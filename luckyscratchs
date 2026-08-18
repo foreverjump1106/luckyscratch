@@ -1,0 +1,2208 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  />
+
+  <title>幸運刮刮樂</title>
+
+  <style>
+    :root {
+      --red: #d62828;
+      --red-dark: #9d1616;
+      --gold: #ffca3a;
+      --gold-dark: #e59b00;
+      --cream: #fff8df;
+      --brown: #6a3b10;
+      --shadow: 0 16px 40px rgba(92, 45, 0, 0.2);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+    }
+
+    body {
+      min-height: 100vh;
+
+      font-family:
+        "Noto Sans TC",
+        "PingFang TC",
+        "Microsoft JhengHei",
+        sans-serif;
+
+      background:
+        radial-gradient(
+          circle at 15% 20%,
+          rgba(255,255,255,.8) 0 3px,
+          transparent 4px
+        ),
+        radial-gradient(
+          circle at 82% 30%,
+          rgba(255,255,255,.6) 0 2px,
+          transparent 3px
+        ),
+        linear-gradient(
+          145deg,
+          #fff7df,
+          #ffd88c
+        );
+
+      color: #512d0b;
+      overflow-x: hidden;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .app {
+      width: min(1180px, 100%);
+      margin: auto;
+      padding: 22px 14px 36px;
+      text-align: center;
+    }
+
+    h1 {
+      margin: 4px 0 6px;
+
+      font-size:
+        clamp(
+          32px,
+          6vw,
+          58px
+        );
+
+      color: var(--red);
+
+      text-shadow:
+        0 3px 0 #fff,
+        0 6px 14px rgba(120, 40, 0, .16);
+    }
+
+    .subtitle {
+      margin: 0 auto 18px;
+
+      font-size:
+        clamp(
+          15px,
+          2.5vw,
+          20px
+        );
+
+      font-weight: 800;
+      color: #875018;
+    }
+
+    .stage {
+      position: relative;
+
+      min-height: 520px;
+
+      border:
+        3px solid
+        rgba(172, 87, 10, .13);
+
+      border-radius: 30px;
+
+      background:
+        rgba(
+          255,
+          255,
+          255,
+          .5
+        );
+
+      box-shadow:
+        inset 0 0 50px rgba(255,255,255,.7),
+        var(--shadow);
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      overflow: hidden;
+
+      padding: 24px;
+    }
+
+    .hint {
+      min-height: 30px;
+      margin: 16px 0 12px;
+
+      font-size:
+        clamp(
+          16px,
+          2.5vw,
+          20px
+        );
+
+      font-weight: 900;
+
+      color: #8a5015;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+
+      margin-top: 10px;
+    }
+
+    .btn {
+      border: none;
+
+      border-radius: 999px;
+
+      padding:
+        15px 30px;
+
+      font-weight: 1000;
+
+      font-size:
+        clamp(
+          16px,
+          2.5vw,
+          20px
+        );
+
+      cursor: pointer;
+
+      color: white;
+
+      background:
+        linear-gradient(
+          #ef5143,
+          var(--red)
+        );
+
+      box-shadow:
+        0 7px 0 var(--red-dark),
+        0 12px 20px rgba(110,44,0,.2);
+
+      transition:
+        .15s transform,
+        .15s opacity,
+        .15s box-shadow;
+    }
+
+    .btn:hover {
+      filter: brightness(1.05);
+    }
+
+    .btn:active {
+      transform: translateY(5px);
+
+      box-shadow:
+        0 2px 0 var(--red-dark),
+        0 6px 12px rgba(110,44,0,.17);
+    }
+
+    .btn.secondary {
+      color: #663500;
+
+      background:
+        linear-gradient(
+          #ffdd69,
+          #f3ad14
+        );
+
+      box-shadow:
+        0 7px 0 #bd7700,
+        0 12px 20px rgba(110,44,0,.18);
+    }
+
+    .btn:disabled {
+      opacity: .45;
+      cursor: not-allowed;
+    }
+
+    /* =========================================
+       卡片基本樣式
+    ========================================= */
+
+    .ticket-face {
+      width: 100%;
+      height: 100%;
+
+      position: relative;
+
+      overflow: hidden;
+
+      border-radius: inherit;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      color: #fff3b5;
+
+      background:
+        radial-gradient(
+          circle at 15% 15%,
+          #ffe870 0 4px,
+          transparent 5px
+        ),
+        radial-gradient(
+          circle at 86% 18%,
+          #ffe870 0 4px,
+          transparent 5px
+        ),
+        radial-gradient(
+          circle at 18% 84%,
+          #ffe870 0 4px,
+          transparent 5px
+        ),
+        radial-gradient(
+          circle at 82% 83%,
+          #ffe870 0 4px,
+          transparent 5px
+        ),
+        linear-gradient(
+          160deg,
+          #ff5757,
+          #df2424 55%,
+          #b31717
+        );
+
+      border:
+        3px solid
+        #ffd85b;
+    }
+
+    .ticket-face::before,
+    .ticket-face::after {
+      position: absolute;
+      color: rgba(255,228,94,.25);
+      font-size: 62px;
+      pointer-events: none;
+    }
+
+    .ticket-face::before {
+      content: "✦";
+      left: 10px;
+      top: 14px;
+    }
+
+    .ticket-face::after {
+      content: "✦";
+      right: 10px;
+      bottom: 14px;
+    }
+
+    .ticket-coin {
+      font-size:
+        clamp(
+          52px,
+          7vw,
+          78px
+        );
+
+      line-height: 1;
+
+      margin-bottom: 8px;
+
+      filter:
+        drop-shadow(
+          0 4px 0 rgba(100,27,0,.25)
+        );
+    }
+
+    .ticket-title {
+      font-size:
+        clamp(
+          24px,
+          4vw,
+          38px
+        );
+
+      font-weight: 1000;
+
+      line-height: 1.12;
+
+      letter-spacing: 3px;
+
+      text-shadow:
+        0 3px 0 #97180f;
+    }
+
+    .ticket-text {
+      margin-top: 11px;
+
+      font-size:
+        clamp(
+          12px,
+          2vw,
+          16px
+        );
+
+      font-weight: 900;
+
+      letter-spacing: 3px;
+    }
+
+    /* =========================================
+       一開始卡片疊成一疊
+    ========================================= */
+
+    .deck {
+      position: relative;
+
+      width:
+        min(
+          280px,
+          66vw
+        );
+
+      aspect-ratio: 2 / 3;
+
+      perspective: 1000px;
+    }
+
+    .deck-card {
+      position: absolute;
+      inset: 0;
+
+      border-radius: 22px;
+
+      background: white;
+
+      border:
+        5px solid white;
+
+      box-shadow:
+        0 11px 25px
+        rgba(75,31,0,.22);
+
+      transform-origin:
+        center bottom;
+    }
+
+    .deck-card:nth-child(1) {
+      transform:
+        translate(-20px,12px)
+        rotate(-6deg);
+    }
+
+    .deck-card:nth-child(2) {
+      transform:
+        translate(-12px,7px)
+        rotate(-4deg);
+    }
+
+    .deck-card:nth-child(3) {
+      transform:
+        translate(-6px,3px)
+        rotate(-2deg);
+    }
+
+    .deck-card:nth-child(4) {
+      transform:
+        translate(0,0)
+        rotate(0deg);
+    }
+
+    .deck-card:nth-child(5) {
+      transform:
+        translate(6px,3px)
+        rotate(2deg);
+    }
+
+    .deck-card:nth-child(6) {
+      transform:
+        translate(12px,7px)
+        rotate(4deg);
+    }
+
+    .deck-card:nth-child(7) {
+      transform:
+        translate(20px,12px)
+        rotate(6deg);
+    }
+
+    /* =========================================
+       洗牌動畫
+    ========================================= */
+
+    .deck.shuffling .deck-card:nth-child(1) {
+      animation:
+        shuffle1 .18s ease-in-out infinite alternate;
+    }
+
+    .deck.shuffling .deck-card:nth-child(2) {
+      animation:
+        shuffle2 .21s ease-in-out infinite alternate;
+    }
+
+    .deck.shuffling .deck-card:nth-child(3) {
+      animation:
+        shuffle3 .17s ease-in-out infinite alternate;
+    }
+
+    .deck.shuffling .deck-card:nth-child(4) {
+      animation:
+        shuffle4 .20s ease-in-out infinite alternate;
+    }
+
+    .deck.shuffling .deck-card:nth-child(5) {
+      animation:
+        shuffle5 .16s ease-in-out infinite alternate;
+    }
+
+    .deck.shuffling .deck-card:nth-child(6) {
+      animation:
+        shuffle6 .19s ease-in-out infinite alternate;
+    }
+
+    .deck.shuffling .deck-card:nth-child(7) {
+      animation:
+        shuffle7 .22s ease-in-out infinite alternate;
+    }
+
+    @keyframes shuffle1 {
+      to {
+        transform:
+          translate(-85px,-20px)
+          rotate(-14deg);
+      }
+    }
+
+    @keyframes shuffle2 {
+      to {
+        transform:
+          translate(72px,-25px)
+          rotate(12deg);
+      }
+    }
+
+    @keyframes shuffle3 {
+      to {
+        transform:
+          translate(-56px,20px)
+          rotate(10deg);
+      }
+    }
+
+    @keyframes shuffle4 {
+      to {
+        transform:
+          translate(55px,24px)
+          rotate(-10deg);
+      }
+    }
+
+    @keyframes shuffle5 {
+      to {
+        transform:
+          translate(-72px,-8px)
+          rotate(15deg);
+      }
+    }
+
+    @keyframes shuffle6 {
+      to {
+        transform:
+          translate(86px,8px)
+          rotate(-14deg);
+      }
+    }
+
+    @keyframes shuffle7 {
+      to {
+        transform:
+          translate(-48px,30px)
+          rotate(8deg);
+      }
+    }
+
+    /* =========================================
+       攤牌區
+    ========================================= */
+
+    .fan {
+      position: relative;
+
+      width: 100%;
+
+      min-height: 440px;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      padding:
+        40px 0;
+    }
+
+    .pick-card {
+      position: relative;
+
+      width: 185px;
+      height: 275px;
+
+      margin:
+        0 -39px;
+
+      border-radius: 19px;
+
+      border:
+        5px solid white;
+
+      background: white;
+
+      box-shadow:
+        0 12px 25px
+        rgba(70,28,0,.25);
+
+      cursor: pointer;
+
+      overflow: hidden;
+
+      transition:
+        .25s transform,
+        .25s opacity,
+        .25s filter;
+
+      animation:
+        deal .6s
+        cubic-bezier(
+          .2,
+          .8,
+          .2,
+          1
+        )
+        both;
+    }
+
+    .pick-card:nth-child(1) {
+      transform:
+        translateY(45px)
+        rotate(-24deg);
+    }
+
+    .pick-card:nth-child(2) {
+      transform:
+        translateY(25px)
+        rotate(-16deg);
+    }
+
+    .pick-card:nth-child(3) {
+      transform:
+        translateY(8px)
+        rotate(-8deg);
+    }
+
+    .pick-card:nth-child(4) {
+      transform:
+        translateY(0)
+        rotate(0deg);
+    }
+
+    .pick-card:nth-child(5) {
+      transform:
+        translateY(8px)
+        rotate(8deg);
+    }
+
+    .pick-card:nth-child(6) {
+      transform:
+        translateY(25px)
+        rotate(16deg);
+    }
+
+    .pick-card:nth-child(7) {
+      transform:
+        translateY(45px)
+        rotate(24deg);
+    }
+
+    .pick-card:hover,
+    .pick-card:active {
+      z-index: 20;
+
+      transform:
+        translateY(-24px)
+        rotate(0deg)
+        scale(1.08);
+
+      filter: brightness(1.08);
+    }
+
+    @keyframes deal {
+      from {
+        opacity: 0;
+
+        transform:
+          translateY(170px)
+          rotate(0deg)
+          scale(.45);
+      }
+    }
+
+    /* =========================================
+       真正刮卡畫面
+    ========================================= */
+
+    .scratch-wrap {
+      width:
+        min(
+          430px,
+          92vw
+        );
+
+      animation:
+        popIn .45s ease both;
+    }
+
+    @keyframes popIn {
+      from {
+        opacity: 0;
+
+        transform:
+          translateY(45px)
+          scale(.72);
+      }
+
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    .scratch-ticket {
+      position: relative;
+
+      width: 100%;
+
+      aspect-ratio: 3 / 4;
+
+      padding: 16px;
+
+      overflow: hidden;
+
+      border-radius: 28px;
+
+      border:
+        7px solid
+        #fff1a5;
+
+      background:
+        linear-gradient(
+          145deg,
+          #d61f1f,
+          #ee4b35 55%,
+          #af1111
+        );
+
+      box-shadow:
+        0 18px 38px
+        rgba(88,31,0,.3);
+    }
+
+    .scratch-ticket::before {
+      content: "";
+
+      position: absolute;
+      inset: 8px;
+
+      border:
+        2px dashed
+        rgba(255,223,91,.68);
+
+      border-radius: 18px;
+
+      pointer-events: none;
+    }
+
+    .ticket-top {
+      height: 37%;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      color: #fff2a8;
+
+      position: relative;
+      z-index: 2;
+    }
+
+    .ticket-top .icon {
+      font-size: 67px;
+      line-height: 1;
+    }
+
+    .ticket-top .title {
+      margin-top: 5px;
+
+      font-size:
+        clamp(
+          32px,
+          7vw,
+          42px
+        );
+
+      font-weight: 1000;
+
+      letter-spacing: 4px;
+
+      text-shadow:
+        0 3px 0 #8f130d;
+    }
+
+    .ticket-top .eng {
+      margin-top: 5px;
+
+      font-size: 12px;
+
+      font-weight: 900;
+
+      letter-spacing: 2px;
+    }
+
+    .scratch-area {
+      position: relative;
+
+      height: 49%;
+
+      margin:
+        0 4px;
+
+      overflow: hidden;
+
+      border-radius: 19px;
+
+      border:
+        4px solid
+        #f5bd34;
+
+      background: #fff9df;
+
+      touch-action: none;
+    }
+
+    .prize-under {
+      position: absolute;
+      inset: 0;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      padding: 12px;
+
+      background:
+        radial-gradient(
+          circle at center,
+          #fffef8,
+          #ffe6a0
+        );
+    }
+
+    .prize-under .emoji {
+      font-size:
+        clamp(
+          56px,
+          12vw,
+          76px
+        );
+
+      line-height: 1;
+    }
+
+    .prize-under .prize-name {
+      margin-top: 5px;
+
+      color: #c52219;
+
+      font-size:
+        clamp(
+          26px,
+          6vw,
+          34px
+        );
+
+      font-weight: 1000;
+    }
+
+    .prize-under .prize-desc {
+      margin-top: 5px;
+
+      color: #754013;
+
+      font-size:
+        clamp(
+          14px,
+          3.5vw,
+          17px
+        );
+
+      font-weight: 900;
+    }
+
+    #scratchCanvas {
+      position: absolute;
+      inset: 0;
+
+      width: 100%;
+      height: 100%;
+
+      cursor: crosshair;
+
+      touch-action: none;
+    }
+
+    .bottom-note {
+      height: 14%;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      position: relative;
+      z-index: 2;
+
+      color: #fff4b5;
+
+      font-size:
+        clamp(
+          13px,
+          3vw,
+          16px
+        );
+
+      font-weight: 900;
+    }
+
+    .result {
+      min-height: 40px;
+
+      margin-top: 15px;
+
+      color: #b51b12;
+
+      font-size:
+        clamp(
+          19px,
+          4vw,
+          24px
+        );
+
+      font-weight: 1000;
+    }
+
+    /* =========================================
+       慶祝動畫
+    ========================================= */
+
+    .confetti {
+      position: fixed;
+
+      left: 50%;
+      top: 45%;
+
+      z-index: 999;
+
+      font-size: 31px;
+
+      pointer-events: none;
+
+      animation:
+        burst 1.25s ease-out forwards;
+    }
+
+    @keyframes burst {
+      to {
+        transform:
+          translate(
+            var(--x),
+            var(--y)
+          )
+          rotate(560deg);
+
+        opacity: 0;
+      }
+    }
+
+    /* =========================================
+       手機平板
+    ========================================= */
+
+    @media (max-width: 850px) {
+
+      .stage {
+        min-height: 500px;
+        padding: 12px 4px;
+      }
+
+      .fan {
+        width: 125%;
+        transform: scale(.84);
+      }
+
+      .pick-card {
+        margin:
+          0 -51px;
+      }
+
+    }
+
+    @media (max-width: 600px) {
+
+      .fan {
+        width: 145%;
+        transform: scale(.72);
+      }
+
+      .pick-card {
+        margin:
+          0 -59px;
+      }
+
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <main class="app">
+
+    <h1>
+      🧧 幸運刮刮樂 🧧
+    </h1>
+
+    <p class="subtitle">
+      洗一洗、抽一張，刮出今天的幸運！
+    </p>
+
+    <section
+      class="stage"
+      id="stage"
+    ></section>
+
+    <p
+      class="hint"
+      id="hint"
+    >
+      先按下「開始洗牌」
+    </p>
+
+    <div class="controls">
+
+      <button
+        class="btn"
+        id="shuffleBtn"
+      >
+        🔀 開始洗牌
+      </button>
+
+      <button
+        class="btn secondary"
+        id="resetBtn"
+        style="display:none"
+      >
+        ↻ 再玩一次
+      </button>
+
+    </div>
+
+  </main>
+
+  <script>
+
+    /* =========================================================
+       【獎項設定區】
+
+       之後你告訴我真正獎項，
+       我主要就是幫你修改這一區。
+
+       name   = 獎項名稱
+       icon   = 獎項圖案
+       desc   = 顯示文字
+       weight = 出現權重
+
+       數字越大越容易抽到。
+    ========================================================= */
+
+    const PRIZES = [
+
+      {
+        name: "特別大獎",
+        icon: "🏆",
+        desc: "恭喜你獲得特別大獎！",
+        weight: 1
+      },
+
+      {
+        name: "幸運大獎",
+        icon: "🎁",
+        desc: "恭喜你獲得幸運好禮！",
+        weight: 2
+      },
+
+      {
+        name: "星星獎",
+        icon: "⭐",
+        desc: "幸運星今天陪著你！",
+        weight: 4
+      },
+
+      {
+        name: "甜蜜獎",
+        icon: "🍭",
+        desc: "送你一份甜甜的小驚喜！",
+        weight: 5
+      },
+
+      {
+        name: "歡樂獎",
+        icon: "🎈",
+        desc: "今天也要開開心心！",
+        weight: 6
+      },
+
+      {
+        name: "加油獎",
+        icon: "💪",
+        desc: "繼續加油，好運就在下一次！",
+        weight: 7
+      },
+
+      {
+        name: "再接再厲",
+        icon: "🍀",
+        desc: "好運正在悄悄靠近你！",
+        weight: 8
+      }
+
+    ];
+
+    /* =========================================================
+       一次攤開幾張刮刮樂
+    ========================================================= */
+
+    const CARD_COUNT = 7;
+
+    /* =========================================================
+       取得畫面
+    ========================================================= */
+
+    const stage =
+      document.getElementById(
+        "stage"
+      );
+
+    const hint =
+      document.getElementById(
+        "hint"
+      );
+
+    const shuffleBtn =
+      document.getElementById(
+        "shuffleBtn"
+      );
+
+    const resetBtn =
+      document.getElementById(
+        "resetBtn"
+      );
+
+    let currentPrize = null;
+
+    let scratchingFinished =
+      false;
+
+    /* =========================================================
+       刮刮樂卡片外觀
+    ========================================================= */
+
+    function ticketFaceHTML() {
+
+      return `
+
+        <div class="ticket-face">
+
+          <div class="ticket-coin">
+            🪙
+          </div>
+
+          <div class="ticket-title">
+            幸運<br>
+            刮刮樂
+          </div>
+
+          <div class="ticket-text">
+            刮・出・好・運
+          </div>
+
+        </div>
+
+      `;
+
+    }
+
+    /* =========================================================
+       顯示一疊卡片
+    ========================================================= */
+
+    function showDeck() {
+
+      stage.innerHTML = `
+
+        <div
+          class="deck"
+          id="deck"
+        >
+
+          ${Array
+            .from(
+              {
+                length:
+                  CARD_COUNT
+              },
+              () => `
+
+                <div class="deck-card">
+                  ${ticketFaceHTML()}
+                </div>
+
+              `
+            )
+            .join("")}
+
+        </div>
+
+      `;
+
+      hint.textContent =
+        "先按下「開始洗牌」";
+
+      shuffleBtn.style.display =
+        "";
+
+      shuffleBtn.disabled =
+        false;
+
+      resetBtn.style.display =
+        "none";
+
+      currentPrize =
+        null;
+
+      scratchingFinished =
+        false;
+
+    }
+
+    /* =========================================================
+       抽獎機率
+    ========================================================= */
+
+    function weightedPrize() {
+
+      const totalWeight =
+        PRIZES.reduce(
+          (total, prize) =>
+            total + prize.weight,
+          0
+        );
+
+      let random =
+        Math.random()
+        * totalWeight;
+
+      for (
+        const prize
+        of PRIZES
+      ) {
+
+        random -=
+          prize.weight;
+
+        if (
+          random <= 0
+        ) {
+
+          return prize;
+
+        }
+
+      }
+
+      return PRIZES[
+        PRIZES.length - 1
+      ];
+
+    }
+
+    /* =========================================================
+       開始洗牌
+    ========================================================= */
+
+    function shuffleDeck() {
+
+      const deck =
+        document.getElementById(
+          "deck"
+        );
+
+      if (!deck) {
+        return;
+      }
+
+      shuffleBtn.disabled =
+        true;
+
+      hint.textContent =
+        "正在洗牌中…… 🔀";
+
+      deck.classList.add(
+        "shuffling"
+      );
+
+      setTimeout(
+        () => {
+
+          deck.classList.remove(
+            "shuffling"
+          );
+
+          dealCards();
+
+        },
+        1700
+      );
+
+    }
+
+    /* =========================================================
+       攤開卡片
+    ========================================================= */
+
+    function dealCards() {
+
+      stage.innerHTML = `
+
+        <div class="fan">
+
+          ${Array
+            .from(
+              {
+                length:
+                  CARD_COUNT
+              },
+              (_, index) => `
+
+                <div
+                  class="pick-card"
+                  data-index="${index}"
+                  style="
+                    animation-delay:
+                    ${index * .07}s;
+                  "
+                >
+
+                  ${ticketFaceHTML()}
+
+                </div>
+
+              `
+            )
+            .join("")}
+
+        </div>
+
+      `;
+
+      hint.textContent =
+        "選一張你最有感覺的刮刮樂！ 👆";
+
+      shuffleBtn.style.display =
+        "none";
+
+      document
+        .querySelectorAll(
+          ".pick-card"
+        )
+        .forEach(
+          card => {
+
+            card.addEventListener(
+              "click",
+              () => {
+                selectCard(card);
+              }
+            );
+
+          }
+        );
+
+    }
+
+    /* =========================================================
+       玩家選卡
+    ========================================================= */
+
+    function selectCard(card) {
+
+      if (
+        currentPrize
+      ) {
+
+        return;
+
+      }
+
+      currentPrize =
+        weightedPrize();
+
+      card.style.zIndex =
+        "50";
+
+      card.style.transform =
+        "translateY(-32px) rotate(0deg) scale(1.12)";
+
+      document
+        .querySelectorAll(
+          ".pick-card"
+        )
+        .forEach(
+          otherCard => {
+
+            if (
+              otherCard !== card
+            ) {
+
+              otherCard.style.opacity =
+                ".22";
+
+              otherCard.style.filter =
+                "grayscale(.5)";
+
+            }
+
+          }
+        );
+
+      hint.textContent =
+        "就是這張！準備刮獎吧！ ✨";
+
+      setTimeout(
+        showScratchTicket,
+        600
+      );
+
+    }
+
+    /* =========================================================
+       顯示刮獎畫面
+    ========================================================= */
+
+    function showScratchTicket() {
+
+      const prize =
+        currentPrize;
+
+      stage.innerHTML = `
+
+        <div class="scratch-wrap">
+
+          <div class="scratch-ticket">
+
+            <div class="ticket-top">
+
+              <div class="icon">
+                🧧✨
+              </div>
+
+              <div class="title">
+                幸運刮刮樂
+              </div>
+
+              <div class="eng">
+                LUCKY SCRATCH CARD
+              </div>
+
+            </div>
+
+            <div
+              class="scratch-area"
+              id="scratchArea"
+            >
+
+              <div class="prize-under">
+
+                <div class="emoji">
+                  ${prize.icon}
+                </div>
+
+                <div class="prize-name">
+                  ${prize.name}
+                </div>
+
+                <div class="prize-desc">
+                  ${prize.desc}
+                </div>
+
+              </div>
+
+              <canvas
+                id="scratchCanvas"
+              ></canvas>
+
+            </div>
+
+            <div class="bottom-note">
+              👆 用手指或滑鼠刮開銀色區域
+            </div>
+
+          </div>
+
+          <div
+            class="result"
+            id="result"
+          ></div>
+
+        </div>
+
+      `;
+
+      hint.textContent =
+        "像真的刮刮樂一樣，把銀色區域刮開！";
+
+      initScratch();
+
+    }
+
+    /* =========================================================
+       建立刮刮樂銀色塗層
+    ========================================================= */
+
+    function initScratch() {
+
+      const canvas =
+        document.getElementById(
+          "scratchCanvas"
+        );
+
+      const area =
+        document.getElementById(
+          "scratchArea"
+        );
+
+      const ctx =
+        canvas.getContext(
+          "2d",
+          {
+            willReadFrequently:
+              true
+          }
+        );
+
+      const dpr =
+        Math.max(
+          1,
+          window.devicePixelRatio
+            || 1
+        );
+
+      const rect =
+        area.getBoundingClientRect();
+
+      canvas.width =
+        Math.round(
+          rect.width * dpr
+        );
+
+      canvas.height =
+        Math.round(
+          rect.height * dpr
+        );
+
+      canvas.style.width =
+        rect.width + "px";
+
+      canvas.style.height =
+        rect.height + "px";
+
+      ctx.scale(
+        dpr,
+        dpr
+      );
+
+      /* =========================================
+         銀色漸層
+      ========================================= */
+
+      const gradient =
+        ctx.createLinearGradient(
+          0,
+          0,
+          rect.width,
+          rect.height
+        );
+
+      gradient.addColorStop(
+        0,
+        "#8f8f8f"
+      );
+
+      gradient.addColorStop(
+        .18,
+        "#d9d9d9"
+      );
+
+      gradient.addColorStop(
+        .35,
+        "#999999"
+      );
+
+      gradient.addColorStop(
+        .53,
+        "#eeeeee"
+      );
+
+      gradient.addColorStop(
+        .73,
+        "#a1a1a1"
+      );
+
+      gradient.addColorStop(
+        1,
+        "#d5d5d5"
+      );
+
+      ctx.fillStyle =
+        gradient;
+
+      ctx.fillRect(
+        0,
+        0,
+        rect.width,
+        rect.height
+      );
+
+      /* =========================================
+         銀色區裝飾
+      ========================================= */
+
+      ctx.fillStyle =
+        "rgba(255,255,255,.28)";
+
+      for (
+        let i = 0;
+        i < 70;
+        i++
+      ) {
+
+        ctx.beginPath();
+
+        ctx.arc(
+          Math.random()
+            * rect.width,
+
+          Math.random()
+            * rect.height,
+
+          Math.random()
+            * 2.5 + .5,
+
+          0,
+
+          Math.PI * 2
+        );
+
+        ctx.fill();
+
+      }
+
+      /* =========================================
+         刮開看看的文字
+      ========================================= */
+
+      ctx.fillStyle =
+        "rgba(255,255,255,.72)";
+
+      ctx.textAlign =
+        "center";
+
+      ctx.textBaseline =
+        "middle";
+
+      ctx.font =
+        "900 25px sans-serif";
+
+      ctx.fillText(
+        "✨ 刮 開 看 看 ✨",
+        rect.width / 2,
+        rect.height / 2
+      );
+
+      ctx.font =
+        "800 14px sans-serif";
+
+      ctx.fillText(
+        "SCRATCH HERE",
+        rect.width / 2,
+        rect.height / 2 + 35
+      );
+
+      /* =========================================
+         後續刮除會變透明
+      ========================================= */
+
+      ctx.globalCompositeOperation =
+        "destination-out";
+
+      let drawing =
+        false;
+
+      let lastPoint =
+        null;
+
+      function getPoint(
+        event
+      ) {
+
+        const canvasRect =
+          canvas.getBoundingClientRect();
+
+        let clientX;
+        let clientY;
+
+        if (
+          event.touches &&
+          event.touches.length
+        ) {
+
+          clientX =
+            event.touches[0]
+              .clientX;
+
+          clientY =
+            event.touches[0]
+              .clientY;
+
+        }
+
+        else if (
+          event.changedTouches &&
+          event.changedTouches.length
+        ) {
+
+          clientX =
+            event.changedTouches[0]
+              .clientX;
+
+          clientY =
+            event.changedTouches[0]
+              .clientY;
+
+        }
+
+        else {
+
+          clientX =
+            event.clientX;
+
+          clientY =
+            event.clientY;
+
+        }
+
+        return {
+
+          x:
+            clientX
+            -
+            canvasRect.left,
+
+          y:
+            clientY
+            -
+            canvasRect.top
+
+        };
+
+      }
+
+      function eraseCircle(
+        x,
+        y
+      ) {
+
+        ctx.beginPath();
+
+        ctx.arc(
+          x,
+          y,
+          27,
+          0,
+          Math.PI * 2
+        );
+
+        ctx.fill();
+
+      }
+
+      function scratch(
+        event
+      ) {
+
+        if (!drawing) {
+          return;
+        }
+
+        event.preventDefault();
+
+        const point =
+          getPoint(event);
+
+        if (
+          lastPoint
+        ) {
+
+          const dx =
+            point.x
+            -
+            lastPoint.x;
+
+          const dy =
+            point.y
+            -
+            lastPoint.y;
+
+          const distance =
+            Math.sqrt(
+              dx * dx
+              +
+              dy * dy
+            );
+
+          const steps =
+            Math.max(
+              1,
+              Math.ceil(
+                distance / 8
+              )
+            );
+
+          for (
+            let i = 0;
+            i <= steps;
+            i++
+          ) {
+
+            const t =
+              i / steps;
+
+            eraseCircle(
+              lastPoint.x
+                +
+              dx * t,
+
+              lastPoint.y
+                +
+              dy * t
+            );
+
+          }
+
+        }
+
+        else {
+
+          eraseCircle(
+            point.x,
+            point.y
+          );
+
+        }
+
+        lastPoint =
+          point;
+
+      }
+
+      function startScratch(
+        event
+      ) {
+
+        drawing =
+          true;
+
+        lastPoint =
+          getPoint(event);
+
+        eraseCircle(
+          lastPoint.x,
+          lastPoint.y
+        );
+
+        event.preventDefault();
+
+      }
+
+      function endScratch() {
+
+        if (!drawing) {
+          return;
+        }
+
+        drawing =
+          false;
+
+        lastPoint =
+          null;
+
+        checkScratch(
+          ctx,
+          canvas
+        );
+
+      }
+
+      /* =========================================
+         Pointer Events
+         電腦、iPad、手機都支援
+      ========================================= */
+
+      if (
+        window.PointerEvent
+      ) {
+
+        canvas.addEventListener(
+          "pointerdown",
+          event => {
+
+            canvas.setPointerCapture(
+              event.pointerId
+            );
+
+            startScratch(
+              event
+            );
+
+          }
+        );
+
+        canvas.addEventListener(
+          "pointermove",
+          scratch
+        );
+
+        canvas.addEventListener(
+          "pointerup",
+          endScratch
+        );
+
+        canvas.addEventListener(
+          "pointercancel",
+          endScratch
+        );
+
+      }
+
+      else {
+
+        canvas.addEventListener(
+          "mousedown",
+          startScratch
+        );
+
+        canvas.addEventListener(
+          "mousemove",
+          scratch
+        );
+
+        window.addEventListener(
+          "mouseup",
+          endScratch
+        );
+
+        canvas.addEventListener(
+          "touchstart",
+          startScratch,
+          {
+            passive:
+              false
+          }
+        );
+
+        canvas.addEventListener(
+          "touchmove",
+          scratch,
+          {
+            passive:
+              false
+          }
+        );
+
+        canvas.addEventListener(
+          "touchend",
+          endScratch
+        );
+
+      }
+
+    }
+
+    /* =========================================================
+       計算玩家刮開比例
+    ========================================================= */
+
+    function checkScratch(
+      ctx,
+      canvas
+    ) {
+
+      if (
+        scratchingFinished
+      ) {
+
+        return;
+      }
+
+      const imageData =
+        ctx.getImageData(
+          0,
+          0,
+          canvas.width,
+          canvas.height
+        );
+
+      const pixels =
+        imageData.data;
+
+      let transparentCount =
+        0;
+
+      let checkedCount =
+        0;
+
+      /* =========================================
+         每隔一些像素檢查
+         避免平板運算太慢
+      ========================================= */
+
+      for (
+        let i = 3;
+        i < pixels.length;
+        i += 16
+      ) {
+
+        checkedCount++;
+
+        if (
+          pixels[i] <
+          20
+        ) {
+
+          transparentCount++;
+
+        }
+
+      }
+
+      const ratio =
+        transparentCount
+        /
+        checkedCount;
+
+      /* =========================================
+         刮開 42% 以上就算完成
+      ========================================= */
+
+      if (
+        ratio >= .42
+      ) {
+
+        finishScratch(
+          canvas
+        );
+
+      }
+
+    }
+
+    /* =========================================================
+       完成刮獎
+    ========================================================= */
+
+    function finishScratch(
+      canvas
+    ) {
+
+      scratchingFinished =
+        true;
+
+      canvas.style.transition =
+        "opacity .5s ease";
+
+      canvas.style.opacity =
+        "0";
+
+      canvas.style.pointerEvents =
+        "none";
+
+      setTimeout(
+        () => {
+
+          canvas.style.display =
+            "none";
+
+        },
+        520
+      );
+
+      const result =
+        document.getElementById(
+          "result"
+        );
+
+      result.textContent =
+        `🎉 恭喜你刮中「${currentPrize.name}」！`;
+
+      hint.textContent =
+        "刮獎完成！恭喜你！ 🎊";
+
+      resetBtn.style.display =
+        "";
+
+      celebrate();
+
+    }
+
+    /* =========================================================
+       慶祝動畫
+    ========================================================= */
+
+    function celebrate() {
+
+      const symbols = [
+        "🎉",
+        "🎊",
+        "✨",
+        "⭐",
+        "🧧",
+        "🎈"
+      ];
+
+      for (
+        let i = 0;
+        i < 34;
+        i++
+      ) {
+
+        const item =
+          document.createElement(
+            "div"
+          );
+
+        item.className =
+          "confetti";
+
+        item.textContent =
+          symbols[
+            Math.floor(
+              Math.random()
+              *
+              symbols.length
+            )
+          ];
+
+        item.style.setProperty(
+          "--x",
+
+          `${
+            (Math.random() - .5)
+            * 820
+          }px`
+        );
+
+        item.style.setProperty(
+          "--y",
+
+          `${
+            (Math.random() - .5)
+            * 680
+          }px`
+        );
+
+        item.style.animationDelay =
+          `${
+            Math.random()
+            * .15
+          }s`;
+
+        document.body.appendChild(
+          item
+        );
+
+        setTimeout(
+          () => {
+            item.remove();
+          },
+          1500
+        );
+
+      }
+
+    }
+
+    /* =========================================================
+       再玩一次
+    ========================================================= */
+
+    function resetGame() {
+
+      currentPrize =
+        null;
+
+      scratchingFinished =
+        false;
+
+      showDeck();
+
+    }
+
+    /* =========================================================
+       按鈕
+    ========================================================= */
+
+    shuffleBtn.addEventListener(
+      "click",
+      shuffleDeck
+    );
+
+    resetBtn.addEventListener(
+      "click",
+      resetGame
+    );
+
+    /* =========================================================
+       初始化
+    ========================================================= */
+
+    showDeck();
+
+  </script>
+
+</body>
+</html>
