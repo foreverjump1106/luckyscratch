@@ -14,22 +14,11 @@
 :root{
   --blue:#304b84;
   --blue-dark:#1f315a;
-
-  --silver1:#667fc0;
-  --silver2:#3c548e;
-  --silver3:#292d5f;
-
-  --gold1:#ffe38a;
-  --gold2:#d39f26;
-  --gold3:#946406;
-
-  --yellow:#f2c75c;
+  --gold:#d39f26;
+  --gold-dark:#946406;
   --cream:#fffaf0;
   --text:#443920;
-
-  --shadow:
-    0 16px 38px
-    rgba(45,42,75,.18);
+  --shadow:0 16px 38px rgba(45,42,75,.18);
 }
 
 *{
@@ -83,78 +72,51 @@ a{
 .app{
   width:min(1320px,100%);
   margin:auto;
-  padding:18px 14px 40px;
+  padding:18px 14px 55px;
   text-align:center;
 }
 
 
 /* =========================================================
-   登入區
+   登入
 ========================================================= */
 
 .login-panel{
   width:min(900px,100%);
   margin:0 auto 18px;
-
   padding:14px 18px;
 
   border-radius:20px;
 
-  background:
-    rgba(255,255,255,.80);
+  background:rgba(255,255,255,.82);
 
-  border:
-    2px solid
-    rgba(190,155,70,.16);
+  border:2px solid rgba(190,155,70,.16);
 
   box-shadow:
-    0 8px 22px
-    rgba(70,55,25,.09);
+    0 8px 22px rgba(70,55,25,.09);
 }
 
 .login-panel.logged{
   display:flex;
   justify-content:space-between;
   align-items:center;
-
   gap:14px;
   flex-wrap:wrap;
 }
 
-.student-info{
-  text-align:left;
-}
-
-.student-name{
-  font-size:18px;
-  font-weight:1000;
-  color:#304b84;
-}
-
-.student-email{
-  margin-top:3px;
-
-  font-size:13px;
-  font-weight:800;
-
-  color:#756950;
-}
-
 .login-title{
+  color:#304b84;
   font-size:17px;
   font-weight:1000;
-
-  color:#304b84;
 }
 
 .login-tip{
   margin:6px 0 12px;
 
-  font-size:13px;
-  font-weight:800;
-
   color:#6f603f;
 
+  font-size:13px;
+  font-weight:800;
   line-height:1.5;
 }
 
@@ -164,17 +126,34 @@ a{
   gap:6px;
 
   margin-bottom:11px;
-
   padding:7px 12px;
 
   border-radius:999px;
 
   background:#f6edd8;
-
   color:#755a22;
 
   font-size:13px;
   font-weight:900;
+}
+
+.student-info{
+  text-align:left;
+}
+
+.student-name{
+  color:#304b84;
+  font-size:18px;
+  font-weight:1000;
+}
+
+.student-email{
+  margin-top:3px;
+
+  color:#756950;
+
+  font-size:13px;
+  font-weight:800;
 }
 
 
@@ -184,7 +163,6 @@ a{
 
 .btn{
   border:0;
-
   border-radius:999px;
 
   padding:12px 23px;
@@ -203,13 +181,12 @@ a{
 
   box-shadow:
     0 6px 0 #1e3159,
-    0 10px 18px
-    rgba(45,45,75,.14);
+    0 10px 18px rgba(45,45,75,.14);
 
   transition:
     transform .15s,
     opacity .15s,
-    box-shadow .15s;
+    filter .15s;
 }
 
 .btn:hover{
@@ -218,11 +195,6 @@ a{
 
 .btn:active{
   transform:translateY(4px);
-
-  box-shadow:
-    0 2px 0 #1e3159,
-    0 5px 10px
-    rgba(45,45,75,.12);
 }
 
 .btn.gold{
@@ -236,8 +208,7 @@ a{
 
   box-shadow:
     0 6px 0 #aa7714,
-    0 10px 18px
-    rgba(80,55,10,.14);
+    0 10px 18px rgba(80,55,10,.14);
 }
 
 .btn.light{
@@ -254,8 +225,6 @@ a{
 }
 
 .btn.records{
-  color:#ffffff;
-
   background:
     linear-gradient(
       #6f66af,
@@ -282,8 +251,81 @@ a{
 }
 
 .btn:disabled{
-  opacity:.42;
+  opacity:.45;
   cursor:not-allowed;
+}
+
+
+/* =========================================================
+   音樂控制
+========================================================= */
+
+.sound-control{
+  position:fixed;
+
+  right:18px;
+  bottom:18px;
+
+  z-index:999999;
+
+  border:0;
+  border-radius:999px;
+
+  padding:11px 16px;
+
+  cursor:pointer;
+
+  color:white;
+
+  font-size:14px;
+  font-weight:1000;
+
+  background:
+    linear-gradient(
+      #6e7fbc,
+      #344c85
+    );
+
+  box-shadow:
+    0 6px 0 #21345e,
+    0 10px 22px rgba(40,45,75,.20);
+}
+
+.sound-control:active{
+  transform:translateY(4px);
+}
+
+.music-tip{
+  position:fixed;
+
+  right:18px;
+  bottom:78px;
+
+  z-index:999998;
+
+  max-width:250px;
+
+  padding:8px 12px;
+
+  border-radius:12px;
+
+  background:rgba(255,255,255,.94);
+
+  color:#6c5424;
+
+  font-size:12px;
+  font-weight:900;
+
+  box-shadow:
+    0 6px 15px rgba(50,40,20,.12);
+
+  pointer-events:none;
+
+  transition:opacity .5s;
+}
+
+.music-tip.hide{
+  opacity:0;
 }
 
 
@@ -296,15 +338,12 @@ a{
 
   color:#30466f;
 
-  font-size:
-    clamp(34px,6vw,58px);
-
+  font-size:clamp(34px,6vw,58px);
   font-weight:1000;
 
   text-shadow:
     0 3px 0 white,
-    0 6px 12px
-    rgba(40,45,70,.12);
+    0 6px 12px rgba(40,45,70,.12);
 }
 
 .home-subtitle{
@@ -312,9 +351,7 @@ a{
 
   color:#77561d;
 
-  font-size:
-    clamp(15px,2.5vw,20px);
-
+  font-size:clamp(15px,2.5vw,20px);
   font-weight:900;
 }
 
@@ -323,7 +360,6 @@ a{
   margin:25px auto;
 
   display:grid;
-
   grid-template-columns:
     repeat(2,minmax(0,1fr));
 
@@ -331,19 +367,14 @@ a{
 }
 
 .mode-card{
-  position:relative;
-
   min-height:320px;
 
   padding:28px;
 
   border:6px solid white;
-
   border-radius:30px;
 
   cursor:pointer;
-
-  overflow:hidden;
 
   box-shadow:var(--shadow);
 
@@ -356,8 +387,7 @@ a{
   transform:translateY(-7px);
 
   box-shadow:
-    0 22px 42px
-    rgba(45,42,75,.24);
+    0 22px 42px rgba(45,42,75,.24);
 }
 
 .mode-card.silver{
@@ -395,9 +425,7 @@ a{
 .mode-title{
   margin-top:8px;
 
-  font-size:
-    clamp(30px,4.5vw,42px);
-
+  font-size:clamp(30px,4.5vw,42px);
   font-weight:1000;
 }
 
@@ -406,23 +434,22 @@ a{
 
   font-size:16px;
   font-weight:900;
-
   line-height:1.65;
 }
 
 .home-tools{
-  margin-top:10px;
-
   display:flex;
   justify-content:center;
   flex-wrap:wrap;
 
   gap:12px;
+
+  margin-top:12px;
 }
 
 
 /* =========================================================
-   遊戲頁
+   遊戲標題
 ========================================================= */
 
 .game-header{
@@ -440,9 +467,7 @@ a{
 .game-title{
   margin:4px 0 5px;
 
-  font-size:
-    clamp(32px,5vw,50px);
-
+  font-size:clamp(32px,5vw,50px);
   font-weight:1000;
 }
 
@@ -469,20 +494,17 @@ a{
 
   border-radius:999px;
 
-  background:
-    rgba(255,255,255,.78);
+  background:rgba(255,255,255,.78);
 
-  border:
-    2px solid
-    rgba(200,165,75,.18);
+  border:2px solid rgba(200,165,75,.18);
 
   font-size:14px;
   font-weight:900;
 }
 
 .info-chip strong{
-  font-size:17px;
   color:#304b84;
+  font-size:17px;
 }
 
 
@@ -499,17 +521,12 @@ a{
 
   border-radius:30px;
 
-  background:
-    rgba(255,255,255,.52);
+  background:rgba(255,255,255,.52);
 
-  border:
-    3px solid
-    rgba(175,137,51,.12);
+  border:3px solid rgba(175,137,51,.12);
 
   box-shadow:
-    inset
-    0 0 50px
-    rgba(255,255,255,.75),
+    inset 0 0 50px rgba(255,255,255,.75),
     var(--shadow);
 
   display:flex;
@@ -536,9 +553,7 @@ a{
 
   color:#73531b;
 
-  font-size:
-    clamp(16px,2.5vw,20px);
-
+  font-size:clamp(16px,2.5vw,20px);
   font-weight:1000;
 }
 
@@ -552,51 +567,40 @@ a{
 
 
 /* =========================================================
-   ★ 新增：獎項一覽
+   獎項一覽
 ========================================================= */
 
 .prize-section{
   width:min(980px,100%);
 
-  margin:
-    28px auto 0;
-
-  padding:
-    20px;
+  margin:28px auto 0;
+  padding:20px;
 
   border-radius:26px;
 
-  background:
-    rgba(255,255,255,.76);
+  background:rgba(255,255,255,.77);
 
-  border:
-    3px solid
-    rgba(190,150,55,.15);
+  border:3px solid rgba(190,150,55,.15);
 
   box-shadow:
-    0 12px 28px
-    rgba(65,50,25,.10);
+    0 12px 28px rgba(65,50,25,.10);
 }
 
 .prize-section.silver{
-  border-color:
-    rgba(67,91,150,.22);
+  border-color:rgba(67,91,150,.22);
 }
 
 .prize-section.gold{
-  border-color:
-    rgba(196,143,20,.28);
+  border-color:rgba(196,143,20,.28);
 }
 
 .prize-section-title{
   margin:0 0 5px;
 
-  font-size:
-    clamp(24px,4vw,32px);
-
-  font-weight:1000;
-
   color:#304b84;
+
+  font-size:clamp(24px,4vw,32px);
+  font-weight:1000;
 }
 
 .prize-section.gold
@@ -611,25 +615,18 @@ a{
 
   font-size:13px;
   font-weight:900;
-
-  line-height:1.5;
 }
 
 .prize-list{
   display:grid;
 
   grid-template-columns:
-    repeat(
-      2,
-      minmax(0,1fr)
-    );
+    repeat(2,minmax(0,1fr));
 
   gap:10px;
 }
 
 .prize-item{
-  position:relative;
-
   display:grid;
 
   grid-template-columns:
@@ -641,21 +638,15 @@ a{
 
   min-height:86px;
 
-  padding:
-    11px 13px;
+  padding:11px 13px;
 
   border-radius:17px;
 
-  background:
-    rgba(255,250,239,.95);
+  background:rgba(255,250,239,.95);
 
-  border:
-    2px solid
-    rgba(180,145,60,.12);
+  border:2px solid rgba(180,145,60,.12);
 
   text-align:left;
-
-  overflow:hidden;
 }
 
 .prize-section.silver
@@ -663,12 +654,9 @@ a{
   background:
     linear-gradient(
       135deg,
-      rgba(248,250,255,.98),
-      rgba(237,241,252,.94)
+      #f8faff,
+      #edf1fc
     );
-
-  border-color:
-    rgba(65,87,145,.14);
 }
 
 .prize-section.gold
@@ -676,32 +664,24 @@ a{
   background:
     linear-gradient(
       135deg,
-      rgba(255,253,238,.98),
-      rgba(255,243,195,.90)
+      #fffdee,
+      #fff3c3
     );
-
-  border-color:
-    rgba(185,129,11,.17);
 }
 
 .prize-item-icon{
   width:58px;
   height:58px;
 
-  border-radius:15px;
-
   display:flex;
   justify-content:center;
   align-items:center;
 
-  background:
-    rgba(255,255,255,.78);
+  border-radius:15px;
+
+  background:rgba(255,255,255,.8);
 
   font-size:34px;
-
-  box-shadow:
-    0 4px 10px
-    rgba(50,45,30,.07);
 }
 
 .prize-item-name{
@@ -709,8 +689,6 @@ a{
 
   font-size:17px;
   font-weight:1000;
-
-  line-height:1.3;
 }
 
 .prize-section.gold
@@ -725,7 +703,6 @@ a{
 
   font-size:12px;
   font-weight:800;
-
   line-height:1.45;
 }
 
@@ -758,8 +735,7 @@ a{
 
   border-radius:15px;
 
-  background:
-    rgba(246,238,214,.7);
+  background:rgba(246,238,214,.7);
 
   color:#69511e;
 
@@ -794,10 +770,9 @@ a{
 
   position:absolute;
 
-  font-size:56px;
+  color:rgba(255,255,255,.22);
 
-  color:
-    rgba(255,255,255,.22);
+  font-size:56px;
 }
 
 .ticket-face::before{
@@ -814,11 +789,6 @@ a{
   color:#fff7d6;
 
   background:
-    radial-gradient(
-      circle at 18% 18%,
-      rgba(255,230,120,.9) 0 3px,
-      transparent 4px
-    ),
     linear-gradient(
       155deg,
       #667fc0,
@@ -826,19 +796,13 @@ a{
       #292d5f
     );
 
-  border:
-    3px solid #f2c75c;
+  border:3px solid #f2c75c;
 }
 
 .ticket-face.gold{
   color:#fffbea;
 
   background:
-    radial-gradient(
-      circle at 18% 18%,
-      rgba(255,255,220,.9) 0 3px,
-      transparent 4px
-    ),
     linear-gradient(
       155deg,
       #ffe48b,
@@ -846,13 +810,11 @@ a{
       #946506
     );
 
-  border:
-    3px solid #fff1b8;
+  border:3px solid #fff1b8;
 }
 
 .ticket-icon{
   font-size:55px;
-  line-height:1;
 }
 
 .ticket-title{
@@ -862,10 +824,6 @@ a{
   font-weight:1000;
 
   line-height:1.08;
-
-  text-shadow:
-    0 2px 0
-    rgba(40,35,60,.3);
 }
 
 .ticket-text{
@@ -885,8 +843,7 @@ a{
 .deck{
   position:relative;
 
-  width:
-    min(285px,68vw);
+  width:min(285px,68vw);
 
   aspect-ratio:2/3;
 }
@@ -897,67 +854,49 @@ a{
 
   border-radius:22px;
 
-  border:
-    5px solid white;
+  border:5px solid white;
 
   background:white;
 
   box-shadow:
-    0 11px 25px
-    rgba(45,40,70,.22);
+    0 11px 25px rgba(45,40,70,.22);
 }
 
 .deck-card:nth-child(1){
-  transform:
-    translate(-24px,13px)
-    rotate(-7deg);
+  transform:translate(-24px,13px) rotate(-7deg);
 }
 
 .deck-card:nth-child(2){
-  transform:
-    translate(-17px,9px)
-    rotate(-5deg);
+  transform:translate(-17px,9px) rotate(-5deg);
 }
 
 .deck-card:nth-child(3){
-  transform:
-    translate(-10px,5px)
-    rotate(-3deg);
+  transform:translate(-10px,5px) rotate(-3deg);
 }
 
 .deck-card:nth-child(4){
-  transform:
-    translate(-4px,2px)
-    rotate(-1deg);
+  transform:translate(-4px,2px) rotate(-1deg);
 }
 
 .deck-card:nth-child(5){
-  transform:
-    translate(4px,2px)
-    rotate(1deg);
+  transform:translate(4px,2px) rotate(1deg);
 }
 
 .deck-card:nth-child(6){
-  transform:
-    translate(10px,5px)
-    rotate(3deg);
+  transform:translate(10px,5px) rotate(3deg);
 }
 
 .deck-card:nth-child(7){
-  transform:
-    translate(17px,9px)
-    rotate(5deg);
+  transform:translate(17px,9px) rotate(5deg);
 }
 
 .deck-card:nth-child(8){
-  transform:
-    translate(24px,13px)
-    rotate(7deg);
+  transform:translate(24px,13px) rotate(7deg);
 }
 
 
 /* =========================================================
-   洗牌
+   洗牌動畫
 ========================================================= */
 
 .shuffle-table{
@@ -965,8 +904,6 @@ a{
 
   width:520px;
   height:470px;
-
-  perspective:1300px;
 }
 
 .shuffle-hand{
@@ -975,8 +912,7 @@ a{
   width:105px;
   height:140px;
 
-  border-radius:
-    55% 55% 45% 45%;
+  border-radius:55% 55% 45% 45%;
 
   background:
     linear-gradient(
@@ -986,12 +922,6 @@ a{
     );
 
   opacity:.9;
-
-  filter:
-    drop-shadow(
-      0 10px 12px
-      rgba(60,35,15,.16)
-    );
 
   z-index:40;
 }
@@ -1017,10 +947,7 @@ a{
   top:165px;
 
   animation:
-    handLeft
-    1.45s
-    ease-in-out
-    infinite;
+    handLeft 1.45s ease-in-out infinite;
 }
 
 .shuffle-hand.right{
@@ -1028,10 +955,7 @@ a{
   top:116px;
 
   animation:
-    handRight
-    1.45s
-    ease-in-out
-    infinite;
+    handRight 1.45s ease-in-out infinite;
 }
 
 @keyframes handLeft{
@@ -1071,14 +995,12 @@ a{
 
   border-radius:19px;
 
-  border:
-    5px solid white;
+  border:5px solid white;
 
   background:white;
 
   box-shadow:
-    0 12px 25px
-    rgba(45,40,70,.22);
+    0 12px 25px rgba(45,40,70,.22);
 }
 
 .shuffle-stack.upper{
@@ -1088,10 +1010,7 @@ a{
   z-index:15;
 
   animation:
-    upperStack
-    1.45s
-    ease-in-out
-    infinite;
+    upperStack 1.45s ease-in-out infinite;
 }
 
 .shuffle-stack.lower{
@@ -1101,10 +1020,7 @@ a{
   z-index:8;
 
   animation:
-    lowerStack
-    1.45s
-    ease-in-out
-    infinite;
+    lowerStack 1.45s ease-in-out infinite;
 }
 
 @keyframes upperStack{
@@ -1149,34 +1065,22 @@ a{
 
 .shuffle-drop.p1{
   animation:
-    overhand1
-    1.75s
-    ease-in-out
-    infinite;
+    overhand1 1.75s ease-in-out infinite;
 }
 
 .shuffle-drop.p2{
   animation:
-    overhand2
-    1.75s
-    ease-in-out
-    infinite;
+    overhand2 1.75s ease-in-out infinite;
 }
 
 .shuffle-drop.p3{
   animation:
-    overhand3
-    1.75s
-    ease-in-out
-    infinite;
+    overhand3 1.75s ease-in-out infinite;
 }
 
 .shuffle-drop.p4{
   animation:
-    overhand4
-    1.75s
-    ease-in-out
-    infinite;
+    overhand4 1.75s ease-in-out infinite;
 }
 
 @keyframes overhand1{
@@ -1202,11 +1106,11 @@ a{
 @keyframes overhand2{
   0%,22%{
     opacity:0;
-    transform:translate(25px,-92px);
   }
 
   29%{
     opacity:1;
+    transform:translate(25px,-92px);
   }
 
   50%{
@@ -1222,11 +1126,11 @@ a{
 @keyframes overhand3{
   0%,45%{
     opacity:0;
-    transform:translate(20px,-88px);
   }
 
   52%{
     opacity:1;
+    transform:translate(20px,-88px);
   }
 
   73%{
@@ -1242,11 +1146,11 @@ a{
 @keyframes overhand4{
   0%,68%{
     opacity:0;
-    transform:translate(17px,-85px);
   }
 
   75%{
     opacity:1;
+    transform:translate(17px,-85px);
   }
 
   95%{
@@ -1274,7 +1178,7 @@ a{
 
 
 /* =========================================================
-   橫向重疊
+   攤牌
 ========================================================= */
 
 .spread-board{
@@ -1291,9 +1195,7 @@ a{
 .spread-row{
   position:relative;
 
-  width:
-    min(1180px,96vw);
-
+  width:min(1180px,96vw);
   height:175px;
 
   margin:auto;
@@ -1319,8 +1221,7 @@ a{
 
   border-radius:15px;
 
-  border:
-    4px solid white;
+  border:4px solid white;
 
   background:white;
 
@@ -1329,20 +1230,15 @@ a{
   cursor:pointer;
 
   box-shadow:
-    0 10px 20px
-    rgba(45,40,70,.2);
+    0 10px 20px rgba(45,40,70,.2);
 
   transition:
     transform .22s,
     opacity .22s,
-    filter .22s,
-    box-shadow .22s;
+    filter .22s;
 
   animation:
-    spreadIn
-    .45s
-    ease
-    both;
+    spreadIn .45s ease both;
 }
 
 @keyframes spreadIn{
@@ -1366,10 +1262,6 @@ a{
   transform:
     translateY(-12px)
     scale(1.07);
-
-  box-shadow:
-    0 18px 30px
-    rgba(45,40,70,.28);
 }
 
 .spread-card.selected{
@@ -1404,17 +1296,12 @@ a{
   justify-content:center;
   align-items:center;
 
-  background:
-    rgba(255,255,255,.93);
+  background:rgba(255,255,255,.93);
 
   color:#304b84;
 
   font-size:10px;
   font-weight:1000;
-
-  box-shadow:
-    0 3px 8px
-    rgba(30,30,60,.14);
 }
 
 .spread-card .ticket-icon{
@@ -1435,14 +1322,10 @@ a{
 ========================================================= */
 
 .scratch-wrap{
-  width:
-    min(455px,92vw);
+  width:min(455px,92vw);
 
   animation:
-    scratchPop
-    .4s
-    ease
-    both;
+    scratchPop .4s ease both;
 }
 
 @keyframes scratchPop{
@@ -1460,8 +1343,6 @@ a{
 }
 
 .scratch-ticket{
-  position:relative;
-
   width:100%;
 
   aspect-ratio:3/4;
@@ -1470,14 +1351,12 @@ a{
 
   border-radius:28px;
 
-  border:
-    7px solid #f4d477;
+  border:7px solid #f4d477;
 
   overflow:hidden;
 
   box-shadow:
-    0 18px 38px
-    rgba(45,42,75,.25);
+    0 18px 38px rgba(45,42,75,.25);
 }
 
 .scratch-ticket.silver{
@@ -1518,9 +1397,7 @@ a{
 .scratch-top-title{
   margin-top:4px;
 
-  font-size:
-    clamp(31px,7vw,42px);
-
+  font-size:clamp(31px,7vw,42px);
   font-weight:1000;
 }
 
@@ -1541,8 +1418,7 @@ a{
 
   border-radius:18px;
 
-  border:
-    4px solid #f2c75c;
+  border:4px solid #f2c75c;
 
   background:#fff8dc;
 
@@ -1569,21 +1445,16 @@ a{
 }
 
 .prize-icon{
-  font-size:
-    clamp(58px,13vw,78px);
-
-  line-height:1.1;
+  font-size:clamp(58px,13vw,78px);
 }
 
 .prize-name{
   margin-top:7px;
 
-  font-size:
-    clamp(24px,5.5vw,34px);
-
-  font-weight:1000;
-
   color:#304b84;
+
+  font-size:clamp(24px,5.5vw,34px);
+  font-weight:1000;
 }
 
 .scratch-ticket.gold
@@ -1596,9 +1467,7 @@ a{
 
   max-width:95%;
 
-  font-size:
-    clamp(14px,3vw,17px);
-
+  font-size:clamp(14px,3vw,17px);
   font-weight:900;
 
   line-height:1.5;
@@ -1635,12 +1504,10 @@ a{
 
   margin-top:14px;
 
-  font-size:
-    clamp(18px,4vw,24px);
-
-  font-weight:1000;
-
   color:#304b84;
+
+  font-size:clamp(18px,4vw,24px);
+  font-weight:1000;
 }
 
 .save-status{
@@ -1652,8 +1519,7 @@ a{
 
   border-radius:13px;
 
-  background:
-    rgba(255,255,255,.72);
+  background:rgba(255,255,255,.72);
 
   font-size:13px;
   font-weight:900;
@@ -1673,7 +1539,7 @@ a{
 
 
 /* =========================================================
-   抽完
+   空獎池
 ========================================================= */
 
 .empty-box{
@@ -1681,8 +1547,7 @@ a{
 
   border-radius:24px;
 
-  background:
-    rgba(255,255,255,.76);
+  background:rgba(255,255,255,.76);
 
   color:#304b84;
 
@@ -1718,13 +1583,11 @@ a{
     height:138px;
   }
 
-  .spread-card
-  .ticket-icon{
+  .spread-card .ticket-icon{
     font-size:28px;
   }
 
-  .spread-card
-  .ticket-title{
+  .spread-card .ticket-title{
     font-size:13px;
   }
 
@@ -1764,26 +1627,16 @@ a{
     height:114px;
   }
 
-  .spread-card
-  .ticket-icon{
+  .spread-card .ticket-icon{
     font-size:22px;
   }
 
-  .spread-card
-  .ticket-title{
+  .spread-card .ticket-title{
     font-size:10px;
   }
 
-  .spread-card
-  .ticket-text{
+  .spread-card .ticket-text{
     display:none;
-  }
-
-  .spread-number{
-    min-width:21px;
-    height:21px;
-
-    font-size:9px;
   }
 
   .prize-section{
@@ -1811,14 +1664,6 @@ a{
   .prize-item-description{
     font-size:11px;
   }
-
-  .prize-item-count{
-    min-width:43px;
-
-    padding:6px;
-
-    font-size:12px;
-  }
 }
 </style>
 </head>
@@ -1830,7 +1675,7 @@ a{
 
 
 <!-- =====================================================
-     登入區
+     登入
 ====================================================== -->
 
 <section
@@ -1884,6 +1729,7 @@ a{
       ></div>
 
     </div>
+
 
     <button
       class="btn light"
@@ -1967,7 +1813,7 @@ a{
   <div class="home-tools">
 
     <a
-      href="records.html"
+      href="./records.html"
       class="btn records"
     >
       📋 已抽獎紀錄
@@ -1979,7 +1825,7 @@ a{
 
 
 <!-- =====================================================
-     遊戲頁
+     遊戲
 ====================================================== -->
 
 <section
@@ -2083,10 +1929,6 @@ a{
   ></div>
 
 
-  <!-- ===================================================
-       ★ 新增：完整獎項一覽
-  ==================================================== -->
-
   <section
     class="prize-section"
     id="prizeSection"
@@ -2098,7 +1940,7 @@ a{
     ></h3>
 
     <p class="prize-section-subtitle">
-      以下為本輪完整獎池內容，抽獎過程中仍保留顯示，方便查看所有可能獎項。
+      本輪完整獎池內容
     </p>
 
     <div
@@ -2118,8 +1960,27 @@ a{
 </main>
 
 
-<script type="module">
+<!-- =====================================================
+     音樂控制
+====================================================== -->
 
+<button
+  class="sound-control"
+  id="soundControl"
+>
+  🔊 音樂開啟
+</button>
+
+
+<div
+  class="music-tip"
+  id="musicTip"
+>
+  🎵 點一下畫面後開始播放背景音樂
+</div>
+
+
+<script type="module">
 
 /* =========================================================
    Firebase
@@ -2180,10 +2041,12 @@ const app =
     firebaseConfig
   );
 
+
 const auth =
   getAuth(
     app
   );
+
 
 const db =
   getFirestore(
@@ -2196,10 +2059,7 @@ const googleProvider =
 
 
 googleProvider.setCustomParameters({
-
-  prompt:
-    "select_account"
-
+  prompt:"select_account"
 });
 
 
@@ -2208,136 +2068,707 @@ googleProvider.setCustomParameters({
 ========================================================= */
 
 const loginPanel =
-  document.getElementById(
-    "loginPanel"
-  );
+  document.getElementById("loginPanel");
 
 const loggedOutArea =
-  document.getElementById(
-    "loggedOutArea"
-  );
+  document.getElementById("loggedOutArea");
 
 const loggedInArea =
-  document.getElementById(
-    "loggedInArea"
-  );
+  document.getElementById("loggedInArea");
 
 const studentName =
-  document.getElementById(
-    "studentName"
-  );
+  document.getElementById("studentName");
 
 const studentEmail =
-  document.getElementById(
-    "studentEmail"
-  );
+  document.getElementById("studentEmail");
 
 const googleLoginBtn =
-  document.getElementById(
-    "googleLoginBtn"
-  );
+  document.getElementById("googleLoginBtn");
 
 const logoutBtn =
-  document.getElementById(
-    "logoutBtn"
-  );
+  document.getElementById("logoutBtn");
 
 const homePage =
-  document.getElementById(
-    "homePage"
-  );
+  document.getElementById("homePage");
 
 const gamePage =
-  document.getElementById(
-    "gamePage"
-  );
+  document.getElementById("gamePage");
 
 const backHomeBtn =
-  document.getElementById(
-    "backHomeBtn"
-  );
+  document.getElementById("backHomeBtn");
 
 const gameTitle =
-  document.getElementById(
-    "gameTitle"
-  );
+  document.getElementById("gameTitle");
 
 const totalCount =
-  document.getElementById(
-    "totalCount"
-  );
+  document.getElementById("totalCount");
 
 const remainingCount =
-  document.getElementById(
-    "remainingCount"
-  );
+  document.getElementById("remainingCount");
 
 const currentPlayer =
-  document.getElementById(
-    "currentPlayer"
-  );
+  document.getElementById("currentPlayer");
 
 const stage =
-  document.getElementById(
-    "stage"
-  );
+  document.getElementById("stage");
 
 const hint =
-  document.getElementById(
-    "hint"
-  );
+  document.getElementById("hint");
 
 const shuffleBtn =
-  document.getElementById(
-    "shuffleBtn"
-  );
+  document.getElementById("shuffleBtn");
 
 const nextBtn =
-  document.getElementById(
-    "nextBtn"
-  );
+  document.getElementById("nextBtn");
 
 const drawAgainBtn =
-  document.getElementById(
-    "drawAgainBtn"
-  );
+  document.getElementById("drawAgainBtn");
 
 const resetPoolBtn =
-  document.getElementById(
-    "resetPoolBtn"
-  );
+  document.getElementById("resetPoolBtn");
 
 const saveStatus =
-  document.getElementById(
-    "saveStatus"
-  );
-
-
-/* ★ 新增 */
+  document.getElementById("saveStatus");
 
 const prizeSection =
-  document.getElementById(
-    "prizeSection"
-  );
+  document.getElementById("prizeSection");
 
 const prizeSectionTitle =
-  document.getElementById(
-    "prizeSectionTitle"
-  );
+  document.getElementById("prizeSectionTitle");
 
 const prizeList =
-  document.getElementById(
-    "prizeList"
-  );
+  document.getElementById("prizeList");
 
 const prizeTotalBox =
-  document.getElementById(
-    "prizeTotalBox"
-  );
+  document.getElementById("prizeTotalBox");
 
+const soundControl =
+  document.getElementById("soundControl");
+
+const musicTip =
+  document.getElementById("musicTip");
+
+
+/* =========================================================
+   使用者
+========================================================= */
 
 let currentUser =
   null;
+
+
+/* =========================================================
+   音樂系統
+========================================================= */
+
+let audioContext =
+  null;
+
+let masterGain =
+  null;
+
+let musicEnabled =
+  true;
+
+let musicStarted =
+  false;
+
+let bgIndex =
+  0;
+
+let bgTimer =
+  null;
+
+
+/*
+  輕柔背景旋律
+*/
+
+const bgMelody = [
+
+  523.25,
+  659.25,
+  783.99,
+  659.25,
+
+  587.33,
+  698.46,
+  783.99,
+  698.46,
+
+  523.25,
+  659.25,
+  880.00,
+  783.99,
+
+  587.33,
+  659.25,
+  523.25,
+  659.25
+
+];
+
+
+function initAudio(){
+
+  if(
+    !audioContext
+  ){
+
+    audioContext =
+      new(
+        window.AudioContext
+        ||
+        window.webkitAudioContext
+      )();
+
+
+    masterGain =
+      audioContext.createGain();
+
+
+    masterGain.gain.value =
+      .55;
+
+
+    masterGain.connect(
+      audioContext.destination
+    );
+
+  }
+
+
+  if(
+    audioContext.state ===
+    "suspended"
+  ){
+
+    audioContext.resume();
+
+  }
+
+}
+
+
+/* =========================================================
+   單音
+========================================================= */
+
+function playTone(
+  frequency,
+  duration=.15,
+  volume=.08,
+  type="sine",
+  delay=0
+){
+
+  if(
+    !musicEnabled
+  ){
+
+    return;
+
+  }
+
+
+  initAudio();
+
+
+  const now =
+    audioContext.currentTime
+    +
+    delay;
+
+
+  const oscillator =
+    audioContext.createOscillator();
+
+
+  const gain =
+    audioContext.createGain();
+
+
+  oscillator.type =
+    type;
+
+
+  oscillator.frequency.setValueAtTime(
+    frequency,
+    now
+  );
+
+
+  gain.gain.setValueAtTime(
+    .0001,
+    now
+  );
+
+
+  gain.gain.exponentialRampToValueAtTime(
+    volume,
+    now+.02
+  );
+
+
+  gain.gain.exponentialRampToValueAtTime(
+    .0001,
+    now+duration
+  );
+
+
+  oscillator.connect(
+    gain
+  );
+
+
+  gain.connect(
+    masterGain
+  );
+
+
+  oscillator.start(
+    now
+  );
+
+
+  oscillator.stop(
+    now
+    +
+    duration
+    +
+    .05
+  );
+
+}
+
+
+/* =========================================================
+   首頁背景音樂
+========================================================= */
+
+function playBackgroundNote(){
+
+  if(
+    !musicEnabled
+    ||
+    !musicStarted
+  ){
+
+    return;
+
+  }
+
+
+  /*
+    只有首頁播放背景音樂。
+    進入遊戲後暫時安靜，
+    讓洗牌與抽獎音效更清楚。
+  */
+
+  if(
+    homePage
+      .classList
+      .contains(
+        "hidden"
+      )
+  ){
+
+    return;
+
+  }
+
+
+  const note =
+    bgMelody[
+      bgIndex
+    ];
+
+
+  playTone(
+    note,
+    .42,
+    .025,
+    "sine"
+  );
+
+
+  playTone(
+    note/2,
+    .52,
+    .009,
+    "triangle"
+  );
+
+
+  bgIndex =
+    (
+      bgIndex
+      +
+      1
+    )
+    %
+    bgMelody.length;
+
+}
+
+
+function startBackgroundMusic(){
+
+  if(
+    musicStarted
+  ){
+
+    return;
+
+  }
+
+
+  initAudio();
+
+
+  musicStarted =
+    true;
+
+
+  playBackgroundNote();
+
+
+  bgTimer =
+    setInterval(
+      playBackgroundNote,
+      580
+    );
+
+
+  musicTip
+    .classList
+    .add(
+      "hide"
+    );
+
+}
+
+
+/*
+  Safari / Chrome 都不允許網站
+  一開啟就自己播放聲音。
+
+  所以第一次碰畫面後才開始。
+*/
+
+function firstInteraction(){
+
+  startBackgroundMusic();
+
+
+  document.removeEventListener(
+    "pointerdown",
+    firstInteraction
+  );
+
+
+  document.removeEventListener(
+    "keydown",
+    firstInteraction
+  );
+
+}
+
+
+document.addEventListener(
+  "pointerdown",
+  firstInteraction
+);
+
+
+document.addEventListener(
+  "keydown",
+  firstInteraction
+);
+
+
+/* =========================================================
+   音樂開關
+========================================================= */
+
+soundControl.addEventListener(
+  "click",
+  event => {
+
+    event.stopPropagation();
+
+
+    initAudio();
+
+
+    musicEnabled =
+      !musicEnabled;
+
+
+    if(
+      musicEnabled
+    ){
+
+      soundControl.textContent =
+        "🔊 音樂開啟";
+
+
+      if(
+        !musicStarted
+      ){
+
+        startBackgroundMusic();
+
+      }
+
+
+      playTone(
+        659.25,
+        .12,
+        .08
+      );
+
+
+      playTone(
+        783.99,
+        .18,
+        .08,
+        "sine",
+        .1
+      );
+
+    }
+
+
+    else{
+
+      soundControl.textContent =
+        "🔇 音樂關閉";
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   洗牌聲
+========================================================= */
+
+function playShuffleSound(){
+
+  const notes = [
+    190,
+    220,
+    180,
+    250,
+    200,
+    275,
+    215,
+    300,
+    230,
+    325,
+    245,
+    350,
+    260,
+    375
+  ];
+
+
+  notes.forEach(
+    (
+      note,
+      index
+    ) => {
+
+      playTone(
+        note,
+        .065,
+        .055,
+        "triangle",
+        index*.065
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   洗牌完成
+========================================================= */
+
+function playReadySound(){
+
+  playTone(
+    523.25,
+    .13,
+    .09
+  );
+
+
+  playTone(
+    659.25,
+    .13,
+    .09,
+    "sine",
+    .13
+  );
+
+
+  playTone(
+    783.99,
+    .26,
+    .10,
+    "sine",
+    .26
+  );
+
+}
+
+
+/* =========================================================
+   抽卡
+========================================================= */
+
+function playPickSound(){
+
+  playTone(
+    440,
+    .08,
+    .08,
+    "triangle"
+  );
+
+
+  playTone(
+    659.25,
+    .14,
+    .09,
+    "sine",
+    .07
+  );
+
+}
+
+
+/* =========================================================
+   一般得獎
+========================================================= */
+
+function playPrizeSound(){
+
+  playTone(
+    523.25,
+    .13,
+    .10
+  );
+
+
+  playTone(
+    659.25,
+    .13,
+    .10,
+    "sine",
+    .12
+  );
+
+
+  playTone(
+    783.99,
+    .14,
+    .11,
+    "sine",
+    .24
+  );
+
+
+  playTone(
+    1046.50,
+    .38,
+    .13,
+    "sine",
+    .36
+  );
+
+}
+
+
+/* =========================================================
+   再抽一次
+========================================================= */
+
+function playBonusSound(){
+
+  playTone(
+    659.25,
+    .10,
+    .11
+  );
+
+
+  playTone(
+    783.99,
+    .10,
+    .11,
+    "sine",
+    .10
+  );
+
+
+  playTone(
+    987.77,
+    .12,
+    .12,
+    "sine",
+    .20
+  );
+
+
+  playTone(
+    1174.66,
+    .34,
+    .14,
+    "sine",
+    .31
+  );
+
+}
+
+
+/* =========================================================
+   再接再厲
+========================================================= */
+
+function playTryAgainSound(){
+
+  playTone(
+    493.88,
+    .15,
+    .07,
+    "triangle"
+  );
+
+
+  playTone(
+    440,
+    .17,
+    .07,
+    "triangle",
+    .15
+  );
+
+
+  playTone(
+    392,
+    .28,
+    .07,
+    "triangle",
+    .30
+  );
+
+}
 
 
 /* =========================================================
@@ -2351,6 +2782,7 @@ googleLoginBtn.addEventListener(
     googleLoginBtn.disabled =
       true;
 
+
     googleLoginBtn.textContent =
       "登入中……";
 
@@ -2363,6 +2795,7 @@ googleLoginBtn.addEventListener(
       );
 
     }
+
 
     catch(error){
 
@@ -2386,6 +2819,7 @@ googleLoginBtn.addEventListener(
           googleProvider
         );
 
+
         return;
 
       }
@@ -2399,10 +2833,12 @@ googleLoginBtn.addEventListener(
 
     }
 
+
     finally{
 
       googleLoginBtn.disabled =
         false;
+
 
       googleLoginBtn.textContent =
         "G　使用 Google 登入";
@@ -2458,7 +2894,9 @@ onAuthStateChanged(
       user;
 
 
-    if(user){
+    if(
+      user
+    ){
 
       loggedOutArea
         .classList
@@ -2495,7 +2933,9 @@ onAuthStateChanged(
         "";
 
 
-      if(currentGame){
+      if(
+        currentGame
+      ){
 
         currentPlayer.textContent =
           user.displayName
@@ -2530,7 +2970,9 @@ onAuthStateChanged(
         );
 
 
-      if(currentGame){
+      if(
+        currentGame
+      ){
 
         currentPlayer.textContent =
           "訪客";
@@ -2549,36 +2991,23 @@ onAuthStateChanged(
 
 const GAMES = {
 
-
-  /* =======================================================
-     銀卡
-  ======================================================= */
-
   silver:{
 
-    key:
-      "silver",
+    key:"silver",
 
-    name:
-      "銀卡刮刮樂",
+    name:"銀卡刮刮樂",
 
-    title:
-      "🥈 銀卡刮刮樂",
+    title:"🥈 銀卡刮刮樂",
 
-    cardIcon:
-      "🥈✨",
+    cardIcon:"🥈✨",
 
-    cardName:
-      "銀卡",
+    cardName:"銀卡",
 
-    english:
-      "SILVER LUCKY CARD",
+    english:"SILVER LUCKY CARD",
 
-    cssClass:
-      "silver",
+    cssClass:"silver",
 
-    total:
-      40,
+    total:40,
 
     storageKey:
       "LuckyScratch_SilverPool_v6",
@@ -2589,8 +3018,7 @@ const GAMES = {
         id:"cash30",
         name:"30 元",
         icon:"💰",
-        description:
-          "現金 30 元",
+        description:"現金 30 元",
         count:1,
         type:"normal"
       },
@@ -2599,8 +3027,7 @@ const GAMES = {
         id:"homework3",
         name:"3 張免寫卷",
         icon:"📚✨",
-        description:
-          "可使用 3 張免寫卷",
+        description:"可使用 3 張免寫卷",
         count:2,
         type:"normal"
       },
@@ -2609,8 +3036,7 @@ const GAMES = {
         id:"homework1",
         name:"1 張免寫卷",
         icon:"📝",
-        description:
-          "可使用 1 張免寫卷",
+        description:"可使用 1 張免寫卷",
         count:3,
         type:"normal"
       },
@@ -2619,8 +3045,7 @@ const GAMES = {
         id:"stationeryA",
         name:"文具 A",
         icon:"🖊️📒",
-        description:
-          "藍黑筆、立可帶、筆記本，三選一",
+        description:"藍黑筆、立可帶、筆記本，三選一",
         count:4,
         type:"normal"
       },
@@ -2629,8 +3054,7 @@ const GAMES = {
         id:"stationeryB",
         name:"文具 B",
         icon:"✏️📏",
-        description:
-          "自動筆、橡皮擦、直尺，三選一",
+        description:"自動筆、橡皮擦、直尺，三選一",
         count:4,
         type:"normal"
       },
@@ -2639,8 +3063,7 @@ const GAMES = {
         id:"cookie",
         name:"小餅乾",
         icon:"🍪",
-        description:
-          "小餅乾 1 份",
+        description:"小餅乾 1 份",
         count:8,
         type:"normal"
       },
@@ -2649,8 +3072,7 @@ const GAMES = {
         id:"again",
         name:"再抽一次",
         icon:"🎟️🔄",
-        description:
-          "同一位可以再抽一張",
+        description:"同一位可以再抽一張",
         count:1,
         type:"again"
       },
@@ -2659,8 +3081,7 @@ const GAMES = {
         id:"silverCard",
         name:"銀卡",
         icon:"🥈🥤",
-        description:
-          "全班累積 10 張銀卡，可獲得飲料一杯",
+        description:"全班累積 10 張銀卡，可獲得飲料一杯",
         count:7,
         type:"special"
       },
@@ -2669,8 +3090,7 @@ const GAMES = {
         id:"none",
         name:"再接再厲",
         icon:"🍀",
-        description:
-          "期待下一次的好運",
+        description:"期待下一次的好運",
         count:10,
         type:"none"
       }
@@ -2680,35 +3100,23 @@ const GAMES = {
   },
 
 
-  /* =======================================================
-     金卡
-  ======================================================= */
-
   gold:{
 
-    key:
-      "gold",
+    key:"gold",
 
-    name:
-      "金卡刮刮樂",
+    name:"金卡刮刮樂",
 
-    title:
-      "🥇 金卡刮刮樂",
+    title:"🥇 金卡刮刮樂",
 
-    cardIcon:
-      "🥇✨",
+    cardIcon:"🥇✨",
 
-    cardName:
-      "金卡",
+    cardName:"金卡",
 
-    english:
-      "GOLD LUCKY CARD",
+    english:"GOLD LUCKY CARD",
 
-    cssClass:
-      "gold",
+    cssClass:"gold",
 
-    total:
-      30,
+    total:30,
 
     storageKey:
       "LuckyScratch_GoldPool_v6",
@@ -2719,8 +3127,7 @@ const GAMES = {
         id:"cash50",
         name:"50 元",
         icon:"💰",
-        description:
-          "現金 50 元",
+        description:"現金 50 元",
         count:1,
         type:"normal"
       },
@@ -2729,8 +3136,7 @@ const GAMES = {
         id:"homework4",
         name:"4 張免寫卷",
         icon:"📚✨",
-        description:
-          "可使用 4 張免寫卷",
+        description:"可使用 4 張免寫卷",
         count:1,
         type:"normal"
       },
@@ -2739,8 +3145,7 @@ const GAMES = {
         id:"homework2",
         name:"2 張免寫卷",
         icon:"📝",
-        description:
-          "可使用 2 張免寫卷",
+        description:"可使用 2 張免寫卷",
         count:3,
         type:"normal"
       },
@@ -2749,8 +3154,7 @@ const GAMES = {
         id:"stationery",
         name:"文具組",
         icon:"🖊️✏️🧽",
-        description:
-          "藍黑筆＋自動筆＋橡皮擦",
+        description:"藍黑筆＋自動筆＋橡皮擦",
         count:2,
         type:"normal"
       },
@@ -2759,8 +3163,7 @@ const GAMES = {
         id:"correction",
         name:"立可帶＋替換帶",
         icon:"🧾✨",
-        description:
-          "立可帶＋替換帶 1 組",
+        description:"立可帶＋替換帶 1 組",
         count:2,
         type:"normal"
       },
@@ -2769,8 +3172,7 @@ const GAMES = {
         id:"cookies3",
         name:"餅乾 ×3",
         icon:"🍪🍪🍪",
-        description:
-          "餅乾 3 份",
+        description:"餅乾 3 份",
         count:6,
         type:"normal"
       },
@@ -2779,8 +3181,7 @@ const GAMES = {
         id:"again",
         name:"再抽一次",
         icon:"🎟️🔄",
-        description:
-          "同一位可以再抽一張",
+        description:"同一位可以再抽一張",
         count:2,
         type:"again"
       },
@@ -2789,8 +3190,7 @@ const GAMES = {
         id:"goldCard",
         name:"金卡",
         icon:"🥇🍗",
-        description:
-          "全班累積 10 張金卡，可獲得雞排一份",
+        description:"全班累積 10 張金卡，可獲得雞排一份",
         count:4,
         type:"special"
       },
@@ -2799,8 +3199,7 @@ const GAMES = {
         id:"none",
         name:"再接再厲",
         icon:"🍀",
-        description:
-          "期待下一次的好運",
+        description:"期待下一次的好運",
         count:9,
         type:"none"
       }
@@ -2813,7 +3212,7 @@ const GAMES = {
 
 
 /* =========================================================
-   遊戲狀態
+   狀態
 ========================================================= */
 
 let currentGame =
@@ -2833,7 +3232,7 @@ let scratchFinished =
 
 
 /* =========================================================
-   選擇遊戲
+   選遊戲
 ========================================================= */
 
 document
@@ -2846,6 +3245,13 @@ document
       card.addEventListener(
         "click",
         () => {
+
+          /*
+            先啟動音訊。
+          */
+
+          startBackgroundMusic();
+
 
           openGame(
             card.dataset.game
@@ -2893,18 +3299,33 @@ function goHome(){
 
 backHomeBtn.addEventListener(
   "click",
-  goHome
+  () => {
+
+    playTone(
+      659.25,
+      .09,
+      .06
+    );
+
+
+    goHome();
+
+  }
 );
 
 
 /* =========================================================
-   ★ 新增：顯示完整獎項
+   獎項一覽
 ========================================================= */
 
 function renderPrizeList(){
 
-  if(!currentGame){
+  if(
+    !currentGame
+  ){
+
     return;
+
   }
 
 
@@ -2916,11 +3337,11 @@ function renderPrizeList(){
     currentGame.key ===
     "silver"
 
-      ?
+    ?
 
     "🥈 銀卡刮刮樂｜全部獎項"
 
-      :
+    :
 
     "🥇 金卡刮刮樂｜全部獎項";
 
@@ -2971,36 +3392,40 @@ function renderPrizeList(){
       .join("");
 
 
-  const prizeTotal =
-    currentGame
-      .prizes
-      .reduce(
-        (
-          total,
-          prize
-        ) => {
+  updatePrizeTotal();
 
-          return(
-            total
-            +
-            prize.count
-          );
+}
 
-        },
-        0
-      );
+
+function updatePrizeTotal(){
+
+  if(
+    !currentGame
+  ){
+
+    return;
+
+  }
 
 
   prizeTotalBox.innerHTML = `
 
     🎟️ 完整獎池共
-    <strong>${prizeTotal}</strong>
+
+    <strong>
+      ${currentGame.total}
+    </strong>
+
     張
 
     ・
 
     📦 目前剩餘
-    <strong>${prizePool.length}</strong>
+
+    <strong>
+      ${prizePool.length}
+    </strong>
+
     張
 
   `;
@@ -3044,7 +3469,7 @@ function openGame(
   currentPlayer.textContent =
     currentUser
 
-      ?
+    ?
 
     (
       currentUser.displayName
@@ -3052,7 +3477,7 @@ function openGame(
       "學生"
     )
 
-      :
+    :
 
     "訪客";
 
@@ -3070,10 +3495,6 @@ function openGame(
       "hidden"
     );
 
-
-  /*
-    ★ 顯示該遊戲完整獎項
-  */
 
   renderPrizeList();
 
@@ -3129,7 +3550,7 @@ function createFreshPool(){
 
 
 /* =========================================================
-   洗牌
+   Fisher-Yates
 ========================================================= */
 
 function shuffleArray(
@@ -3183,7 +3604,9 @@ function loadPool(){
     );
 
 
-  if(saved){
+  if(
+    saved
+  ){
 
     try{
 
@@ -3241,8 +3664,12 @@ function loadPool(){
 
 function savePool(){
 
-  if(!currentGame){
+  if(
+    !currentGame
+  ){
+
     return;
+
   }
 
 
@@ -3258,39 +3685,13 @@ function savePool(){
     `${prizePool.length} 張`;
 
 
-  /*
-    同步更新獎項區剩餘數量
-  */
-
-  if(
-    !gamePage
-      .classList
-      .contains(
-        "hidden"
-      )
-  ){
-
-    prizeTotalBox.innerHTML = `
-
-      🎟️ 完整獎池共
-      <strong>${currentGame.total}</strong>
-      張
-
-      ・
-
-      📦 目前剩餘
-      <strong>${prizePool.length}</strong>
-      張
-
-    `;
-
-  }
+  updatePrizeTotal();
 
 }
 
 
 /* =========================================================
-   卡片背面
+   卡面
 ========================================================= */
 
 function ticketFaceHTML(){
@@ -3455,7 +3856,7 @@ function showDeck(
 
 
 /* =========================================================
-   開始洗牌
+   洗牌
 ========================================================= */
 
 function startShuffle(){
@@ -3470,6 +3871,13 @@ function startShuffle(){
     return;
 
   }
+
+
+  /*
+    ★ 洗牌聲
+  */
+
+  playShuffleSound();
 
 
   resetPoolBtn
@@ -3583,7 +3991,7 @@ function startShuffle(){
 
 
 /* =========================================================
-   橫向重疊
+   攤牌
 ========================================================= */
 
 function dealHorizontalRows(){
@@ -3635,8 +4043,7 @@ function dealHorizontalRows(){
 
 
       if(
-        window.innerWidth
-        <=
+        window.innerWidth <=
         900
       ){
 
@@ -3650,8 +4057,7 @@ function dealHorizontalRows(){
 
 
       if(
-        window.innerWidth
-        <=
+        window.innerWidth <=
         650
       ){
 
@@ -3706,7 +4112,6 @@ function dealHorizontalRows(){
               data-index="${globalIndex}"
 
               style="
-
                 left:
                 ${
                   localIndex
@@ -3719,7 +4124,6 @@ function dealHorizontalRows(){
 
                 animation-delay:
                 ${delay}s;
-
               "
             >
 
@@ -3782,6 +4186,13 @@ function dealHorizontalRows(){
     `全部 ${prizePool.length} 張已攤開，請挑一張！ 👆`;
 
 
+  /*
+    ★ 準備抽牌音效
+  */
+
+  playReadySound();
+
+
   document
     .querySelectorAll(
       ".spread-card"
@@ -3821,6 +4232,13 @@ function selectCard(
     return;
 
   }
+
+
+  /*
+    ★ 抽卡音效
+  */
+
+  playPickSound();
 
 
   cardSelected =
@@ -4006,7 +4424,7 @@ function showScratchTicket(){
 
 
 /* =========================================================
-   刮除
+   刮除層
 ========================================================= */
 
 function initScratch(){
@@ -4027,8 +4445,7 @@ function initScratch(){
     canvas.getContext(
       "2d",
       {
-        willReadFrequently:
-          true
+        willReadFrequently:true
       }
     );
 
@@ -4130,7 +4547,6 @@ function initScratch(){
     );
 
   }
-
 
   else{
 
@@ -4281,6 +4697,10 @@ function initScratch(){
     null;
 
 
+  let moveCounter =
+    0;
+
+
   function point(
     event
   ){
@@ -4317,7 +4737,7 @@ function initScratch(){
     ctx.arc(
       x,
       y,
-      28,
+      30,
       0,
       Math.PI*2
     );
@@ -4411,7 +4831,7 @@ function initScratch(){
         Math.max(
           1,
           Math.ceil(
-            distance/7
+            distance/6
           )
         );
 
@@ -4445,6 +4865,27 @@ function initScratch(){
 
     lastPoint =
       p;
+
+
+    /*
+      不必等手指放開，
+      刮到一定比例就會自動揭曉。
+    */
+
+    moveCounter++;
+
+
+    if(
+      moveCounter % 8 ===
+      0
+    ){
+
+      checkScratch(
+        ctx,
+        canvas
+      );
+
+    }
 
   }
 
@@ -4537,18 +4978,22 @@ function checkScratch(
     0;
 
 
+  /*
+    不逐點全部檢查，
+    手機效能會比較好。
+  */
+
   for(
     let i=3;
     i<pixels.length;
-    i+=16
+    i+=20
   ){
 
     checked++;
 
 
     if(
-      pixels[i]
-      <
+      pixels[i] <
       20
     ){
 
@@ -4566,8 +5011,7 @@ function checkScratch(
 
 
   if(
-    ratio
-    >=
+    ratio >=
     .42
   ){
 
@@ -4653,7 +5097,7 @@ async function saveDrawRecord(){
 
 
 /* =========================================================
-   刮獎完成
+   刮完
 ========================================================= */
 
 async function finishScratch(
@@ -4674,7 +5118,7 @@ async function finishScratch(
 
 
   canvas.style.transition =
-    "opacity .5s ease";
+    "opacity .55s ease";
 
 
   canvas.style.opacity =
@@ -4691,6 +5135,10 @@ async function finishScratch(
     );
 
 
+  /*
+    ★ 根據獎項播放不同音效
+  */
+
   if(
     currentPrize.type ===
     "none"
@@ -4699,7 +5147,11 @@ async function finishScratch(
     result.textContent =
       "🍀 再接再厲！下一次一定更幸運！";
 
+
+    playTryAgainSound();
+
   }
+
 
   else if(
     currentPrize.type ===
@@ -4709,12 +5161,19 @@ async function finishScratch(
     result.textContent =
       "🎟️ 恭喜獲得「再抽一次」！";
 
+
+    playBonusSound();
+
   }
+
 
   else{
 
     result.textContent =
       `🎉 恭喜獲得「${currentPrize.name}」！`;
+
+
+    playPrizeSound();
 
   }
 
@@ -4737,7 +5196,8 @@ async function finishScratch(
 
 
   /*
-    已登入：寫 Firebase
+    已登入：
+    寫 Firebase
   */
 
   if(
@@ -4801,7 +5261,8 @@ async function finishScratch(
 
 
   /*
-    訪客：不寫 Firebase
+    訪客：
+    不寫 Firebase
   */
 
   else{
@@ -4847,7 +5308,6 @@ async function finishScratch(
 
   }
 
-
   else{
 
     nextBtn
@@ -4875,6 +5335,13 @@ async function finishScratch(
 drawAgainBtn.addEventListener(
   "click",
   () => {
+
+    playTone(
+      783.99,
+      .10,
+      .08
+    );
+
 
     showDeck(
       false
@@ -4904,10 +5371,12 @@ nextBtn.addEventListener(
   "click",
   async () => {
 
-    /*
-      如果有登入，
-      下一位前自動登出。
-    */
+    playTone(
+      659.25,
+      .10,
+      .06
+    );
+
 
     if(
       currentUser
@@ -4975,17 +5444,15 @@ resetPoolBtn.addEventListener(
     savePool();
 
 
-    /*
-      完整獎項列表不變，
-      剩餘張數恢復。
-    */
-
     renderPrizeList();
 
 
     showDeck(
       true
     );
+
+
+    playReadySound();
 
 
     hint.textContent =
