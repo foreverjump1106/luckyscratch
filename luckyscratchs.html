@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
 
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-  >
+  />
 
   <title>班級幸運刮刮樂</title>
 
@@ -82,15 +82,11 @@
     }
 
     .app {
-      width: min(1180px, 100%);
+      width: min(1280px, 100%);
       margin: auto;
       padding: 18px 14px 40px;
       text-align: center;
     }
-
-    /* =========================
-       標題
-    ========================= */
 
     h1 {
       margin: 4px 0 6px;
@@ -172,8 +168,7 @@
           .08
         );
 
-      font-size:
-        14px;
+      font-size: 14px;
 
       font-weight: 900;
 
@@ -192,7 +187,7 @@
     .stage {
       position: relative;
 
-      min-height: 540px;
+      min-height: 560px;
 
       padding: 24px;
 
@@ -231,6 +226,11 @@
       display: flex;
       justify-content: center;
       align-items: center;
+    }
+
+    .stage.dealing-stage {
+      align-items: flex-start;
+      overflow: visible;
     }
 
     .hint {
@@ -375,7 +375,7 @@
     }
 
     /* =========================
-       卡片背面
+       卡片共用樣式
     ========================= */
 
     .ticket-face {
@@ -464,33 +464,22 @@
     .ticket-icon {
       font-size:
         clamp(
-          52px,
-          8vw,
-          78px
+          46px,
+          7vw,
+          72px
         );
 
       line-height: 1;
 
       margin-bottom: 9px;
-
-      filter:
-        drop-shadow(
-          0 4px 0
-          rgba(
-            30,
-            35,
-            70,
-            .35
-          )
-        );
     }
 
     .ticket-title {
       font-size:
         clamp(
-          24px,
-          4vw,
-          38px
+          20px,
+          3.6vw,
+          34px
         );
 
       font-weight: 1000;
@@ -514,19 +503,19 @@
 
       font-size:
         clamp(
-          12px,
-          2vw,
-          16px
+          10px,
+          1.8vw,
+          14px
         );
 
       font-weight: 900;
 
-      letter-spacing: 3px;
+      letter-spacing: 2px;
     }
 
-    /* =========================
-       疊牌
-    ========================= */
+    /* =====================================================
+       初始牌堆
+    ===================================================== */
 
     .deck {
       position: relative;
@@ -539,7 +528,7 @@
 
       aspect-ratio: 2 / 3;
 
-      perspective: 1000px;
+      perspective: 1400px;
     }
 
     .deck-card {
@@ -614,179 +603,136 @@
         rotate(7deg);
     }
 
-    /* =========================
-       洗牌動畫
-    ========================= */
+    /* =====================================================
+       真人式上下洗牌動畫
+    ===================================================== */
 
-    .deck.shuffling
-    .deck-card:nth-child(1) {
-      animation:
-        shuffle1
-        .18s
-        ease-in-out
-        infinite
-        alternate;
+    .shuffle-table {
+      position: relative;
+
+      width: 520px;
+      height: 480px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      perspective: 1200px;
     }
 
-    .deck.shuffling
-    .deck-card:nth-child(2) {
-      animation:
-        shuffle2
-        .21s
-        ease-in-out
-        infinite
-        alternate;
+    .hand {
+      position: absolute;
+
+      width: 110px;
+      height: 145px;
+
+      border-radius: 50% 50% 44% 44%;
+
+      background:
+        linear-gradient(
+          160deg,
+          #f4c7a6,
+          #dca47e
+        );
+
+      opacity: .92;
+
+      filter:
+        drop-shadow(
+          0 10px 15px
+          rgba(
+            65,
+            40,
+            20,
+            .15
+          )
+        );
+
+      z-index: 30;
     }
 
-    .deck.shuffling
-    .deck-card:nth-child(3) {
+    .hand.left {
+      left: 52px;
+      top: 150px;
+
+      transform:
+        rotate(18deg);
+
       animation:
-        shuffle3
-        .17s
+        leftHandMove
+        1.8s
         ease-in-out
-        infinite
-        alternate;
+        infinite;
     }
 
-    .deck.shuffling
-    .deck-card:nth-child(4) {
+    .hand.right {
+      right: 52px;
+      top: 118px;
+
+      transform:
+        rotate(-18deg);
+
       animation:
-        shuffle4
-        .20s
+        rightHandMove
+        1.8s
         ease-in-out
-        infinite
-        alternate;
+        infinite;
     }
 
-    .deck.shuffling
-    .deck-card:nth-child(5) {
-      animation:
-        shuffle5
-        .16s
-        ease-in-out
-        infinite
-        alternate;
+    .hand::after {
+      content: "";
+
+      position: absolute;
+
+      width: 45px;
+      height: 120px;
+
+      border-radius: 40px;
+
+      background:
+        inherit;
+
+      top: -37px;
+      left: 33px;
     }
 
-    .deck.shuffling
-    .deck-card:nth-child(6) {
-      animation:
-        shuffle6
-        .19s
-        ease-in-out
-        infinite
-        alternate;
-    }
-
-    .deck.shuffling
-    .deck-card:nth-child(7) {
-      animation:
-        shuffle7
-        .22s
-        ease-in-out
-        infinite
-        alternate;
-    }
-
-    .deck.shuffling
-    .deck-card:nth-child(8) {
-      animation:
-        shuffle8
-        .18s
-        ease-in-out
-        infinite
-        alternate;
-    }
-
-    @keyframes shuffle1 {
-      to {
+    @keyframes leftHandMove {
+      0%,
+      100% {
         transform:
-          translate(-90px,-22px)
-          rotate(-16deg);
+          translateY(12px)
+          rotate(18deg);
       }
-    }
 
-    @keyframes shuffle2 {
-      to {
+      50% {
         transform:
-          translate(78px,-28px)
-          rotate(13deg);
-      }
-    }
-
-    @keyframes shuffle3 {
-      to {
-        transform:
-          translate(-58px,22px)
-          rotate(10deg);
-      }
-    }
-
-    @keyframes shuffle4 {
-      to {
-        transform:
-          translate(62px,28px)
-          rotate(-11deg);
-      }
-    }
-
-    @keyframes shuffle5 {
-      to {
-        transform:
-          translate(-76px,-10px)
+          translateY(-10px)
           rotate(15deg);
       }
     }
 
-    @keyframes shuffle6 {
-      to {
+    @keyframes rightHandMove {
+      0%,
+      100% {
         transform:
-          translate(88px,10px)
+          translateY(-8px)
+          rotate(-18deg);
+      }
+
+      50% {
+        transform:
+          translateY(12px)
           rotate(-15deg);
       }
     }
 
-    @keyframes shuffle7 {
-      to {
-        transform:
-          translate(-52px,32px)
-          rotate(9deg);
-      }
-    }
-
-    @keyframes shuffle8 {
-      to {
-        transform:
-          translate(55px,-35px)
-          rotate(-9deg);
-      }
-    }
-
-    /* =========================
-       攤牌
-    ========================= */
-
-    .fan {
-      width: 100%;
-      min-height: 445px;
-
-      display: flex;
-      justify-content: center;
-      align-items: center;
-
-      padding: 40px 0;
-    }
-
-    .pick-card {
-      position: relative;
+    .shuffle-pile {
+      position: absolute;
 
       width: 180px;
       height: 270px;
 
-      margin:
-        0 -42px;
-
-      border-radius: 20px;
+      border-radius: 18px;
 
       border:
         5px solid white;
@@ -794,12 +740,361 @@
       background: white;
 
       box-shadow:
-        0 12px 25px
+        0 13px 28px
+        rgba(
+          43,
+          42,
+          72,
+          .23
+        );
+    }
+
+    .shuffle-pile.top-pile {
+      top: 42px;
+      left: 170px;
+
+      transform:
+        rotate(-6deg);
+
+      animation:
+        upperPileMove
+        1.2s
+        ease-in-out
+        infinite;
+    }
+
+    .shuffle-pile.bottom-pile {
+      top: 165px;
+      left: 185px;
+
+      transform:
+        rotate(5deg);
+
+      animation:
+        lowerPileMove
+        1.2s
+        ease-in-out
+        infinite;
+    }
+
+    @keyframes upperPileMove {
+      0%,
+      100% {
+        transform:
+          translateY(-8px)
+          rotate(-6deg);
+      }
+
+      50% {
+        transform:
+          translateY(12px)
+          rotate(-3deg);
+      }
+    }
+
+    @keyframes lowerPileMove {
+      0%,
+      100% {
+        transform:
+          translateY(7px)
+          rotate(5deg);
+      }
+
+      50% {
+        transform:
+          translateY(-8px)
+          rotate(3deg);
+      }
+    }
+
+    .shuffle-packet {
+      position: absolute;
+
+      width: 168px;
+      height: 252px;
+
+      border-radius: 17px;
+
+      border:
+        4px solid white;
+
+      background: white;
+
+      box-shadow:
+        0 9px 18px
+        rgba(
+          40,
+          35,
+          70,
+          .18
+        );
+
+      z-index: 15;
+
+      opacity: 0;
+    }
+
+    .shuffle-packet.packet1 {
+      animation:
+        packetDrop1
+        1.8s
+        ease-in-out
+        infinite;
+    }
+
+    .shuffle-packet.packet2 {
+      animation:
+        packetDrop2
+        1.8s
+        ease-in-out
+        infinite;
+    }
+
+    .shuffle-packet.packet3 {
+      animation:
+        packetDrop3
+        1.8s
+        ease-in-out
+        infinite;
+    }
+
+    .shuffle-packet.packet4 {
+      animation:
+        packetDrop4
+        1.8s
+        ease-in-out
+        infinite;
+    }
+
+    .shuffle-packet.packet5 {
+      animation:
+        packetDrop5
+        1.8s
+        ease-in-out
+        infinite;
+    }
+
+    @keyframes packetDrop1 {
+      0% {
+        opacity: 0;
+        transform:
+          translate(30px,-95px)
+          rotate(-5deg)
+          scale(.98);
+      }
+
+      10% {
+        opacity: 1;
+      }
+
+      34% {
+        opacity: 1;
+
+        transform:
+          translate(2px,35px)
+          rotate(2deg)
+          scale(.99);
+      }
+
+      40%,
+      100% {
+        opacity: 0;
+      }
+    }
+
+    @keyframes packetDrop2 {
+      0%,
+      18% {
+        opacity: 0;
+
+        transform:
+          translate(22px,-86px)
+          rotate(-3deg);
+      }
+
+      26% {
+        opacity: 1;
+      }
+
+      48% {
+        opacity: 1;
+
+        transform:
+          translate(-2px,48px)
+          rotate(1deg);
+      }
+
+      54%,
+      100% {
+        opacity: 0;
+      }
+    }
+
+    @keyframes packetDrop3 {
+      0%,
+      33% {
+        opacity: 0;
+
+        transform:
+          translate(18px,-80px)
+          rotate(-3deg);
+      }
+
+      41% {
+        opacity: 1;
+      }
+
+      63% {
+        opacity: 1;
+
+        transform:
+          translate(0,56px)
+          rotate(2deg);
+      }
+
+      69%,
+      100% {
+        opacity: 0;
+      }
+    }
+
+    @keyframes packetDrop4 {
+      0%,
+      48% {
+        opacity: 0;
+
+        transform:
+          translate(15px,-78px)
+          rotate(-2deg);
+      }
+
+      56% {
+        opacity: 1;
+      }
+
+      78% {
+        opacity: 1;
+
+        transform:
+          translate(-3px,64px)
+          rotate(1deg);
+      }
+
+      84%,
+      100% {
+        opacity: 0;
+      }
+    }
+
+    @keyframes packetDrop5 {
+      0%,
+      63% {
+        opacity: 0;
+
+        transform:
+          translate(12px,-74px)
+          rotate(-1deg);
+      }
+
+      71% {
+        opacity: 1;
+      }
+
+      93% {
+        opacity: 1;
+
+        transform:
+          translate(0,70px)
+          rotate(1deg);
+      }
+
+      100% {
+        opacity: 0;
+      }
+    }
+
+    .shuffle-label {
+      position: absolute;
+
+      bottom: 5px;
+
+      width: 100%;
+
+      font-size: 19px;
+
+      font-weight: 1000;
+
+      color: var(--navy);
+
+      letter-spacing: 2px;
+
+      animation:
+        labelPulse
+        .9s
+        ease-in-out
+        infinite
+        alternate;
+    }
+
+    @keyframes labelPulse {
+      to {
+        transform: scale(1.05);
+        opacity: .65;
+      }
+    }
+
+    /* =====================================================
+       全部牌攤開
+    ===================================================== */
+
+    .all-cards-area {
+      width: 100%;
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(
+          auto-fit,
+          minmax(
+            115px,
+            1fr
+          )
+        );
+
+      gap:
+        18px
+        13px;
+
+      padding:
+        18px 8px 30px;
+    }
+
+    .all-card {
+      position: relative;
+
+      width: 100%;
+
+      max-width: 145px;
+
+      aspect-ratio:
+        2 / 3;
+
+      margin: auto;
+
+      border-radius: 16px;
+
+      border:
+        4px solid white;
+
+      background: white;
+
+      box-shadow:
+        0 9px 18px
         rgba(
           46,
           40,
           76,
-          .25
+          .18
         );
 
       cursor: pointer;
@@ -807,13 +1102,14 @@
       overflow: hidden;
 
       transition:
-        .25s transform,
-        .25s opacity,
-        .25s filter;
+        .22s transform,
+        .22s box-shadow,
+        .22s filter,
+        .22s opacity;
 
       animation:
-        deal
-        .6s
+        dealAllCards
+        .5s
         cubic-bezier(
           .2,
           .8,
@@ -823,75 +1119,84 @@
         both;
     }
 
-    .pick-card:nth-child(1) {
-      transform:
-        translateY(50px)
-        rotate(-28deg);
-    }
-
-    .pick-card:nth-child(2) {
-      transform:
-        translateY(31px)
-        rotate(-20deg);
-    }
-
-    .pick-card:nth-child(3) {
-      transform:
-        translateY(15px)
-        rotate(-12deg);
-    }
-
-    .pick-card:nth-child(4) {
-      transform:
-        translateY(4px)
-        rotate(-4deg);
-    }
-
-    .pick-card:nth-child(5) {
-      transform:
-        translateY(4px)
-        rotate(4deg);
-    }
-
-    .pick-card:nth-child(6) {
-      transform:
-        translateY(15px)
-        rotate(12deg);
-    }
-
-    .pick-card:nth-child(7) {
-      transform:
-        translateY(31px)
-        rotate(20deg);
-    }
-
-    .pick-card:nth-child(8) {
-      transform:
-        translateY(50px)
-        rotate(28deg);
-    }
-
-    .pick-card:hover,
-    .pick-card:active {
-      z-index: 30;
+    .all-card:hover,
+    .all-card:active {
+      z-index: 20;
 
       transform:
-        translateY(-25px)
-        rotate(0deg)
-        scale(1.09);
+        translateY(-10px)
+        scale(1.06);
 
-      filter: brightness(1.08);
+      box-shadow:
+        0 16px 30px
+        rgba(
+          46,
+          40,
+          76,
+          .25
+        );
+
+      filter:
+        brightness(1.08);
     }
 
-    @keyframes deal {
+    @keyframes dealAllCards {
       from {
         opacity: 0;
 
         transform:
-          translateY(170px)
-          rotate(0deg)
-          scale(.4);
+          translateY(45px)
+          scale(.8);
       }
+
+      to {
+        opacity: 1;
+
+        transform:
+          translateY(0)
+          scale(1);
+      }
+    }
+
+    .all-card-number {
+      position: absolute;
+
+      top: 6px;
+      right: 7px;
+
+      z-index: 5;
+
+      width: 28px;
+      height: 28px;
+
+      border-radius: 50%;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      background:
+        rgba(
+          255,
+          255,
+          255,
+          .88
+        );
+
+      color: var(--navy);
+
+      font-size: 12px;
+
+      font-weight: 1000;
+
+      box-shadow:
+        0 3px 8px
+        rgba(
+          20,
+          25,
+          60,
+          .15
+        );
     }
 
     /* =========================
@@ -1036,10 +1341,6 @@
 
       letter-spacing: 2px;
     }
-
-    /* =========================
-       刮除區，全滿
-    ========================= */
 
     .scratch-area {
       position: relative;
@@ -1309,7 +1610,7 @@
     }
 
     /* =========================
-       爆炸動畫
+       慶祝動畫
     ========================= */
 
     .confetti {
@@ -1377,43 +1678,69 @@
        手機平板
     ========================= */
 
-    @media
-    (max-width: 850px) {
+    @media (max-width: 850px) {
 
       .stage {
-        min-height: 510px;
-
-        padding:
-          12px 4px;
+        min-height: 520px;
+        padding: 12px 8px;
       }
 
-      .fan {
-        width: 128%;
-
-        transform:
-          scale(.82);
+      .shuffle-table {
+        transform: scale(.82);
       }
 
-      .pick-card {
-        margin:
-          0 -52px;
+      .all-cards-area {
+        grid-template-columns:
+          repeat(
+            auto-fit,
+            minmax(
+              92px,
+              1fr
+            )
+          );
+
+        gap:
+          12px
+          8px;
+      }
+
+      .all-card {
+        max-width: 120px;
       }
 
     }
 
-    @media
-    (max-width: 620px) {
+    @media (max-width: 620px) {
 
-      .fan {
-        width: 150%;
-
-        transform:
-          scale(.7);
+      .shuffle-table {
+        transform: scale(.68);
       }
 
-      .pick-card {
-        margin:
-          0 -60px;
+      .all-cards-area {
+        grid-template-columns:
+          repeat(
+            4,
+            1fr
+          );
+
+        gap: 8px;
+      }
+
+      .all-card {
+        max-width: 100px;
+      }
+
+      .ticket-title {
+        font-size: 14px;
+        letter-spacing: 1px;
+      }
+
+      .ticket-icon {
+        font-size: 30px;
+      }
+
+      .ticket-text {
+        font-size: 8px;
       }
 
       .prize-grid {
@@ -1584,14 +1911,6 @@
 
   <script>
 
-    /* =====================================================
-       固定獎項設定
-
-       共 40 張：
-       有獎 30 張
-       再接再厲 10 張
-    ===================================================== */
-
     const PRIZE_DEFINITIONS = [
 
       {
@@ -1625,8 +1944,7 @@
         id: "stationeryA",
         name: "文具 A",
         icon: "🖊️📒",
-        description:
-          "藍黑筆、立可帶、筆記本，三選一",
+        description: "藍黑筆、立可帶、筆記本，三選一",
         count: 4,
         type: "normal"
       },
@@ -1635,8 +1953,7 @@
         id: "stationeryB",
         name: "文具 B",
         icon: "✏️📏",
-        description:
-          "自動筆、橡皮擦、直尺，三選一",
+        description: "自動筆、橡皮擦、直尺，三選一",
         count: 4,
         type: "normal"
       },
@@ -1645,8 +1962,7 @@
         id: "cookie",
         name: "小餅乾",
         icon: "🍪",
-        description:
-          "恭喜獲得小餅乾 1 份！",
+        description: "恭喜獲得小餅乾 1 份！",
         count: 8,
         type: "normal"
       },
@@ -1655,8 +1971,7 @@
         id: "drawAgain",
         name: "再抽一次",
         icon: "🎟️🔄",
-        description:
-          "太幸運了！可以立刻再抽一張！",
+        description: "太幸運了！可以立刻再抽一張！",
         count: 1,
         type: "again"
       },
@@ -1665,8 +1980,7 @@
         id: "silver",
         name: "銀卡",
         icon: "🥈🥤",
-        description:
-          "全班累積 10 張銀卡，可獲得飲料一杯！",
+        description: "全班累積 10 張銀卡，可獲得飲料一杯！",
         count: 7,
         type: "silver"
       },
@@ -1675,33 +1989,15 @@
         id: "tryAgain",
         name: "再接再厲",
         icon: "🍀",
-        description:
-          "這次差一點，好運下次再來！",
+        description: "這次差一點，好運下次再來！",
         count: 10,
         type: "none"
       }
 
     ];
 
-    /* =====================================================
-       儲存名稱
-
-       localStorage 會讓同一台裝置重新整理後，
-       獎池仍維持原本剩餘數量。
-    ===================================================== */
-
     const STORAGE_KEY =
-      "classLuckyScratchPool_v1";
-
-    /* =====================================================
-       一次攤開幾張
-    ===================================================== */
-
-    const DISPLAY_CARD_COUNT = 8;
-
-    /* =====================================================
-       HTML 元件
-    ===================================================== */
+      "classLuckyScratchPool_v2";
 
     const stage =
       document.getElementById(
@@ -1738,62 +2034,57 @@
         "remainingCount"
       );
 
-    /* =====================================================
-       遊戲狀態
-    ===================================================== */
-
     let prizePool = [];
 
     let currentPrize = null;
 
-    let scratchingFinished =
-      false;
+    let scratchingFinished = false;
 
-    let cardSelected =
-      false;
+    let cardSelected = false;
 
-    /* =====================================================
-       建立新的 40 張固定獎池
-    ===================================================== */
+    /* =============================
+       建立獎池
+    ============================= */
 
     function createFreshPool() {
 
       const pool = [];
 
-      PRIZE_DEFINITIONS
-        .forEach(
-          prize => {
+      PRIZE_DEFINITIONS.forEach(
+        prize => {
 
-            for (
-              let i = 0;
-              i < prize.count;
-              i++
-            ) {
+          for (
+            let i = 0;
+            i < prize.count;
+            i++
+          ) {
 
-              pool.push({
-                id:
-                  prize.id,
+            pool.push({
 
-                name:
-                  prize.name,
+              id:
+                prize.id,
 
-                icon:
-                  prize.icon,
+              name:
+                prize.name,
 
-                description:
-                  prize.description,
+              icon:
+                prize.icon,
 
-                type:
-                  prize.type,
+              description:
+                prize.description,
 
-                serial:
-                  `${prize.id}-${i + 1}`
-              });
+              type:
+                prize.type,
 
-            }
+              serial:
+                `${prize.id}-${i + 1}`
+
+            });
 
           }
-        );
+
+        }
+      );
 
       return shuffleArray(
         pool
@@ -1801,9 +2092,9 @@
 
     }
 
-    /* =====================================================
-       Fisher-Yates 洗牌
-    ===================================================== */
+    /* =============================
+       洗牌陣列
+    ============================= */
 
     function shuffleArray(
       array
@@ -1843,9 +2134,9 @@
 
     }
 
-    /* =====================================================
-       儲存獎池
-    ===================================================== */
+    /* =============================
+       儲存
+    ============================= */
 
     function savePool() {
 
@@ -1860,9 +2151,9 @@
 
     }
 
-    /* =====================================================
-       載入獎池
-    ===================================================== */
+    /* =============================
+       載入
+    ============================= */
 
     function loadPool() {
 
@@ -1926,10 +2217,6 @@
 
     }
 
-    /* =====================================================
-       剩餘張數
-    ===================================================== */
-
     function updateRemainingCount() {
 
       remainingCount.textContent =
@@ -1937,9 +2224,9 @@
 
     }
 
-    /* =====================================================
-       卡片背面
-    ===================================================== */
+    /* =============================
+       卡片圖案
+    ============================= */
 
     function ticketFaceHTML() {
 
@@ -1966,9 +2253,9 @@
 
     }
 
-    /* =====================================================
-       初始畫面
-    ===================================================== */
+    /* =============================
+       初始牌堆
+    ============================= */
 
     function showDeck() {
 
@@ -1980,6 +2267,10 @@
 
       cardSelected =
         false;
+
+      stage.classList.remove(
+        "dealing-stage"
+      );
 
       nextBtn.style.display =
         "none";
@@ -2005,15 +2296,6 @@
 
       }
 
-      const visibleDeckCount =
-        Math.min(
-          8,
-          Math.max(
-            1,
-            prizePool.length
-          )
-        );
-
       stage.innerHTML = `
 
         <div
@@ -2024,8 +2306,7 @@
           ${Array
             .from(
               {
-                length:
-                  visibleDeckCount
+                length: 8
               },
               () => `
 
@@ -2048,51 +2329,9 @@
 
     }
 
-    /* =====================================================
-       獎池用完
-    ===================================================== */
-
-    function showEmptyPool() {
-
-      stage.innerHTML = `
-
-        <div class="empty-box">
-
-          <div class="empty-icon">
-            🎉
-          </div>
-
-          40 張刮刮樂已經全部抽完！
-
-          <br><br>
-
-          老師若要重新開始，
-
-          <br>
-
-          請按下「重設 40 張獎池」。
-
-        </div>
-
-      `;
-
-      hint.textContent =
-        "本輪抽獎已全部完成！";
-
-      shuffleBtn.style.display =
-        "none";
-
-      nextBtn.style.display =
-        "none";
-
-      drawAgainBtn.style.display =
-        "none";
-
-    }
-
-    /* =====================================================
-       洗牌
-    ===================================================== */
+    /* =============================
+       真人上下洗牌
+    ============================= */
 
     function startShuffle() {
 
@@ -2106,26 +2345,11 @@
 
       }
 
-      const deck =
-        document.getElementById(
-          "deck"
-        );
-
-      if (!deck) {
-        return;
-      }
-
       shuffleBtn.disabled =
         true;
 
       hint.textContent =
-        "正在洗牌中…… 🔀";
-
-      deck.classList.add(
-        "shuffling"
-      );
-
-      /* 同時真正重新排列剩餘獎池 */
+        "正在上下洗牌中…… 🔀";
 
       prizePool =
         shuffleArray(
@@ -2134,53 +2358,122 @@
 
       savePool();
 
+      stage.innerHTML = `
+
+        <div class="shuffle-table">
+
+          <div class="hand left"></div>
+          <div class="hand right"></div>
+
+          <div class="shuffle-pile top-pile">
+
+            ${ticketFaceHTML()}
+
+          </div>
+
+          <div class="shuffle-pile bottom-pile">
+
+            ${ticketFaceHTML()}
+
+          </div>
+
+          <div class="shuffle-packet packet1">
+
+            ${ticketFaceHTML()}
+
+          </div>
+
+          <div class="shuffle-packet packet2">
+
+            ${ticketFaceHTML()}
+
+          </div>
+
+          <div class="shuffle-packet packet3">
+
+            ${ticketFaceHTML()}
+
+          </div>
+
+          <div class="shuffle-packet packet4">
+
+            ${ticketFaceHTML()}
+
+          </div>
+
+          <div class="shuffle-packet packet5">
+
+            ${ticketFaceHTML()}
+
+          </div>
+
+          <div class="shuffle-label">
+            上下洗牌中……
+          </div>
+
+        </div>
+
+      `;
+
       setTimeout(
         () => {
 
-          deck.classList.remove(
-            "shuffling"
-          );
+          prizePool =
+            shuffleArray(
+              prizePool
+            );
 
-          dealCards();
+          savePool();
+
+          dealAllCards();
 
         },
-        1700
+        3600
       );
 
     }
 
-    /* =====================================================
-       攤牌
-    ===================================================== */
+    /* =============================
+       攤開全部剩餘卡片
+    ============================= */
 
-    function dealCards() {
+    function dealAllCards() {
 
-      const cardCount =
-        Math.min(
-          DISPLAY_CARD_COUNT,
-          prizePool.length
-        );
+      stage.classList.add(
+        "dealing-stage"
+      );
+
+      const count =
+        prizePool.length;
 
       stage.innerHTML = `
 
-        <div class="fan">
+        <div class="all-cards-area">
 
-          ${Array
-            .from(
-              {
-                length:
-                  cardCount
-              },
-              (_, index) => `
+          ${prizePool
+            .map(
+              (
+                prize,
+                index
+              ) => `
 
                 <div
-                  class="pick-card"
+                  class="all-card"
                   data-index="${index}"
                   style="
                     animation-delay:
-                    ${index * .07}s;
+                    ${
+                      Math.min(
+                        index * .025,
+                        .8
+                      )
+                    }s;
                   "
                 >
+
+                  <div class="all-card-number">
+                    ${index + 1}
+                  </div>
 
                   ${ticketFaceHTML()}
 
@@ -2195,14 +2488,14 @@
       `;
 
       hint.textContent =
-        "從攤開的刮刮樂中，挑一張吧！ 👆";
+        `全部 ${count} 張都已攤開，請挑一張！ 👆`;
 
       shuffleBtn.style.display =
         "none";
 
       document
         .querySelectorAll(
-          ".pick-card"
+          ".all-card"
         )
         .forEach(
           card => {
@@ -2223,13 +2516,9 @@
 
     }
 
-    /* =====================================================
-       玩家選一張
-
-       重點：
-       這裡不是重新亂數產生獎品，
-       而是從固定獎池拿掉一張。
-    ===================================================== */
+    /* =============================
+       選卡
+    ============================= */
 
     function selectCard(
       card
@@ -2249,20 +2538,10 @@
           card.dataset.index
         );
 
-      /*
-        前面展示的 8 張，
-        實際對應獎池中的前 8 張。
-      */
-
       currentPrize =
         prizePool[
           chosenIndex
         ];
-
-      /*
-        從獎池移除，
-        所以同一張絕對不會再出現。
-      */
 
       prizePool.splice(
         chosenIndex,
@@ -2275,11 +2554,11 @@
         "60";
 
       card.style.transform =
-        "translateY(-35px) rotate(0deg) scale(1.13)";
+        "translateY(-18px) scale(1.12)";
 
       document
         .querySelectorAll(
-          ".pick-card"
+          ".all-card"
         )
         .forEach(
           otherCard => {
@@ -2289,10 +2568,10 @@
             ) {
 
               otherCard.style.opacity =
-                ".18";
+                ".15";
 
               otherCard.style.filter =
-                "grayscale(.55)";
+                "grayscale(.65)";
 
             }
 
@@ -2309,11 +2588,15 @@
 
     }
 
-    /* =====================================================
-       顯示刮刮樂
-    ===================================================== */
+    /* =============================
+       刮刮樂
+    ============================= */
 
     function showScratchTicket() {
+
+      stage.classList.remove(
+        "dealing-stage"
+      );
 
       let prizeClass =
         "";
@@ -2432,9 +2715,9 @@
 
     }
 
-    /* =====================================================
+    /* =============================
        刮除功能
-    ===================================================== */
+    ============================= */
 
     function initScratch() {
 
@@ -2498,10 +2781,6 @@
         0
       );
 
-      /* =====================
-         銀色金屬層
-      ===================== */
-
       const gradient =
         ctx.createLinearGradient(
           0,
@@ -2555,10 +2834,6 @@
         rect.height
       );
 
-      /* =====================
-         金屬亮點
-      ===================== */
-
       ctx.fillStyle =
         "rgba(255,255,255,.34)";
 
@@ -2589,10 +2864,6 @@
 
       }
 
-      /* =====================
-         銀色層文字
-      ===================== */
-
       ctx.textAlign =
         "center";
 
@@ -2619,10 +2890,6 @@
         rect.width / 2,
         rect.height / 2 + 28
       );
-
-      /* =====================
-         之後筆跡變透明
-      ===================== */
 
       ctx.globalCompositeOperation =
         "destination-out";
@@ -2841,11 +3108,6 @@
 
       }
 
-      /* =====================
-         Pointer Events
-         iPad / iPhone / 電腦
-      ===================== */
-
       if (
         window.PointerEvent
       ) {
@@ -2908,8 +3170,7 @@
           "touchstart",
           startScratch,
           {
-            passive:
-              false
+            passive: false
           }
         );
 
@@ -2917,8 +3178,7 @@
           "touchmove",
           scratch,
           {
-            passive:
-              false
+            passive: false
           }
         );
 
@@ -2931,9 +3191,9 @@
 
     }
 
-    /* =====================================================
-       檢查刮除比例
-    ===================================================== */
+    /* =============================
+       計算刮除比例
+    ============================= */
 
     function checkScratch(
       ctx,
@@ -2943,9 +3203,7 @@
       if (
         scratchingFinished
       ) {
-
         return;
-
       }
 
       const data =
@@ -2962,11 +3220,6 @@
       let checked =
         0;
 
-      /*
-        每 4 個像素抽樣一次，
-        降低 iPad 運算負擔。
-      */
-
       for (
         let i = 3;
         i < data.length;
@@ -2976,8 +3229,7 @@
         checked++;
 
         if (
-          data[i] <
-          20
+          data[i] < 20
         ) {
 
           transparent++;
@@ -2988,11 +3240,6 @@
 
       const ratio =
         transparent / checked;
-
-      /*
-        刮掉約 42%
-        自動完整揭曉。
-      */
 
       if (
         ratio >= .42
@@ -3006,9 +3253,9 @@
 
     }
 
-    /* =====================================================
-       刮完後
-    ===================================================== */
+    /* =============================
+       刮完
+    ============================= */
 
     function finishScratch(
       canvas
@@ -3041,10 +3288,6 @@
           "result"
         );
 
-      /* =====================
-         再抽一次
-      ===================== */
-
       if (
         currentPrize.type ===
         "again"
@@ -3054,7 +3297,7 @@
           "🎟️ 太幸運了！這張可以再抽一次！";
 
         hint.textContent =
-          `目前還剩 ${prizePool.length} 張，請直接再抽一張！`;
+          `目前還剩 ${prizePool.length} 張，可以再抽一次！`;
 
         drawAgainBtn.style.display =
           prizePool.length > 0
@@ -3065,10 +3308,6 @@
           "none";
 
       }
-
-      /* =====================
-         再接再厲
-      ===================== */
 
       else if (
         currentPrize.type ===
@@ -3087,10 +3326,6 @@
             : "none";
 
       }
-
-      /* =====================
-         一般獎項
-      ===================== */
 
       else {
 
@@ -3113,9 +3348,9 @@
 
     }
 
-    /* =====================================================
+    /* =============================
        慶祝動畫
-    ===================================================== */
+    ============================= */
 
     function celebrate() {
 
@@ -3193,9 +3428,9 @@
 
     }
 
-    /* =====================================================
+    /* =============================
        下一位
-    ===================================================== */
+    ============================= */
 
     function nextPlayer() {
 
@@ -3203,27 +3438,22 @@
 
     }
 
-    /* =====================================================
+    /* =============================
        再抽一次
-    ===================================================== */
+    ============================= */
 
     function drawAgain() {
-
-      /*
-        獎池不重設，
-        直接開始下一次抽獎。
-      */
 
       showDeck();
 
       hint.textContent =
-        "🎟️ 你獲得再抽一次！請重新洗牌再抽一張！";
+        "🎟️ 你獲得再抽一次！請重新洗牌後再選一張！";
 
     }
 
-    /* =====================================================
+    /* =============================
        重設 40 張
-    ===================================================== */
+    ============================= */
 
     function resetPool() {
 
@@ -3257,9 +3487,55 @@
 
     }
 
-    /* =====================================================
-       按鈕事件
-    ===================================================== */
+    /* =============================
+       獎池抽完
+    ============================= */
+
+    function showEmptyPool() {
+
+      stage.classList.remove(
+        "dealing-stage"
+      );
+
+      stage.innerHTML = `
+
+        <div class="empty-box">
+
+          <div class="empty-icon">
+            🎉
+          </div>
+
+          40 張刮刮樂已經全部抽完！
+
+          <br><br>
+
+          老師若要重新開始，
+
+          <br>
+
+          請按下「重設 40 張獎池」。
+
+        </div>
+
+      `;
+
+      hint.textContent =
+        "本輪抽獎已全部完成！";
+
+      shuffleBtn.style.display =
+        "none";
+
+      nextBtn.style.display =
+        "none";
+
+      drawAgainBtn.style.display =
+        "none";
+
+    }
+
+    /* =============================
+       按鈕
+    ============================= */
 
     shuffleBtn.addEventListener(
       "click",
@@ -3281,9 +3557,9 @@
       resetPool
     );
 
-    /* =====================================================
-       啟動遊戲
-    ===================================================== */
+    /* =============================
+       啟動
+    ============================= */
 
     loadPool();
 
