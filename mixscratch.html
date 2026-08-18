@@ -1,2108 +1,2927 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-  >
-
-  <title>班級幸運刮刮樂</title>
-
-  <style>
-    :root {
-      --blue1: #2f477a;
-      --blue2: #1f315a;
-      --silver: #dfe5eb;
-
-      --gold1: #f0bd3d;
-      --gold2: #a9780c;
-
-      --cream: #fffaf0;
-      --text: #3d3629;
-
-      --shadow:
-        0 16px 38px rgba(45,45,70,.18);
-    }
-
-    * {
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    html,
-    body {
-      margin: 0;
-      min-height: 100%;
-    }
-
-    body {
-      min-height: 100vh;
-
-      font-family:
-        "Noto Sans TC",
-        "PingFang TC",
-        "Microsoft JhengHei",
-        sans-serif;
-
-      color: var(--text);
-
-      background:
-        linear-gradient(
-          145deg,
-          #fffaf0,
-          #efe4c6
-        );
-    }
-
-    button {
-      font: inherit;
-    }
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+>
+
+<title>班級幸運刮刮樂</title>
+
+<style>
+:root{
+  --blue:#304b84;
+  --blue-dark:#1f315a;
+
+  --silver1:#667fc0;
+  --silver2:#3c548e;
+  --silver3:#292d5f;
+
+  --gold1:#ffe38a;
+  --gold2:#d39f26;
+  --gold3:#946406;
+
+  --yellow:#f2c75c;
+  --cream:#fffaf0;
+  --text:#443920;
+
+  --shadow:0 16px 38px rgba(45,42,75,.18);
+}
+
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+html,
+body{
+  margin:0;
+  min-height:100%;
+}
+
+body{
+  min-height:100vh;
+
+  font-family:
+    "Noto Sans TC",
+    "PingFang TC",
+    "Microsoft JhengHei",
+    sans-serif;
 
-    .hidden {
-      display: none !important;
-    }
-
-    .app {
-      width: min(1320px, 100%);
-      margin: auto;
-      padding: 18px 14px 40px;
-      text-align: center;
-    }
-
-    h1 {
-      margin: 6px 0;
-
-      font-size:
-        clamp(30px, 6vw, 56px);
-
-      color: #29416f;
-    }
-
-    .subtitle {
-      margin: 0 0 18px;
-      font-weight: 800;
-      color: #79591c;
-    }
-
-    /* =========================
-       登入列
-    ========================= */
-
-    .login-panel {
-      width: min(800px, 100%);
-      margin: 0 auto 20px;
-
-      padding: 14px 18px;
-
-      border-radius: 20px;
-
-      background:
-        rgba(255,255,255,.76);
-
-      box-shadow:
-        0 8px 22px rgba(60,45,20,.1);
-    }
-
-    .login-panel.logged {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 15px;
-      flex-wrap: wrap;
-    }
-
-    .student-info {
-      text-align: left;
-      font-weight: 800;
-    }
-
-    .student-name {
-      color: #29416f;
-      font-size: 18px;
-      font-weight: 1000;
-    }
-
-    .student-email {
-      margin-top: 3px;
-      font-size: 13px;
-      color: #76684e;
-    }
-
-    /* =========================
-       首頁卡片
-    ========================= */
-
-    .home-grid {
-      width: min(900px, 100%);
-      margin: 30px auto;
-
-      display: grid;
-      grid-template-columns:
-        repeat(2, minmax(0,1fr));
-
-      gap: 24px;
-    }
-
-    .mode-card {
-      min-height: 300px;
-
-      border: none;
-      border-radius: 30px;
-
-      cursor: pointer;
-
-      padding: 30px;
-
-      color: white;
-
-      box-shadow: var(--shadow);
-
-      transition:
-        transform .2s,
-        box-shadow .2s;
-    }
-
-    .mode-card:hover {
-      transform: translateY(-7px);
-      box-shadow:
-        0 22px 42px rgba(45,45,70,.23);
-    }
-
-    .mode-card.silver {
-      background:
-        linear-gradient(
-          145deg,
-          #627fc2,
-          #304a83 55%,
-          #202b55
-        );
-    }
-
-    .mode-card.gold {
-      color: #fff9de;
-
-      background:
-        linear-gradient(
-          145deg,
-          #f5cf67,
-          #d29a20 55%,
-          #926307
-        );
-    }
-
-    .mode-icon {
-      font-size: 80px;
-    }
-
-    .mode-title {
-      margin-top: 10px;
-
-      font-size:
-        clamp(28px, 5vw, 42px);
-
-      font-weight: 1000;
-    }
-
-    .mode-desc {
-      margin-top: 10px;
-      font-weight: 800;
-      line-height: 1.6;
-    }
-
-    /* =========================
-       共用按鈕
-    ========================= */
-
-    .btn {
-      border: 0;
-      border-radius: 999px;
-
-      padding: 12px 22px;
-
-      font-weight: 1000;
-
-      cursor: pointer;
-
-      background:
-        linear-gradient(
-          #5878bb,
-          #304a83
-        );
+  color:var(--text);
 
-      color: white;
+  background:
+    radial-gradient(
+      circle at 10% 10%,
+      rgba(255,255,255,.9) 0 3px,
+      transparent 4px
+    ),
+    linear-gradient(
+      145deg,
+      #fffaf0,
+      #efe3c2
+    );
+}
+
+button{
+  font:inherit;
+}
+
+.hidden{
+  display:none !important;
+}
+
+.app{
+  width:min(1320px,100%);
+  margin:auto;
+  padding:18px 14px 40px;
+  text-align:center;
+}
+
+/* =========================================================
+   登入區
+========================================================= */
+
+.login-panel{
+  width:min(900px,100%);
+  margin:0 auto 18px;
+
+  padding:13px 18px;
+
+  border-radius:20px;
+
+  background:rgba(255,255,255,.78);
+
+  border:2px solid rgba(190,155,70,.16);
+
+  box-shadow:
+    0 8px 22px rgba(70,55,25,.09);
+}
+
+.login-panel.logged{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  gap:14px;
+  flex-wrap:wrap;
+}
 
-      box-shadow:
-        0 5px 0 #1f315a;
-    }
+.student-info{
+  text-align:left;
+}
 
-    .btn.gold {
-      color: #654600;
+.student-name{
+  font-size:18px;
+  font-weight:1000;
+  color:#304b84;
+}
+
+.student-email{
+  margin-top:3px;
 
-      background:
-        linear-gradient(
-          #ffe79b,
-          #eeb742
-        );
+  font-size:13px;
+  font-weight:800;
+  color:#756950;
+}
+
+.login-tip{
+  margin-bottom:10px;
+  font-weight:900;
+  color:#69501c;
+}
 
-      box-shadow:
-        0 5px 0 #aa7714;
-    }
+/* =========================================================
+   按鈕
+========================================================= */
 
-    .btn.light {
-      color: #51452e;
+.btn{
+  border:0;
 
-      background:
-        linear-gradient(
-          #fffdf7,
-          #e8dfc9
-        );
+  border-radius:999px;
 
-      box-shadow:
-        0 5px 0 #b3a587;
-    }
+  padding:12px 23px;
 
-    .btn:disabled {
-      opacity: .45;
-      cursor: not-allowed;
-    }
+  color:white;
 
-    /* =========================
-       遊戲頂部
-    ========================= */
+  font-weight:1000;
 
-    .game-header {
-      width: min(850px, 100%);
-      margin: auto;
-    }
+  cursor:pointer;
 
-    .back-line {
-      display: flex;
-      justify-content: flex-start;
-      margin-bottom: 8px;
-    }
+  background:
+    linear-gradient(
+      #5879bd,
+      #304b84
+    );
 
-    .game-title {
-      margin: 0;
+  box-shadow:
+    0 6px 0 #1e3159,
+    0 10px 18px rgba(45,45,75,.14);
 
-      font-size:
-        clamp(30px, 6vw, 50px);
+  transition:
+    transform .15s,
+    opacity .15s,
+    box-shadow .15s;
+}
 
-      font-weight: 1000;
-    }
+.btn:hover{
+  filter:brightness(1.05);
+}
 
-    .game-title.silver {
-      color: #344f87;
-    }
+.btn:active{
+  transform:translateY(4px);
 
-    .game-title.gold {
-      color: #986a05;
-    }
+  box-shadow:
+    0 2px 0 #1e3159,
+    0 5px 10px rgba(45,45,75,.12);
+}
 
-    .info-bar {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 9px;
+.btn.gold{
+  color:#624500;
 
-      margin: 12px 0;
-    }
+  background:
+    linear-gradient(
+      #ffe79d,
+      #edb840
+    );
 
-    .info-chip {
-      padding: 8px 14px;
+  box-shadow:
+    0 6px 0 #aa7714,
+    0 10px 18px rgba(80,55,10,.14);
+}
 
-      border-radius: 999px;
+.btn.light{
+  color:#594a2e;
 
-      background: rgba(255,255,255,.78);
+  background:
+    linear-gradient(
+      #fffdf7,
+      #e9dfc8
+    );
 
-      font-weight: 900;
-    }
+  box-shadow:
+    0 5px 0 #b5a485;
+}
 
-    /* =========================
-       舞台
-    ========================= */
+.btn.danger{
+  padding:10px 18px;
 
-    .stage {
-      position: relative;
+  color:#664c24;
 
-      min-height: 560px;
+  background:
+    linear-gradient(
+      #faf4df,
+      #e4d2a8
+    );
 
-      border-radius: 30px;
+  box-shadow:
+    0 5px 0 #a99772;
+}
 
-      padding: 24px;
-
-      background:
-        rgba(255,255,255,.5);
-
-      box-shadow: var(--shadow);
+.btn:disabled{
+  opacity:.42;
+  cursor:not-allowed;
+}
 
-      display: flex;
-      justify-content: center;
-      align-items: center;
+/* =========================================================
+   首頁
+========================================================= */
 
-      overflow: hidden;
-    }
+.home-title{
+  margin:10px 0 5px;
 
-    .stage.spread-stage {
-      min-height: 760px;
-      align-items: flex-start;
-      overflow: visible;
-    }
+  color:#30466f;
 
-    .hint {
-      min-height: 28px;
-      margin: 15px 0 10px;
+  font-size:
+    clamp(34px,6vw,58px);
 
-      font-size: 18px;
-      font-weight: 900;
-      color: #74551b;
-    }
+  font-weight:1000;
 
-    .controls {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
+  text-shadow:
+    0 3px 0 white,
+    0 6px 12px rgba(40,45,70,.12);
+}
 
-    /* =========================
-       卡片共用
-    ========================= */
+.home-subtitle{
+  margin:0 0 24px;
 
-    .ticket-face {
-      width: 100%;
-      height: 100%;
+  color:#77561d;
 
-      position: relative;
+  font-size:
+    clamp(15px,2.5vw,20px);
 
-      border-radius: inherit;
+  font-weight:900;
+}
 
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
+.mode-grid{
+  width:min(900px,100%);
+  margin:25px auto;
 
-      overflow: hidden;
-    }
+  display:grid;
 
-    .ticket-face.silver {
-      color: #fff7d5;
+  grid-template-columns:
+    repeat(2,minmax(0,1fr));
 
-      background:
-        linear-gradient(
-          155deg,
-          #647fc1,
-          #3b538c 55%,
-          #252d5d
-        );
+  gap:25px;
+}
 
-      border: 3px solid #f2c75c;
-    }
+.mode-card{
+  position:relative;
 
-    .ticket-face.gold {
-      color: #fff9dd;
+  min-height:320px;
 
-      background:
-        linear-gradient(
-          155deg,
-          #ffe38a,
-          #d5a12a 48%,
-          #966607
-        );
+  padding:28px;
 
-      border: 3px solid #fff1b8;
-    }
+  border:6px solid white;
 
-    .ticket-icon {
-      font-size: 54px;
-    }
+  border-radius:30px;
 
-    .ticket-title {
-      margin-top: 5px;
+  cursor:pointer;
 
-      font-size: 30px;
-      font-weight: 1000;
-      line-height: 1.05;
-    }
+  overflow:hidden;
 
-    .ticket-text {
-      margin-top: 8px;
-      font-size: 11px;
-      font-weight: 900;
-    }
+  box-shadow:var(--shadow);
 
-    /* =========================
-       疊牌
-    ========================= */
+  transition:
+    transform .22s,
+    box-shadow .22s,
+    opacity .22s;
+}
 
-    .deck {
-      position: relative;
+.mode-card:hover{
+  transform:translateY(-7px);
 
-      width: min(285px,68vw);
-      aspect-ratio: 2 / 3;
-    }
+  box-shadow:
+    0 22px 42px rgba(45,42,75,.24);
+}
 
-    .deck-card {
-      position: absolute;
-      inset: 0;
+.mode-card.locked{
+  opacity:.65;
+}
 
-      border: 5px solid white;
-      border-radius: 22px;
+.mode-card.silver{
+  color:#fff8d9;
 
-      background: white;
-
-      box-shadow:
-        0 10px 24px rgba(50,40,60,.2);
-    }
-
-    .deck-card:nth-child(1) {
-      transform: translate(-24px,12px) rotate(-7deg);
-    }
-
-    .deck-card:nth-child(2) {
-      transform: translate(-16px,8px) rotate(-5deg);
-    }
-
-    .deck-card:nth-child(3) {
-      transform: translate(-8px,4px) rotate(-3deg);
-    }
-
-    .deck-card:nth-child(4) {
-      transform: translate(-2px,1px) rotate(-1deg);
-    }
-
-    .deck-card:nth-child(5) {
-      transform: translate(3px,1px) rotate(1deg);
-    }
-
-    .deck-card:nth-child(6) {
-      transform: translate(9px,4px) rotate(3deg);
-    }
-
-    .deck-card:nth-child(7) {
-      transform: translate(17px,8px) rotate(5deg);
-    }
-
-    .deck-card:nth-child(8) {
-      transform: translate(24px,12px) rotate(7deg);
-    }
-
-    /* =========================
-       洗牌
-    ========================= */
-
-    .shuffle-box {
-      position: relative;
-      width: 430px;
-      height: 420px;
-    }
-
-    .shuffle-card {
-      position: absolute;
-
-      width: 170px;
-      height: 255px;
-
-      left: 130px;
-
-      border-radius: 18px;
-      border: 5px solid white;
-
-      background: white;
-
-      box-shadow:
-        0 10px 22px rgba(50,40,60,.2);
-    }
-
-    .shuffle-card.top {
-      top: 30px;
-
-      animation:
-        shuffleTop 1s
-        ease-in-out infinite;
-    }
-
-    .shuffle-card.bottom {
-      top: 140px;
-
-      animation:
-        shuffleBottom 1s
-        ease-in-out infinite;
-    }
-
-    .shuffle-card.drop1 {
-      top: 70px;
-      animation:
-        drop1 1.7s
-        ease-in-out infinite;
-    }
-
-    .shuffle-card.drop2 {
-      top: 70px;
-      animation:
-        drop2 1.7s
-        ease-in-out infinite;
-    }
-
-    .shuffle-card.drop3 {
-      top: 70px;
-      animation:
-        drop3 1.7s
-        ease-in-out infinite;
-    }
-
-    @keyframes shuffleTop {
-      50% {
-        transform:
-          translateY(14px)
-          rotate(-4deg);
-      }
-    }
-
-    @keyframes shuffleBottom {
-      50% {
-        transform:
-          translateY(-10px)
-          rotate(4deg);
-      }
-    }
-
-    @keyframes drop1 {
-      0%,
-      10% {
-        opacity: 0;
-        transform: translateY(-70px);
-      }
-
-      18% {
-        opacity: 1;
-      }
-
-      38% {
-        opacity: 1;
-        transform: translateY(85px);
-      }
-
-      45%,
-      100% {
-        opacity: 0;
-      }
-    }
-
-    @keyframes drop2 {
-      0%,
-      36% {
-        opacity: 0;
-        transform: translateY(-70px);
-      }
-
-      44% {
-        opacity: 1;
-      }
-
-      64% {
-        opacity: 1;
-        transform: translateY(85px);
-      }
-
-      72%,
-      100% {
-        opacity: 0;
-      }
-    }
-
-    @keyframes drop3 {
-      0%,
-      62% {
-        opacity: 0;
-        transform: translateY(-70px);
-      }
-
-      70% {
-        opacity: 1;
-      }
-
-      90% {
-        opacity: 1;
-        transform: translateY(85px);
-      }
-
-      100% {
-        opacity: 0;
-      }
-    }
-
-    /* =========================
-       10 張一排橫向重疊
-    ========================= */
-
-    .spread-board {
-      width: 100%;
-
-      display: flex;
-      flex-direction: column;
-
-      gap: 24px;
-
-      padding: 10px 0;
-    }
-
-    .spread-row {
-      position: relative;
-
-      height: 175px;
-
-      display: flex;
-      justify-content: center;
-    }
+  background:
+    linear-gradient(
+      150deg,
+      #6d87c6,
+      #405b95 55%,
+      #242c59
+    );
 
-    .spread-row-inner {
-      position: relative;
-      height: 100%;
-    }
+  border-color:#f0d37a;
+}
 
-    .spread-card {
-      position: absolute;
-      top: 0;
+.mode-card.gold{
+  color:#fffbea;
 
-      width: 108px;
-      height: 162px;
+  background:
+    linear-gradient(
+      150deg,
+      #ffe48a,
+      #d4a128 50%,
+      #976607
+    );
 
-      border-radius: 15px;
-      border: 4px solid white;
+  border-color:#fff0ad;
+}
 
-      background: white;
+.mode-icon{
+  font-size:88px;
+}
 
-      box-shadow:
-        0 9px 18px rgba(40,35,60,.2);
+.mode-title{
+  margin-top:8px;
 
-      overflow: hidden;
-
-      cursor: pointer;
+  font-size:
+    clamp(30px,4.5vw,42px);
 
-      transition:
-        transform .2s,
-        opacity .2s,
-        filter .2s;
-    }
-
-    .spread-card:hover {
-      z-index: 999 !important;
-
-      transform:
-        translateY(-12px)
-        scale(1.07);
-    }
-
-    .spread-card.selected {
-      z-index: 9999 !important;
-
-      transform:
-        translateY(-25px)
-        scale(1.13);
-    }
-
-    .spread-card.dimmed {
-      opacity: .13;
-      filter: grayscale(.7);
-    }
-
-    .spread-number {
-      position: absolute;
-
-      right: 5px;
-      top: 5px;
-
-      z-index: 10;
-
-      min-width: 25px;
-      height: 25px;
-
-      padding: 0 5px;
+  font-weight:1000;
+}
 
-      border-radius: 999px;
+.mode-text{
+  margin-top:14px;
 
-      display: flex;
-      align-items: center;
-      justify-content: center;
+  font-size:16px;
+  font-weight:900;
+  line-height:1.65;
+}
 
-      background: white;
+/* =========================================================
+   遊戲頁
+========================================================= */
 
-      font-size: 10px;
-      font-weight: 1000;
-    }
+.game-header{
+  width:min(900px,100%);
+  margin:auto;
+}
 
-    .spread-card .ticket-icon {
-      font-size: 32px;
-    }
+.back-row{
+  display:flex;
+  justify-content:flex-start;
 
-    .spread-card .ticket-title {
-      font-size: 15px;
-    }
+  margin-bottom:8px;
+}
 
-    .spread-card .ticket-text {
-      font-size: 7px;
-    }
+.game-title{
+  margin:4px 0 5px;
 
-    /* =========================
-       刮卡
-    ========================= */
+  font-size:
+    clamp(32px,5vw,50px);
 
-    .scratch-wrap {
-      width: min(455px,92vw);
-    }
+  font-weight:1000;
+}
 
-    .scratch-ticket {
-      position: relative;
+.game-title.silver{
+  color:#304b84;
+}
 
-      width: 100%;
-      aspect-ratio: 3 / 4;
+.game-title.gold{
+  color:#946507;
+}
 
-      padding: 15px;
+.info-bar{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
 
-      border-radius: 28px;
+  gap:9px;
 
-      border: 7px solid #f6d875;
+  margin:12px 0 15px;
+}
 
-      box-shadow:
-        0 18px 38px rgba(45,42,75,.25);
-    }
+.info-chip{
+  padding:8px 15px;
 
-    .scratch-ticket.silver {
-      background:
-        linear-gradient(
-          145deg,
-          #536fae,
-          #344d86 55%,
-          #3c376f
-        );
-    }
+  border-radius:999px;
 
-    .scratch-ticket.gold {
-      background:
-        linear-gradient(
-          145deg,
-          #ffe48a,
-          #d29d23 50%,
-          #956407
-        );
-    }
+  background:rgba(255,255,255,.78);
 
-    .scratch-top {
-      height: 30%;
+  border:
+    2px solid
+    rgba(200,165,75,.18);
 
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
+  font-size:14px;
+  font-weight:900;
+}
 
-      color: #fff9e4;
-    }
+.info-chip strong{
+  font-size:17px;
+  color:#304b84;
+}
 
-    .scratch-top-icon {
-      font-size: 56px;
-    }
+.stage{
+  position:relative;
 
-    .scratch-top-title {
-      font-size: 40px;
-      font-weight: 1000;
-    }
+  min-height:560px;
 
-    .scratch-area {
-      position: relative;
+  padding:24px;
 
-      width: 100%;
-      height: 57%;
+  border-radius:30px;
 
-      overflow: hidden;
+  background:
+    rgba(255,255,255,.52);
 
-      border-radius: 18px;
+  border:
+    3px solid
+    rgba(175,137,51,.12);
 
-      border: 4px solid #f2c75c;
+  box-shadow:
+    inset 0 0 50px rgba(255,255,255,.75),
+    var(--shadow);
 
-      background: #fff9e5;
+  display:flex;
+  justify-content:center;
+  align-items:center;
 
-      touch-action: none;
-    }
+  overflow:hidden;
+}
 
-    .prize-under {
-      position: absolute;
-      inset: 0;
+.stage.spread-stage{
+  min-height:760px;
 
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
+  align-items:flex-start;
 
-      padding: 15px;
+  padding:18px 8px 25px;
 
-      background:
-        radial-gradient(
-          circle,
-          #fff,
-          #f7e6b5
-        );
-    }
+  overflow:visible;
+}
 
-    .prize-icon {
-      font-size: 70px;
-    }
+.hint{
+  min-height:30px;
 
-    .prize-name {
-      margin-top: 6px;
+  margin:15px 0 11px;
 
-      font-size: 31px;
-      font-weight: 1000;
+  color:#73531b;
 
-      color: #375286;
-    }
+  font-size:
+    clamp(16px,2.5vw,20px);
 
-    .gold .prize-name {
-      color: #956407;
-    }
+  font-weight:1000;
+}
 
-    .prize-desc {
-      margin-top: 6px;
-      font-weight: 900;
-    }
+.controls{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
 
-    #scratchCanvas {
-      position: absolute;
-      inset: 0;
+  gap:12px;
+}
 
-      width: 100%;
-      height: 100%;
+/* =========================================================
+   卡片共用
+========================================================= */
 
-      touch-action: none;
-    }
+.ticket-face{
+  position:relative;
 
-    .scratch-note {
-      height: 13%;
+  width:100%;
+  height:100%;
 
-      display: flex;
-      align-items: center;
-      justify-content: center;
+  border-radius:inherit;
 
-      color: #fff9e4;
-      font-weight: 900;
-    }
+  overflow:hidden;
 
-    .result {
-      margin-top: 13px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+}
 
-      min-height: 35px;
+.ticket-face::before,
+.ticket-face::after{
+  content:"✦";
 
-      font-size: 21px;
-      font-weight: 1000;
-    }
+  position:absolute;
 
-    /* =========================
-       RWD
-    ========================= */
+  font-size:56px;
 
-    @media (max-width: 700px) {
+  color:rgba(255,255,255,.22);
+}
 
-      .home-grid {
-        grid-template-columns: 1fr;
-      }
+.ticket-face::before{
+  left:8px;
+  top:8px;
+}
 
-      .stage.spread-stage {
-        min-height: 620px;
-      }
+.ticket-face::after{
+  right:8px;
+  bottom:8px;
+}
 
-      .spread-row {
-        height: 125px;
-      }
+.ticket-face.silver{
+  color:#fff7d6;
 
-      .spread-card {
-        width: 76px;
-        height: 114px;
-      }
+  background:
+    radial-gradient(
+      circle at 18% 18%,
+      rgba(255,230,120,.9) 0 3px,
+      transparent 4px
+    ),
+    linear-gradient(
+      155deg,
+      #667fc0,
+      #3d558e 55%,
+      #292d5f
+    );
 
-      .spread-card .ticket-icon {
-        font-size: 21px;
-      }
+  border:3px solid #f2c75c;
+}
 
-      .spread-card .ticket-title {
-        font-size: 10px;
-      }
+.ticket-face.gold{
+  color:#fffbea;
 
-      .spread-card .ticket-text {
-        display: none;
-      }
+  background:
+    radial-gradient(
+      circle at 18% 18%,
+      rgba(255,255,220,.9) 0 3px,
+      transparent 4px
+    ),
+    linear-gradient(
+      155deg,
+      #ffe48b,
+      #d4a028 48%,
+      #946506
+    );
 
-    }
+  border:3px solid #fff1b8;
+}
 
-  </style>
+.ticket-icon{
+  font-size:55px;
+  line-height:1;
+}
+
+.ticket-title{
+  margin-top:6px;
+
+  font-size:30px;
+  font-weight:1000;
+  line-height:1.08;
+
+  text-shadow:
+    0 2px 0 rgba(40,35,60,.3);
+}
+
+.ticket-text{
+  margin-top:8px;
+
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:1.5px;
+}
+
+/* =========================================================
+   初始疊牌
+========================================================= */
+
+.deck{
+  position:relative;
+
+  width:min(285px,68vw);
+
+  aspect-ratio:2/3;
+}
+
+.deck-card{
+  position:absolute;
+  inset:0;
+
+  border-radius:22px;
+
+  border:5px solid white;
+
+  background:white;
+
+  box-shadow:
+    0 11px 25px rgba(45,40,70,.22);
+}
+
+.deck-card:nth-child(1){
+  transform:translate(-24px,13px) rotate(-7deg);
+}
+
+.deck-card:nth-child(2){
+  transform:translate(-17px,9px) rotate(-5deg);
+}
+
+.deck-card:nth-child(3){
+  transform:translate(-10px,5px) rotate(-3deg);
+}
+
+.deck-card:nth-child(4){
+  transform:translate(-4px,2px) rotate(-1deg);
+}
+
+.deck-card:nth-child(5){
+  transform:translate(4px,2px) rotate(1deg);
+}
+
+.deck-card:nth-child(6){
+  transform:translate(10px,5px) rotate(3deg);
+}
+
+.deck-card:nth-child(7){
+  transform:translate(17px,9px) rotate(5deg);
+}
+
+.deck-card:nth-child(8){
+  transform:translate(24px,13px) rotate(7deg);
+}
+
+/* =========================================================
+   上下洗牌
+========================================================= */
+
+.shuffle-table{
+  position:relative;
+
+  width:520px;
+  height:470px;
+
+  perspective:1300px;
+}
+
+.shuffle-hand{
+  position:absolute;
+
+  width:105px;
+  height:140px;
+
+  border-radius:
+    55% 55% 45% 45%;
+
+  background:
+    linear-gradient(
+      155deg,
+      #f1c29f,
+      #d89b73
+    );
+
+  opacity:.9;
+
+  filter:
+    drop-shadow(
+      0 10px 12px rgba(60,35,15,.16)
+    );
+
+  z-index:40;
+}
+
+.shuffle-hand::after{
+  content:"";
+
+  position:absolute;
+
+  width:42px;
+  height:115px;
+
+  top:-34px;
+  left:31px;
+
+  border-radius:30px;
+
+  background:inherit;
+}
+
+.shuffle-hand.left{
+  left:48px;
+  top:165px;
+
+  animation:
+    handLeft
+    1.45s
+    ease-in-out
+    infinite;
+}
+
+.shuffle-hand.right{
+  right:48px;
+  top:116px;
+
+  animation:
+    handRight
+    1.45s
+    ease-in-out
+    infinite;
+}
+
+@keyframes handLeft{
+  0%,100%{
+    transform:
+      translateY(13px)
+      rotate(20deg);
+  }
+
+  50%{
+    transform:
+      translateY(-12px)
+      rotate(15deg);
+  }
+}
+
+@keyframes handRight{
+  0%,100%{
+    transform:
+      translateY(-12px)
+      rotate(-20deg);
+  }
+
+  50%{
+    transform:
+      translateY(13px)
+      rotate(-15deg);
+  }
+}
+
+.shuffle-stack,
+.shuffle-drop{
+  position:absolute;
+
+  width:180px;
+  height:270px;
+
+  border-radius:19px;
+
+  border:5px solid white;
+
+  background:white;
+
+  box-shadow:
+    0 12px 25px rgba(45,40,70,.22);
+}
+
+.shuffle-stack.upper{
+  left:168px;
+  top:34px;
+
+  z-index:15;
+
+  animation:
+    upperStack
+    1.45s
+    ease-in-out
+    infinite;
+}
+
+.shuffle-stack.lower{
+  left:185px;
+  top:165px;
+
+  z-index:8;
+
+  animation:
+    lowerStack
+    1.45s
+    ease-in-out
+    infinite;
+}
+
+@keyframes upperStack{
+  0%,100%{
+    transform:
+      translateY(-9px)
+      rotate(-6deg);
+  }
+
+  50%{
+    transform:
+      translateY(11px)
+      rotate(-3deg);
+  }
+}
+
+@keyframes lowerStack{
+  0%,100%{
+    transform:
+      translateY(8px)
+      rotate(5deg);
+  }
+
+  50%{
+    transform:
+      translateY(-7px)
+      rotate(3deg);
+  }
+}
+
+.shuffle-drop{
+  width:168px;
+  height:252px;
+
+  left:177px;
+  top:75px;
+
+  z-index:12;
+
+  opacity:0;
+}
+
+.shuffle-drop.p1{
+  animation:
+    overhand1
+    1.75s
+    ease-in-out
+    infinite;
+}
+
+.shuffle-drop.p2{
+  animation:
+    overhand2
+    1.75s
+    ease-in-out
+    infinite;
+}
+
+.shuffle-drop.p3{
+  animation:
+    overhand3
+    1.75s
+    ease-in-out
+    infinite;
+}
+
+.shuffle-drop.p4{
+  animation:
+    overhand4
+    1.75s
+    ease-in-out
+    infinite;
+}
+
+@keyframes overhand1{
+  0%{
+    opacity:0;
+    transform:translate(28px,-95px);
+  }
+
+  7%{
+    opacity:1;
+  }
+
+  28%{
+    opacity:1;
+    transform:translate(-1px,66px);
+  }
+
+  34%,100%{
+    opacity:0;
+  }
+}
+
+@keyframes overhand2{
+  0%,22%{
+    opacity:0;
+    transform:translate(25px,-92px);
+  }
+
+  29%{
+    opacity:1;
+  }
+
+  50%{
+    opacity:1;
+    transform:translate(1px,72px);
+  }
+
+  56%,100%{
+    opacity:0;
+  }
+}
+
+@keyframes overhand3{
+  0%,45%{
+    opacity:0;
+    transform:translate(20px,-88px);
+  }
+
+  52%{
+    opacity:1;
+  }
+
+  73%{
+    opacity:1;
+    transform:translate(-2px,78px);
+  }
+
+  79%,100%{
+    opacity:0;
+  }
+}
+
+@keyframes overhand4{
+  0%,68%{
+    opacity:0;
+    transform:translate(17px,-85px);
+  }
+
+  75%{
+    opacity:1;
+  }
+
+  95%{
+    opacity:1;
+    transform:translate(2px,84px);
+  }
+
+  100%{
+    opacity:0;
+  }
+}
+
+.shuffle-label{
+  position:absolute;
+
+  left:0;
+  right:0;
+  bottom:0;
+
+  font-size:20px;
+  font-weight:1000;
+
+  color:#6e531d;
+}
+
+/* =========================================================
+   10 張一排、橫向重疊
+========================================================= */
+
+.spread-board{
+  width:100%;
+
+  display:flex;
+  flex-direction:column;
+
+  gap:24px;
+
+  padding:10px 0 20px;
+}
+
+.spread-row{
+  position:relative;
+
+  width:min(1180px,96vw);
+  height:175px;
+
+  margin:auto;
+
+  display:flex;
+  justify-content:center;
+
+  overflow:visible;
+}
+
+.spread-row-inner{
+  position:relative;
+  height:100%;
+}
+
+.spread-card{
+  position:absolute;
+
+  top:0;
+
+  width:108px;
+  height:162px;
+
+  border-radius:15px;
+
+  border:4px solid white;
+
+  background:white;
+
+  overflow:hidden;
+
+  cursor:pointer;
+
+  box-shadow:
+    0 10px 20px rgba(45,40,70,.2);
+
+  transition:
+    transform .22s,
+    opacity .22s,
+    filter .22s,
+    box-shadow .22s;
+
+  animation:
+    spreadIn
+    .45s
+    ease
+    both;
+}
+
+@keyframes spreadIn{
+  from{
+    opacity:0;
+
+    transform:
+      translateX(-80px)
+      scale(.82);
+  }
+
+  to{
+    opacity:1;
+  }
+}
+
+.spread-card:hover,
+.spread-card:active{
+  z-index:9999 !important;
+
+  transform:
+    translateY(-12px)
+    scale(1.07);
+
+  box-shadow:
+    0 18px 30px rgba(45,40,70,.28);
+}
+
+.spread-card.selected{
+  z-index:99999 !important;
+
+  transform:
+    translateY(-24px)
+    scale(1.13);
+}
+
+.spread-card.dimmed{
+  opacity:.13;
+
+  filter:grayscale(.7);
+}
+
+.spread-number{
+  position:absolute;
+
+  top:5px;
+  right:5px;
+
+  z-index:10;
+
+  min-width:26px;
+  height:26px;
+
+  padding:0 5px;
+
+  border-radius:999px;
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
+  background:rgba(255,255,255,.93);
+
+  color:#304b84;
+
+  font-size:10px;
+  font-weight:1000;
+
+  box-shadow:
+    0 3px 8px rgba(30,30,60,.14);
+}
+
+.spread-card .ticket-icon{
+  font-size:34px;
+}
+
+.spread-card .ticket-title{
+  font-size:16px;
+}
+
+.spread-card .ticket-text{
+  font-size:7px;
+}
+
+/* =========================================================
+   刮刮樂
+========================================================= */
+
+.scratch-wrap{
+  width:min(455px,92vw);
+
+  animation:
+    scratchPop
+    .4s
+    ease
+    both;
+}
+
+@keyframes scratchPop{
+  from{
+    opacity:0;
+
+    transform:
+      translateY(35px)
+      scale(.75);
+  }
+
+  to{
+    opacity:1;
+  }
+}
+
+.scratch-ticket{
+  position:relative;
+
+  width:100%;
+
+  aspect-ratio:3/4;
+
+  padding:15px;
+
+  border-radius:28px;
+
+  border:7px solid #f4d477;
+
+  overflow:hidden;
+
+  box-shadow:
+    0 18px 38px rgba(45,42,75,.25);
+}
+
+.scratch-ticket.silver{
+  background:
+    linear-gradient(
+      145deg,
+      #536fae,
+      #344d86 55%,
+      #3c376f
+    );
+}
+
+.scratch-ticket.gold{
+  background:
+    linear-gradient(
+      145deg,
+      #ffe38a,
+      #d39f26 50%,
+      #956407
+    );
+}
+
+.scratch-top{
+  height:30%;
+
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+
+  color:#fff9e8;
+}
+
+.scratch-top-icon{
+  font-size:57px;
+}
+
+.scratch-top-title{
+  margin-top:4px;
+
+  font-size:
+    clamp(31px,7vw,42px);
+
+  font-weight:1000;
+}
+
+.scratch-top-eng{
+  margin-top:4px;
+
+  font-size:11px;
+  font-weight:900;
+}
+
+.scratch-area{
+  position:relative;
+
+  width:100%;
+  height:57%;
+
+  overflow:hidden;
+
+  border-radius:18px;
+
+  border:4px solid #f2c75c;
+
+  background:#fff8dc;
+
+  touch-action:none;
+}
+
+.prize-under{
+  position:absolute;
+
+  inset:0;
+
+  padding:15px;
+
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+
+  background:
+    radial-gradient(
+      circle,
+      #ffffff,
+      #f7e7b8
+    );
+}
+
+.prize-icon{
+  font-size:
+    clamp(58px,13vw,78px);
+
+  line-height:1.1;
+}
+
+.prize-name{
+  margin-top:7px;
+
+  font-size:
+    clamp(24px,5.5vw,34px);
+
+  font-weight:1000;
+
+  color:#304b84;
+}
+
+.scratch-ticket.gold .prize-name{
+  color:#946506;
+}
+
+.prize-description{
+  margin-top:8px;
+
+  max-width:95%;
+
+  font-size:
+    clamp(14px,3vw,17px);
+
+  font-weight:900;
+
+  line-height:1.5;
+}
+
+#scratchCanvas{
+  position:absolute;
+
+  inset:0;
+
+  width:100% !important;
+  height:100% !important;
+
+  display:block;
+
+  touch-action:none;
+
+  cursor:crosshair;
+}
+
+.scratch-note{
+  height:13%;
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
+  color:#fff8df;
+
+  font-weight:900;
+}
+
+.result{
+  min-height:42px;
+
+  margin-top:14px;
+
+  font-size:
+    clamp(18px,4vw,24px);
+
+  font-weight:1000;
+
+  color:#304b84;
+}
+
+/* =========================================================
+   寫入提示
+========================================================= */
+
+.save-status{
+  width:min(600px,100%);
+
+  margin:8px auto 0;
+
+  padding:8px 12px;
+
+  border-radius:12px;
+
+  font-size:13px;
+  font-weight:900;
+
+  background:rgba(255,255,255,.65);
+}
+
+.save-status.ok{
+  color:#26714b;
+}
+
+.save-status.error{
+  color:#9a3535;
+}
+
+/* =========================================================
+   抽完
+========================================================= */
+
+.empty-box{
+  padding:35px;
+
+  border-radius:24px;
+
+  background:rgba(255,255,255,.76);
+
+  color:#304b84;
+
+  font-size:22px;
+  font-weight:1000;
+}
+
+.empty-icon{
+  font-size:70px;
+}
+
+/* =========================================================
+   RWD
+========================================================= */
+
+@media(max-width:900px){
+
+  .stage.spread-stage{
+    min-height:700px;
+  }
+
+  .shuffle-table{
+    transform:scale(.82);
+  }
+
+  .spread-row{
+    height:152px;
+  }
+
+  .spread-card{
+    width:92px;
+    height:138px;
+  }
+
+  .spread-card .ticket-icon{
+    font-size:28px;
+  }
+
+  .spread-card .ticket-title{
+    font-size:13px;
+  }
+}
+
+@media(max-width:650px){
+
+  .mode-grid{
+    grid-template-columns:1fr;
+  }
+
+  .stage{
+    padding:10px 4px;
+  }
+
+  .stage.spread-stage{
+    min-height:610px;
+  }
+
+  .shuffle-table{
+    transform:scale(.64);
+  }
+
+  .spread-board{
+    gap:18px;
+  }
+
+  .spread-row{
+    height:125px;
+  }
+
+  .spread-card{
+    width:76px;
+    height:114px;
+  }
+
+  .spread-card .ticket-icon{
+    font-size:22px;
+  }
+
+  .spread-card .ticket-title{
+    font-size:10px;
+  }
+
+  .spread-card .ticket-text{
+    display:none;
+  }
+
+  .spread-number{
+    min-width:21px;
+    height:21px;
+
+    font-size:9px;
+  }
+}
+</style>
 </head>
 
 <body>
 
-  <main class="app">
+<main class="app">
 
-    <!-- =========================================
-         登入區
-    ========================================== -->
+  <!-- =====================================================
+       登入區
+  ====================================================== -->
+
+  <section
+    class="login-panel"
+    id="loginPanel"
+  >
+
+    <div id="loggedOutArea">
+
+      <div class="login-tip">
+        👤 每位同學請先使用自己的 Google 帳號登入
+      </div>
+
+      <button
+        class="btn"
+        id="googleLoginBtn"
+      >
+        G　使用 Google 登入
+      </button>
+
+    </div>
+
 
     <div
-      class="login-panel"
-      id="loginPanel"
+      id="loggedInArea"
+      class="hidden"
     >
 
-      <div id="loggedOutArea">
+      <div class="student-info">
 
-        <strong>
-          👤 請先登入學生 Google 帳號
-        </strong>
+        <div
+          class="student-name"
+          id="studentName"
+        ></div>
 
-        <br><br>
+        <div
+          class="student-email"
+          id="studentEmail"
+        ></div>
+
+      </div>
+
+      <button
+        class="btn light"
+        id="logoutBtn"
+      >
+        登出
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       首頁
+  ====================================================== -->
+
+  <section id="homePage">
+
+    <h1 class="home-title">
+      🎫 班級幸運刮刮樂
+    </h1>
+
+    <p class="home-subtitle">
+      登入後選擇「銀卡刮刮樂」或「金卡刮刮樂」
+    </p>
+
+
+    <div class="mode-grid">
+
+      <button
+        class="mode-card silver"
+        data-game="silver"
+      >
+
+        <div class="mode-icon">
+          🥈✨
+        </div>
+
+        <div class="mode-title">
+          銀卡刮刮樂
+        </div>
+
+        <div class="mode-text">
+          固定 40 張獎池
+          <br>
+          🥈 全班累積 10 張銀卡
+          <br>
+          🥤 飲料一杯
+        </div>
+
+      </button>
+
+
+      <button
+        class="mode-card gold"
+        data-game="gold"
+      >
+
+        <div class="mode-icon">
+          🥇✨
+        </div>
+
+        <div class="mode-title">
+          金卡刮刮樂
+        </div>
+
+        <div class="mode-text">
+          固定 30 張獎池
+          <br>
+          🥇 全班累積 10 張金卡
+          <br>
+          🍗 雞排一份
+        </div>
+
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================================
+       遊戲頁
+  ====================================================== -->
+
+  <section
+    id="gamePage"
+    class="hidden"
+  >
+
+    <div class="game-header">
+
+      <div class="back-row">
 
         <button
-          class="btn"
-          id="googleLoginBtn"
+          class="btn light"
+          id="backHomeBtn"
         >
-          G　使用 Google 登入
+          ← 回刮刮樂首頁
         </button>
 
       </div>
 
-      <div
-        id="loggedInArea"
-        class="hidden"
-      >
 
-        <div class="student-info">
+      <h2
+        class="game-title"
+        id="gameTitle"
+      ></h2>
 
-          <div
-            class="student-name"
-            id="studentName"
-          ></div>
 
-          <div
-            class="student-email"
-            id="studentEmail"
-          ></div>
+      <div class="info-bar">
 
+        <div class="info-chip">
+          🎟️ 總獎池：
+          <strong id="totalCount"></strong>
         </div>
 
-        <button
-          class="btn light"
-          id="logoutBtn"
-        >
-          登出
-        </button>
+        <div class="info-chip">
+          📦 剩餘：
+          <strong id="remainingCount"></strong>
+        </div>
+
+        <div class="info-chip">
+          👤 抽獎者：
+          <strong id="currentPlayer"></strong>
+        </div>
 
       </div>
 
     </div>
 
-    <!-- =========================================
-         首頁
-    ========================================== -->
-
-    <section id="homePage">
-
-      <h1>
-        🎫 班級幸運刮刮樂
-      </h1>
-
-      <p class="subtitle">
-        請先登入，再選擇今天要抽的刮刮樂
-      </p>
-
-      <div class="home-grid">
-
-        <button
-          class="mode-card silver"
-          data-game="silver"
-        >
-
-          <div class="mode-icon">
-            🥈✨
-          </div>
-
-          <div class="mode-title">
-            銀卡刮刮樂
-          </div>
-
-          <div class="mode-desc">
-            40 張固定獎池
-            <br>
-            全班累積銀卡可兌換飲料
-          </div>
-
-        </button>
-
-        <button
-          class="mode-card gold"
-          data-game="gold"
-        >
-
-          <div class="mode-icon">
-            🥇✨
-          </div>
-
-          <div class="mode-title">
-            金卡刮刮樂
-          </div>
-
-          <div class="mode-desc">
-            30 張固定獎池
-            <br>
-            全班累積金卡可兌換雞排
-          </div>
-
-        </button>
-
-      </div>
-
-    </section>
-
-    <!-- =========================================
-         遊戲區
-    ========================================== -->
 
     <section
-      id="gamePage"
-      class="hidden"
-    >
+      class="stage"
+      id="stage"
+    ></section>
 
-      <div class="game-header">
 
-        <div class="back-line">
+    <p
+      class="hint"
+      id="hint"
+    ></p>
 
-          <button
-            class="btn light"
-            id="backHomeBtn"
-          >
-            ← 回選擇頁
-          </button>
 
-        </div>
+    <div class="controls">
 
-        <h2
-          class="game-title"
-          id="gameTitle"
-        ></h2>
+      <button
+        class="btn"
+        id="shuffleBtn"
+      >
+        🔀 開始洗牌
+      </button>
 
-        <div class="info-bar">
 
-          <div class="info-chip">
-            🎟️ 總獎池：
-            <strong id="totalPoolText"></strong>
-          </div>
+      <button
+        class="btn gold hidden"
+        id="nextBtn"
+      >
+        👤 下一位抽獎
+      </button>
 
-          <div class="info-chip">
-            📦 剩餘：
-            <strong id="remainingCount"></strong>
-          </div>
 
-        </div>
+      <button
+        class="btn hidden"
+        id="drawAgainBtn"
+      >
+        🎟️ 再抽一次
+      </button>
 
-      </div>
 
-      <section
-        class="stage"
-        id="stage"
-      ></section>
+      <button
+        class="btn danger"
+        id="resetPoolBtn"
+      >
+        ♻️ 重設獎池
+      </button>
 
-      <p
-        class="hint"
-        id="hint"
-      ></p>
+    </div>
 
-      <div class="controls">
 
-        <button
-          class="btn"
-          id="shuffleBtn"
-        >
-          🔀 開始洗牌
-        </button>
+    <div
+      class="save-status hidden"
+      id="saveStatus"
+    ></div>
 
-        <button
-          class="btn gold hidden"
-          id="nextBtn"
-        >
-          👤 下一位抽獎
-        </button>
+  </section>
 
-        <button
-          class="btn hidden"
-          id="drawAgainBtn"
-        >
-          🎟️ 再抽一次
-        </button>
+</main>
 
-        <button
-          class="btn light"
-          id="resetPoolBtn"
-        >
-          ♻️ 重設獎池
-        </button>
 
-      </div>
+<script type="module">
 
-    </section>
+/* =========================================================
+   Firebase SDK
+========================================================= */
 
-  </main>
+import {
+  initializeApp
+} from
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
-  <script type="module">
 
-    /* =====================================================
-       Firebase SDK
-       目前官方 CDN 模組化版本
-    ===================================================== */
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
+  signOut,
+  onAuthStateChanged
+} from
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-    import {
-      initializeApp
+
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  serverTimestamp
+} from
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+
+/* =========================================================
+   你的 Firebase 專案設定
+========================================================= */
+
+const firebaseConfig = {
+
+  apiKey:
+    "AIzaSyDUboz4Rif7KFFtrqnkb6HrSPBTHsvqfr8",
+
+  authDomain:
+    "luckyscratch-13477.firebaseapp.com",
+
+  projectId:
+    "luckyscratch-13477",
+
+  storageBucket:
+    "luckyscratch-13477.firebasestorage.app",
+
+  messagingSenderId:
+    "731061378453",
+
+  appId:
+    "1:731061378453:web:889728f895388088626a9c"
+
+};
+
+
+/* =========================================================
+   Firebase 初始化
+========================================================= */
+
+const app =
+  initializeApp(
+    firebaseConfig
+  );
+
+const auth =
+  getAuth(
+    app
+  );
+
+const db =
+  getFirestore(
+    app
+  );
+
+const googleProvider =
+  new GoogleAuthProvider();
+
+googleProvider.setCustomParameters({
+  prompt:"select_account"
+});
+
+
+/* =========================================================
+   DOM
+========================================================= */
+
+const loginPanel =
+  document.getElementById(
+    "loginPanel"
+  );
+
+const loggedOutArea =
+  document.getElementById(
+    "loggedOutArea"
+  );
+
+const loggedInArea =
+  document.getElementById(
+    "loggedInArea"
+  );
+
+const studentName =
+  document.getElementById(
+    "studentName"
+  );
+
+const studentEmail =
+  document.getElementById(
+    "studentEmail"
+  );
+
+const googleLoginBtn =
+  document.getElementById(
+    "googleLoginBtn"
+  );
+
+const logoutBtn =
+  document.getElementById(
+    "logoutBtn"
+  );
+
+const homePage =
+  document.getElementById(
+    "homePage"
+  );
+
+const gamePage =
+  document.getElementById(
+    "gamePage"
+  );
+
+const backHomeBtn =
+  document.getElementById(
+    "backHomeBtn"
+  );
+
+const gameTitle =
+  document.getElementById(
+    "gameTitle"
+  );
+
+const totalCount =
+  document.getElementById(
+    "totalCount"
+  );
+
+const remainingCount =
+  document.getElementById(
+    "remainingCount"
+  );
+
+const currentPlayer =
+  document.getElementById(
+    "currentPlayer"
+  );
+
+const stage =
+  document.getElementById(
+    "stage"
+  );
+
+const hint =
+  document.getElementById(
+    "hint"
+  );
+
+const shuffleBtn =
+  document.getElementById(
+    "shuffleBtn"
+  );
+
+const nextBtn =
+  document.getElementById(
+    "nextBtn"
+  );
+
+const drawAgainBtn =
+  document.getElementById(
+    "drawAgainBtn"
+  );
+
+const resetPoolBtn =
+  document.getElementById(
+    "resetPoolBtn"
+  );
+
+const saveStatus =
+  document.getElementById(
+    "saveStatus"
+  );
+
+
+/* =========================================================
+   使用者
+========================================================= */
+
+let currentUser =
+  null;
+
+
+/* =========================================================
+   Google 登入
+========================================================= */
+
+googleLoginBtn.addEventListener(
+  "click",
+  async () => {
+
+    googleLoginBtn.disabled =
+      true;
+
+    googleLoginBtn.textContent =
+      "登入中……";
+
+    try {
+
+      /*
+        桌機優先使用 Popup。
+      */
+
+      await signInWithPopup(
+        auth,
+        googleProvider
+      );
+
     }
-    from
-    "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
 
-    import {
-      getAuth,
-      GoogleAuthProvider,
-      signInWithPopup,
-      signOut,
-      onAuthStateChanged
-    }
-    from
-    "https://www.gstatic.com/firebasejs/12.16.0/firebase-auth.js";
+    catch(error){
 
-    import {
-      getFirestore,
-      collection,
-      addDoc,
-      serverTimestamp
-    }
-    from
-    "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
-
-
-    /* =====================================================
-       ★★★ 這裡換成你的 Firebase 設定 ★★★
-    ===================================================== */
-
-    const firebaseConfig = {
-
-      apiKey:
-        "請換成你的 apiKey",
-
-      authDomain:
-        "請換成你的 authDomain",
-
-      projectId:
-        "請換成你的 projectId",
-
-      storageBucket:
-        "請換成你的 storageBucket",
-
-      messagingSenderId:
-        "請換成你的 messagingSenderId",
-
-      appId:
-        "請換成你的 appId"
-
-    };
-
-
-    /* =====================================================
-       Firebase 初始化
-    ===================================================== */
-
-    const firebaseApp =
-      initializeApp(
-        firebaseConfig
+      console.error(
+        "Google 登入錯誤：",
+        error
       );
 
-    const auth =
-      getAuth(
-        firebaseApp
-      );
+      /*
+        如果瀏覽器擋 Popup，
+        改用 Redirect。
+      */
 
-    const db =
-      getFirestore(
-        firebaseApp
-      );
+      if(
+        error.code ===
+        "auth/popup-blocked"
+        ||
+        error.code ===
+        "auth/cancelled-popup-request"
+      ){
 
-    const googleProvider =
-      new GoogleAuthProvider();
-
-
-    /* =====================================================
-       DOM
-    ===================================================== */
-
-    const loginPanel =
-      document.getElementById(
-        "loginPanel"
-      );
-
-    const loggedOutArea =
-      document.getElementById(
-        "loggedOutArea"
-      );
-
-    const loggedInArea =
-      document.getElementById(
-        "loggedInArea"
-      );
-
-    const studentName =
-      document.getElementById(
-        "studentName"
-      );
-
-    const studentEmail =
-      document.getElementById(
-        "studentEmail"
-      );
-
-    const googleLoginBtn =
-      document.getElementById(
-        "googleLoginBtn"
-      );
-
-    const logoutBtn =
-      document.getElementById(
-        "logoutBtn"
-      );
-
-    const homePage =
-      document.getElementById(
-        "homePage"
-      );
-
-    const gamePage =
-      document.getElementById(
-        "gamePage"
-      );
-
-    const backHomeBtn =
-      document.getElementById(
-        "backHomeBtn"
-      );
-
-    const gameTitle =
-      document.getElementById(
-        "gameTitle"
-      );
-
-    const totalPoolText =
-      document.getElementById(
-        "totalPoolText"
-      );
-
-    const remainingCount =
-      document.getElementById(
-        "remainingCount"
-      );
-
-    const stage =
-      document.getElementById(
-        "stage"
-      );
-
-    const hint =
-      document.getElementById(
-        "hint"
-      );
-
-    const shuffleBtn =
-      document.getElementById(
-        "shuffleBtn"
-      );
-
-    const nextBtn =
-      document.getElementById(
-        "nextBtn"
-      );
-
-    const drawAgainBtn =
-      document.getElementById(
-        "drawAgainBtn"
-      );
-
-    const resetPoolBtn =
-      document.getElementById(
-        "resetPoolBtn"
-      );
-
-
-    /* =====================================================
-       登入狀態
-    ===================================================== */
-
-    let currentUser = null;
-
-
-    googleLoginBtn.addEventListener(
-      "click",
-      async () => {
-
-        try {
-
-          await signInWithPopup(
-            auth,
-            googleProvider
-          );
-
-        }
-
-        catch (error) {
-
-          alert(
-            "Google 登入失敗："
-            +
-            error.message
-          );
-
-        }
-
-      }
-    );
-
-
-    logoutBtn.addEventListener(
-      "click",
-      async () => {
-
-        await signOut(
-          auth
+        await signInWithRedirect(
+          auth,
+          googleProvider
         );
 
-      }
-    );
-
-
-    onAuthStateChanged(
-      auth,
-      user => {
-
-        currentUser =
-          user;
-
-        if (user) {
-
-          loggedOutArea
-            .classList
-            .add(
-              "hidden"
-            );
-
-          loggedInArea
-            .classList
-            .remove(
-              "hidden"
-            );
-
-          loginPanel
-            .classList
-            .add(
-              "logged"
-            );
-
-          studentName.textContent =
-            `👤 ${user.displayName || "學生"}`;
-
-          studentEmail.textContent =
-            user.email || "";
-
-        }
-
-        else {
-
-          loggedOutArea
-            .classList
-            .remove(
-              "hidden"
-            );
-
-          loggedInArea
-            .classList
-            .add(
-              "hidden"
-            );
-
-          loginPanel
-            .classList
-            .remove(
-              "logged"
-            );
-
-          /*
-            登出就回首頁。
-          */
-
-          goHome();
-
-        }
+        return;
 
       }
+
+      alert(
+        "Google 登入失敗。\n\n"
+        +
+        error.message
+      );
+
+    }
+
+    finally{
+
+      googleLoginBtn.disabled =
+        false;
+
+      googleLoginBtn.textContent =
+        "G　使用 Google 登入";
+
+    }
+
+  }
+);
+
+
+/*
+  如果登入流程使用 Redirect，
+  回到頁面後接收結果。
+*/
+
+try{
+
+  await getRedirectResult(
+    auth
+  );
+
+}
+
+catch(error){
+
+  console.error(
+    "Redirect 登入錯誤：",
+    error
+  );
+
+}
+
+
+/* =========================================================
+   登出
+========================================================= */
+
+logoutBtn.addEventListener(
+  "click",
+  async () => {
+
+    await signOut(
+      auth
     );
 
+  }
+);
 
-    /* =====================================================
-       遊戲設定
-    ===================================================== */
 
-    const GAMES = {
+/* =========================================================
+   Authentication 狀態
+========================================================= */
 
-      silver: {
+onAuthStateChanged(
+  auth,
+  user => {
 
-        key:
-          "silver",
+    currentUser =
+      user;
 
-        title:
-          "🥈 銀卡刮刮樂",
+    if(user){
 
-        cardIcon:
-          "🥈✨",
+      loggedOutArea
+        .classList
+        .add(
+          "hidden"
+        );
 
-        cardText:
-          "銀卡",
+      loggedInArea
+        .classList
+        .remove(
+          "hidden"
+        );
 
-        english:
-          "SILVER LUCKY CARD",
+      loginPanel
+        .classList
+        .add(
+          "logged"
+        );
 
-        total:
-          40,
+      studentName.textContent =
+        `👤 ${
+          user.displayName
+          ||
+          "學生"
+        }`;
 
-        storageKey:
-          "silverScratchPool_v4",
+      studentEmail.textContent =
+        user.email
+        ||
+        "";
 
-        cssClass:
-          "silver",
+      currentPlayer.textContent =
+        user.displayName
+        ||
+        "學生";
 
-        prizes: [
+    }
 
-          {
-            id: "cash30",
-            name: "30 元",
-            icon: "💰",
-            description:
-              "恭喜獲得現金 30 元！",
-            count: 1,
-            type: "normal"
-          },
+    else{
 
-          {
-            id: "homework3",
-            name: "3 張免寫卷",
-            icon: "📚✨",
-            description:
-              "恭喜獲得 3 張免寫卷！",
-            count: 2,
-            type: "normal"
-          },
+      loggedOutArea
+        .classList
+        .remove(
+          "hidden"
+        );
 
-          {
-            id: "homework1",
-            name: "1 張免寫卷",
-            icon: "📝",
-            description:
-              "恭喜獲得 1 張免寫卷！",
-            count: 3,
-            type: "normal"
-          },
+      loggedInArea
+        .classList
+        .add(
+          "hidden"
+        );
 
-          {
-            id: "stationeryA",
-            name: "文具 A",
-            icon: "🖊️📒",
-            description:
-              "藍黑筆、立可帶、筆記本，三選一",
-            count: 4,
-            type: "normal"
-          },
+      loginPanel
+        .classList
+        .remove(
+          "logged"
+        );
 
-          {
-            id: "stationeryB",
-            name: "文具 B",
-            icon: "✏️📏",
-            description:
-              "自動筆、橡皮擦、直尺，三選一",
-            count: 4,
-            type: "normal"
-          },
+      currentPlayer.textContent =
+        "";
 
-          {
-            id: "cookie",
-            name: "小餅乾",
-            icon: "🍪",
-            description:
-              "恭喜獲得小餅乾 1 份！",
-            count: 8,
-            type: "normal"
-          },
+      /*
+        登出後回首頁。
+      */
 
-          {
-            id: "again",
-            name: "再抽一次",
-            icon: "🎟️🔄",
-            description:
-              "可以立刻再抽一張！",
-            count: 1,
-            type: "again"
-          },
+      goHome();
 
-          {
-            id: "silverCard",
-            name: "銀卡",
-            icon: "🥈🥤",
-            description:
-              "全班累積 10 張，可獲得飲料一杯！",
-            count: 7,
-            type: "special"
-          },
+    }
 
-          {
-            id: "none",
-            name: "再接再厲",
-            icon: "🍀",
-            description:
-              "好運下次再來！",
-            count: 10,
-            type: "none"
-          }
+  }
+);
 
-        ]
 
+/* =========================================================
+   遊戲設定
+========================================================= */
+
+const GAMES = {
+
+  /* =======================================================
+     銀卡刮刮樂
+  ======================================================= */
+
+  silver:{
+
+    key:
+      "silver",
+
+    name:
+      "銀卡刮刮樂",
+
+    title:
+      "🥈 銀卡刮刮樂",
+
+    cardIcon:
+      "🥈✨",
+
+    cardName:
+      "銀卡",
+
+    english:
+      "SILVER LUCKY CARD",
+
+    cssClass:
+      "silver",
+
+    total:
+      40,
+
+    storageKey:
+      "LuckyScratch_SilverPool_v5",
+
+    prizes:[
+
+      {
+        id:"cash30",
+        name:"30 元",
+        icon:"💰",
+        description:
+          "恭喜獲得現金 30 元！",
+        count:1,
+        type:"normal"
       },
 
+      {
+        id:"homework3",
+        name:"3 張免寫卷",
+        icon:"📚✨",
+        description:
+          "恭喜獲得 3 張免寫卷！",
+        count:2,
+        type:"normal"
+      },
 
-      gold: {
+      {
+        id:"homework1",
+        name:"1 張免寫卷",
+        icon:"📝",
+        description:
+          "恭喜獲得 1 張免寫卷！",
+        count:3,
+        type:"normal"
+      },
 
-        key:
-          "gold",
+      {
+        id:"stationeryA",
+        name:"文具 A",
+        icon:"🖊️📒",
+        description:
+          "藍黑筆、立可帶、筆記本，三選一",
+        count:4,
+        type:"normal"
+      },
 
-        title:
-          "🥇 金卡刮刮樂",
+      {
+        id:"stationeryB",
+        name:"文具 B",
+        icon:"✏️📏",
+        description:
+          "自動筆、橡皮擦、直尺，三選一",
+        count:4,
+        type:"normal"
+      },
 
-        cardIcon:
-          "🥇✨",
+      {
+        id:"cookie",
+        name:"小餅乾",
+        icon:"🍪",
+        description:
+          "恭喜獲得小餅乾 1 份！",
+        count:8,
+        type:"normal"
+      },
 
-        cardText:
-          "金卡",
+      {
+        id:"again",
+        name:"再抽一次",
+        icon:"🎟️🔄",
+        description:
+          "可以立刻再抽一張！",
+        count:1,
+        type:"again"
+      },
 
-        english:
-          "GOLD LUCKY CARD",
+      {
+        id:"silverCard",
+        name:"銀卡",
+        icon:"🥈🥤",
+        description:
+          "全班累積 10 張銀卡，可獲得飲料一杯！",
+        count:7,
+        type:"special"
+      },
 
-        total:
-          30,
-
-        storageKey:
-          "goldScratchPool_v4",
-
-        cssClass:
-          "gold",
-
-        prizes: [
-
-          {
-            id: "cash50",
-            name: "50 元",
-            icon: "💰",
-            description:
-              "恭喜獲得現金 50 元！",
-            count: 1,
-            type: "normal"
-          },
-
-          {
-            id: "homework4",
-            name: "4 張免寫卷",
-            icon: "📚✨",
-            description:
-              "恭喜獲得 4 張免寫卷！",
-            count: 1,
-            type: "normal"
-          },
-
-          {
-            id: "homework2",
-            name: "2 張免寫卷",
-            icon: "📝",
-            description:
-              "恭喜獲得 2 張免寫卷！",
-            count: 3,
-            type: "normal"
-          },
-
-          {
-            id: "stationery",
-            name: "文具組",
-            icon: "🖊️✏️🧽",
-            description:
-              "藍黑筆＋自動筆＋橡皮擦",
-            count: 2,
-            type: "normal"
-          },
-
-          {
-            id: "correction",
-            name: "立可帶＋替換帶",
-            icon: "🧾✨",
-            description:
-              "恭喜獲得立可帶＋替換帶！",
-            count: 2,
-            type: "normal"
-          },
-
-          {
-            id: "cookies",
-            name: "餅乾 ×3",
-            icon: "🍪🍪🍪",
-            description:
-              "恭喜獲得 3 份餅乾！",
-            count: 6,
-            type: "normal"
-          },
-
-          {
-            id: "again",
-            name: "再抽一次",
-            icon: "🎟️🔄",
-            description:
-              "可以立刻再抽一張！",
-            count: 2,
-            type: "again"
-          },
-
-          {
-            id: "goldCard",
-            name: "金卡",
-            icon: "🥇🍗",
-            description:
-              "全班累積 10 張，可獲得雞排一份！",
-            count: 4,
-            type: "special"
-          },
-
-          {
-            id: "none",
-            name: "再接再厲",
-            icon: "🍀",
-            description:
-              "好運下次再來！",
-            count: 9,
-            type: "none"
-          }
-
-        ]
-
+      {
+        id:"none",
+        name:"再接再厲",
+        icon:"🍀",
+        description:
+          "這次差一點，好運下次再來！",
+        count:10,
+        type:"none"
       }
 
-    };
+    ]
+
+  },
 
 
-    /* =====================================================
-       遊戲狀態
-    ===================================================== */
+  /* =======================================================
+     金卡刮刮樂
+  ======================================================= */
 
-    let currentGame = null;
+  gold:{
 
-    let prizePool = [];
+    key:
+      "gold",
 
-    let currentPrize = null;
+    name:
+      "金卡刮刮樂",
 
-    let cardSelected =
-      false;
+    title:
+      "🥇 金卡刮刮樂",
 
-    let scratchFinished =
-      false;
+    cardIcon:
+      "🥇✨",
 
+    cardName:
+      "金卡",
 
-    /* =====================================================
-       首頁
-    ===================================================== */
+    english:
+      "GOLD LUCKY CARD",
 
-    document
-      .querySelectorAll(
-        ".mode-card"
-      )
-      .forEach(
-        button => {
+    cssClass:
+      "gold",
 
-          button.addEventListener(
-            "click",
-            () => {
+    total:
+      30,
 
-              if (!currentUser) {
+    storageKey:
+      "LuckyScratch_GoldPool_v5",
 
-                alert(
-                  "請先使用 Google 帳號登入，才能開始抽獎。"
-                );
+    prizes:[
 
-                return;
+      {
+        id:"cash50",
+        name:"50 元",
+        icon:"💰",
+        description:
+          "恭喜獲得現金 50 元！",
+        count:1,
+        type:"normal"
+      },
 
-              }
+      {
+        id:"homework4",
+        name:"4 張免寫卷",
+        icon:"📚✨",
+        description:
+          "恭喜獲得 4 張免寫卷！",
+        count:1,
+        type:"normal"
+      },
 
-              openGame(
-                button.dataset.game
-              );
+      {
+        id:"homework2",
+        name:"2 張免寫卷",
+        icon:"📝",
+        description:
+          "恭喜獲得 2 張免寫卷！",
+        count:3,
+        type:"normal"
+      },
 
-            }
-          );
+      {
+        id:"stationery",
+        name:"文具組",
+        icon:"🖊️✏️🧽",
+        description:
+          "藍黑筆＋自動筆＋橡皮擦",
+        count:2,
+        type:"normal"
+      },
 
-        }
-      );
+      {
+        id:"correction",
+        name:"立可帶＋替換帶",
+        icon:"🧾✨",
+        description:
+          "恭喜獲得立可帶＋替換帶！",
+        count:2,
+        type:"normal"
+      },
 
+      {
+        id:"cookies3",
+        name:"餅乾 ×3",
+        icon:"🍪🍪🍪",
+        description:
+          "恭喜獲得 3 份餅乾！",
+        count:6,
+        type:"normal"
+      },
 
-    function goHome() {
+      {
+        id:"again",
+        name:"再抽一次",
+        icon:"🎟️🔄",
+        description:
+          "可以立刻再抽一張！",
+        count:2,
+        type:"again"
+      },
 
-      currentGame =
-        null;
+      {
+        id:"goldCard",
+        name:"金卡",
+        icon:"🥇🍗",
+        description:
+          "全班累積 10 張金卡，可獲得雞排一份！",
+        count:4,
+        type:"special"
+      },
 
-      homePage
-        .classList
-        .remove(
-          "hidden"
-        );
-
-      gamePage
-        .classList
-        .add(
-          "hidden"
-        );
-
-    }
-
-
-    backHomeBtn.addEventListener(
-      "click",
-      goHome
-    );
-
-
-    /* =====================================================
-       打開遊戲
-    ===================================================== */
-
-    function openGame(
-      gameKey
-    ) {
-
-      currentGame =
-        GAMES[
-          gameKey
-        ];
-
-      loadPool();
-
-      gameTitle.textContent =
-        currentGame.title;
-
-      gameTitle.className =
-        `game-title ${currentGame.cssClass}`;
-
-      totalPoolText.textContent =
-        `${currentGame.total} 張`;
-
-      homePage
-        .classList
-        .add(
-          "hidden"
-        );
-
-      gamePage
-        .classList
-        .remove(
-          "hidden"
-        );
-
-      showDeck(
-        true
-      );
-
-    }
-
-
-    /* =====================================================
-       獎池
-    ===================================================== */
-
-    function createFreshPool() {
-
-      const pool = [];
-
-      currentGame
-        .prizes
-        .forEach(
-          prize => {
-
-            for (
-              let i = 0;
-              i < prize.count;
-              i++
-            ) {
-
-              pool.push({
-
-                ...prize,
-
-                serial:
-                  `${prize.id}-${i + 1}`
-
-              });
-
-            }
-
-          }
-        );
-
-      return shuffleArray(
-        pool
-      );
-
-    }
-
-
-    function shuffleArray(
-      arr
-    ) {
-
-      const result =
-        [...arr];
-
-      for (
-        let i =
-          result.length - 1;
-
-        i > 0;
-
-        i--
-      ) {
-
-        const j =
-          Math.floor(
-            Math.random()
-            *
-            (i + 1)
-          );
-
-        [
-          result[i],
-          result[j]
-        ] =
-        [
-          result[j],
-          result[i]
-        ];
-
+      {
+        id:"none",
+        name:"再接再厲",
+        icon:"🍀",
+        description:
+          "這次差一點，好運下次再來！",
+        count:9,
+        type:"none"
       }
 
-      return result;
+    ]
 
-    }
+  }
+
+};
 
 
-    function loadPool() {
+/* =========================================================
+   遊戲狀態
+========================================================= */
 
-      const saved =
-        localStorage.getItem(
-          currentGame.storageKey
-        );
+let currentGame =
+  null;
 
-      if (saved) {
+let prizePool =
+  [];
 
-        try {
+let currentPrize =
+  null;
 
-          prizePool =
-            JSON.parse(
-              saved
+let cardSelected =
+  false;
+
+let scratchFinished =
+  false;
+
+
+/* =========================================================
+   首頁按鈕
+========================================================= */
+
+document
+  .querySelectorAll(
+    ".mode-card"
+  )
+  .forEach(
+    card => {
+
+      card.addEventListener(
+        "click",
+        () => {
+
+          if(!currentUser){
+
+            alert(
+              "請先使用學生自己的 Google 帳號登入，再開始抽獎。"
             );
 
+            return;
+
+          }
+
+          openGame(
+            card.dataset.game
+          );
+
         }
+      );
 
-        catch {
+    }
+  );
 
-          prizePool =
-            createFreshPool();
+
+/* =========================================================
+   回首頁
+========================================================= */
+
+function goHome(){
+
+  currentGame =
+    null;
+
+  homePage
+    .classList
+    .remove(
+      "hidden"
+    );
+
+  gamePage
+    .classList
+    .add(
+      "hidden"
+    );
+
+  saveStatus
+    .classList
+    .add(
+      "hidden"
+    );
+
+}
+
+
+/* =========================================================
+   手動回首頁
+
+   注意：
+   尚未抽獎時可以回首頁。
+========================================================= */
+
+backHomeBtn.addEventListener(
+  "click",
+  () => {
+
+    goHome();
+
+  }
+);
+
+
+/* =========================================================
+   開啟遊戲
+========================================================= */
+
+function openGame(gameKey){
+
+  currentGame =
+    GAMES[
+      gameKey
+    ];
+
+  loadPool();
+
+  gameTitle.textContent =
+    currentGame.title;
+
+  gameTitle.className =
+    `game-title ${currentGame.cssClass}`;
+
+  totalCount.textContent =
+    `${currentGame.total} 張`;
+
+  remainingCount.textContent =
+    `${prizePool.length} 張`;
+
+  currentPlayer.textContent =
+    currentUser?.displayName
+    ||
+    "學生";
+
+  homePage
+    .classList
+    .add(
+      "hidden"
+    );
+
+  gamePage
+    .classList
+    .remove(
+      "hidden"
+    );
+
+  showDeck(
+    true
+  );
+
+}
+
+
+/* =========================================================
+   建立獎池
+========================================================= */
+
+function createFreshPool(){
+
+  const pool =
+    [];
+
+  currentGame
+    .prizes
+    .forEach(
+      prize => {
+
+        for(
+          let i=0;
+          i<prize.count;
+          i++
+        ){
+
+          pool.push({
+
+            ...prize,
+
+            serial:
+              `${prize.id}-${i+1}`
+
+          });
 
         }
 
       }
+    );
 
-      else {
+  return shuffleArray(
+    pool
+  );
+
+}
+
+
+/* =========================================================
+   Fisher-Yates
+========================================================= */
+
+function shuffleArray(array){
+
+  const result =
+    [...array];
+
+  for(
+    let i=result.length-1;
+    i>0;
+    i--
+  ){
+
+    const j =
+      Math.floor(
+        Math.random()
+        *
+        (i+1)
+      );
+
+    [
+      result[i],
+      result[j]
+    ] =
+    [
+      result[j],
+      result[i]
+    ];
+
+  }
+
+  return result;
+
+}
+
+
+/* =========================================================
+   載入獎池
+========================================================= */
+
+function loadPool(){
+
+  const saved =
+    localStorage.getItem(
+      currentGame.storageKey
+    );
+
+  if(saved){
+
+    try{
+
+      const parsed =
+        JSON.parse(
+          saved
+        );
+
+      if(
+        Array.isArray(parsed)
+      ){
+
+        prizePool =
+          parsed;
+
+      }
+
+      else{
 
         prizePool =
           createFreshPool();
 
       }
 
-      savePool();
+    }
+
+    catch{
+
+      prizePool =
+        createFreshPool();
 
     }
 
+  }
 
-    function savePool() {
+  else{
 
-      localStorage.setItem(
-        currentGame.storageKey,
-        JSON.stringify(
-          prizePool
-        )
-      );
+    prizePool =
+      createFreshPool();
 
-      remainingCount.textContent =
-        `${prizePool.length} 張`;
+  }
 
-    }
+  savePool();
+
+}
 
 
-    /* =====================================================
-       卡片
-    ===================================================== */
+/* =========================================================
+   儲存獎池
+========================================================= */
 
-    function ticketFaceHTML() {
+function savePool(){
 
-      return `
+  if(!currentGame){
+    return;
+  }
 
-        <div
-          class="
-            ticket-face
-            ${currentGame.cssClass}
-          "
-        >
+  localStorage.setItem(
+    currentGame.storageKey,
+    JSON.stringify(
+      prizePool
+    )
+  );
 
-          <div class="ticket-icon">
-            ${currentGame.cardIcon}
-          </div>
+  remainingCount.textContent =
+    `${prizePool.length} 張`;
 
-          <div class="ticket-title">
-            ${currentGame.cardText}
-            <br>
-            刮刮樂
-          </div>
-
-          <div class="ticket-text">
-            ${currentGame.english}
-          </div>
-
-        </div>
-
-      `;
-
-    }
+}
 
 
-    function showDeck(
-      showReset = true
-    ) {
+/* =========================================================
+   卡片背面
+========================================================= */
 
-      currentPrize =
-        null;
+function ticketFaceHTML(){
 
-      cardSelected =
-        false;
+  return `
 
-      scratchFinished =
-        false;
+    <div
+      class="
+        ticket-face
+        ${currentGame.cssClass}
+      "
+    >
 
-      stage.classList.remove(
-        "spread-stage"
-      );
+      <div class="ticket-icon">
+        ${currentGame.cardIcon}
+      </div>
 
-      nextBtn.classList.add(
-        "hidden"
-      );
+      <div class="ticket-title">
+        ${currentGame.cardName}
+        <br>
+        刮刮樂
+      </div>
 
-      drawAgainBtn.classList.add(
-        "hidden"
-      );
+      <div class="ticket-text">
+        ${currentGame.english}
+      </div>
 
-      shuffleBtn.classList.remove(
-        "hidden"
-      );
+    </div>
 
-      resetPoolBtn.classList.toggle(
-        "hidden",
-        !showReset
-      );
+  `;
 
-      savePool();
+}
 
-      if (
-        prizePool.length === 0
-      ) {
 
-        showEmpty();
+/* =========================================================
+   初始牌堆
+========================================================= */
 
-        return;
+function showDeck(
+  showReset=true
+){
 
+  currentPrize =
+    null;
+
+  cardSelected =
+    false;
+
+  scratchFinished =
+    false;
+
+  stage
+    .classList
+    .remove(
+      "spread-stage"
+    );
+
+  nextBtn
+    .classList
+    .add(
+      "hidden"
+    );
+
+  drawAgainBtn
+    .classList
+    .add(
+      "hidden"
+    );
+
+  shuffleBtn
+    .classList
+    .remove(
+      "hidden"
+    );
+
+  resetPoolBtn
+    .classList
+    .toggle(
+      "hidden",
+      !showReset
+    );
+
+  saveStatus
+    .classList
+    .add(
+      "hidden"
+    );
+
+  savePool();
+
+  if(
+    prizePool.length === 0
+  ){
+
+    showEmptyPool();
+
+    return;
+
+  }
+
+  const count =
+    Math.min(
+      8,
+      prizePool.length
+    );
+
+  stage.innerHTML = `
+
+    <div class="deck">
+
+      ${
+        Array
+          .from(
+            {
+              length:count
+            },
+            () => `
+
+              <div class="deck-card">
+
+                ${ticketFaceHTML()}
+
+              </div>
+
+            `
+          )
+          .join("")
       }
 
-      const count =
-        Math.min(
-          8,
-          prizePool.length
-        );
+    </div>
 
-      stage.innerHTML = `
+  `;
 
-        <div class="deck">
+  hint.textContent =
+    `${currentGame.name}目前剩 ${prizePool.length} 張，請按「開始洗牌」！`;
 
-          ${Array
-            .from(
-              {
-                length:
-                  count
-              },
-              () => `
-
-                <div class="deck-card">
-
-                  ${ticketFaceHTML()}
-
-                </div>
-
-              `
-            )
-            .join("")}
-
-        </div>
-
-      `;
-
-      hint.textContent =
-        `目前剩 ${prizePool.length} 張，請按「開始洗牌」！`;
-
-    }
+}
 
 
-    /* =====================================================
-       洗牌
-    ===================================================== */
+/* =========================================================
+   開始洗牌
+========================================================= */
 
-    function startShuffle() {
+function startShuffle(){
 
-      if (!currentUser) {
+  if(!currentUser){
 
-        alert(
-          "請先登入。"
-        );
+    alert(
+      "登入狀態已失效，請重新登入。"
+    );
 
-        return;
+    return;
 
-      }
+  }
 
-      resetPoolBtn
-        .classList
-        .add(
-          "hidden"
-        );
+  if(
+    prizePool.length === 0
+  ){
 
-      shuffleBtn
-        .classList
-        .add(
-          "hidden"
-        );
+    showEmptyPool();
 
-      hint.textContent =
-        "正在洗牌中……";
+    return;
+
+  }
+
+  /*
+    洗牌一開始：
+    重設按鈕消失。
+  */
+
+  resetPoolBtn
+    .classList
+    .add(
+      "hidden"
+    );
+
+  shuffleBtn
+    .classList
+    .add(
+      "hidden"
+    );
+
+  hint.textContent =
+    "正在上下洗牌中…… 🔀";
+
+  prizePool =
+    shuffleArray(
+      prizePool
+    );
+
+  savePool();
+
+  stage.innerHTML = `
+
+    <div class="shuffle-table">
+
+      <div class="shuffle-hand left"></div>
+
+      <div class="shuffle-hand right"></div>
+
+
+      <div class="shuffle-stack upper">
+
+        ${ticketFaceHTML()}
+
+      </div>
+
+
+      <div class="shuffle-stack lower">
+
+        ${ticketFaceHTML()}
+
+      </div>
+
+
+      <div class="shuffle-drop p1">
+
+        ${ticketFaceHTML()}
+
+      </div>
+
+
+      <div class="shuffle-drop p2">
+
+        ${ticketFaceHTML()}
+
+      </div>
+
+
+      <div class="shuffle-drop p3">
+
+        ${ticketFaceHTML()}
+
+      </div>
+
+
+      <div class="shuffle-drop p4">
+
+        ${ticketFaceHTML()}
+
+      </div>
+
+
+      <div class="shuffle-label">
+
+        上下洗牌中……
+
+      </div>
+
+    </div>
+
+  `;
+
+
+  setTimeout(
+    () => {
 
       prizePool =
         shuffleArray(
@@ -2111,808 +2930,825 @@
 
       savePool();
 
-      stage.innerHTML = `
+      dealHorizontalRows();
 
-        <div class="shuffle-box">
+    },
+    3400
+  );
 
-          <div class="shuffle-card top">
-            ${ticketFaceHTML()}
-          </div>
-
-          <div class="shuffle-card bottom">
-            ${ticketFaceHTML()}
-          </div>
-
-          <div class="shuffle-card drop1">
-            ${ticketFaceHTML()}
-          </div>
-
-          <div class="shuffle-card drop2">
-            ${ticketFaceHTML()}
-          </div>
-
-          <div class="shuffle-card drop3">
-            ${ticketFaceHTML()}
-          </div>
-
-        </div>
-
-      `;
-
-      setTimeout(
-        () => {
-
-          prizePool =
-            shuffleArray(
-              prizePool
-            );
-
-          savePool();
-
-          dealCards();
-
-        },
-        3000
-      );
-
-    }
+}
 
 
-    /* =====================================================
-       每排 10 張橫向重疊
-    ===================================================== */
+/* =========================================================
+   10 張一排重疊展開
+========================================================= */
 
-    function dealCards() {
+function dealHorizontalRows(){
 
-      stage.classList.add(
-        "spread-stage"
-      );
+  stage
+    .classList
+    .add(
+      "spread-stage"
+    );
 
-      const rows = [];
+  const rows =
+    [];
 
-      for (
-        let i = 0;
-        i < prizePool.length;
-        i += 10
-      ) {
+  for(
+    let i=0;
+    i<prizePool.length;
+    i+=10
+  ){
 
-        rows.push(
-          prizePool.slice(
-            i,
-            i + 10
-          )
-        );
+    rows.push(
+      prizePool.slice(
+        i,
+        i+10
+      )
+    );
+
+  }
+
+
+  let globalIndex =
+    0;
+
+  let html =
+    "";
+
+
+  rows.forEach(
+    row => {
+
+      let cardWidth =
+        108;
+
+      let overlap =
+        56;
+
+
+      if(
+        window.innerWidth <= 900
+      ){
+
+        cardWidth =
+          92;
+
+        overlap =
+          47;
 
       }
 
-      let globalIndex =
-        0;
 
-      let html =
+      if(
+        window.innerWidth <= 650
+      ){
+
+        cardWidth =
+          76;
+
+        overlap =
+          38;
+
+      }
+
+
+      const rowWidth =
+        cardWidth
+        +
+        Math.max(
+          0,
+          row.length-1
+        )
+        *
+        overlap;
+
+
+      let rowHTML =
         "";
 
-      rows.forEach(
-        row => {
 
-          let cardWidth =
-            window.innerWidth <= 700
-              ? 76
-              : 108;
+      row.forEach(
+        (
+          prize,
+          localIndex
+        ) => {
 
-          let overlap =
-            window.innerWidth <= 700
-              ? 38
-              : 56;
+          const delay =
+            Math.min(
+              globalIndex
+              *
+              .025,
+              .7
+            );
 
-          const width =
-            cardWidth
-            +
-            Math.max(
-              0,
-              row.length - 1
-            )
-            *
-            overlap;
 
-          let rowHTML =
-            "";
+          rowHTML += `
 
-          row.forEach(
-            (
-              prize,
-              localIndex
-            ) => {
+            <div
+              class="spread-card"
 
-              rowHTML += `
+              data-index="${globalIndex}"
 
-                <div
-                  class="spread-card"
+              style="
+                left:
+                ${
+                  localIndex
+                  *
+                  overlap
+                }px;
 
-                  data-index="${globalIndex}"
+                z-index:
+                ${localIndex+1};
 
-                  style="
-                    left:
-                    ${
-                      localIndex
-                      *
-                      overlap
-                    }px;
+                animation-delay:
+                ${delay}s;
+              "
+            >
 
-                    z-index:
-                    ${localIndex + 1};
-                  "
-                >
+              <div class="spread-number">
 
-                  <div class="spread-number">
-                    ${globalIndex + 1}
-                  </div>
-
-                  ${ticketFaceHTML()}
-
-                </div>
-
-              `;
-
-              globalIndex++;
-
-            }
-          );
-
-          html += `
-
-            <div class="spread-row">
-
-              <div
-                class="spread-row-inner"
-
-                style="
-                  width:${width}px
-                "
-              >
-
-                ${rowHTML}
+                ${globalIndex+1}
 
               </div>
+
+
+              ${ticketFaceHTML()}
 
             </div>
 
           `;
 
+
+          globalIndex++;
+
         }
       );
 
-      stage.innerHTML = `
 
-        <div class="spread-board">
-          ${html}
+      html += `
+
+        <div class="spread-row">
+
+          <div
+            class="spread-row-inner"
+
+            style="
+              width:${rowWidth}px;
+            "
+          >
+
+            ${rowHTML}
+
+          </div>
+
         </div>
 
       `;
 
-      hint.textContent =
-        `全部 ${prizePool.length} 張已攤開，請挑一張！`;
+    }
+  );
 
-      document
-        .querySelectorAll(
-          ".spread-card"
-        )
-        .forEach(
-          card => {
 
-            card.addEventListener(
-              "click",
-              () => {
+  stage.innerHTML = `
 
-                chooseCard(
-                  card
-                );
+    <div class="spread-board">
 
-              }
+      ${html}
+
+    </div>
+
+  `;
+
+
+  hint.textContent =
+    `全部 ${prizePool.length} 張已攤開，請挑一張！ 👆`;
+
+
+  document
+    .querySelectorAll(
+      ".spread-card"
+    )
+    .forEach(
+      card => {
+
+        card.addEventListener(
+          "click",
+          () => {
+
+            selectCard(
+              card
             );
 
           }
         );
 
-    }
-
-
-    function chooseCard(
-      card
-    ) {
-
-      if (
-        cardSelected
-      ) {
-        return;
       }
+    );
 
-      cardSelected =
-        true;
-
-      const index =
-        Number(
-          card.dataset.index
-        );
-
-      currentPrize =
-        prizePool[
-          index
-        ];
-
-      prizePool.splice(
-        index,
-        1
-      );
-
-      savePool();
-
-      card
-        .classList
-        .add(
-          "selected"
-        );
-
-      document
-        .querySelectorAll(
-          ".spread-card"
-        )
-        .forEach(
-          other => {
-
-            if (
-              other !== card
-            ) {
-
-              other
-                .classList
-                .add(
-                  "dimmed"
-                );
-
-            }
-
-          }
-        );
-
-      setTimeout(
-        showScratch,
-        650
-      );
-
-    }
+}
 
 
-    /* =====================================================
-       刮卡
-    ===================================================== */
+/* =========================================================
+   選牌
+========================================================= */
 
-    function showScratch() {
+function selectCard(card){
 
-      stage.classList.remove(
-        "spread-stage"
-      );
+  if(cardSelected){
+    return;
+  }
 
-      stage.innerHTML = `
+  cardSelected =
+    true;
 
-        <div class="scratch-wrap">
 
-          <div
-            class="
-              scratch-ticket
-              ${currentGame.cssClass}
-            "
-          >
+  const chosenIndex =
+    Number(
+      card.dataset.index
+    );
 
-            <div class="scratch-top">
 
-              <div class="scratch-top-icon">
-                ${currentGame.cardIcon}
-              </div>
+  currentPrize =
+    prizePool[
+      chosenIndex
+    ];
 
-              <div class="scratch-top-title">
-                ${currentGame.cardText}刮刮樂
-              </div>
+
+  /*
+    從獎池移除此張。
+  */
+
+  prizePool.splice(
+    chosenIndex,
+    1
+  );
+
+
+  savePool();
+
+
+  card
+    .classList
+    .add(
+      "selected"
+    );
+
+
+  document
+    .querySelectorAll(
+      ".spread-card"
+    )
+    .forEach(
+      other => {
+
+        if(
+          other !== card
+        ){
+
+          other
+            .classList
+            .add(
+              "dimmed"
+            );
+
+        }
+
+      }
+    );
+
+
+  hint.textContent =
+    "就是這張！準備刮開獎項！ ✨";
+
+
+  setTimeout(
+    showScratchTicket,
+    700
+  );
+
+}
+
+
+/* =========================================================
+   刮卡畫面
+========================================================= */
+
+function showScratchTicket(){
+
+  stage
+    .classList
+    .remove(
+      "spread-stage"
+    );
+
+
+  stage.innerHTML = `
+
+    <div class="scratch-wrap">
+
+      <div
+        class="
+          scratch-ticket
+          ${currentGame.cssClass}
+        "
+      >
+
+        <div class="scratch-top">
+
+          <div class="scratch-top-icon">
+
+            ${currentGame.cardIcon}
+
+          </div>
+
+
+          <div class="scratch-top-title">
+
+            ${currentGame.cardName}刮刮樂
+
+          </div>
+
+
+          <div class="scratch-top-eng">
+
+            ${currentGame.english}
+
+          </div>
+
+        </div>
+
+
+        <div
+          class="scratch-area"
+          id="scratchArea"
+        >
+
+          <div class="prize-under">
+
+            <div class="prize-icon">
+
+              ${currentPrize.icon}
 
             </div>
 
-            <div
-              class="scratch-area"
-              id="scratchArea"
-            >
 
-              <div
-                class="
-                  prize-under
-                  ${currentGame.cssClass}
-                "
-              >
+            <div class="prize-name">
 
-                <div class="prize-icon">
-                  ${currentPrize.icon}
-                </div>
-
-                <div class="prize-name">
-                  ${currentPrize.name}
-                </div>
-
-                <div class="prize-desc">
-                  ${currentPrize.description}
-                </div>
-
-              </div>
-
-              <canvas
-                id="scratchCanvas"
-              ></canvas>
+              ${currentPrize.name}
 
             </div>
 
-            <div class="scratch-note">
-              用手指或滑鼠刮開塗層
+
+            <div class="prize-description">
+
+              ${currentPrize.description}
+
             </div>
 
           </div>
 
-          <div
-            class="result"
-            id="result"
-          ></div>
+
+          <canvas
+            id="scratchCanvas"
+          ></canvas>
 
         </div>
 
-      `;
 
-      hint.textContent =
-        "開始刮吧！";
+        <div class="scratch-note">
 
-      initScratch();
+          👆 用手指或滑鼠刮開塗層
+
+        </div>
+
+      </div>
+
+
+      <div
+        class="result"
+        id="result"
+      ></div>
+
+    </div>
+
+  `;
+
+
+  hint.textContent =
+    "開始刮吧！獎項就在塗層下面！";
+
+
+  initScratch();
+
+}
+
+
+/* =========================================================
+   建立刮除層
+========================================================= */
+
+function initScratch(){
+
+  const canvas =
+    document.getElementById(
+      "scratchCanvas"
+    );
+
+  const area =
+    document.getElementById(
+      "scratchArea"
+    );
+
+
+  const ctx =
+    canvas.getContext(
+      "2d",
+      {
+        willReadFrequently:true
+      }
+    );
+
+
+  const rect =
+    area.getBoundingClientRect();
+
+
+  const dpr =
+    Math.max(
+      1,
+      window.devicePixelRatio
+      ||
+      1
+    );
+
+
+  canvas.width =
+    Math.round(
+      rect.width
+      *
+      dpr
+    );
+
+
+  canvas.height =
+    Math.round(
+      rect.height
+      *
+      dpr
+    );
+
+
+  canvas.style.width =
+    "100%";
+
+  canvas.style.height =
+    "100%";
+
+
+  ctx.setTransform(
+    dpr,
+    0,
+    0,
+    dpr,
+    0,
+    0
+  );
+
+
+  const gradient =
+    ctx.createLinearGradient(
+      0,
+      0,
+      rect.width,
+      rect.height
+    );
+
+
+  /*
+    銀卡：銀色刮除層
+  */
+
+  if(
+    currentGame.key ===
+    "silver"
+  ){
+
+    gradient.addColorStop(
+      0,
+      "#858d96"
+    );
+
+    gradient.addColorStop(
+      .15,
+      "#e9edf0"
+    );
+
+    gradient.addColorStop(
+      .32,
+      "#a5abb2"
+    );
+
+    gradient.addColorStop(
+      .48,
+      "#f7f8f8"
+    );
+
+    gradient.addColorStop(
+      .65,
+      "#a3a8af"
+    );
+
+    gradient.addColorStop(
+      .82,
+      "#e2e5e8"
+    );
+
+    gradient.addColorStop(
+      1,
+      "#8d949d"
+    );
+
+  }
+
+  /*
+    金卡：金色刮除層
+  */
+
+  else{
+
+    gradient.addColorStop(
+      0,
+      "#91640d"
+    );
+
+    gradient.addColorStop(
+      .14,
+      "#ffe999"
+    );
+
+    gradient.addColorStop(
+      .31,
+      "#bd8612"
+    );
+
+    gradient.addColorStop(
+      .48,
+      "#fff3b7"
+    );
+
+    gradient.addColorStop(
+      .65,
+      "#c58e19"
+    );
+
+    gradient.addColorStop(
+      .82,
+      "#ffe68a"
+    );
+
+    gradient.addColorStop(
+      1,
+      "#946406"
+    );
+
+  }
+
+
+  ctx.fillStyle =
+    gradient;
+
+
+  ctx.fillRect(
+    0,
+    0,
+    rect.width,
+    rect.height
+  );
+
+
+  /*
+    金屬亮點
+  */
+
+  ctx.fillStyle =
+    "rgba(255,255,255,.3)";
+
+
+  for(
+    let i=0;
+    i<95;
+    i++
+  ){
+
+    ctx.beginPath();
+
+    ctx.arc(
+      Math.random()
+      *
+      rect.width,
+
+      Math.random()
+      *
+      rect.height,
+
+      Math.random()
+      *
+      2.5
+      +
+      .4,
+
+      0,
+
+      Math.PI
+      *
+      2
+    );
+
+    ctx.fill();
+
+  }
+
+
+  ctx.textAlign =
+    "center";
+
+
+  ctx.textBaseline =
+    "middle";
+
+
+  ctx.fillStyle =
+    "rgba(255,255,255,.88)";
+
+
+  ctx.font =
+    "900 27px sans-serif";
+
+
+  ctx.fillText(
+    "✨ 刮 開 看 看 ✨",
+    rect.width/2,
+    rect.height/2-12
+  );
+
+
+  ctx.font =
+    "900 14px sans-serif";
+
+
+  ctx.fillText(
+    "SCRATCH HERE",
+    rect.width/2,
+    rect.height/2+26
+  );
+
+
+  ctx.globalCompositeOperation =
+    "destination-out";
+
+
+  let drawing =
+    false;
+
+
+  let lastPoint =
+    null;
+
+
+  function point(event){
+
+    const canvasRect =
+      canvas.getBoundingClientRect();
+
+
+    return{
+
+      x:
+        event.clientX
+        -
+        canvasRect.left,
+
+      y:
+        event.clientY
+        -
+        canvasRect.top
+
+    };
+
+  }
+
+
+  function erase(
+    x,
+    y
+  ){
+
+    ctx.beginPath();
+
+    ctx.arc(
+      x,
+      y,
+      28,
+      0,
+      Math.PI*2
+    );
+
+    ctx.fill();
+
+  }
+
+
+  function start(event){
+
+    drawing =
+      true;
+
+    lastPoint =
+      point(event);
+
+    erase(
+      lastPoint.x,
+      lastPoint.y
+    );
+
+    try{
+
+      canvas.setPointerCapture(
+        event.pointerId
+      );
 
     }
 
+    catch{}
 
-    function initScratch() {
+  }
 
-      const canvas =
-        document.getElementById(
-          "scratchCanvas"
+
+  function move(event){
+
+    if(!drawing){
+      return;
+    }
+
+
+    event.preventDefault();
+
+
+    const p =
+      point(event);
+
+
+    if(lastPoint){
+
+      const dx =
+        p.x
+        -
+        lastPoint.x;
+
+      const dy =
+        p.y
+        -
+        lastPoint.y;
+
+
+      const distance =
+        Math.sqrt(
+          dx*dx
+          +
+          dy*dy
         );
 
-      const area =
-        document.getElementById(
-          "scratchArea"
-        );
 
-      const ctx =
-        canvas.getContext(
-          "2d",
-          {
-            willReadFrequently:
-              true
-          }
-        );
-
-      const rect =
-        area.getBoundingClientRect();
-
-      const dpr =
+      const steps =
         Math.max(
           1,
-          window.devicePixelRatio || 1
+          Math.ceil(
+            distance/7
+          )
         );
 
-      canvas.width =
-        rect.width * dpr;
 
-      canvas.height =
-        rect.height * dpr;
+      for(
+        let i=0;
+        i<=steps;
+        i++
+      ){
 
-      ctx.setTransform(
-        dpr,
-        0,
-        0,
-        dpr,
-        0,
-        0
-      );
+        const t =
+          i/steps;
 
-      const gradient =
-        ctx.createLinearGradient(
-          0,
-          0,
-          rect.width,
-          rect.height
-        );
 
-      if (
-        currentGame.key ===
-        "silver"
-      ) {
+        erase(
 
-        gradient.addColorStop(
-          0,
-          "#8a919a"
-        );
+          lastPoint.x
+          +
+          dx*t,
 
-        gradient.addColorStop(
-          .25,
-          "#edf0f2"
-        );
+          lastPoint.y
+          +
+          dy*t
 
-        gradient.addColorStop(
-          .5,
-          "#9fa6ac"
-        );
-
-        gradient.addColorStop(
-          .75,
-          "#f4f5f6"
-        );
-
-        gradient.addColorStop(
-          1,
-          "#989fa6"
-        );
-
-      }
-
-      else {
-
-        gradient.addColorStop(
-          0,
-          "#9d6e0c"
-        );
-
-        gradient.addColorStop(
-          .25,
-          "#ffe798"
-        );
-
-        gradient.addColorStop(
-          .5,
-          "#c58d15"
-        );
-
-        gradient.addColorStop(
-          .75,
-          "#fff1b0"
-        );
-
-        gradient.addColorStop(
-          1,
-          "#a6740d"
-        );
-
-      }
-
-      ctx.fillStyle =
-        gradient;
-
-      ctx.fillRect(
-        0,
-        0,
-        rect.width,
-        rect.height
-      );
-
-      ctx.fillStyle =
-        "rgba(255,255,255,.8)";
-
-      ctx.textAlign =
-        "center";
-
-      ctx.textBaseline =
-        "middle";
-
-      ctx.font =
-        "900 26px sans-serif";
-
-      ctx.fillText(
-        "✨ 刮 開 看 看 ✨",
-        rect.width / 2,
-        rect.height / 2
-      );
-
-      ctx.globalCompositeOperation =
-        "destination-out";
-
-      let drawing =
-        false;
-
-      let last =
-        null;
-
-      function point(
-        e
-      ) {
-
-        const r =
-          canvas.getBoundingClientRect();
-
-        return {
-
-          x:
-            e.clientX
-            -
-            r.left,
-
-          y:
-            e.clientY
-            -
-            r.top
-
-        };
-
-      }
-
-      function erase(
-        x,
-        y
-      ) {
-
-        ctx.beginPath();
-
-        ctx.arc(
-          x,
-          y,
-          28,
-          0,
-          Math.PI * 2
-        );
-
-        ctx.fill();
-
-      }
-
-      canvas.addEventListener(
-        "pointerdown",
-        e => {
-
-          drawing =
-            true;
-
-          last =
-            point(e);
-
-          erase(
-            last.x,
-            last.y
-          );
-
-          try {
-
-            canvas.setPointerCapture(
-              e.pointerId
-            );
-
-          }
-
-          catch {}
-
-        }
-      );
-
-      canvas.addEventListener(
-        "pointermove",
-        e => {
-
-          if (!drawing) {
-            return;
-          }
-
-          const p =
-            point(e);
-
-          if (last) {
-
-            const dx =
-              p.x - last.x;
-
-            const dy =
-              p.y - last.y;
-
-            const d =
-              Math.sqrt(
-                dx * dx
-                +
-                dy * dy
-              );
-
-            const steps =
-              Math.max(
-                1,
-                Math.ceil(
-                  d / 7
-                )
-              );
-
-            for (
-              let i = 0;
-              i <= steps;
-              i++
-            ) {
-
-              const t =
-                i / steps;
-
-              erase(
-                last.x
-                +
-                dx * t,
-
-                last.y
-                +
-                dy * t
-              );
-
-            }
-
-          }
-
-          last =
-            p;
-
-        }
-      );
-
-      async function end() {
-
-        if (!drawing) {
-          return;
-        }
-
-        drawing =
-          false;
-
-        last =
-          null;
-
-        const pixels =
-          ctx.getImageData(
-            0,
-            0,
-            canvas.width,
-            canvas.height
-          ).data;
-
-        let transparent =
-          0;
-
-        let checked =
-          0;
-
-        for (
-          let i = 3;
-          i < pixels.length;
-          i += 16
-        ) {
-
-          checked++;
-
-          if (
-            pixels[i]
-            <
-            20
-          ) {
-
-            transparent++;
-
-          }
-
-        }
-
-        if (
-          transparent
-          /
-          checked
-          >=
-          .42
-        ) {
-
-          await finishScratch(
-            canvas
-          );
-
-        }
-
-      }
-
-      canvas.addEventListener(
-        "pointerup",
-        end
-      );
-
-      canvas.addEventListener(
-        "pointercancel",
-        end
-      );
-
-    }
-
-
-    /* =====================================================
-       Firebase 記錄抽獎
-    ===================================================== */
-
-    async function saveDrawRecord() {
-
-      if (
-        !currentUser
-        ||
-        !currentPrize
-        ||
-        !currentGame
-      ) {
-
-        return;
-
-      }
-
-      try {
-
-        await addDoc(
-
-          collection(
-            db,
-            "drawRecords"
-          ),
-
-          {
-
-            uid:
-              currentUser.uid,
-
-            displayName:
-              currentUser.displayName
-              ||
-              "",
-
-            email:
-              currentUser.email
-              ||
-              "",
-
-            gameType:
-              currentGame.key,
-
-            gameName:
-              currentGame.key
-              ===
-              "silver"
-              ?
-              "銀卡刮刮樂"
-              :
-              "金卡刮刮樂",
-
-            prizeId:
-              currentPrize.id,
-
-            prizeName:
-              currentPrize.name,
-
-            prizeIcon:
-              currentPrize.icon,
-
-            prizeType:
-              currentPrize.type,
-
-            drawnAt:
-              serverTimestamp()
-
-          }
-
-        );
-
-      }
-
-      catch (error) {
-
-        console.error(
-          "抽獎紀錄寫入失敗：",
-          error
-        );
-
-        alert(
-          "獎項已抽出，但 Firebase 紀錄寫入失敗，請通知老師。"
         );
 
       }
@@ -2920,209 +3756,590 @@
     }
 
 
-    async function finishScratch(
+    lastPoint =
+      p;
+
+  }
+
+
+  async function end(){
+
+    if(!drawing){
+      return;
+    }
+
+
+    drawing =
+      false;
+
+
+    lastPoint =
+      null;
+
+
+    checkScratch(
+      ctx,
       canvas
-    ) {
+    );
 
-      if (
-        scratchFinished
-      ) {
-        return;
-      }
+  }
 
-      scratchFinished =
-        true;
 
-      canvas.style.transition =
-        "opacity .5s";
+  canvas.addEventListener(
+    "pointerdown",
+    start
+  );
 
-      canvas.style.opacity =
-        "0";
 
-      canvas.style.pointerEvents =
-        "none";
+  canvas.addEventListener(
+    "pointermove",
+    move
+  );
 
-      /*
-        真正刮完才寫 Firestore。
-      */
 
-      await saveDrawRecord();
+  canvas.addEventListener(
+    "pointerup",
+    end
+  );
 
-      const result =
-        document.getElementById(
-          "result"
-        );
 
-      result.textContent =
-        `🎉 ${currentPrize.name}`;
+  canvas.addEventListener(
+    "pointercancel",
+    end
+  );
 
-      resetPoolBtn
-        .classList
-        .add(
-          "hidden"
-        );
+}
 
-      if (
-        currentPrize.type ===
-        "again"
-      ) {
 
-        drawAgainBtn
-          .classList
-          .remove(
-            "hidden"
-          );
+/* =========================================================
+   檢查刮除比例
+========================================================= */
 
-        nextBtn
-          .classList
-          .add(
-            "hidden"
-          );
+function checkScratch(
+  ctx,
+  canvas
+){
 
-      }
+  if(scratchFinished){
+    return;
+  }
 
-      else {
 
-        nextBtn
-          .classList
-          .remove(
-            "hidden"
-          );
+  const pixels =
+    ctx.getImageData(
+      0,
+      0,
+      canvas.width,
+      canvas.height
+    ).data;
 
-        drawAgainBtn
-          .classList
-          .add(
-            "hidden"
-          );
 
-      }
+  let transparent =
+    0;
 
-      hint.textContent =
-        `本次完成，目前剩 ${prizePool.length} 張。`;
+
+  let checked =
+    0;
+
+
+  for(
+    let i=3;
+    i<pixels.length;
+    i+=16
+  ){
+
+    checked++;
+
+
+    if(
+      pixels[i]
+      <
+      20
+    ){
+
+      transparent++;
 
     }
 
+  }
 
-    /* =====================================================
-       下一位 / 再抽
-    ===================================================== */
 
-    nextBtn.addEventListener(
-      "click",
-      () => {
+  const ratio =
+    transparent
+    /
+    checked;
 
-        showDeck(
-          true
-        );
 
-        hint.textContent =
-          "下一位同學準備抽獎！";
+  if(
+    ratio >= .42
+  ){
 
-      }
+    finishScratch(
+      canvas
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   儲存抽獎紀錄到 Firestore
+========================================================= */
+
+async function saveDrawRecord(){
+
+  if(
+    !currentUser
+    ||
+    !currentGame
+    ||
+    !currentPrize
+  ){
+
+    throw new Error(
+      "缺少登入或抽獎資料"
+    );
+
+  }
+
+
+  /*
+    Firestore：
+    drawRecords / 自動 ID
+  */
+
+  const record = {
+
+    /*
+      學生
+    */
+
+    uid:
+      currentUser.uid,
+
+    displayName:
+      currentUser.displayName
+      ||
+      "",
+
+    email:
+      currentUser.email
+      ||
+      "",
+
+
+    /*
+      遊戲
+    */
+
+    gameType:
+      currentGame.key,
+
+    gameName:
+      currentGame.name,
+
+
+    /*
+      獎項
+    */
+
+    prizeId:
+      currentPrize.id,
+
+    prizeName:
+      currentPrize.name,
+
+    prizeIcon:
+      currentPrize.icon,
+
+    prizeType:
+      currentPrize.type,
+
+
+    /*
+      方便日後查詢
+    */
+
+    remainingAfter:
+      prizePool.length,
+
+
+    /*
+      使用 Firebase 伺服器時間
+    */
+
+    drawnAt:
+      serverTimestamp()
+
+  };
+
+
+  await addDoc(
+
+    collection(
+      db,
+      "drawRecords"
+    ),
+
+    record
+
+  );
+
+}
+
+
+/* =========================================================
+   刮獎完成
+========================================================= */
+
+async function finishScratch(
+  canvas
+){
+
+  if(scratchFinished){
+    return;
+  }
+
+
+  scratchFinished =
+    true;
+
+
+  canvas.style.transition =
+    "opacity .5s ease";
+
+
+  canvas.style.opacity =
+    "0";
+
+
+  canvas.style.pointerEvents =
+    "none";
+
+
+  const result =
+    document.getElementById(
+      "result"
     );
 
 
-    drawAgainBtn.addEventListener(
-      "click",
-      () => {
+  result.textContent =
+    `🎉 恭喜獲得「${currentPrize.name}」！`;
 
-        showDeck(
-          false
-        );
 
-        hint.textContent =
-          "獲得再抽一次！請重新洗牌。";
+  hint.textContent =
+    "正在儲存抽獎紀錄……";
 
-      }
+
+  saveStatus
+    .classList
+    .remove(
+      "hidden",
+      "ok",
+      "error"
     );
 
 
-    /* =====================================================
-       重設
-    ===================================================== */
+  saveStatus.textContent =
+    "☁️ 正在寫入 Firebase……";
 
-    resetPoolBtn.addEventListener(
-      "click",
-      () => {
 
-        if (
-          !currentGame
-        ) {
-          return;
-        }
+  /*
+    防止中間誤重設。
+  */
 
-        const ok =
-          confirm(
-            `確定要重設「${currentGame.title}」的完整獎池嗎？`
-          );
-
-        if (!ok) {
-          return;
-        }
-
-        prizePool =
-          createFreshPool();
-
-        savePool();
-
-        showDeck(
-          true
-        );
-
-      }
+  resetPoolBtn
+    .classList
+    .add(
+      "hidden"
     );
 
 
-    shuffleBtn.addEventListener(
-      "click",
-      startShuffle
+  try{
+
+    await saveDrawRecord();
+
+
+    saveStatus
+      .classList
+      .add(
+        "ok"
+      );
+
+
+    saveStatus.textContent =
+      `✅ 已記錄：${currentUser.displayName || "學生"}｜${currentGame.name}｜${currentPrize.name}`;
+
+
+    hint.textContent =
+      `本次完成，目前剩餘 ${prizePool.length} 張。`;
+
+  }
+
+  catch(error){
+
+    console.error(
+      "Firestore 寫入失敗：",
+      error
     );
 
 
-    function showEmpty() {
-
-      stage.innerHTML = `
-
-        <div>
-
-          <div
-            style="
-              font-size:70px
-            "
-          >
-            🎉
-          </div>
-
-          <h2>
-            本輪獎池已全部抽完！
-          </h2>
-
-        </div>
-
-      `;
-
-      shuffleBtn
-        .classList
-        .add(
-          "hidden"
-        );
-
-      resetPoolBtn
-        .classList
-        .remove(
-          "hidden"
-        );
-
-    }
+    saveStatus
+      .classList
+      .add(
+        "error"
+      );
 
 
-    /* =====================================================
-       初始
-    ===================================================== */
+    saveStatus.textContent =
+      "⚠️ 獎項已抽出，但抽獎紀錄沒有成功寫入 Firebase。";
+
+
+    hint.textContent =
+      "Firebase 紀錄失敗，請先通知老師，不要直接進行下一位。";
+
+  }
+
+
+  /*
+    再抽一次：
+    同一學生留下。
+  */
+
+  if(
+    currentPrize.type ===
+    "again"
+  ){
+
+    drawAgainBtn
+      .classList
+      .remove(
+        "hidden"
+      );
+
+
+    nextBtn
+      .classList
+      .add(
+        "hidden"
+      );
+
+  }
+
+
+  else{
+
+    nextBtn
+      .classList
+      .remove(
+        "hidden"
+      );
+
+
+    drawAgainBtn
+      .classList
+      .add(
+        "hidden"
+      );
+
+  }
+
+}
+
+
+/* =========================================================
+   「再抽一次」
+
+   同一學生保持登入。
+========================================================= */
+
+drawAgainBtn.addEventListener(
+  "click",
+  () => {
+
+    showDeck(
+      false
+    );
+
+
+    hint.textContent =
+      `🎟️ ${currentUser?.displayName || "這位同學"}獲得再抽一次！請重新洗牌。`;
+
+  }
+);
+
+
+/* =========================================================
+   下一位學生
+
+   ★ 自動登出上一位學生
+========================================================= */
+
+nextBtn.addEventListener(
+  "click",
+  async () => {
+
+    /*
+      先回首頁。
+    */
 
     goHome();
 
-  </script>
+
+    /*
+      再登出，
+      下一位必須重新登入自己的 Google 帳號。
+    */
+
+    await signOut(
+      auth
+    );
+
+
+    alert(
+      "上一位同學的抽獎已完成。\n\n請下一位同學登入自己的 Google 帳號。"
+    );
+
+  }
+);
+
+
+/* =========================================================
+   重設獎池
+
+   只有尚未開始洗牌時才看得到。
+========================================================= */
+
+resetPoolBtn.addEventListener(
+  "click",
+  () => {
+
+    if(!currentGame){
+      return;
+    }
+
+
+    const confirmed =
+      window.confirm(
+
+        `確定要重設「${currentGame.name}」嗎？\n\n`
+        +
+        `目前所有已抽出的牌都會恢復，重新變成完整 ${currentGame.total} 張。\n\n`
+        +
+        `Firebase 已經存在的抽獎紀錄不會被刪除。`
+
+      );
+
+
+    if(!confirmed){
+      return;
+    }
+
+
+    prizePool =
+      createFreshPool();
+
+
+    savePool();
+
+
+    showDeck(
+      true
+    );
+
+
+    hint.textContent =
+      `✅ ${currentGame.name}已重新建立完整 ${currentGame.total} 張獎池！`;
+
+  }
+);
+
+
+/* =========================================================
+   洗牌按鈕
+========================================================= */
+
+shuffleBtn.addEventListener(
+  "click",
+  startShuffle
+);
+
+
+/* =========================================================
+   全部抽完
+========================================================= */
+
+function showEmptyPool(){
+
+  stage
+    .classList
+    .remove(
+      "spread-stage"
+    );
+
+
+  stage.innerHTML = `
+
+    <div class="empty-box">
+
+      <div class="empty-icon">
+
+        🎉
+
+      </div>
+
+      ${currentGame.name}
+      <br><br>
+
+      本輪已經全部抽完！
+
+    </div>
+
+  `;
+
+
+  hint.textContent =
+    "本輪獎池已全部完成！";
+
+
+  shuffleBtn
+    .classList
+    .add(
+      "hidden"
+    );
+
+
+  nextBtn
+    .classList
+    .add(
+      "hidden"
+    );
+
+
+  drawAgainBtn
+    .classList
+    .add(
+      "hidden"
+    );
+
+
+  resetPoolBtn
+    .classList
+    .remove(
+      "hidden"
+    );
+
+}
+
+
+/* =========================================================
+   初始
+========================================================= */
+
+goHome();
+
+</script>
 
 </body>
 </html>
