@@ -1,0 +1,1901 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  >
+
+  <title>金卡刮刮樂</title>
+
+  <style>
+    :root {
+      --navy: #3f2b00;
+      --navy2: #7a5a10;
+      --navy3: #b88417;
+
+      --purple: #8c6a18;
+      --purple-dark: #6d520f;
+
+      --gold: #f6c543;
+      --gold2: #ffe38c;
+      --gold3: #fff1b8;
+      --gold-dark: #b17c10;
+
+      --cream: #fff9e9;
+      --cream2: #f8edcf;
+
+      --text: #4a3812;
+      --brown: #72521e;
+
+      --shadow:
+        0 16px 38px
+        rgba(90, 60, 10, 0.18);
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+    }
+
+    body {
+      min-height: 100vh;
+
+      font-family:
+        "Noto Sans TC",
+        "PingFang TC",
+        "Microsoft JhengHei",
+        sans-serif;
+
+      color: var(--text);
+
+      background:
+        radial-gradient(
+          circle at 12% 18%,
+          rgba(255,255,255,.8) 0 3px,
+          transparent 4px
+        ),
+        radial-gradient(
+          circle at 84% 30%,
+          rgba(255,255,255,.7) 0 2px,
+          transparent 3px
+        ),
+        linear-gradient(
+          145deg,
+          #fffaf0,
+          #efe4c6
+        );
+
+      overflow-x: hidden;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .app {
+      width: min(1320px, 100%);
+      margin: auto;
+      padding: 18px 14px 40px;
+      text-align: center;
+    }
+
+    h1 {
+      margin: 4px 0 6px;
+
+      font-size:
+        clamp(30px, 6vw, 56px);
+
+      color: #7b5400;
+
+      text-shadow:
+        0 3px 0 white,
+        0 6px 14px rgba(90,60,10,.12);
+    }
+
+    .subtitle {
+      margin: 0 auto 14px;
+
+      font-size:
+        clamp(15px, 2.4vw, 20px);
+
+      font-weight: 800;
+      color: #7a5b16;
+    }
+
+    .info-bar {
+      width: min(780px, 100%);
+      margin: 0 auto 16px;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .info-chip {
+      padding: 8px 16px;
+      border-radius: 999px;
+
+      background: rgba(255,255,255,.75);
+      border: 2px solid rgba(223,184,72,.38);
+
+      box-shadow:
+        0 5px 14px rgba(80,60,20,.08);
+
+      font-size: 14px;
+      font-weight: 900;
+      color: #6c4d12;
+    }
+
+    .info-chip strong {
+      color: #9a6900;
+      font-size: 17px;
+    }
+
+    .stage {
+      position: relative;
+
+      min-height: 560px;
+
+      padding: 24px;
+
+      border-radius: 30px;
+
+      border: 3px solid rgba(175,137,51,.13);
+
+      background: rgba(255,255,255,.5);
+
+      box-shadow:
+        inset 0 0 50px rgba(255,255,255,.75),
+        var(--shadow);
+
+      overflow: hidden;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .stage.spread-stage {
+      align-items: flex-start;
+      min-height: 620px;
+      padding: 18px 10px 22px;
+      overflow: visible;
+    }
+
+    .hint {
+      min-height: 30px;
+      margin: 16px 0 12px;
+
+      font-size:
+        clamp(16px, 2.5vw, 20px);
+
+      font-weight: 900;
+      color: #7a5b16;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 13px;
+      margin-top: 8px;
+    }
+
+    .btn {
+      border: 0;
+      border-radius: 999px;
+
+      padding: 14px 28px;
+
+      font-size:
+        clamp(16px, 2.3vw, 19px);
+
+      font-weight: 1000;
+      cursor: pointer;
+
+      color: white;
+
+      background:
+        linear-gradient(#b88716, #8b6204);
+
+      box-shadow:
+        0 7px 0 #6a4900,
+        0 12px 20px rgba(90,60,10,.18);
+
+      transition:
+        .15s transform,
+        .15s opacity,
+        .15s box-shadow;
+    }
+
+    .btn:hover {
+      filter: brightness(1.06);
+    }
+
+    .btn:active {
+      transform: translateY(5px);
+
+      box-shadow:
+        0 2px 0 #6a4900,
+        0 6px 12px rgba(90,60,10,.15);
+    }
+
+    .btn.gold {
+      color: #5e4308;
+
+      background:
+        linear-gradient(#ffe79a, #efbc46);
+
+      box-shadow:
+        0 7px 0 #ba8417,
+        0 12px 20px rgba(90,60,10,.16);
+    }
+
+    .btn.purple {
+      background:
+        linear-gradient(#d2a63a, #9d7312);
+
+      box-shadow:
+        0 7px 0 #72530d,
+        0 12px 20px rgba(90,60,10,.16);
+    }
+
+    .btn.reset {
+      padding: 10px 18px;
+      font-size: 14px;
+
+      color: #644b20;
+
+      background:
+        linear-gradient(#f9f4df, #e6d6ae);
+
+      box-shadow:
+        0 5px 0 #aa9871,
+        0 9px 15px rgba(80,55,20,.12);
+    }
+
+    .btn:disabled {
+      opacity: .42;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .ticket-face {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      border-radius: inherit;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      color: #fff9dd;
+
+      background:
+        radial-gradient(circle at 15% 15%, rgba(255,250,200,.95) 0 3px, transparent 4px),
+        radial-gradient(circle at 85% 20%, rgba(255,250,200,.95) 0 3px, transparent 4px),
+        radial-gradient(circle at 18% 84%, rgba(255,250,200,.95) 0 3px, transparent 4px),
+        radial-gradient(circle at 82% 82%, rgba(255,250,200,.95) 0 3px, transparent 4px),
+        linear-gradient(155deg, #ffe38a, #d6a42e 45%, #9c6c08 90%);
+
+      border: 3px solid #fff2b8;
+    }
+
+    .ticket-face::before,
+    .ticket-face::after {
+      content: "✦";
+      position: absolute;
+      font-size: 58px;
+      color: rgba(255,255,255,.24);
+      pointer-events: none;
+    }
+
+    .ticket-face::before {
+      left: 10px;
+      top: 10px;
+    }
+
+    .ticket-face::after {
+      right: 10px;
+      bottom: 10px;
+    }
+
+    .ticket-icon {
+      font-size:
+        clamp(50px, 7vw, 72px);
+
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .ticket-title {
+      font-size:
+        clamp(22px, 3.8vw, 35px);
+
+      font-weight: 1000;
+      line-height: 1.1;
+      letter-spacing: 3px;
+
+      text-shadow:
+        0 2px 0 rgba(105,70,0,.35);
+    }
+
+    .ticket-text {
+      margin-top: 10px;
+
+      font-size:
+        clamp(10px, 1.7vw, 14px);
+
+      font-weight: 900;
+      letter-spacing: 2px;
+    }
+
+    .deck {
+      position: relative;
+      width: min(285px, 68vw);
+      aspect-ratio: 2 / 3;
+      perspective: 1400px;
+    }
+
+    .deck-card {
+      position: absolute;
+      inset: 0;
+
+      border-radius: 22px;
+      background: white;
+      border: 5px solid white;
+
+      box-shadow:
+        0 11px 25px rgba(90,60,10,.23);
+
+      transform-origin: center bottom;
+    }
+
+    .deck-card:nth-child(1) { transform: translate(-24px,13px) rotate(-7deg); }
+    .deck-card:nth-child(2) { transform: translate(-17px,9px) rotate(-5deg); }
+    .deck-card:nth-child(3) { transform: translate(-10px,5px) rotate(-3deg); }
+    .deck-card:nth-child(4) { transform: translate(-4px,2px) rotate(-1deg); }
+    .deck-card:nth-child(5) { transform: translate(4px,2px) rotate(1deg); }
+    .deck-card:nth-child(6) { transform: translate(10px,5px) rotate(3deg); }
+    .deck-card:nth-child(7) { transform: translate(17px,9px) rotate(5deg); }
+    .deck-card:nth-child(8) { transform: translate(24px,13px) rotate(7deg); }
+
+    .shuffle-table {
+      position: relative;
+      width: 520px;
+      height: 470px;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      perspective: 1300px;
+    }
+
+    .shuffle-hand {
+      position: absolute;
+
+      width: 105px;
+      height: 140px;
+
+      border-radius: 55% 55% 45% 45%;
+
+      background:
+        linear-gradient(155deg, #f1c29f, #d89b73);
+
+      opacity: .9;
+
+      filter:
+        drop-shadow(0 10px 12px rgba(60,35,15,.16));
+
+      z-index: 40;
+    }
+
+    .shuffle-hand::after {
+      content: "";
+      position: absolute;
+      width: 42px;
+      height: 115px;
+      top: -34px;
+      left: 31px;
+      border-radius: 30px;
+      background: inherit;
+    }
+
+    .shuffle-hand.left {
+      left: 48px;
+      top: 165px;
+      animation: handLeft 1.45s ease-in-out infinite;
+    }
+
+    .shuffle-hand.right {
+      right: 48px;
+      top: 116px;
+      animation: handRight 1.45s ease-in-out infinite;
+    }
+
+    @keyframes handLeft {
+      0%,100% { transform: translateY(13px) rotate(20deg); }
+      50% { transform: translateY(-12px) rotate(15deg); }
+    }
+
+    @keyframes handRight {
+      0%,100% { transform: translateY(-12px) rotate(-20deg); }
+      50% { transform: translateY(13px) rotate(-15deg); }
+    }
+
+    .shuffle-main-stack,
+    .shuffle-drop-card {
+      position: absolute;
+
+      width: 180px;
+      height: 270px;
+
+      border-radius: 19px;
+      background: white;
+      border: 5px solid white;
+
+      box-shadow:
+        0 12px 25px rgba(90,60,10,.22);
+    }
+
+    .shuffle-main-stack.upper {
+      left: 168px;
+      top: 34px;
+      animation: upperStack 1.45s ease-in-out infinite;
+      z-index: 15;
+    }
+
+    .shuffle-main-stack.lower {
+      left: 185px;
+      top: 165px;
+      animation: lowerStack 1.45s ease-in-out infinite;
+      z-index: 8;
+    }
+
+    @keyframes upperStack {
+      0%,100% { transform: translateY(-9px) rotate(-6deg); }
+      50% { transform: translateY(11px) rotate(-3deg); }
+    }
+
+    @keyframes lowerStack {
+      0%,100% { transform: translateY(8px) rotate(5deg); }
+      50% { transform: translateY(-7px) rotate(3deg); }
+    }
+
+    .shuffle-drop-card {
+      width: 168px;
+      height: 252px;
+      left: 177px;
+      top: 75px;
+      z-index: 12;
+      opacity: 0;
+    }
+
+    .shuffle-drop-card.p1 { animation: overhand1 1.75s ease-in-out infinite; }
+    .shuffle-drop-card.p2 { animation: overhand2 1.75s ease-in-out infinite; }
+    .shuffle-drop-card.p3 { animation: overhand3 1.75s ease-in-out infinite; }
+    .shuffle-drop-card.p4 { animation: overhand4 1.75s ease-in-out infinite; }
+    .shuffle-drop-card.p5 { animation: overhand5 1.75s ease-in-out infinite; }
+
+    @keyframes overhand1 {
+      0% { opacity: 0; transform: translate(28px,-95px) rotate(-5deg); }
+      7% { opacity: 1; }
+      28% { opacity: 1; transform: translate(-1px,66px) rotate(2deg); }
+      34%,100% { opacity: 0; }
+    }
+
+    @keyframes overhand2 {
+      0%,16% { opacity: 0; transform: translate(25px,-92px) rotate(-4deg); }
+      23% { opacity: 1; }
+      44% { opacity: 1; transform: translate(1px,72px) rotate(1deg); }
+      50%,100% { opacity: 0; }
+    }
+
+    @keyframes overhand3 {
+      0%,32% { opacity: 0; transform: translate(20px,-88px) rotate(-3deg); }
+      39% { opacity: 1; }
+      60% { opacity: 1; transform: translate(-2px,78px) rotate(2deg); }
+      66%,100% { opacity: 0; }
+    }
+
+    @keyframes overhand4 {
+      0%,48% { opacity: 0; transform: translate(17px,-85px) rotate(-2deg); }
+      55% { opacity: 1; }
+      76% { opacity: 1; transform: translate(2px,84px) rotate(1deg); }
+      82%,100% { opacity: 0; }
+    }
+
+    @keyframes overhand5 {
+      0%,64% { opacity: 0; transform: translate(13px,-82px) rotate(-2deg); }
+      71% { opacity: 1; }
+      92% { opacity: 1; transform: translate(0,89px) rotate(1deg); }
+      98%,100% { opacity: 0; }
+    }
+
+    .shuffle-label {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 2px;
+
+      color: #8b6204;
+      font-size: 20px;
+      font-weight: 1000;
+      letter-spacing: 3px;
+    }
+
+    .spread-board {
+      width: 100%;
+      max-width: 1280px;
+
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+
+      padding: 10px 0 20px;
+    }
+
+    .spread-row {
+      position: relative;
+      width: min(1180px, 96vw);
+      height: 175px;
+
+      margin: 0 auto;
+
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+
+      overflow: visible;
+    }
+
+    .spread-row-inner {
+      position: relative;
+      height: 100%;
+    }
+
+    .spread-card {
+      position: absolute;
+      top: 0;
+
+      width: 108px;
+      height: 162px;
+
+      border-radius: 15px;
+      border: 4px solid white;
+      background: white;
+
+      box-shadow:
+        0 10px 20px rgba(90,60,10,.22);
+
+      overflow: hidden;
+      cursor: pointer;
+
+      transition:
+        transform .22s ease,
+        filter .22s ease,
+        opacity .22s ease,
+        box-shadow .22s ease;
+
+      animation:
+        horizontalSpread .48s cubic-bezier(.2,.8,.2,1) both;
+    }
+
+    .spread-card:hover,
+    .spread-card:active {
+      z-index: 9999 !important;
+
+      transform:
+        translateY(-12px)
+        scale(1.07);
+
+      filter: brightness(1.08);
+
+      box-shadow:
+        0 17px 30px rgba(90,60,10,.28);
+    }
+
+    .spread-card.selected {
+      z-index: 99999 !important;
+
+      transform:
+        translateY(-24px)
+        scale(1.13);
+
+      box-shadow:
+        0 22px 38px rgba(90,60,10,.32);
+    }
+
+    .spread-card.dimmed {
+      opacity: .13;
+      filter: grayscale(.7);
+    }
+
+    @keyframes horizontalSpread {
+      from {
+        opacity: 0;
+        transform: translateX(-80px) scale(.82);
+      }
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    .spread-card-number {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      z-index: 10;
+
+      min-width: 26px;
+      height: 26px;
+
+      padding: 0 5px;
+
+      border-radius: 999px;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      background: rgba(255,255,255,.92);
+
+      color: #7b5400;
+      font-size: 11px;
+      font-weight: 1000;
+
+      box-shadow:
+        0 3px 8px rgba(90,60,10,.15);
+    }
+
+    .spread-card .ticket-icon {
+      font-size: 34px;
+      margin-bottom: 4px;
+    }
+
+    .spread-card .ticket-title {
+      font-size: 16px;
+      line-height: 1.05;
+      letter-spacing: 1px;
+    }
+
+    .spread-card .ticket-text {
+      font-size: 8px;
+      margin-top: 5px;
+      letter-spacing: .8px;
+    }
+
+    .scratch-wrap {
+      width: min(455px, 92vw);
+      animation: popIn .45s ease both;
+    }
+
+    @keyframes popIn {
+      from {
+        opacity: 0;
+        transform: translateY(45px) scale(.72);
+      }
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    .scratch-ticket {
+      position: relative;
+
+      width: 100%;
+      aspect-ratio: 3 / 4;
+
+      padding: 15px;
+      overflow: hidden;
+
+      border-radius: 28px;
+      border: 7px solid #fff1b2;
+
+      background:
+        linear-gradient(145deg, #ffe38a, #d2a026 45%, #9c6c08 90%);
+
+      box-shadow:
+        0 18px 38px rgba(90,60,10,.25);
+    }
+
+    .scratch-ticket::before {
+      content: "";
+
+      position: absolute;
+      inset: 8px;
+
+      border: 2px dashed rgba(255,255,220,.8);
+      border-radius: 18px;
+
+      pointer-events: none;
+    }
+
+    .ticket-top {
+      height: 30%;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      color: #fffbed;
+
+      position: relative;
+      z-index: 2;
+    }
+
+    .ticket-top .icon {
+      font-size: 57px;
+      line-height: 1;
+    }
+
+    .ticket-top .title {
+      margin-top: 4px;
+
+      font-size:
+        clamp(30px, 7vw, 42px);
+
+      font-weight: 1000;
+      letter-spacing: 4px;
+
+      text-shadow:
+        0 3px 0 rgba(105,70,0,.35);
+    }
+
+    .ticket-top .eng {
+      margin-top: 5px;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 2px;
+    }
+
+    .scratch-area {
+      position: relative;
+
+      width: 100%;
+      height: 57%;
+
+      margin: 0;
+      overflow: hidden;
+
+      border-radius: 18px;
+      border: 4px solid #fff1b2;
+
+      background: #fff8dc;
+
+      touch-action: none;
+    }
+
+    .prize-under {
+      position: absolute;
+      inset: 0;
+
+      width: 100%;
+      height: 100%;
+
+      padding: 15px;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      background:
+        radial-gradient(circle at center, #fffef9, #f7e9bb);
+    }
+
+    .prize-under.gold-card {
+      background:
+        radial-gradient(circle at center, #fff9dc, #f8dda1);
+    }
+
+    .prize-under.try-again {
+      background:
+        radial-gradient(circle at center, #fffaf0, #f7e0b3);
+    }
+
+    .prize-under.no-prize {
+      background:
+        radial-gradient(circle at center, #fffef7, #f0ead8);
+    }
+
+    .prize-icon {
+      font-size:
+        clamp(58px, 13vw, 78px);
+
+      line-height: 1;
+      margin-bottom: 7px;
+    }
+
+    .prize-name {
+      color: #8b6204;
+
+      font-size:
+        clamp(24px, 5.5vw, 34px);
+
+      font-weight: 1000;
+      line-height: 1.2;
+    }
+
+    .prize-description {
+      margin-top: 7px;
+      max-width: 95%;
+
+      color: #72521b;
+
+      font-size:
+        clamp(14px, 3.5vw, 17px);
+
+      font-weight: 900;
+      line-height: 1.45;
+    }
+
+    #scratchCanvas {
+      position: absolute;
+      inset: 0;
+
+      width: 100% !important;
+      height: 100% !important;
+
+      display: block;
+
+      cursor: crosshair;
+      touch-action: none;
+    }
+
+    .bottom-note {
+      height: 13%;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      position: relative;
+      z-index: 2;
+
+      color: #fffdf1;
+
+      font-size:
+        clamp(13px, 3vw, 16px);
+
+      font-weight: 900;
+      text-align: center;
+    }
+
+    .result {
+      min-height: 44px;
+      margin-top: 15px;
+
+      color: #8b6204;
+
+      font-size:
+        clamp(18px, 4vw, 24px);
+
+      font-weight: 1000;
+    }
+
+    .prize-list {
+      width: min(760px, 100%);
+      margin: 24px auto 0;
+      padding: 18px;
+
+      border-radius: 22px;
+
+      background: rgba(255,255,255,.72);
+
+      border: 2px solid rgba(205,163,58,.2);
+
+      box-shadow:
+        0 10px 25px rgba(70,55,20,.08);
+    }
+
+    .prize-list h2 {
+      margin: 0 0 13px;
+      color: #8b6204;
+      font-size: 21px;
+    }
+
+    .prize-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 8px;
+    }
+
+    .prize-item {
+      padding: 9px 11px;
+      border-radius: 13px;
+
+      background: #fffaf0;
+      border: 1px solid rgba(192,145,34,.15);
+
+      font-size: 14px;
+      font-weight: 800;
+      text-align: left;
+    }
+
+    .prize-item strong {
+      color: #8b6204;
+    }
+
+    .confetti {
+      position: fixed;
+      left: 50%;
+      top: 45%;
+      z-index: 99999;
+
+      font-size: 31px;
+      pointer-events: none;
+
+      animation: burst 1.25s ease-out forwards;
+    }
+
+    @keyframes burst {
+      to {
+        transform:
+          translate(var(--x), var(--y))
+          rotate(560deg);
+        opacity: 0;
+      }
+    }
+
+    .empty-box {
+      padding: 35px;
+      border-radius: 22px;
+
+      background: rgba(255,255,255,.75);
+
+      color: #8b6204;
+      font-weight: 900;
+      font-size: 22px;
+    }
+
+    .empty-icon {
+      font-size: 70px;
+      margin-bottom: 14px;
+    }
+
+    @media (max-width: 900px) {
+      .stage.spread-stage {
+        min-height: 560px;
+      }
+
+      .shuffle-table {
+        transform: scale(.82);
+      }
+
+      .spread-row {
+        width: 96vw;
+        height: 152px;
+      }
+
+      .spread-card {
+        width: 92px;
+        height: 138px;
+      }
+
+      .spread-card .ticket-icon {
+        font-size: 28px;
+      }
+
+      .spread-card .ticket-title {
+        font-size: 13px;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .stage.spread-stage {
+        min-height: 520px;
+      }
+
+      .shuffle-table {
+        transform: scale(.65);
+      }
+
+      .spread-board {
+        gap: 18px;
+      }
+
+      .spread-row {
+        width: 97vw;
+        height: 125px;
+      }
+
+      .spread-card {
+        width: 76px;
+        height: 114px;
+      }
+
+      .spread-card .ticket-icon {
+        font-size: 22px;
+      }
+
+      .spread-card .ticket-title {
+        font-size: 10px;
+      }
+
+      .spread-card .ticket-text {
+        display: none;
+      }
+
+      .spread-card-number {
+        min-width: 21px;
+        height: 21px;
+        font-size: 9px;
+      }
+
+      .prize-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="app">
+
+    <h1>
+      🥇 金卡刮刮樂 ✨
+    </h1>
+
+    <p class="subtitle">
+      洗牌、挑一張，刮出你的金色幸運獎項！
+    </p>
+
+    <div class="info-bar">
+
+      <div class="info-chip">
+        🎟️ 總獎池
+        <strong>30</strong>
+        張
+      </div>
+
+      <div class="info-chip">
+        🎁 有獎
+        <strong>21</strong>
+        張
+      </div>
+
+      <div class="info-chip">
+        📦 剩餘
+        <strong id="remainingCount">30</strong>
+        張
+      </div>
+
+    </div>
+
+    <section class="stage" id="stage"></section>
+
+    <p class="hint" id="hint">
+      先按下「開始洗牌」
+    </p>
+
+    <div class="controls">
+
+      <button class="btn" id="shuffleBtn">
+        🔀 開始洗牌
+      </button>
+
+      <button
+        class="btn gold"
+        id="nextBtn"
+        style="display:none"
+      >
+        👤 下一位抽獎
+      </button>
+
+      <button
+        class="btn purple"
+        id="drawAgainBtn"
+        style="display:none"
+      >
+        🎟️ 再抽一次
+      </button>
+
+      <button class="btn reset" id="resetPoolBtn">
+        ♻️ 重設 30 張獎池
+      </button>
+
+    </div>
+
+    <div class="prize-list">
+
+      <h2>🥇 金卡刮刮樂獎項</h2>
+
+      <div class="prize-grid">
+
+        <div class="prize-item">
+          💰 <strong>50 元</strong> × 1
+        </div>
+
+        <div class="prize-item">
+          📚✨ <strong>4 張免寫卷</strong> × 1
+        </div>
+
+        <div class="prize-item">
+          📝 <strong>2 張免寫卷</strong> × 3
+        </div>
+
+        <div class="prize-item">
+          🖊️✏️🧽 <strong>文具組</strong> × 2
+          <br>
+          藍黑筆＋自動筆＋橡皮擦
+        </div>
+
+        <div class="prize-item">
+          🧾🧩 <strong>立可帶＋替換帶</strong> × 2
+        </div>
+
+        <div class="prize-item">
+          🍪🍪🍪 <strong>餅乾*3</strong> × 6
+        </div>
+
+        <div class="prize-item">
+          🎟️🔄 <strong>再抽一次</strong> × 2
+        </div>
+
+        <div class="prize-item">
+          🥇🍗 <strong>金卡</strong> × 4
+          <br>
+          全班累積 10 張，雞排一份
+        </div>
+
+        <div class="prize-item">
+          🍀 <strong>再接再厲</strong> × 9
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <script>
+    const PRIZE_DEFINITIONS = [
+      {
+        id: "cash50",
+        name: "50 元",
+        icon: "💰",
+        description: "恭喜獲得現金 50 元！",
+        count: 1,
+        type: "normal"
+      },
+      {
+        id: "homework4",
+        name: "4 張免寫卷",
+        icon: "📚✨",
+        description: "恭喜獲得 4 張免寫卷！",
+        count: 1,
+        type: "normal"
+      },
+      {
+        id: "homework2",
+        name: "2 張免寫卷",
+        icon: "📝",
+        description: "恭喜獲得 2 張免寫卷！",
+        count: 3,
+        type: "normal"
+      },
+      {
+        id: "stationerySet",
+        name: "文具組",
+        icon: "🖊️✏️🧽",
+        description: "藍黑筆＋自動筆＋橡皮擦",
+        count: 2,
+        type: "normal"
+      },
+      {
+        id: "correctionSet",
+        name: "立可帶＋替換帶",
+        icon: "🧾🧩",
+        description: "恭喜獲得立可帶＋替換帶！",
+        count: 2,
+        type: "normal"
+      },
+      {
+        id: "cookies3",
+        name: "餅乾*3",
+        icon: "🍪🍪🍪",
+        description: "恭喜獲得 3 份餅乾！",
+        count: 6,
+        type: "normal"
+      },
+      {
+        id: "drawAgain",
+        name: "再抽一次",
+        icon: "🎟️🔄",
+        description: "太幸運了！可以立刻再抽一張！",
+        count: 2,
+        type: "again"
+      },
+      {
+        id: "goldCard",
+        name: "金卡",
+        icon: "🥇🍗",
+        description: "全班累積 10 張金卡，可獲得雞排一份！",
+        count: 4,
+        type: "gold"
+      },
+      {
+        id: "tryAgain",
+        name: "再接再厲",
+        icon: "🍀",
+        description: "這次差一點，好運下次再來！",
+        count: 9,
+        type: "none"
+      }
+    ];
+
+    const STORAGE_KEY = "goldLuckyScratchPool_v1";
+
+    const stage = document.getElementById("stage");
+    const hint = document.getElementById("hint");
+    const shuffleBtn = document.getElementById("shuffleBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const drawAgainBtn = document.getElementById("drawAgainBtn");
+    const resetPoolBtn = document.getElementById("resetPoolBtn");
+    const remainingCount = document.getElementById("remainingCount");
+
+    let prizePool = [];
+    let currentPrize = null;
+    let scratchingFinished = false;
+    let cardSelected = false;
+
+    function createFreshPool() {
+      const pool = [];
+
+      PRIZE_DEFINITIONS.forEach(prize => {
+        for (let i = 0; i < prize.count; i++) {
+          pool.push({
+            id: prize.id,
+            name: prize.name,
+            icon: prize.icon,
+            description: prize.description,
+            type: prize.type,
+            serial: `${prize.id}-${i + 1}`
+          });
+        }
+      });
+
+      return shuffleArray(pool);
+    }
+
+    function shuffleArray(array) {
+      const result = [...array];
+
+      for (let i = result.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [result[i], result[j]] = [result[j], result[i]];
+      }
+
+      return result;
+    }
+
+    function savePool() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(prizePool));
+      updateRemainingCount();
+    }
+
+    function loadPool() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+
+          if (Array.isArray(parsed)) {
+            prizePool = parsed;
+          } else {
+            prizePool = createFreshPool();
+            savePool();
+          }
+        } catch {
+          prizePool = createFreshPool();
+          savePool();
+        }
+      } else {
+        prizePool = createFreshPool();
+        savePool();
+      }
+
+      updateRemainingCount();
+    }
+
+    function updateRemainingCount() {
+      remainingCount.textContent = prizePool.length;
+    }
+
+    function ticketFaceHTML() {
+      return `
+        <div class="ticket-face">
+          <div class="ticket-icon">🥇✨</div>
+          <div class="ticket-title">
+            金卡<br>
+            刮刮樂
+          </div>
+          <div class="ticket-text">
+            GOLD LUCKY CARD
+          </div>
+        </div>
+      `;
+    }
+
+    function showDeck(showReset = true) {
+      currentPrize = null;
+      scratchingFinished = false;
+      cardSelected = false;
+
+      stage.classList.remove("spread-stage");
+
+      nextBtn.style.display = "none";
+      drawAgainBtn.style.display = "none";
+      shuffleBtn.style.display = "";
+      shuffleBtn.disabled = false;
+
+      resetPoolBtn.style.display = showReset ? "" : "none";
+
+      updateRemainingCount();
+
+      if (prizePool.length === 0) {
+        showEmptyPool();
+        return;
+      }
+
+      const deckCount = Math.min(8, Math.max(1, prizePool.length));
+
+      stage.innerHTML = `
+        <div class="deck">
+          ${Array.from({ length: deckCount }, () => `
+            <div class="deck-card">
+              ${ticketFaceHTML()}
+            </div>
+          `).join("")}
+        </div>
+      `;
+
+      hint.textContent = `目前剩 ${prizePool.length} 張，請按「開始洗牌」！`;
+    }
+
+    function startShuffle() {
+      if (prizePool.length === 0) {
+        showEmptyPool();
+        return;
+      }
+
+      resetPoolBtn.style.display = "none";
+      shuffleBtn.style.display = "none";
+      nextBtn.style.display = "none";
+      drawAgainBtn.style.display = "none";
+
+      hint.textContent = "正在上下洗牌中…… 🔀";
+
+      prizePool = shuffleArray(prizePool);
+      savePool();
+
+      stage.classList.remove("spread-stage");
+
+      stage.innerHTML = `
+        <div class="shuffle-table">
+          <div class="shuffle-hand left"></div>
+          <div class="shuffle-hand right"></div>
+
+          <div class="shuffle-main-stack upper">
+            ${ticketFaceHTML()}
+          </div>
+
+          <div class="shuffle-main-stack lower">
+            ${ticketFaceHTML()}
+          </div>
+
+          <div class="shuffle-drop-card p1">${ticketFaceHTML()}</div>
+          <div class="shuffle-drop-card p2">${ticketFaceHTML()}</div>
+          <div class="shuffle-drop-card p3">${ticketFaceHTML()}</div>
+          <div class="shuffle-drop-card p4">${ticketFaceHTML()}</div>
+          <div class="shuffle-drop-card p5">${ticketFaceHTML()}</div>
+
+          <div class="shuffle-label">
+            上下洗牌中……
+          </div>
+        </div>
+      `;
+
+      setTimeout(() => {
+        prizePool = shuffleArray(prizePool);
+        savePool();
+        dealHorizontalRows();
+      }, 3600);
+    }
+
+    function dealHorizontalRows() {
+      stage.classList.add("spread-stage");
+
+      const total = prizePool.length;
+      const rows = [];
+
+      for (let i = 0; i < total; i += 10) {
+        rows.push(prizePool.slice(i, i + 10));
+      }
+
+      let globalIndex = 0;
+      let rowsHTML = "";
+
+      rows.forEach((rowCards) => {
+        const rowCount = rowCards.length;
+
+        let cardWidth = 108;
+        let overlap = 56;
+
+        if (window.innerWidth <= 900) {
+          cardWidth = 92;
+          overlap = 47;
+        }
+
+        if (window.innerWidth <= 620) {
+          cardWidth = 76;
+          overlap = 38;
+        }
+
+        const rowInnerWidth = cardWidth + Math.max(0, rowCount - 1) * overlap;
+
+        let cardsHTML = "";
+
+        rowCards.forEach((prize, localIndex) => {
+          const left = localIndex * overlap;
+          const delay = Math.min(globalIndex * 0.025, 0.8);
+
+          cardsHTML += `
+            <div
+              class="spread-card"
+              data-index="${globalIndex}"
+              style="
+                left:${left}px;
+                z-index:${localIndex + 1};
+                animation-delay:${delay}s;
+              "
+            >
+              <div class="spread-card-number">${globalIndex + 1}</div>
+              ${ticketFaceHTML()}
+            </div>
+          `;
+
+          globalIndex++;
+        });
+
+        rowsHTML += `
+          <div class="spread-row">
+            <div
+              class="spread-row-inner"
+              style="width:${rowInnerWidth}px;"
+            >
+              ${cardsHTML}
+            </div>
+          </div>
+        `;
+      });
+
+      stage.innerHTML = `
+        <div class="spread-board">
+          ${rowsHTML}
+        </div>
+      `;
+
+      hint.textContent = `全部 ${total} 張已攤開，請挑一張！ 👆`;
+
+      document.querySelectorAll(".spread-card").forEach(card => {
+        card.addEventListener("click", () => {
+          selectCard(card);
+        });
+      });
+    }
+
+    function selectCard(card) {
+      if (cardSelected) return;
+
+      cardSelected = true;
+
+      const chosenIndex = Number(card.dataset.index);
+
+      currentPrize = prizePool[chosenIndex];
+
+      prizePool.splice(chosenIndex, 1);
+
+      savePool();
+
+      card.classList.add("selected");
+
+      document.querySelectorAll(".spread-card").forEach(otherCard => {
+        if (otherCard !== card) {
+          otherCard.classList.add("dimmed");
+        }
+      });
+
+      hint.textContent = "就是這張！準備刮開獎項！ ✨";
+
+      setTimeout(showScratchTicket, 700);
+    }
+
+    function showScratchTicket() {
+      stage.classList.remove("spread-stage");
+
+      let prizeClass = "";
+
+      if (currentPrize.type === "gold") {
+        prizeClass = "gold-card";
+      } else if (currentPrize.type === "again") {
+        prizeClass = "try-again";
+      } else if (currentPrize.type === "none") {
+        prizeClass = "no-prize";
+      }
+
+      stage.innerHTML = `
+        <div class="scratch-wrap">
+          <div class="scratch-ticket">
+
+            <div class="ticket-top">
+              <div class="icon">🥇✨</div>
+              <div class="title">金卡刮刮樂</div>
+              <div class="eng">GOLD LUCKY SCRATCH CARD</div>
+            </div>
+
+            <div class="scratch-area" id="scratchArea">
+              <div class="prize-under ${prizeClass}">
+                <div class="prize-icon">${currentPrize.icon}</div>
+                <div class="prize-name">${currentPrize.name}</div>
+                <div class="prize-description">${currentPrize.description}</div>
+              </div>
+
+              <canvas id="scratchCanvas"></canvas>
+            </div>
+
+            <div class="bottom-note">
+              👆 用手指或滑鼠刮開整個金色區域
+            </div>
+
+          </div>
+
+          <div class="result" id="result"></div>
+        </div>
+      `;
+
+      hint.textContent = "開始刮吧！獎項就在金色塗層下面！";
+
+      initScratch();
+    }
+
+    function initScratch() {
+      const canvas = document.getElementById("scratchCanvas");
+      const area = document.getElementById("scratchArea");
+
+      const ctx = canvas.getContext("2d", {
+        willReadFrequently: true
+      });
+
+      const rect = area.getBoundingClientRect();
+
+      const dpr = Math.max(1, window.devicePixelRatio || 1);
+
+      canvas.width = Math.max(1, Math.round(rect.width * dpr));
+      canvas.height = Math.max(1, Math.round(rect.height * dpr));
+
+      canvas.style.width = "100%";
+      canvas.style.height = "100%";
+
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      const gradient = ctx.createLinearGradient(0, 0, rect.width, rect.height);
+
+      gradient.addColorStop(0, "#8f6412");
+      gradient.addColorStop(0.12, "#fff1aa");
+      gradient.addColorStop(0.26, "#dba42b");
+      gradient.addColorStop(0.42, "#fff8ca");
+      gradient.addColorStop(0.58, "#b97f0c");
+      gradient.addColorStop(0.74, "#ffe694");
+      gradient.addColorStop(0.88, "#a97408");
+      gradient.addColorStop(1, "#f2c34d");
+
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, rect.width, rect.height);
+
+      ctx.fillStyle = "rgba(255,255,255,.28)";
+
+      for (let i = 0; i < 100; i++) {
+        ctx.beginPath();
+        ctx.arc(
+          Math.random() * rect.width,
+          Math.random() * rect.height,
+          Math.random() * 2.7 + 0.4,
+          0,
+          Math.PI * 2
+        );
+        ctx.fill();
+      }
+
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillStyle = "rgba(255,255,255,.88)";
+      ctx.font = "900 27px sans-serif";
+      ctx.fillText("✨ 刮 開 看 看 ✨", rect.width / 2, rect.height / 2 - 13);
+      ctx.font = "900 15px sans-serif";
+      ctx.fillText("SCRATCH HERE", rect.width / 2, rect.height / 2 + 28);
+
+      ctx.globalCompositeOperation = "destination-out";
+
+      let drawing = false;
+      let lastPoint = null;
+
+      function getPoint(event) {
+        const canvasRect = canvas.getBoundingClientRect();
+
+        let clientX;
+        let clientY;
+
+        if (event.touches && event.touches.length) {
+          clientX = event.touches[0].clientX;
+          clientY = event.touches[0].clientY;
+        } else if (event.changedTouches && event.changedTouches.length) {
+          clientX = event.changedTouches[0].clientX;
+          clientY = event.changedTouches[0].clientY;
+        } else {
+          clientX = event.clientX;
+          clientY = event.clientY;
+        }
+
+        return {
+          x: clientX - canvasRect.left,
+          y: clientY - canvasRect.top
+        };
+      }
+
+      function eraseCircle(x, y) {
+        ctx.beginPath();
+        ctx.arc(x, y, 28, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      function scratch(event) {
+        if (!drawing) return;
+
+        event.preventDefault();
+
+        const point = getPoint(event);
+
+        if (lastPoint) {
+          const dx = point.x - lastPoint.x;
+          const dy = point.y - lastPoint.y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          const steps = Math.max(1, Math.ceil(distance / 7));
+
+          for (let i = 0; i <= steps; i++) {
+            const t = i / steps;
+            eraseCircle(
+              lastPoint.x + dx * t,
+              lastPoint.y + dy * t
+            );
+          }
+        } else {
+          eraseCircle(point.x, point.y);
+        }
+
+        lastPoint = point;
+      }
+
+      function startScratch(event) {
+        drawing = true;
+        lastPoint = getPoint(event);
+        eraseCircle(lastPoint.x, lastPoint.y);
+        event.preventDefault();
+      }
+
+      function endScratch() {
+        if (!drawing) return;
+
+        drawing = false;
+        lastPoint = null;
+
+        checkScratch(ctx, canvas);
+      }
+
+      if (window.PointerEvent) {
+        canvas.addEventListener("pointerdown", event => {
+          try {
+            canvas.setPointerCapture(event.pointerId);
+          } catch {}
+
+          startScratch(event);
+        });
+
+        canvas.addEventListener("pointermove", scratch);
+        canvas.addEventListener("pointerup", endScratch);
+        canvas.addEventListener("pointercancel", endScratch);
+      } else {
+        canvas.addEventListener("mousedown", startScratch);
+        canvas.addEventListener("mousemove", scratch);
+        window.addEventListener("mouseup", endScratch);
+
+        canvas.addEventListener("touchstart", startScratch, { passive: false });
+        canvas.addEventListener("touchmove", scratch, { passive: false });
+        canvas.addEventListener("touchend", endScratch);
+      }
+    }
+
+    function checkScratch(ctx, canvas) {
+      if (scratchingFinished) return;
+
+      const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+
+      let transparent = 0;
+      let checked = 0;
+
+      for (let i = 3; i < data.length; i += 16) {
+        checked++;
+        if (data[i] < 20) {
+          transparent++;
+        }
+      }
+
+      const ratio = transparent / checked;
+
+      if (ratio >= 0.42) {
+        finishScratch(canvas);
+      }
+    }
+
+    function finishScratch(canvas) {
+      scratchingFinished = true;
+
+      canvas.style.transition = "opacity .5s ease";
+      canvas.style.opacity = "0";
+      canvas.style.pointerEvents = "none";
+
+      setTimeout(() => {
+        canvas.style.display = "none";
+      }, 520);
+
+      const result = document.getElementById("result");
+
+      resetPoolBtn.style.display = "none";
+
+      if (currentPrize.type === "again") {
+        result.textContent = "🎟️ 太幸運了！獲得「再抽一次」！";
+        hint.textContent = `目前剩 ${prizePool.length} 張，這位同學可以再抽一張！`;
+
+        drawAgainBtn.style.display =
+          prizePool.length > 0 ? "" : "none";
+
+        nextBtn.style.display = "none";
+      } else if (currentPrize.type === "none") {
+        result.textContent = "🍀 再接再厲！下一次一定更幸運！";
+        hint.textContent = `本次完成，目前剩餘 ${prizePool.length} 張。`;
+
+        nextBtn.style.display =
+          prizePool.length > 0 ? "" : "none";
+
+        drawAgainBtn.style.display = "none";
+      } else {
+        result.textContent = `🎉 恭喜獲得「${currentPrize.name}」！`;
+        hint.textContent = `本次完成，目前剩餘 ${prizePool.length} 張。`;
+
+        nextBtn.style.display =
+          prizePool.length > 0 ? "" : "none";
+
+        drawAgainBtn.style.display = "none";
+      }
+
+      updateRemainingCount();
+      celebrate();
+    }
+
+    function celebrate() {
+      const symbols = ["🎉", "🎊", "✨", "⭐", "🥇", "🎟️", "🎁", "🍀"];
+
+      for (let i = 0; i < 34; i++) {
+        const item = document.createElement("div");
+        item.className = "confetti";
+        item.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+
+        item.style.setProperty(
+          "--x",
+          `${(Math.random() - .5) * 820}px`
+        );
+
+        item.style.setProperty(
+          "--y",
+          `${(Math.random() - .5) * 680}px`
+        );
+
+        item.style.animationDelay = `${Math.random() * .15}s`;
+
+        document.body.appendChild(item);
+
+        setTimeout(() => {
+          item.remove();
+        }, 1500);
+      }
+    }
+
+    function nextPlayer() {
+      showDeck(true);
+      hint.textContent = `👤 下一位同學準備抽獎，目前剩餘 ${prizePool.length} 張。`;
+    }
+
+    function drawAgain() {
+      showDeck(false);
+      hint.textContent = "🎟️ 獲得再抽一次！請重新洗牌，再挑一張！";
+    }
+
+    function resetPool() {
+      const confirmed = window.confirm(
+        "確定要重設「金卡刮刮樂」嗎？\n\n所有已抽出的獎項都會恢復，重新變成完整 30 張。"
+      );
+
+      if (!confirmed) return;
+
+      prizePool = createFreshPool();
+      savePool();
+
+      currentPrize = null;
+      scratchingFinished = false;
+      cardSelected = false;
+
+      showDeck(true);
+
+      hint.textContent = "✅ 金卡刮刮樂已重新建立完整 30 張獎池！";
+    }
+
+    function showEmptyPool() {
+      stage.classList.remove("spread-stage");
+
+      stage.innerHTML = `
+        <div class="empty-box">
+          <div class="empty-icon">🥇🎉</div>
+
+          金卡刮刮樂 30 張
+          <br>
+          已經全部抽完！
+
+          <br><br>
+
+          如需重新開始，
+          <br>
+          請使用「重設 30 張獎池」。
+        </div>
+      `;
+
+      hint.textContent = "本輪金卡刮刮樂已全部完成！";
+
+      shuffleBtn.style.display = "none";
+      nextBtn.style.display = "none";
+      drawAgainBtn.style.display = "none";
+      resetPoolBtn.style.display = "";
+    }
+
+    shuffleBtn.addEventListener("click", startShuffle);
+    nextBtn.addEventListener("click", nextPlayer);
+    drawAgainBtn.addEventListener("click", drawAgain);
+    resetPoolBtn.addEventListener("click", resetPool);
+
+    loadPool();
+    showDeck(true);
+  </script>
+
+</body>
+</html>
