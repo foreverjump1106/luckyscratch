@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
 
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-  />
+  >
 
-  <title>班級幸運刮刮樂</title>
+  <title>銀卡刮刮樂</title>
 
   <style>
     :root {
       --navy: #23395d;
       --navy2: #35558a;
-      --navy3: #4e6fae;
+      --navy3: #5875b5;
 
       --purple: #625ca8;
       --purple-dark: #48427f;
@@ -22,6 +22,10 @@
       --gold: #f2c75c;
       --gold2: #ffdf86;
       --gold-dark: #c99827;
+
+      --silver1: #f5f7f8;
+      --silver2: #c5cbd0;
+      --silver3: #929aa3;
 
       --cream: #fff9e9;
       --cream2: #f8edcf;
@@ -82,11 +86,15 @@
     }
 
     .app {
-      width: min(1280px, 100%);
+      width: min(1320px, 100%);
       margin: auto;
       padding: 18px 14px 40px;
       text-align: center;
     }
+
+    /* =====================================================
+       標題
+    ===================================================== */
 
     h1 {
       margin: 4px 0 6px;
@@ -102,8 +110,7 @@
 
       text-shadow:
         0 3px 0 white,
-        0 6px 14px
-        rgba(60, 55, 90, .14);
+        0 6px 14px rgba(60,55,90,.14);
     }
 
     .subtitle {
@@ -121,12 +128,12 @@
       color: #72531c;
     }
 
-    /* =========================
+    /* =====================================================
        資訊列
-    ========================= */
+    ===================================================== */
 
     .info-bar {
-      width: min(760px, 100%);
+      width: min(780px, 100%);
       margin: 0 auto 16px;
 
       display: flex;
@@ -147,7 +154,7 @@
           255,
           255,
           255,
-          .72
+          .74
         );
 
       border:
@@ -156,7 +163,7 @@
           218,
           177,
           74,
-          .4
+          .38
         );
 
       box-shadow:
@@ -169,9 +176,7 @@
         );
 
       font-size: 14px;
-
       font-weight: 900;
-
       color: #644918;
     }
 
@@ -180,9 +185,9 @@
       font-size: 17px;
     }
 
-    /* =========================
+    /* =====================================================
        主舞台
-    ========================= */
+    ===================================================== */
 
     .stage {
       position: relative;
@@ -228,9 +233,9 @@
       align-items: center;
     }
 
-    .stage.dealing-stage {
-      align-items: flex-start;
-      overflow: visible;
+    .stage.fan-stage {
+      min-height: 600px;
+      padding: 8px;
     }
 
     .hint {
@@ -246,13 +251,12 @@
         );
 
       font-weight: 900;
-
       color: #72521e;
     }
 
-    /* =========================
+    /* =====================================================
        按鈕
-    ========================= */
+    ===================================================== */
 
     .controls {
       display: flex;
@@ -352,8 +356,7 @@
         );
 
       box-shadow:
-        0 7px 0
-        var(--purple-dark),
+        0 7px 0 var(--purple-dark),
         0 12px 20px
         rgba(
           60,
@@ -363,9 +366,22 @@
         );
     }
 
-    .btn.small {
+    .btn.reset {
       padding: 10px 18px;
+
       font-size: 14px;
+
+      color: #644b20;
+
+      background:
+        linear-gradient(
+          #f9f4df,
+          #e6d6ae
+        );
+
+      box-shadow:
+        0 5px 0 #aa9871,
+        0 9px 15px rgba(80,55,20,.12);
     }
 
     .btn:disabled {
@@ -374,15 +390,15 @@
       transform: none;
     }
 
-    /* =========================
-       卡片共用樣式
-    ========================= */
+    /* =====================================================
+       卡片共用外觀
+    ===================================================== */
 
     .ticket-face {
+      position: relative;
+
       width: 100%;
       height: 100%;
-
-      position: relative;
 
       overflow: hidden;
 
@@ -398,32 +414,28 @@
       background:
         radial-gradient(
           circle at 15% 15%,
-          rgba(255,230,130,.95)
-          0 3px,
+          rgba(255,230,130,.95) 0 3px,
           transparent 4px
         ),
         radial-gradient(
           circle at 85% 20%,
-          rgba(255,230,130,.95)
-          0 3px,
+          rgba(255,230,130,.95) 0 3px,
           transparent 4px
         ),
         radial-gradient(
           circle at 18% 84%,
-          rgba(255,230,130,.95)
-          0 3px,
+          rgba(255,230,130,.95) 0 3px,
           transparent 4px
         ),
         radial-gradient(
           circle at 82% 82%,
-          rgba(255,230,130,.95)
-          0 3px,
+          rgba(255,230,130,.95) 0 3px,
           transparent 4px
         ),
         linear-gradient(
           155deg,
-          #6079b8,
-          #394f88 55%,
+          #637ec0,
+          #3c548e 55%,
           #292d5f
         );
 
@@ -445,55 +457,66 @@
           255,
           229,
           132,
-          .22
+          .24
         );
 
       pointer-events: none;
     }
 
     .ticket-face::before {
-      left: 12px;
-      top: 12px;
+      left: 10px;
+      top: 10px;
     }
 
     .ticket-face::after {
-      right: 12px;
-      bottom: 12px;
+      right: 10px;
+      bottom: 10px;
     }
 
     .ticket-icon {
       font-size:
         clamp(
-          46px,
+          50px,
           7vw,
           72px
         );
 
       line-height: 1;
 
-      margin-bottom: 9px;
+      margin-bottom: 8px;
+
+      filter:
+        drop-shadow(
+          0 4px 0
+          rgba(
+            25,
+            30,
+            65,
+            .35
+          )
+        );
     }
 
     .ticket-title {
       font-size:
         clamp(
-          20px,
-          3.6vw,
-          34px
+          22px,
+          3.8vw,
+          35px
         );
 
       font-weight: 1000;
 
-      line-height: 1.12;
+      line-height: 1.1;
 
       letter-spacing: 3px;
 
       text-shadow:
         0 3px 0
         rgba(
+          25,
           30,
-          35,
-          70,
+          65,
           .5
         );
     }
@@ -504,7 +527,7 @@
       font-size:
         clamp(
           10px,
-          1.8vw,
+          1.7vw,
           14px
         );
 
@@ -522,7 +545,7 @@
 
       width:
         min(
-          280px,
+          285px,
           68vw
         );
 
@@ -557,457 +580,429 @@
 
     .deck-card:nth-child(1) {
       transform:
-        translate(-22px,12px)
+        translate(-24px,13px)
         rotate(-7deg);
     }
 
     .deck-card:nth-child(2) {
       transform:
-        translate(-15px,8px)
+        translate(-17px,9px)
         rotate(-5deg);
     }
 
     .deck-card:nth-child(3) {
       transform:
-        translate(-9px,5px)
+        translate(-10px,5px)
         rotate(-3deg);
     }
 
     .deck-card:nth-child(4) {
       transform:
-        translate(-3px,2px)
+        translate(-4px,2px)
         rotate(-1deg);
     }
 
     .deck-card:nth-child(5) {
       transform:
-        translate(3px,2px)
+        translate(4px,2px)
         rotate(1deg);
     }
 
     .deck-card:nth-child(6) {
       transform:
-        translate(9px,5px)
+        translate(10px,5px)
         rotate(3deg);
     }
 
     .deck-card:nth-child(7) {
       transform:
-        translate(15px,8px)
+        translate(17px,9px)
         rotate(5deg);
     }
 
     .deck-card:nth-child(8) {
       transform:
-        translate(22px,12px)
+        translate(24px,13px)
         rotate(7deg);
     }
 
     /* =====================================================
-       真人式上下洗牌動畫
+       真人上下洗牌
     ===================================================== */
 
     .shuffle-table {
       position: relative;
 
       width: 520px;
-      height: 480px;
+      height: 470px;
 
       display: flex;
-      align-items: center;
       justify-content: center;
+      align-items: center;
 
-      perspective: 1200px;
+      perspective: 1300px;
     }
 
-    .hand {
+    .shuffle-hand {
       position: absolute;
 
-      width: 110px;
-      height: 145px;
+      width: 105px;
+      height: 140px;
 
-      border-radius: 50% 50% 44% 44%;
+      border-radius:
+        55% 55% 45% 45%;
 
       background:
         linear-gradient(
-          160deg,
-          #f4c7a6,
-          #dca47e
+          155deg,
+          #f1c29f,
+          #d89b73
         );
 
-      opacity: .92;
+      opacity: .9;
 
       filter:
         drop-shadow(
-          0 10px 15px
-          rgba(
-            65,
-            40,
-            20,
-            .15
-          )
+          0 10px 12px
+          rgba(60,35,15,.16)
         );
 
-      z-index: 30;
+      z-index: 40;
     }
 
-    .hand.left {
-      left: 52px;
-      top: 150px;
-
-      transform:
-        rotate(18deg);
-
-      animation:
-        leftHandMove
-        1.8s
-        ease-in-out
-        infinite;
-    }
-
-    .hand.right {
-      right: 52px;
-      top: 118px;
-
-      transform:
-        rotate(-18deg);
-
-      animation:
-        rightHandMove
-        1.8s
-        ease-in-out
-        infinite;
-    }
-
-    .hand::after {
+    .shuffle-hand::after {
       content: "";
 
       position: absolute;
 
-      width: 45px;
-      height: 120px;
+      width: 42px;
+      height: 115px;
 
-      border-radius: 40px;
+      top: -34px;
+      left: 31px;
 
-      background:
-        inherit;
+      border-radius: 30px;
 
-      top: -37px;
-      left: 33px;
+      background: inherit;
     }
 
-    @keyframes leftHandMove {
+    .shuffle-hand.left {
+      left: 48px;
+      top: 165px;
+
+      animation:
+        handLeft
+        1.45s
+        ease-in-out
+        infinite;
+    }
+
+    .shuffle-hand.right {
+      right: 48px;
+      top: 116px;
+
+      animation:
+        handRight
+        1.45s
+        ease-in-out
+        infinite;
+    }
+
+    @keyframes handLeft {
       0%,
       100% {
         transform:
-          translateY(12px)
-          rotate(18deg);
+          translateY(13px)
+          rotate(20deg);
       }
 
       50% {
         transform:
-          translateY(-10px)
+          translateY(-12px)
           rotate(15deg);
       }
     }
 
-    @keyframes rightHandMove {
+    @keyframes handRight {
       0%,
       100% {
         transform:
-          translateY(-8px)
-          rotate(-18deg);
+          translateY(-12px)
+          rotate(-20deg);
       }
 
       50% {
         transform:
-          translateY(12px)
+          translateY(13px)
           rotate(-15deg);
       }
     }
 
-    .shuffle-pile {
+    .shuffle-main-stack,
+    .shuffle-drop-card {
       position: absolute;
 
       width: 180px;
       height: 270px;
 
-      border-radius: 18px;
-
-      border:
-        5px solid white;
+      border-radius: 19px;
 
       background: white;
 
+      border: 5px solid white;
+
       box-shadow:
-        0 13px 28px
+        0 12px 25px
         rgba(
-          43,
-          42,
-          72,
-          .23
+          40,
+          37,
+          70,
+          .22
         );
     }
 
-    .shuffle-pile.top-pile {
-      top: 42px;
-      left: 170px;
-
-      transform:
-        rotate(-6deg);
+    .shuffle-main-stack.upper {
+      left: 168px;
+      top: 34px;
 
       animation:
-        upperPileMove
-        1.2s
+        upperStack
+        1.45s
         ease-in-out
         infinite;
+
+      z-index: 15;
     }
 
-    .shuffle-pile.bottom-pile {
-      top: 165px;
+    .shuffle-main-stack.lower {
       left: 185px;
-
-      transform:
-        rotate(5deg);
+      top: 165px;
 
       animation:
-        lowerPileMove
-        1.2s
+        lowerStack
+        1.45s
         ease-in-out
         infinite;
+
+      z-index: 8;
     }
 
-    @keyframes upperPileMove {
+    @keyframes upperStack {
       0%,
       100% {
         transform:
-          translateY(-8px)
+          translateY(-9px)
           rotate(-6deg);
       }
 
       50% {
         transform:
-          translateY(12px)
+          translateY(11px)
           rotate(-3deg);
       }
     }
 
-    @keyframes lowerPileMove {
+    @keyframes lowerStack {
       0%,
       100% {
         transform:
-          translateY(7px)
+          translateY(8px)
           rotate(5deg);
       }
 
       50% {
         transform:
-          translateY(-8px)
+          translateY(-7px)
           rotate(3deg);
       }
     }
 
-    .shuffle-packet {
-      position: absolute;
-
+    .shuffle-drop-card {
       width: 168px;
       height: 252px;
 
-      border-radius: 17px;
+      left: 177px;
+      top: 75px;
 
-      border:
-        4px solid white;
-
-      background: white;
-
-      box-shadow:
-        0 9px 18px
-        rgba(
-          40,
-          35,
-          70,
-          .18
-        );
-
-      z-index: 15;
+      z-index: 12;
 
       opacity: 0;
     }
 
-    .shuffle-packet.packet1 {
+    .shuffle-drop-card.p1 {
       animation:
-        packetDrop1
-        1.8s
+        overhand1
+        1.75s
         ease-in-out
         infinite;
     }
 
-    .shuffle-packet.packet2 {
+    .shuffle-drop-card.p2 {
       animation:
-        packetDrop2
-        1.8s
+        overhand2
+        1.75s
         ease-in-out
         infinite;
     }
 
-    .shuffle-packet.packet3 {
+    .shuffle-drop-card.p3 {
       animation:
-        packetDrop3
-        1.8s
+        overhand3
+        1.75s
         ease-in-out
         infinite;
     }
 
-    .shuffle-packet.packet4 {
+    .shuffle-drop-card.p4 {
       animation:
-        packetDrop4
-        1.8s
+        overhand4
+        1.75s
         ease-in-out
         infinite;
     }
 
-    .shuffle-packet.packet5 {
+    .shuffle-drop-card.p5 {
       animation:
-        packetDrop5
-        1.8s
+        overhand5
+        1.75s
         ease-in-out
         infinite;
     }
 
-    @keyframes packetDrop1 {
+    @keyframes overhand1 {
       0% {
         opacity: 0;
+
         transform:
-          translate(30px,-95px)
-          rotate(-5deg)
-          scale(.98);
+          translate(28px,-95px)
+          rotate(-5deg);
       }
 
-      10% {
+      7% {
         opacity: 1;
       }
 
-      34% {
+      28% {
         opacity: 1;
 
         transform:
-          translate(2px,35px)
-          rotate(2deg)
-          scale(.99);
-      }
-
-      40%,
-      100% {
-        opacity: 0;
-      }
-    }
-
-    @keyframes packetDrop2 {
-      0%,
-      18% {
-        opacity: 0;
-
-        transform:
-          translate(22px,-86px)
-          rotate(-3deg);
-      }
-
-      26% {
-        opacity: 1;
-      }
-
-      48% {
-        opacity: 1;
-
-        transform:
-          translate(-2px,48px)
-          rotate(1deg);
-      }
-
-      54%,
-      100% {
-        opacity: 0;
-      }
-    }
-
-    @keyframes packetDrop3 {
-      0%,
-      33% {
-        opacity: 0;
-
-        transform:
-          translate(18px,-80px)
-          rotate(-3deg);
-      }
-
-      41% {
-        opacity: 1;
-      }
-
-      63% {
-        opacity: 1;
-
-        transform:
-          translate(0,56px)
+          translate(-1px,66px)
           rotate(2deg);
       }
 
-      69%,
+      34%,
       100% {
         opacity: 0;
       }
     }
 
-    @keyframes packetDrop4 {
+    @keyframes overhand2 {
+      0%,
+      16% {
+        opacity: 0;
+
+        transform:
+          translate(25px,-92px)
+          rotate(-4deg);
+      }
+
+      23% {
+        opacity: 1;
+      }
+
+      44% {
+        opacity: 1;
+
+        transform:
+          translate(1px,72px)
+          rotate(1deg);
+      }
+
+      50%,
+      100% {
+        opacity: 0;
+      }
+    }
+
+    @keyframes overhand3 {
+      0%,
+      32% {
+        opacity: 0;
+
+        transform:
+          translate(20px,-88px)
+          rotate(-3deg);
+      }
+
+      39% {
+        opacity: 1;
+      }
+
+      60% {
+        opacity: 1;
+
+        transform:
+          translate(-2px,78px)
+          rotate(2deg);
+      }
+
+      66%,
+      100% {
+        opacity: 0;
+      }
+    }
+
+    @keyframes overhand4 {
       0%,
       48% {
         opacity: 0;
 
         transform:
-          translate(15px,-78px)
+          translate(17px,-85px)
           rotate(-2deg);
       }
 
-      56% {
+      55% {
         opacity: 1;
       }
 
-      78% {
+      76% {
         opacity: 1;
 
         transform:
-          translate(-3px,64px)
+          translate(2px,84px)
           rotate(1deg);
       }
 
-      84%,
+      82%,
       100% {
         opacity: 0;
       }
     }
 
-    @keyframes packetDrop5 {
+    @keyframes overhand5 {
       0%,
-      63% {
+      64% {
         opacity: 0;
 
         transform:
-          translate(12px,-74px)
-          rotate(-1deg);
+          translate(13px,-82px)
+          rotate(-2deg);
       }
 
       71% {
         opacity: 1;
       }
 
-      93% {
+      92% {
         opacity: 1;
 
         transform:
-          translate(0,70px)
+          translate(0,89px)
           rotate(1deg);
       }
 
+      98%,
       100% {
         opacity: 0;
       }
@@ -1016,72 +1011,85 @@
     .shuffle-label {
       position: absolute;
 
-      bottom: 5px;
-
-      width: 100%;
-
-      font-size: 19px;
-
-      font-weight: 1000;
+      left: 0;
+      right: 0;
+      bottom: 2px;
 
       color: var(--navy);
 
-      letter-spacing: 2px;
+      font-size: 20px;
+
+      font-weight: 1000;
+
+      letter-spacing: 3px;
 
       animation:
-        labelPulse
-        .9s
+        shuffleText
+        .75s
         ease-in-out
         infinite
         alternate;
     }
 
-    @keyframes labelPulse {
+    @keyframes shuffleText {
       to {
-        transform: scale(1.05);
-        opacity: .65;
+        opacity: .55;
+        transform: scale(1.04);
       }
     }
 
     /* =====================================================
-       全部牌攤開
+       賭場式扇形攤牌
     ===================================================== */
 
-    .all-cards-area {
-      width: 100%;
-
-      display: grid;
-
-      grid-template-columns:
-        repeat(
-          auto-fit,
-          minmax(
-            115px,
-            1fr
-          )
-        );
-
-      gap:
-        18px
-        13px;
-
-      padding:
-        18px 8px 30px;
-    }
-
-    .all-card {
+    .casino-fan {
       position: relative;
 
-      width: 100%;
+      width: min(1250px, 100%);
+      height: 570px;
 
-      max-width: 145px;
+      overflow: hidden;
 
-      aspect-ratio:
-        2 / 3;
+      perspective: 1500px;
+    }
 
-      margin: auto;
+    .fan-center-shadow {
+      position: absolute;
 
-      border-radius: 16px;
+      left: 50%;
+      bottom: 12px;
+
+      width: 70%;
+      height: 80px;
+
+      transform:
+        translateX(-50%);
+
+      border-radius: 50%;
+
+      background:
+        radial-gradient(
+          ellipse at center,
+          rgba(36,40,70,.18),
+          transparent 70%
+        );
+
+      filter: blur(9px);
+
+      pointer-events: none;
+    }
+
+    .fan-card {
+      position: absolute;
+
+      left: 50%;
+      bottom: 22px;
+
+      width: var(--card-width);
+
+      aspect-ratio: 2 / 3;
+
+      border-radius: 15px;
 
       border:
         4px solid white;
@@ -1089,87 +1097,123 @@
       background: white;
 
       box-shadow:
-        0 9px 18px
+        0 9px 20px
         rgba(
-          46,
-          40,
-          76,
-          .18
+          37,
+          35,
+          68,
+          .23
         );
 
       cursor: pointer;
 
       overflow: hidden;
 
-      transition:
-        .22s transform,
-        .22s box-shadow,
-        .22s filter,
-        .22s opacity;
-
-      animation:
-        dealAllCards
-        .5s
-        cubic-bezier(
-          .2,
-          .8,
-          .2,
-          1
-        )
-        both;
-    }
-
-    .all-card:hover,
-    .all-card:active {
-      z-index: 20;
+      transform-origin:
+        50% 112%;
 
       transform:
-        translateY(-10px)
-        scale(1.06);
+        translateX(-50%)
+        translateX(var(--fan-x))
+        translateY(calc(-1 * var(--fan-rise)))
+        rotate(var(--fan-angle));
 
-      box-shadow:
-        0 16px 30px
-        rgba(
-          46,
-          40,
-          76,
-          .25
-        );
+      transition:
+        transform .24s ease,
+        filter .24s ease,
+        opacity .24s ease,
+        box-shadow .24s ease;
 
-      filter:
-        brightness(1.08);
+      animation:
+        casinoSpread
+        .62s
+        cubic-bezier(.18,.8,.25,1)
+        both;
+
+      animation-delay:
+        var(--deal-delay);
     }
 
-    @keyframes dealAllCards {
+    .fan-card:hover,
+    .fan-card:active {
+      z-index: 5000 !important;
+
+      transform:
+        translateX(-50%)
+        translateX(var(--fan-x))
+        translateY(calc(-1 * var(--fan-rise) - 24px))
+        rotate(var(--fan-angle))
+        scale(1.08);
+
+      filter: brightness(1.08);
+
+      box-shadow:
+        0 18px 32px
+        rgba(
+          37,
+          35,
+          68,
+          .3
+        );
+    }
+
+    .fan-card.selected {
+      z-index: 9999 !important;
+
+      transform:
+        translateX(-50%)
+        translateX(var(--fan-x))
+        translateY(calc(-1 * var(--fan-rise) - 48px))
+        rotate(0deg)
+        scale(1.15);
+
+      box-shadow:
+        0 22px 38px
+        rgba(
+          37,
+          35,
+          68,
+          .32
+        );
+    }
+
+    .fan-card.dimmed {
+      opacity: .13;
+      filter: grayscale(.7);
+    }
+
+    @keyframes casinoSpread {
       from {
         opacity: 0;
 
         transform:
-          translateY(45px)
-          scale(.8);
+          translateX(-50%)
+          translateX(0)
+          translateY(100px)
+          rotate(0deg)
+          scale(.68);
       }
 
       to {
         opacity: 1;
-
-        transform:
-          translateY(0)
-          scale(1);
       }
     }
 
-    .all-card-number {
+    .fan-card-number {
       position: absolute;
 
-      top: 6px;
-      right: 7px;
+      top: 5px;
+      right: 5px;
 
-      z-index: 5;
+      z-index: 10;
 
-      width: 28px;
-      height: 28px;
+      min-width: 27px;
+      height: 27px;
 
-      border-radius: 50%;
+      padding:
+        0 5px;
+
+      border-radius: 999px;
 
       display: flex;
       justify-content: center;
@@ -1180,33 +1224,50 @@
           255,
           255,
           255,
-          .88
+          .9
         );
 
       color: var(--navy);
 
-      font-size: 12px;
-
+      font-size: 11px;
       font-weight: 1000;
 
       box-shadow:
         0 3px 8px
         rgba(
-          20,
-          25,
+          30,
+          30,
           60,
-          .15
+          .16
         );
     }
 
-    /* =========================
-       刮刮樂本體
-    ========================= */
+    /* 攤開的小牌，字體縮小 */
+    .fan-card .ticket-icon {
+      font-size: 35px;
+      margin-bottom: 4px;
+    }
+
+    .fan-card .ticket-title {
+      font-size: 16px;
+      line-height: 1.1;
+      letter-spacing: 1px;
+    }
+
+    .fan-card .ticket-text {
+      font-size: 8px;
+      margin-top: 5px;
+      letter-spacing: 1px;
+    }
+
+    /* =====================================================
+       正式刮刮卡
+    ===================================================== */
 
     .scratch-wrap {
       width:
         min(
-          450px,
+          455px,
           92vw
         );
 
@@ -1237,8 +1298,7 @@
 
       width: 100%;
 
-      aspect-ratio:
-        3 / 4;
+      aspect-ratio: 3 / 4;
 
       padding: 15px;
 
@@ -1289,7 +1349,7 @@
     }
 
     .ticket-top {
-      height: 31%;
+      height: 30%;
 
       display: flex;
       flex-direction: column;
@@ -1304,7 +1364,7 @@
     }
 
     .ticket-top .icon {
-      font-size: 58px;
+      font-size: 57px;
       line-height: 1;
     }
 
@@ -1313,9 +1373,9 @@
 
       font-size:
         clamp(
-          29px,
+          30px,
           7vw,
-          41px
+          42px
         );
 
       font-weight: 1000;
@@ -1342,12 +1402,16 @@
       letter-spacing: 2px;
     }
 
+    /* =====================================================
+       全滿銀色刮除區
+    ===================================================== */
+
     .scratch-area {
       position: relative;
 
       width: 100%;
 
-      height: 56%;
+      height: 57%;
 
       margin: 0;
 
@@ -1391,7 +1455,7 @@
         radial-gradient(
           circle at center,
           #ffffff,
-          #dfe5ec
+          #dce2e7
         );
     }
 
@@ -1409,7 +1473,7 @@
         radial-gradient(
           circle at center,
           #fffef7,
-          #e9eadf
+          #e8e9df
         );
     }
 
@@ -1422,7 +1486,6 @@
         );
 
       line-height: 1;
-
       margin-bottom: 7px;
     }
 
@@ -1433,7 +1496,7 @@
         clamp(
           24px,
           5.5vw,
-          33px
+          34px
         );
 
       font-weight: 1000;
@@ -1516,15 +1579,14 @@
       font-weight: 1000;
     }
 
-    /* =========================
-       獎項明細
-    ========================= */
+    /* =====================================================
+       獎項表
+    ===================================================== */
 
     .prize-list {
-      width: min(720px, 100%);
+      width: min(760px, 100%);
 
-      margin:
-        24px auto 0;
+      margin: 24px auto 0;
 
       padding: 18px;
 
@@ -1558,8 +1620,7 @@
     }
 
     .prize-list h2 {
-      margin:
-        0 0 13px;
+      margin: 0 0 13px;
 
       color: var(--navy);
 
@@ -1572,18 +1633,14 @@
       grid-template-columns:
         repeat(
           2,
-          minmax(
-            0,
-            1fr
-          )
+          minmax(0,1fr)
         );
 
       gap: 8px;
     }
 
     .prize-item {
-      padding:
-        9px 11px;
+      padding: 9px 11px;
 
       border-radius: 13px;
 
@@ -1599,7 +1656,6 @@
         );
 
       font-size: 14px;
-
       font-weight: 800;
 
       text-align: left;
@@ -1609,9 +1665,9 @@
       color: var(--navy);
     }
 
-    /* =========================
+    /* =====================================================
        慶祝動畫
-    ========================= */
+    ===================================================== */
 
     .confetti {
       position: fixed;
@@ -1619,7 +1675,7 @@
       left: 50%;
       top: 45%;
 
-      z-index: 999;
+      z-index: 99999;
 
       font-size: 31px;
 
@@ -1645,9 +1701,9 @@
       }
     }
 
-    /* =========================
-       獎池清空
-    ========================= */
+    /* =====================================================
+       空獎池
+    ===================================================== */
 
     .empty-box {
       padding: 35px;
@@ -1659,7 +1715,7 @@
           255,
           255,
           255,
-          .72
+          .75
         );
 
       color: var(--navy);
@@ -1674,78 +1730,73 @@
       margin-bottom: 14px;
     }
 
-    /* =========================
-       手機平板
-    ========================= */
+    /* =====================================================
+       iPad / 平板
+    ===================================================== */
 
-    @media (max-width: 850px) {
+    @media (max-width: 900px) {
 
       .stage {
         min-height: 520px;
-        padding: 12px 8px;
+        padding: 12px 5px;
+      }
+
+      .stage.fan-stage {
+        min-height: 520px;
       }
 
       .shuffle-table {
         transform: scale(.82);
       }
 
-      .all-cards-area {
-        grid-template-columns:
-          repeat(
-            auto-fit,
-            minmax(
-              92px,
-              1fr
-            )
-          );
-
-        gap:
-          12px
-          8px;
-      }
-
-      .all-card {
-        max-width: 120px;
+      .casino-fan {
+        height: 500px;
       }
 
     }
 
+    /* =====================================================
+       手機
+    ===================================================== */
+
     @media (max-width: 620px) {
 
+      .stage {
+        min-height: 460px;
+      }
+
+      .stage.fan-stage {
+        min-height: 430px;
+      }
+
       .shuffle-table {
-        transform: scale(.68);
+        transform: scale(.65);
       }
 
-      .all-cards-area {
-        grid-template-columns:
-          repeat(
-            4,
-            1fr
-          );
-
-        gap: 8px;
+      .casino-fan {
+        height: 410px;
       }
 
-      .all-card {
-        max-width: 100px;
+      .fan-card .ticket-icon {
+        font-size: 25px;
       }
 
-      .ticket-title {
-        font-size: 14px;
-        letter-spacing: 1px;
+      .fan-card .ticket-title {
+        font-size: 11px;
       }
 
-      .ticket-icon {
-        font-size: 30px;
+      .fan-card .ticket-text {
+        display: none;
       }
 
-      .ticket-text {
-        font-size: 8px;
+      .fan-card-number {
+        min-width: 22px;
+        height: 22px;
+        font-size: 9px;
       }
 
       .prize-grid {
-        grid-template-columns:
-          1fr;
+        grid-template-columns: 1fr;
       }
 
     }
@@ -1758,23 +1809,23 @@
   <main class="app">
 
     <h1>
-      🎫 班級幸運刮刮樂 ✨
+      🥈 銀卡刮刮樂 ✨
     </h1>
 
     <p class="subtitle">
-      洗牌、抽一張，刮出你的幸運獎項！
+      洗牌、挑一張，刮出你的幸運獎項！
     </p>
 
     <div class="info-bar">
 
       <div class="info-chip">
-        🎟️ 原始獎池
+        🎟️ 總獎池
         <strong>40</strong>
         張
       </div>
 
       <div class="info-chip">
-        🏆 有獎
+        🎁 有獎
         <strong>30</strong>
         張
       </div>
@@ -1823,11 +1874,11 @@
         id="drawAgainBtn"
         style="display:none"
       >
-        🔄 再抽一次
+        🎟️ 再抽一次
       </button>
 
       <button
-        class="btn gold small"
+        class="btn reset"
         id="resetPoolBtn"
       >
         ♻️ 重設 40 張獎池
@@ -1838,7 +1889,7 @@
     <div class="prize-list">
 
       <h2>
-        🎁 本次刮刮樂獎項
+        🥈 銀卡刮刮樂獎項
       </h2>
 
       <div class="prize-grid">
@@ -1884,7 +1935,7 @@
         </div>
 
         <div class="prize-item">
-          🔄🎟️
+          🎟️🔄
           <strong>再抽一次</strong>
           × 1
         </div>
@@ -1911,6 +1962,11 @@
 
   <script>
 
+    /* =====================================================
+       銀卡刮刮樂固定獎池
+       共 40 張
+    ===================================================== */
+
     const PRIZE_DEFINITIONS = [
 
       {
@@ -1926,7 +1982,7 @@
         id: "homework3",
         name: "3 張免寫卷",
         icon: "📚✨",
-        description: "可獲得 3 張免寫卷！",
+        description: "恭喜獲得 3 張免寫卷！",
         count: 2,
         type: "normal"
       },
@@ -1935,7 +1991,7 @@
         id: "homework1",
         name: "1 張免寫卷",
         icon: "📝",
-        description: "可獲得 1 張免寫卷！",
+        description: "恭喜獲得 1 張免寫卷！",
         count: 3,
         type: "normal"
       },
@@ -1996,6 +2052,12 @@
 
     ];
 
+    /*
+      沿用固定儲存名稱。
+      同一台裝置重新整理後，
+      剩餘獎池不會自動回到 40 張。
+    */
+
     const STORAGE_KEY =
       "classLuckyScratchPool_v2";
 
@@ -2038,13 +2100,15 @@
 
     let currentPrize = null;
 
-    let scratchingFinished = false;
+    let scratchingFinished =
+      false;
 
-    let cardSelected = false;
+    let cardSelected =
+      false;
 
-    /* =============================
-       建立獎池
-    ============================= */
+    /* =====================================================
+       建立完整 40 張
+    ===================================================== */
 
     function createFreshPool() {
 
@@ -2092,9 +2156,9 @@
 
     }
 
-    /* =============================
-       洗牌陣列
-    ============================= */
+    /* =====================================================
+       Fisher-Yates 真正亂數洗牌
+    ===================================================== */
 
     function shuffleArray(
       array
@@ -2134,9 +2198,9 @@
 
     }
 
-    /* =============================
-       儲存
-    ============================= */
+    /* =====================================================
+       儲存獎池
+    ===================================================== */
 
     function savePool() {
 
@@ -2151,9 +2215,9 @@
 
     }
 
-    /* =============================
-       載入
-    ============================= */
+    /* =====================================================
+       載入獎池
+    ===================================================== */
 
     function loadPool() {
 
@@ -2217,6 +2281,10 @@
 
     }
 
+    /* =====================================================
+       剩餘張數
+    ===================================================== */
+
     function updateRemainingCount() {
 
       remainingCount.textContent =
@@ -2224,9 +2292,9 @@
 
     }
 
-    /* =============================
-       卡片圖案
-    ============================= */
+    /* =====================================================
+       卡片背面
+    ===================================================== */
 
     function ticketFaceHTML() {
 
@@ -2235,16 +2303,16 @@
         <div class="ticket-face">
 
           <div class="ticket-icon">
-            🎫✨
+            🥈✨
           </div>
 
           <div class="ticket-title">
-            班級<br>
-            幸運刮刮樂
+            銀卡<br>
+            刮刮樂
           </div>
 
           <div class="ticket-text">
-            LUCKY CARD
+            SILVER LUCKY CARD
           </div>
 
         </div>
@@ -2253,11 +2321,16 @@
 
     }
 
-    /* =============================
-       初始牌堆
-    ============================= */
+    /* =====================================================
+       初始 / 下一位準備畫面
 
-    function showDeck() {
+       showReset = true
+       才顯示重設按鈕
+    ===================================================== */
+
+    function showDeck(
+      showReset = true
+    ) {
 
       currentPrize =
         null;
@@ -2269,7 +2342,7 @@
         false;
 
       stage.classList.remove(
-        "dealing-stage"
+        "fan-stage"
       );
 
       nextBtn.style.display =
@@ -2284,6 +2357,17 @@
       shuffleBtn.disabled =
         false;
 
+      /*
+        防誤觸設計：
+        只有初始狀態或「下一位」狀態
+        才顯示重設按鈕。
+      */
+
+      resetPoolBtn.style.display =
+        showReset
+          ? ""
+          : "none";
+
       updateRemainingCount();
 
       if (
@@ -2296,6 +2380,15 @@
 
       }
 
+      const deckCount =
+        Math.min(
+          8,
+          Math.max(
+            1,
+            prizePool.length
+          )
+        );
+
       stage.innerHTML = `
 
         <div
@@ -2306,14 +2399,13 @@
           ${Array
             .from(
               {
-                length: 8
+                length:
+                  deckCount
               },
               () => `
 
                 <div class="deck-card">
-
                   ${ticketFaceHTML()}
-
                 </div>
 
               `
@@ -2325,13 +2417,13 @@
       `;
 
       hint.textContent =
-        `目前還有 ${prizePool.length} 張，按下「開始洗牌」！`;
+        `銀卡刮刮樂目前剩 ${prizePool.length} 張，請按「開始洗牌」！`;
 
     }
 
-    /* =============================
-       真人上下洗牌
-    ============================= */
+    /* =====================================================
+       開始真人上下洗牌
+    ===================================================== */
 
     function startShuffle() {
 
@@ -2345,11 +2437,29 @@
 
       }
 
-      shuffleBtn.disabled =
-        true;
+      /*
+        一開始洗牌，
+        立刻隱藏重設按鈕。
+      */
+
+      resetPoolBtn.style.display =
+        "none";
+
+      shuffleBtn.style.display =
+        "none";
+
+      nextBtn.style.display =
+        "none";
+
+      drawAgainBtn.style.display =
+        "none";
 
       hint.textContent =
         "正在上下洗牌中…… 🔀";
+
+      /*
+        動畫同時真正重新排列獎池。
+      */
 
       prizePool =
         shuffleArray(
@@ -2358,53 +2468,44 @@
 
       savePool();
 
+      stage.classList.remove(
+        "fan-stage"
+      );
+
       stage.innerHTML = `
 
         <div class="shuffle-table">
 
-          <div class="hand left"></div>
-          <div class="hand right"></div>
+          <div class="shuffle-hand left"></div>
 
-          <div class="shuffle-pile top-pile">
+          <div class="shuffle-hand right"></div>
 
+          <div class="shuffle-main-stack upper">
             ${ticketFaceHTML()}
-
           </div>
 
-          <div class="shuffle-pile bottom-pile">
-
+          <div class="shuffle-main-stack lower">
             ${ticketFaceHTML()}
-
           </div>
 
-          <div class="shuffle-packet packet1">
-
+          <div class="shuffle-drop-card p1">
             ${ticketFaceHTML()}
-
           </div>
 
-          <div class="shuffle-packet packet2">
-
+          <div class="shuffle-drop-card p2">
             ${ticketFaceHTML()}
-
           </div>
 
-          <div class="shuffle-packet packet3">
-
+          <div class="shuffle-drop-card p3">
             ${ticketFaceHTML()}
-
           </div>
 
-          <div class="shuffle-packet packet4">
-
+          <div class="shuffle-drop-card p4">
             ${ticketFaceHTML()}
-
           </div>
 
-          <div class="shuffle-packet packet5">
-
+          <div class="shuffle-drop-card p5">
             ${ticketFaceHTML()}
-
           </div>
 
           <div class="shuffle-label">
@@ -2418,6 +2519,11 @@
       setTimeout(
         () => {
 
+          /*
+            洗牌結束前再洗一次，
+            讓最終獎池與視覺洗牌同步。
+          */
+
           prizePool =
             shuffleArray(
               prizePool
@@ -2425,7 +2531,7 @@
 
           savePool();
 
-          dealAllCards();
+          dealCasinoFan();
 
         },
         3600
@@ -2433,69 +2539,252 @@
 
     }
 
-    /* =============================
-       攤開全部剩餘卡片
-    ============================= */
+    /* =====================================================
+       賭場扇面攤牌
 
-    function dealAllCards() {
+       目前剩幾張就全部攤幾張。
+    ===================================================== */
+
+    function dealCasinoFan() {
 
       stage.classList.add(
-        "dealing-stage"
+        "fan-stage"
       );
 
-      const count =
+      const total =
         prizePool.length;
+
+      /*
+        依剩餘張數調整扇面尺寸。
+      */
+
+      let cardWidth;
+      let maxFanWidth;
+      let maxAngle;
+      let maxRise;
+
+      if (
+        total >= 35
+      ) {
+
+        cardWidth = 92;
+        maxFanWidth = 1040;
+        maxAngle = 61;
+        maxRise = 170;
+
+      }
+
+      else if (
+        total >= 25
+      ) {
+
+        cardWidth = 100;
+        maxFanWidth = 1000;
+        maxAngle = 58;
+        maxRise = 165;
+
+      }
+
+      else if (
+        total >= 15
+      ) {
+
+        cardWidth = 112;
+        maxFanWidth = 930;
+        maxAngle = 52;
+        maxRise = 150;
+
+      }
+
+      else if (
+        total >= 8
+      ) {
+
+        cardWidth = 126;
+        maxFanWidth = 800;
+        maxAngle = 43;
+        maxRise = 125;
+
+      }
+
+      else {
+
+        cardWidth = 145;
+        maxFanWidth = 620;
+        maxAngle = 30;
+        maxRise = 90;
+
+      }
+
+      /*
+        iPad / 手機依實際螢幕寬度縮小。
+      */
+
+      const availableWidth =
+        Math.min(
+          window.innerWidth - 34,
+          maxFanWidth
+        );
+
+      /*
+        扇面的實際左右距離。
+      */
+
+      const totalSpread =
+        Math.max(
+          120,
+          availableWidth
+          -
+          cardWidth
+        );
+
+      const center =
+        (total - 1) / 2;
+
+      let cardsHTML =
+        "";
+
+      prizePool.forEach(
+        (
+          prize,
+          index
+        ) => {
+
+          const normalized =
+            center === 0
+              ? 0
+              : (
+                  index - center
+                )
+                /
+                center;
+
+          /*
+            左右位置
+          */
+
+          const x =
+            normalized
+            *
+            totalSpread
+            /
+            2;
+
+          /*
+            扇形旋轉
+          */
+
+          const angle =
+            normalized
+            *
+            maxAngle;
+
+          /*
+            中間最高，
+            左右兩側逐漸下降。
+
+            使用平方曲線讓扇面更像荷官攤牌。
+          */
+
+          const rise =
+            (
+              1
+              -
+              Math.pow(
+                Math.abs(
+                  normalized
+                ),
+                1.65
+              )
+            )
+            *
+            maxRise;
+
+          /*
+            中央牌層級稍高。
+          */
+
+          const zIndex =
+            Math.round(
+              500
+              -
+              Math.abs(
+                index
+                -
+                center
+              )
+            );
+
+          /*
+            從左至右快速展開。
+          */
+
+          const delay =
+            Math.min(
+              index
+              *
+              .022,
+              .8
+            );
+
+          cardsHTML += `
+
+            <div
+              class="fan-card"
+              data-index="${index}"
+
+              style="
+                --card-width:
+                  ${cardWidth}px;
+
+                --fan-x:
+                  ${x}px;
+
+                --fan-rise:
+                  ${rise}px;
+
+                --fan-angle:
+                  ${angle}deg;
+
+                --deal-delay:
+                  ${delay}s;
+
+                z-index:
+                  ${zIndex};
+              "
+            >
+
+              <div class="fan-card-number">
+                ${index + 1}
+              </div>
+
+              ${ticketFaceHTML()}
+
+            </div>
+
+          `;
+
+        }
+      );
 
       stage.innerHTML = `
 
-        <div class="all-cards-area">
+        <div class="casino-fan">
 
-          ${prizePool
-            .map(
-              (
-                prize,
-                index
-              ) => `
+          <div class="fan-center-shadow"></div>
 
-                <div
-                  class="all-card"
-                  data-index="${index}"
-                  style="
-                    animation-delay:
-                    ${
-                      Math.min(
-                        index * .025,
-                        .8
-                      )
-                    }s;
-                  "
-                >
-
-                  <div class="all-card-number">
-                    ${index + 1}
-                  </div>
-
-                  ${ticketFaceHTML()}
-
-                </div>
-
-              `
-            )
-            .join("")}
+          ${cardsHTML}
 
         </div>
 
       `;
 
       hint.textContent =
-        `全部 ${count} 張都已攤開，請挑一張！ 👆`;
-
-      shuffleBtn.style.display =
-        "none";
+        `全部 ${total} 張已攤成扇面，請挑一張！ 👆`;
 
       document
         .querySelectorAll(
-          ".all-card"
+          ".fan-card"
         )
         .forEach(
           card => {
@@ -2516,9 +2805,9 @@
 
     }
 
-    /* =============================
-       選卡
-    ============================= */
+    /* =====================================================
+       選擇一張卡
+    ===================================================== */
 
     function selectCard(
       card
@@ -2527,7 +2816,9 @@
       if (
         cardSelected
       ) {
+
         return;
+
       }
 
       cardSelected =
@@ -2543,6 +2834,10 @@
           chosenIndex
         ];
 
+      /*
+        從真正獎池移除。
+      */
+
       prizePool.splice(
         chosenIndex,
         1
@@ -2550,15 +2845,13 @@
 
       savePool();
 
-      card.style.zIndex =
-        "60";
-
-      card.style.transform =
-        "translateY(-18px) scale(1.12)";
+      card.classList.add(
+        "selected"
+      );
 
       document
         .querySelectorAll(
-          ".all-card"
+          ".fan-card"
         )
         .forEach(
           otherCard => {
@@ -2567,11 +2860,9 @@
               otherCard !== card
             ) {
 
-              otherCard.style.opacity =
-                ".15";
-
-              otherCard.style.filter =
-                "grayscale(.65)";
+              otherCard.classList.add(
+                "dimmed"
+              );
 
             }
 
@@ -2579,23 +2870,23 @@
         );
 
       hint.textContent =
-        "選好了！準備刮開獎項！ ✨";
+        "就是這張！正在抽出你的銀卡刮刮樂…… ✨";
 
       setTimeout(
         showScratchTicket,
-        650
+        750
       );
 
     }
 
-    /* =============================
-       刮刮樂
-    ============================= */
+    /* =====================================================
+       正式刮卡畫面
+    ===================================================== */
 
     function showScratchTicket() {
 
       stage.classList.remove(
-        "dealing-stage"
+        "fan-stage"
       );
 
       let prizeClass =
@@ -2640,15 +2931,15 @@
             <div class="ticket-top">
 
               <div class="icon">
-                🎫✨
+                🥈✨
               </div>
 
               <div class="title">
-                班級幸運刮刮樂
+                銀卡刮刮樂
               </div>
 
               <div class="eng">
-                LUCKY SCRATCH CARD
+                SILVER LUCKY SCRATCH CARD
               </div>
 
             </div>
@@ -2692,9 +2983,7 @@
             </div>
 
             <div class="bottom-note">
-
               👆 用手指或滑鼠刮開整個銀色區域
-
             </div>
 
           </div>
@@ -2709,15 +2998,15 @@
       `;
 
       hint.textContent =
-        "開始刮吧！銀色區域下面就是你的獎項！";
+        "開始刮吧！獎項就在銀色塗層下面！";
 
       initScratch();
 
     }
 
-    /* =============================
-       刮除功能
-    ============================= */
+    /* =====================================================
+       建立銀色塗層
+    ===================================================== */
 
     function initScratch() {
 
@@ -2747,14 +3036,17 @@
         Math.max(
           1,
           window.devicePixelRatio
-            || 1
+          ||
+          1
         );
 
       canvas.width =
         Math.max(
           1,
           Math.round(
-            rect.width * dpr
+            rect.width
+            *
+            dpr
           )
         );
 
@@ -2762,7 +3054,9 @@
         Math.max(
           1,
           Math.round(
-            rect.height * dpr
+            rect.height
+            *
+            dpr
           )
         );
 
@@ -2781,6 +3075,10 @@
         0
       );
 
+      /* =============================================
+         金屬銀色漸層
+      ============================================= */
+
       const gradient =
         ctx.createLinearGradient(
           0,
@@ -2791,37 +3089,42 @@
 
       gradient.addColorStop(
         0,
-        "#9299a2"
+        "#858d96"
       );
 
       gradient.addColorStop(
-        .15,
-        "#e9edf0"
+        .13,
+        "#e6e9ec"
       );
 
       gradient.addColorStop(
-        .32,
-        "#a5abb2"
+        .28,
+        "#9aa1a8"
       );
 
       gradient.addColorStop(
-        .48,
-        "#f7f8f8"
+        .44,
+        "#f6f7f8"
       );
 
       gradient.addColorStop(
-        .65,
-        "#a3a8af"
+        .57,
+        "#b0b6bb"
       );
 
       gradient.addColorStop(
-        .82,
-        "#e2e5e8"
+        .72,
+        "#eef0f1"
+      );
+
+      gradient.addColorStop(
+        .87,
+        "#989fa7"
       );
 
       gradient.addColorStop(
         1,
-        "#8d949d"
+        "#d8dcdf"
       );
 
       ctx.fillStyle =
@@ -2834,12 +3137,16 @@
         rect.height
       );
 
+      /* =============================================
+         金屬亮點
+      ============================================= */
+
       ctx.fillStyle =
-        "rgba(255,255,255,.34)";
+        "rgba(255,255,255,.32)";
 
       for (
         let i = 0;
-        i < 95;
+        i < 100;
         i++
       ) {
 
@@ -2847,22 +3154,33 @@
 
         ctx.arc(
           Math.random()
-            * rect.width,
+          *
+          rect.width,
 
           Math.random()
-            * rect.height,
+          *
+          rect.height,
 
           Math.random()
-            * 2.6 + .4,
+          *
+          2.7
+          +
+          .4,
 
           0,
 
-          Math.PI * 2
+          Math.PI
+          *
+          2
         );
 
         ctx.fill();
 
       }
+
+      /* =============================================
+         銀色層提示字
+      ============================================= */
 
       ctx.textAlign =
         "center";
@@ -2871,7 +3189,7 @@
         "middle";
 
       ctx.fillStyle =
-        "rgba(255,255,255,.86)";
+        "rgba(255,255,255,.88)";
 
       ctx.font =
         "900 27px sans-serif";
@@ -2890,6 +3208,10 @@
         rect.width / 2,
         rect.height / 2 + 28
       );
+
+      /*
+        後續筆畫全部變透明。
+      */
 
       ctx.globalCompositeOperation =
         "destination-out";
@@ -2911,32 +3233,34 @@
         let clientY;
 
         if (
-          event.touches &&
+          event.touches
+          &&
           event.touches.length
         ) {
 
           clientX =
             event.touches[0]
-              .clientX;
+            .clientX;
 
           clientY =
             event.touches[0]
-              .clientY;
+            .clientY;
 
         }
 
         else if (
-          event.changedTouches &&
+          event.changedTouches
+          &&
           event.changedTouches.length
         ) {
 
           clientX =
             event.changedTouches[0]
-              .clientX;
+            .clientX;
 
           clientY =
             event.changedTouches[0]
-              .clientY;
+            .clientY;
 
         }
 
@@ -3108,6 +3432,10 @@
 
       }
 
+      /*
+        iPad / iPhone / Android / 電腦
+      */
+
       if (
         window.PointerEvent
       ) {
@@ -3123,6 +3451,7 @@
               );
 
             }
+
             catch {}
 
             startScratch(
@@ -3170,7 +3499,8 @@
           "touchstart",
           startScratch,
           {
-            passive: false
+            passive:
+              false
           }
         );
 
@@ -3178,7 +3508,8 @@
           "touchmove",
           scratch,
           {
-            passive: false
+            passive:
+              false
           }
         );
 
@@ -3191,9 +3522,9 @@
 
     }
 
-    /* =============================
+    /* =====================================================
        計算刮除比例
-    ============================= */
+    ===================================================== */
 
     function checkScratch(
       ctx,
@@ -3220,6 +3551,11 @@
       let checked =
         0;
 
+      /*
+        抽樣檢查，
+        避免 iPad 運算太重。
+      */
+
       for (
         let i = 3;
         i < data.length;
@@ -3229,7 +3565,9 @@
         checked++;
 
         if (
-          data[i] < 20
+          data[i]
+          <
+          20
         ) {
 
           transparent++;
@@ -3239,7 +3577,14 @@
       }
 
       const ratio =
-        transparent / checked;
+        transparent
+        /
+        checked;
+
+      /*
+        約刮開 42% 後，
+        自動揭曉剩餘區域。
+      */
 
       if (
         ratio >= .42
@@ -3253,9 +3598,9 @@
 
     }
 
-    /* =============================
-       刮完
-    ============================= */
+    /* =====================================================
+       完成刮獎
+    ===================================================== */
 
     function finishScratch(
       canvas
@@ -3288,16 +3633,29 @@
           "result"
         );
 
+      /*
+        重設按鈕仍維持隱藏。
+        必須到下一位準備畫面才重新顯示。
+      */
+
+      resetPoolBtn.style.display =
+        "none";
+
+      /* =============================================
+         再抽一次
+      ============================================= */
+
       if (
-        currentPrize.type ===
+        currentPrize.type
+        ===
         "again"
       ) {
 
         result.textContent =
-          "🎟️ 太幸運了！這張可以再抽一次！";
+          "🎟️ 太幸運了！獲得「再抽一次」！";
 
         hint.textContent =
-          `目前還剩 ${prizePool.length} 張，可以再抽一次！`;
+          `目前剩 ${prizePool.length} 張，這位同學可以再抽一張！`;
 
         drawAgainBtn.style.display =
           prizePool.length > 0
@@ -3309,8 +3667,13 @@
 
       }
 
+      /* =============================================
+         再接再厲
+      ============================================= */
+
       else if (
-        currentPrize.type ===
+        currentPrize.type
+        ===
         "none"
       ) {
 
@@ -3318,14 +3681,21 @@
           "🍀 再接再厲！下一次一定更幸運！";
 
         hint.textContent =
-          `本次抽獎完成，目前剩餘 ${prizePool.length} 張。`;
+          `本次完成，目前剩餘 ${prizePool.length} 張。`;
 
         nextBtn.style.display =
           prizePool.length > 0
             ? ""
             : "none";
 
+        drawAgainBtn.style.display =
+          "none";
+
       }
+
+      /* =============================================
+         一般獎項
+      ============================================= */
 
       else {
 
@@ -3333,12 +3703,15 @@
           `🎉 恭喜獲得「${currentPrize.name}」！`;
 
         hint.textContent =
-          `本次抽獎完成，目前剩餘 ${prizePool.length} 張。`;
+          `本次完成，目前剩餘 ${prizePool.length} 張。`;
 
         nextBtn.style.display =
           prizePool.length > 0
             ? ""
             : "none";
+
+        drawAgainBtn.style.display =
+          "none";
 
       }
 
@@ -3348,9 +3721,9 @@
 
     }
 
-    /* =============================
+    /* =====================================================
        慶祝動畫
-    ============================= */
+    ===================================================== */
 
     function celebrate() {
 
@@ -3359,6 +3732,7 @@
         "🎊",
         "✨",
         "⭐",
+        "🥈",
         "🎟️",
         "🎁",
         "🍀"
@@ -3392,7 +3766,8 @@
 
           `${
             (Math.random() - .5)
-            * 820
+            *
+            820
           }px`
         );
 
@@ -3401,14 +3776,16 @@
 
           `${
             (Math.random() - .5)
-            * 680
+            *
+            680
           }px`
         );
 
         item.style.animationDelay =
           `${
             Math.random()
-            * .15
+            *
+            .15
           }s`;
 
         document.body.appendChild(
@@ -3428,42 +3805,59 @@
 
     }
 
-    /* =============================
-       下一位
-    ============================= */
+    /* =====================================================
+       下一位抽獎
+
+       回到準備畫面後，
+       重設按鈕才重新出現。
+    ===================================================== */
 
     function nextPlayer() {
 
-      showDeck();
+      showDeck(
+        true
+      );
+
+      hint.textContent =
+        `👤 下一位同學準備抽獎，目前剩餘 ${prizePool.length} 張。`;
 
     }
 
-    /* =============================
+    /* =====================================================
        再抽一次
-    ============================= */
+
+       仍然是同一位學生，
+       所以重設按鈕繼續隱藏。
+    ===================================================== */
 
     function drawAgain() {
 
-      showDeck();
+      showDeck(
+        false
+      );
 
       hint.textContent =
-        "🎟️ 你獲得再抽一次！請重新洗牌後再選一張！";
+        "🎟️ 獲得再抽一次！請重新洗牌，再挑一張！";
 
     }
 
-    /* =============================
-       重設 40 張
-    ============================= */
+    /* =====================================================
+       重設完整 40 張
+    ===================================================== */
 
     function resetPool() {
 
       const confirmed =
         window.confirm(
-          "確定要重設刮刮樂嗎？\n\n所有已抽出的獎項都會恢復，重新變成完整 40 張。"
+          "確定要重設「銀卡刮刮樂」嗎？\n\n所有已抽出的獎項都會恢復，重新變成完整 40 張。"
         );
 
-      if (!confirmed) {
+      if (
+        !confirmed
+      ) {
+
         return;
+
       }
 
       prizePool =
@@ -3480,21 +3874,23 @@
       cardSelected =
         false;
 
-      showDeck();
+      showDeck(
+        true
+      );
 
       hint.textContent =
-        "✅ 已重新建立完整 40 張獎池！";
+        "✅ 銀卡刮刮樂已重新建立完整 40 張獎池！";
 
     }
 
-    /* =============================
-       獎池抽完
-    ============================= */
+    /* =====================================================
+       全部抽完
+    ===================================================== */
 
     function showEmptyPool() {
 
       stage.classList.remove(
-        "dealing-stage"
+        "fan-stage"
       );
 
       stage.innerHTML = `
@@ -3502,25 +3898,25 @@
         <div class="empty-box">
 
           <div class="empty-icon">
-            🎉
+            🥈🎉
           </div>
 
-          40 張刮刮樂已經全部抽完！
+          銀卡刮刮樂 40 張
+          <br>
+          已經全部抽完！
 
           <br><br>
 
-          老師若要重新開始，
-
+          如需重新開始，
           <br>
-
-          請按下「重設 40 張獎池」。
+          請使用「重設 40 張獎池」。
 
         </div>
 
       `;
 
       hint.textContent =
-        "本輪抽獎已全部完成！";
+        "本輪銀卡刮刮樂已全部完成！";
 
       shuffleBtn.style.display =
         "none";
@@ -3531,11 +3927,19 @@
       drawAgainBtn.style.display =
         "none";
 
+      /*
+        全部抽完後，
+        必須讓老師可以重新建立獎池。
+      */
+
+      resetPoolBtn.style.display =
+        "";
+
     }
 
-    /* =============================
-       按鈕
-    ============================= */
+    /* =====================================================
+       按鈕事件
+    ===================================================== */
 
     shuffleBtn.addEventListener(
       "click",
@@ -3557,13 +3961,15 @@
       resetPool
     );
 
-    /* =============================
+    /* =====================================================
        啟動
-    ============================= */
+    ===================================================== */
 
     loadPool();
 
-    showDeck();
+    showDeck(
+      true
+    );
 
   </script>
 
