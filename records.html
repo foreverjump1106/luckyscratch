@@ -1,1524 +1,598 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-<meta charset="UTF-8">
-
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1.0"
->
-
-<title>已抽獎紀錄</title>
-
-<style>
-:root{
-  --blue:#304b84;
-  --blue-dark:#1f315a;
-
-  --gold:#c9951f;
-  --gold-light:#ffe8a0;
-
-  --cream:#fffaf0;
-
-  --text:#413820;
-
-  --shadow:
-    0 12px 28px
-    rgba(45,42,75,.14);
-}
-
-*{
-  box-sizing:border-box;
-}
-
-html,
-body{
-  margin:0;
-  min-height:100%;
-}
-
-body{
-  min-height:100vh;
-
-  font-family:
-    "Noto Sans TC",
-    "PingFang TC",
-    "Microsoft JhengHei",
-    sans-serif;
-
-  color:var(--text);
-
-  background:
-    linear-gradient(
-      145deg,
-      #fffaf0,
-      #efe4c5
-    );
-}
-
-button,
-input{
-  font:inherit;
-}
-
-a{
-  text-decoration:none;
-  color:inherit;
-}
-
-.app{
-  width:min(1200px,100%);
-
-  margin:auto;
-
-  padding:
-    20px 14px 50px;
-}
-
-/* =========================================================
-   Header
-========================================================= */
-
-.top-row{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-
-  gap:12px;
-  flex-wrap:wrap;
-
-  margin-bottom:16px;
-}
-
-.back-btn{
-  display:inline-flex;
-  align-items:center;
-
-  padding:10px 18px;
-
-  border-radius:999px;
-
-  background:white;
-
-  color:#564a32;
-
-  font-weight:900;
-
-  box-shadow:
-    0 5px 0 #b5a687;
-}
-
-.refresh-btn{
-  border:0;
-
-  padding:10px 18px;
-
-  border-radius:999px;
-
-  cursor:pointer;
-
-  color:white;
-
-  background:
-    linear-gradient(
-      #5d7dc0,
-      #304b84
-    );
-
-  font-weight:1000;
-
-  box-shadow:
-    0 5px 0 #1f315a;
-}
-
-h1{
-  margin:
-    5px 0;
-
-  text-align:center;
-
-  color:#304b84;
-
-  font-size:
-    clamp(34px,6vw,54px);
-
-  font-weight:1000;
-
-  text-shadow:
-    0 3px 0 white;
-}
-
-.subtitle{
-  text-align:center;
-
-  margin:
-    0 0 22px;
-
-  color:#705421;
-
-  font-weight:800;
-}
-
-/* =========================================================
-   統計
-========================================================= */
-
-.stats{
-  display:grid;
-
-  grid-template-columns:
-    repeat(
-      5,
-      minmax(0,1fr)
-    );
-
-  gap:10px;
-
-  margin-bottom:18px;
-}
-
-.stat-card{
-  padding:
-    14px 10px;
-
-  border-radius:18px;
-
-  background:
-    rgba(255,255,255,.8);
-
-  box-shadow:var(--shadow);
-
-  text-align:center;
-}
-
-.stat-icon{
-  font-size:29px;
-}
-
-.stat-number{
-  margin-top:5px;
-
-  color:#304b84;
-
-  font-size:28px;
-
-  font-weight:1000;
-}
-
-.stat-title{
-  margin-top:4px;
-
-  font-size:13px;
-
-  font-weight:900;
-
-  color:#71644d;
-}
-
-/* =========================================================
-   控制列
-========================================================= */
-
-.tools{
-  padding:15px;
-
-  border-radius:20px;
-
-  background:
-    rgba(255,255,255,.75);
-
-  box-shadow:var(--shadow);
-
-  margin-bottom:18px;
-}
-
-.filters{
-  display:flex;
-  justify-content:center;
-  flex-wrap:wrap;
-
-  gap:8px;
-
-  margin-bottom:13px;
-}
-
-.filter-btn{
-  border:0;
-
-  padding:9px 16px;
-
-  border-radius:999px;
-
-  cursor:pointer;
-
-  font-weight:1000;
-
-  background:#eee5d2;
-
-  color:#65563c;
-}
-
-.filter-btn.active{
-  background:
-    linear-gradient(
-      #5879bd,
-      #304b84
-    );
-
-  color:white;
-}
-
-.search-row{
-  width:min(620px,100%);
-
-  margin:auto;
-
-  display:flex;
-
-  gap:8px;
-}
-
-.search-input{
-  width:100%;
-
-  padding:12px 16px;
-
-  border-radius:999px;
-
-  border:
-    2px solid
-    rgba(55,75,130,.18);
-
-  outline:none;
-
-  background:white;
-
-  font-weight:800;
-}
-
-.search-input:focus{
-  border-color:#5879bd;
-}
-
-/* =========================================================
-   狀態
-========================================================= */
-
-.status{
-  text-align:center;
-
-  padding:25px;
-
-  font-weight:900;
-
-  color:#6b5a37;
-}
-
-.error{
-  color:#9b3939;
-}
-
-/* =========================================================
-   紀錄
-========================================================= */
-
-.records{
-  display:flex;
-  flex-direction:column;
-
-  gap:10px;
-}
-
-.record{
-  display:grid;
-
-  grid-template-columns:
-    180px
-    1fr
-    180px
-    1fr;
-
-  align-items:center;
-
-  gap:14px;
-
-  padding:14px 16px;
-
-  border-radius:18px;
-
-  background:
-    rgba(255,255,255,.84);
-
-  box-shadow:
-    0 6px 18px
-    rgba(55,45,70,.08);
-
-  border:
-    2px solid transparent;
-}
-
-.record.silver{
-  border-color:
-    rgba(78,103,165,.18);
-}
-
-.record.gold{
-  border-color:
-    rgba(201,149,31,.25);
-}
-
-.time{
-  color:#6d624e;
-
-  font-size:13px;
-
-  font-weight:900;
-
-  line-height:1.5;
-}
-
-.student{
-  min-width:0;
-}
-
-.student-name{
-  color:#304b84;
-
-  font-size:17px;
-
-  font-weight:1000;
-}
-
-.student-email{
-  margin-top:3px;
-
-  color:#81745e;
-
-  font-size:12px;
-
-  font-weight:800;
-
-  overflow:hidden;
-  text-overflow:ellipsis;
-}
-
-.game{
-  font-weight:1000;
-
-  text-align:center;
-}
-
-.game.silver{
-  color:#405b95;
-}
-
-.game.gold{
-  color:#986a05;
-}
-
-.prize{
-  display:flex;
-  align-items:center;
-
-  gap:10px;
-}
-
-.prize-icon{
-  font-size:35px;
-
-  min-width:48px;
-
-  text-align:center;
-}
-
-.prize-name{
-  font-size:17px;
-
-  font-weight:1000;
-}
-
-.remaining{
-  margin-top:3px;
-
-  color:#84755a;
-
-  font-size:11px;
-
-  font-weight:800;
-}
-
-/* =========================================================
-   無結果
-========================================================= */
-
-.no-results{
-  text-align:center;
-
-  padding:45px 15px;
-
-  border-radius:20px;
-
-  background:
-    rgba(255,255,255,.72);
-
-  color:#715f3c;
-
-  font-size:18px;
-
-  font-weight:900;
-}
-
-/* =========================================================
-   注意
-========================================================= */
-
-.note{
-  margin-top:20px;
-
-  padding:12px 15px;
-
-  border-radius:15px;
-
-  background:
-    rgba(255,255,255,.65);
-
-  color:#746341;
-
-  font-size:12px;
-
-  font-weight:800;
-
-  line-height:1.5;
-
-  text-align:center;
-}
-
-/* =========================================================
-   RWD
-========================================================= */
-
-@media(max-width:900px){
-
-  .stats{
-    grid-template-columns:
-      repeat(
-        2,
-        1fr
-      );
-  }
-
-  .record{
-    grid-template-columns:
-      140px
-      1fr;
-
-    gap:
-      10px 14px;
-  }
-
-  .game{
-    text-align:left;
-  }
-
-}
-
-@media(max-width:580px){
-
-  .stats{
-    grid-template-columns:
-      repeat(
-        2,
-        1fr
-      );
-  }
-
-  .record{
-    display:block;
-
-    padding:15px;
-  }
-
-  .record > div{
-    margin-bottom:10px;
-  }
-
-  .time{
-    padding-bottom:8px;
-
-    border-bottom:
-      1px solid
-      rgba(80,65,40,.10);
-  }
-
-  .game{
-    text-align:left;
-  }
-
-  .prize{
-    margin-bottom:0 !important;
-  }
-
-}
-</style>
+  <meta charset="UTF-8" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  />
+  <title>已抽獎紀錄</title>
+
+  <style>
+    :root{
+      --blue:#304b84;
+      --blue-dark:#1f315a;
+      --gold:#e5b33b;
+      --gold-dark:#9a6b06;
+      --cream:#fffaf0;
+      --paper:#ffffffd9;
+      --text:#4d4027;
+      --soft:#f4ecd8;
+      --line:#e5d7b4;
+      --shadow:0 12px 30px rgba(50,40,20,.12);
+    }
+
+    *{
+      box-sizing:border-box;
+      -webkit-tap-highlight-color:transparent;
+    }
+
+    body{
+      margin:0;
+      font-family:
+        "Noto Sans TC",
+        "PingFang TC",
+        "Microsoft JhengHei",
+        sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 10% 10%, rgba(255,255,255,.9) 0 3px, transparent 4px),
+        linear-gradient(145deg,#fffaf0,#efe3c2);
+      min-height:100vh;
+    }
+
+    .page{
+      width:min(1200px,100%);
+      margin:auto;
+      padding:18px 10px 40px;
+    }
+
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-bottom:12px;
+      flex-wrap:wrap;
+    }
+
+    .back-btn,
+    .refresh-btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      border:none;
+      border-radius:999px;
+      padding:11px 18px;
+      cursor:pointer;
+      font-weight:900;
+      text-decoration:none;
+      font-size:14px;
+      box-shadow:0 5px 0 rgba(0,0,0,.12);
+      transition:transform .15s, filter .15s;
+    }
+
+    .back-btn{
+      background:linear-gradient(#fffdf8,#eadfc9);
+      color:#6a5530;
+    }
+
+    .refresh-btn{
+      background:linear-gradient(#5f7fc0,#304b84);
+      color:#fff;
+    }
+
+    .back-btn:active,
+    .refresh-btn:active{
+      transform:translateY(3px);
+    }
+
+    .hero{
+      text-align:center;
+      margin:8px 0 18px;
+    }
+
+    .hero h1{
+      margin:0;
+      font-size:clamp(34px,6vw,54px);
+      color:var(--blue);
+      font-weight:1000;
+    }
+
+    .hero p{
+      margin:8px 0 0;
+      color:#7a6435;
+      font-weight:800;
+      font-size:14px;
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(5,minmax(0,1fr));
+      gap:12px;
+      margin:18px 0;
+    }
+
+    .stat-card{
+      background:var(--paper);
+      border-radius:18px;
+      padding:18px 12px;
+      box-shadow:var(--shadow);
+      text-align:center;
+      border:1px solid rgba(180,150,70,.12);
+    }
+
+    .stat-icon{
+      font-size:26px;
+      margin-bottom:8px;
+    }
+
+    .stat-value{
+      font-size:32px;
+      font-weight:1000;
+      color:var(--blue);
+      line-height:1;
+      margin-bottom:6px;
+    }
+
+    .stat-label{
+      font-size:13px;
+      font-weight:900;
+      color:#6e5c37;
+      line-height:1.4;
+    }
+
+    .panel{
+      background:rgba(255,255,255,.74);
+      border-radius:22px;
+      padding:16px;
+      box-shadow:var(--shadow);
+      border:1px solid rgba(180,150,70,.12);
+      margin-bottom:16px;
+    }
+
+    .toolbar{
+      display:flex;
+      justify-content:center;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:14px;
+    }
+
+    .filter-btn{
+      border:none;
+      border-radius:999px;
+      padding:10px 18px;
+      cursor:pointer;
+      font-size:14px;
+      font-weight:1000;
+      background:#efe6d1;
+      color:#6c5730;
+      transition:.15s;
+    }
+
+    .filter-btn.active{
+      background:linear-gradient(#5e7ebf,#304b84);
+      color:white;
+      box-shadow:0 6px 14px rgba(48,75,132,.22);
+    }
+
+    .search-wrap{
+      display:flex;
+      justify-content:center;
+    }
+
+    .search-input{
+      width:min(700px,100%);
+      border:2px solid #ddd2bd;
+      outline:none;
+      border-radius:999px;
+      padding:13px 18px;
+      font-size:15px;
+      background:#fffdfa;
+      color:#4e4028;
+    }
+
+    .search-input:focus{
+      border-color:#8ea7d9;
+      box-shadow:0 0 0 4px rgba(48,75,132,.08);
+    }
+
+    .record-list{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+    }
+
+    .record-card{
+      display:grid;
+      grid-template-columns:140px 1.2fr 1fr 1.2fr;
+      gap:12px;
+      align-items:center;
+      background:rgba(255,255,255,.85);
+      border-radius:18px;
+      padding:14px 16px;
+      box-shadow:0 8px 18px rgba(60,45,20,.08);
+      border:1px solid rgba(190,160,90,.12);
+    }
+
+    .time-box{
+      background:#fffaf1;
+      border-radius:14px;
+      padding:10px 12px;
+      border:1px solid #ebdfc8;
+    }
+
+    .time-date{
+      font-size:15px;
+      font-weight:1000;
+      color:#9a4f4f;
+      line-height:1.3;
+    }
+
+    .time-clock{
+      margin-top:3px;
+      font-size:13px;
+      font-weight:900;
+      color:#78654a;
+    }
+
+    .student-box{
+      min-width:0;
+    }
+
+    .student-name{
+      font-size:18px;
+      font-weight:1000;
+      color:#304b84;
+      line-height:1.3;
+      word-break:break-word;
+    }
+
+    .student-note{
+      margin-top:5px;
+      font-size:12px;
+      font-weight:800;
+      color:#8a7753;
+    }
+
+    .game-box{
+      font-size:18px;
+      font-weight:1000;
+      color:#5e4a24;
+      line-height:1.4;
+    }
+
+    .prize-box{
+      background:#fffaf1;
+      border-radius:14px;
+      padding:10px 12px;
+      border:1px solid #eadbbd;
+    }
+
+    .prize-main{
+      font-size:20px;
+      font-weight:1000;
+      color:#3b4d80;
+      line-height:1.35;
+      word-break:break-word;
+    }
+
+    .prize-sub{
+      margin-top:5px;
+      font-size:12px;
+      font-weight:900;
+      color:#8a7753;
+      line-height:1.4;
+    }
+
+    .empty{
+      text-align:center;
+      padding:36px 12px;
+      color:#7b6640;
+      font-weight:1000;
+      font-size:18px;
+    }
+
+    .foot-note{
+      text-align:center;
+      font-size:12px;
+      font-weight:800;
+      color:#8c7750;
+      margin-top:12px;
+    }
+
+    .loading{
+      text-align:center;
+      padding:28px 10px;
+      font-weight:1000;
+      color:#6a5933;
+    }
+
+    @media (max-width: 980px){
+      .stats{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+      }
+
+      .record-card{
+        grid-template-columns:1fr;
+      }
+    }
+
+    @media (max-width: 560px){
+      .stats{
+        grid-template-columns:1fr 1fr;
+      }
+
+      .stat-value{
+        font-size:26px;
+      }
+
+      .hero h1{
+        font-size:38px;
+      }
+
+      .record-card{
+        padding:12px;
+      }
+
+      .time-date,
+      .student-name,
+      .game-box,
+      .prize-main{
+        font-size:16px;
+      }
+    }
+  </style>
 </head>
-
 <body>
+  <main class="page">
 
-<main class="app">
-
-  <div class="top-row">
-
-    <a
-      href="index.html"
-      class="back-btn"
-    >
-      ← 回刮刮樂首頁
-    </a>
-
-    <button
-      class="refresh-btn"
-      id="refreshBtn"
-    >
-      🔄 重新整理
-    </button>
-
-  </div>
-
-
-  <h1>
-    📋 已抽獎紀錄
-  </h1>
-
-  <p class="subtitle">
-    顯示使用 Google 登入後完成的抽獎紀錄
-  </p>
-
-
-  <!-- =====================================================
-       統計
-  ====================================================== -->
-
-  <section class="stats">
-
-    <div class="stat-card">
-
-      <div class="stat-icon">
-        🎟️
-      </div>
-
-      <div
-        class="stat-number"
-        id="totalRecords"
-      >
-        0
-      </div>
-
-      <div class="stat-title">
-        總抽獎紀錄
-      </div>
-
+    <div class="topbar">
+      <a class="back-btn" href="./index.html">← 回刮刮樂首頁</a>
+      <button class="refresh-btn" id="refreshBtn">🔄 重新整理</button>
     </div>
 
+    <section class="hero">
+      <h1>📋 已抽獎紀錄</h1>
+      <p>顯示寫入 Firebase 的抽獎紀錄</p>
+    </section>
 
-    <div class="stat-card">
-
-      <div class="stat-icon">
-        🥈
+    <section class="stats" id="statsArea">
+      <div class="stat-card">
+        <div class="stat-icon">🧾</div>
+        <div class="stat-value" id="totalRecords">0</div>
+        <div class="stat-label">總抽獎紀錄</div>
       </div>
 
-      <div
-        class="stat-number"
-        id="silverRecords"
-      >
-        0
+      <div class="stat-card">
+        <div class="stat-icon">🥈</div>
+        <div class="stat-value" id="silverRecords">0</div>
+        <div class="stat-label">銀卡刮刮樂</div>
       </div>
 
-      <div class="stat-title">
-        銀卡刮刮樂
+      <div class="stat-card">
+        <div class="stat-icon">🥇</div>
+        <div class="stat-value" id="goldRecords">0</div>
+        <div class="stat-label">金卡刮刮樂</div>
       </div>
 
+      <div class="stat-card">
+        <div class="stat-icon">🥈🥤</div>
+        <div class="stat-value" id="silverCardCount">0</div>
+        <div class="stat-label">已抽出銀卡</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">🥇🍗</div>
+        <div class="stat-value" id="goldCardCount">0</div>
+        <div class="stat-label">已抽出金卡</div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="toolbar">
+        <button class="filter-btn active" data-filter="all">📋 全部</button>
+        <button class="filter-btn" data-filter="silver">🥈 銀卡</button>
+        <button class="filter-btn" data-filter="gold">🥇 金卡</button>
+      </div>
+
+      <div class="search-wrap">
+        <input
+          id="searchInput"
+          class="search-input"
+          type="text"
+          placeholder="搜尋學生姓名"
+        />
+      </div>
+    </section>
+
+    <section class="record-list" id="recordList">
+      <div class="loading">讀取紀錄中……</div>
+    </section>
+
+    <div class="foot-note">
+      ※ 僅顯示 Firebase 已成功寫入的紀錄。
     </div>
 
-
-    <div class="stat-card">
-
-      <div class="stat-icon">
-        🥇
-      </div>
-
-      <div
-        class="stat-number"
-        id="goldRecords"
-      >
-        0
-      </div>
-
-      <div class="stat-title">
-        金卡刮刮樂
-      </div>
-
-    </div>
-
-
-    <div class="stat-card">
-
-      <div class="stat-icon">
-        🥈🥤
-      </div>
-
-      <div
-        class="stat-number"
-        id="silverCardCount"
-      >
-        0
-      </div>
-
-      <div class="stat-title">
-        已抽出銀卡
-      </div>
-
-    </div>
-
-
-    <div class="stat-card">
-
-      <div class="stat-icon">
-        🥇🍗
-      </div>
-
-      <div
-        class="stat-number"
-        id="goldCardCount"
-      >
-        0
-      </div>
-
-      <div class="stat-title">
-        已抽出金卡
-      </div>
-
-    </div>
-
-  </section>
-
-
-  <!-- =====================================================
-       篩選搜尋
-  ====================================================== -->
-
-  <section class="tools">
-
-    <div class="filters">
-
-      <button
-        class="filter-btn active"
-        data-filter="all"
-      >
-        📋 全部
-      </button>
-
-      <button
-        class="filter-btn"
-        data-filter="silver"
-      >
-        🥈 銀卡
-      </button>
-
-      <button
-        class="filter-btn"
-        data-filter="gold"
-      >
-        🥇 金卡
-      </button>
-
-    </div>
-
-
-    <div class="search-row">
-
-      <input
-        type="search"
-        class="search-input"
-        id="searchInput"
-        placeholder="🔍 搜尋學生姓名或 Email"
-      >
-
-    </div>
-
-  </section>
-
-
-  <div
-    class="status"
-    id="loadingStatus"
-  >
-    ☁️ 正在讀取 Firebase 抽獎紀錄……
-  </div>
-
-
-  <section
-    class="records"
-    id="recordsList"
-  ></section>
-
-
-  <div class="note">
-    ※ 訪客模式的抽獎不會寫入 Firebase，因此不會出現在本頁。
-  </div>
-
-</main>
-
-
-<script type="module">
-
-/* =========================================================
-   Firebase
-========================================================= */
-
-import {
-  initializeApp
-} from
-"https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-
-import {
-  getFirestore,
-  collection,
-  getDocs,
-  query,
-  orderBy
-} from
-"https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-
-const firebaseConfig = {
-
-  apiKey:
-    "AIzaSyDUboz4Rif7KFFtrqnkb6HrSPBTHsvqfr8",
-
-  authDomain:
-    "luckyscratch-13477.firebaseapp.com",
-
-  projectId:
-    "luckyscratch-13477",
-
-  storageBucket:
-    "luckyscratch-13477.firebasestorage.app",
-
-  messagingSenderId:
-    "731061378453",
-
-  appId:
-    "1:731061378453:web:889728f895388088626a9c"
-
-};
-
-
-const app =
-  initializeApp(
-    firebaseConfig
-  );
-
-
-const db =
-  getFirestore(
-    app
-  );
-
-
-/* =========================================================
-   DOM
-========================================================= */
-
-const totalRecords =
-  document.getElementById(
-    "totalRecords"
-  );
-
-const silverRecords =
-  document.getElementById(
-    "silverRecords"
-  );
-
-const goldRecords =
-  document.getElementById(
-    "goldRecords"
-  );
-
-const silverCardCount =
-  document.getElementById(
-    "silverCardCount"
-  );
-
-const goldCardCount =
-  document.getElementById(
-    "goldCardCount"
-  );
-
-const recordsList =
-  document.getElementById(
-    "recordsList"
-  );
-
-const loadingStatus =
-  document.getElementById(
-    "loadingStatus"
-  );
-
-const searchInput =
-  document.getElementById(
-    "searchInput"
-  );
-
-const refreshBtn =
-  document.getElementById(
-    "refreshBtn"
-  );
-
-
-let allRecords =
-  [];
-
-let currentFilter =
-  "all";
-
-
-/* =========================================================
-   XSS 防護
-========================================================= */
-
-function escapeHTML(
-  value
-){
-
-  return String(
-    value
-    ??
-    ""
-  )
-  .replace(
-    /&/g,
-    "&amp;"
-  )
-  .replace(
-    /</g,
-    "&lt;"
-  )
-  .replace(
-    />/g,
-    "&gt;"
-  )
-  .replace(
-    /"/g,
-    "&quot;"
-  )
-  .replace(
-    /'/g,
-    "&#039;"
-  );
-
-}
-
-
-/* =========================================================
-   時間
-========================================================= */
-
-function formatTimestamp(
-  timestamp
-){
-
-  if(
-    !timestamp
-    ||
-    typeof timestamp.toDate
-    !==
-    "function"
-  ){
-
-    return{
-      date:"時間處理中",
-      time:""
+  </main>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      getDocs,
+      query,
+      orderBy
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDUboz4Rif7KFFtrqnkb6HrSPBTHsvqfr8",
+      authDomain: "luckyscratch-13477.firebaseapp.com",
+      projectId: "luckyscratch-13477",
+      storageBucket: "luckyscratch-13477.firebasestorage.app",
+      messagingSenderId: "731061378453",
+      appId: "1:731061378453:web:889728f895388088626a9c"
     };
 
-  }
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
+    const recordList = document.getElementById("recordList");
+    const refreshBtn = document.getElementById("refreshBtn");
+    const searchInput = document.getElementById("searchInput");
 
-  const date =
-    timestamp.toDate();
+    const totalRecords = document.getElementById("totalRecords");
+    const silverRecords = document.getElementById("silverRecords");
+    const goldRecords = document.getElementById("goldRecords");
+    const silverCardCount = document.getElementById("silverCardCount");
+    const goldCardCount = document.getElementById("goldCardCount");
 
+    const filterButtons = document.querySelectorAll(".filter-btn");
 
-  const dateText =
-    new Intl.DateTimeFormat(
-      "zh-TW",
-      {
-        year:"numeric",
-        month:"2-digit",
-        day:"2-digit"
+    let allRecords = [];
+    let currentFilter = "all";
+
+    function formatDateTime(ts){
+      if(!ts) return { date:"--", time:"--" };
+
+      let dateObj;
+
+      if(typeof ts.toDate === "function"){
+        dateObj = ts.toDate();
+      }else{
+        dateObj = new Date(ts);
       }
-    ).format(
-      date
-    );
 
-
-  const timeText =
-    new Intl.DateTimeFormat(
-      "zh-TW",
-      {
-        hour:"2-digit",
-        minute:"2-digit",
-        second:"2-digit",
-        hour12:false
-      }
-    ).format(
-      date
-    );
-
-
-  return{
-    date:dateText,
-    time:timeText
-  };
-
-}
-
-
-/* =========================================================
-   載入資料
-========================================================= */
-
-async function loadRecords(){
-
-  loadingStatus.className =
-    "status";
-
-  loadingStatus.textContent =
-    "☁️ 正在讀取 Firebase 抽獎紀錄……";
-
-  loadingStatus.style.display =
-    "block";
-
-  recordsList.innerHTML =
-    "";
-
-  refreshBtn.disabled =
-    true;
-
-
-  try{
-
-    const q =
-      query(
-
-        collection(
-          db,
-          "drawRecords"
-        ),
-
-        orderBy(
-          "drawnAt",
-          "desc"
-        )
-
-      );
-
-
-    const snapshot =
-      await getDocs(
-        q
-      );
-
-
-    allRecords =
-      snapshot.docs.map(
-        document => {
-
-          return{
-
-            id:
-              document.id,
-
-            ...document.data()
-
-          };
-
-        }
-      );
-
-
-    updateStatistics();
-
-    applyFilters();
-
-
-    loadingStatus.style.display =
-      "none";
-
-  }
-
-  catch(error){
-
-    console.error(
-      error
-    );
-
-
-    loadingStatus.className =
-      "status error";
-
-
-    loadingStatus.textContent =
-      "⚠️ 無法讀取抽獎紀錄。請確認 Firestore Rules 已允許公開讀取。";
-
-  }
-
-  finally{
-
-    refreshBtn.disabled =
-      false;
-
-  }
-
-}
-
-
-/* =========================================================
-   統計
-========================================================= */
-
-function updateStatistics(){
-
-  const silver =
-    allRecords.filter(
-      record =>
-        record.gameType ===
-        "silver"
-    );
-
-
-  const gold =
-    allRecords.filter(
-      record =>
-        record.gameType ===
-        "gold"
-    );
-
-
-  const wonSilverCards =
-    allRecords.filter(
-      record =>
-        record.prizeId ===
-        "silverCard"
-        ||
-        (
-          record.gameType ===
-          "silver"
-          &&
-          record.prizeName ===
-          "銀卡"
-        )
-    );
-
-
-  const wonGoldCards =
-    allRecords.filter(
-      record =>
-        record.prizeId ===
-        "goldCard"
-        ||
-        (
-          record.gameType ===
-          "gold"
-          &&
-          record.prizeName ===
-          "金卡"
-        )
-    );
-
-
-  totalRecords.textContent =
-    allRecords.length;
-
-
-  silverRecords.textContent =
-    silver.length;
-
-
-  goldRecords.textContent =
-    gold.length;
-
-
-  silverCardCount.textContent =
-    wonSilverCards.length;
-
-
-  goldCardCount.textContent =
-    wonGoldCards.length;
-
-}
-
-
-/* =========================================================
-   篩選
-========================================================= */
-
-function applyFilters(){
-
-  const keyword =
-    searchInput.value
-      .trim()
-      .toLowerCase();
-
-
-  let records =
-    [...allRecords];
-
-
-  if(
-    currentFilter !==
-    "all"
-  ){
-
-    records =
-      records.filter(
-        record =>
-          record.gameType ===
-          currentFilter
-      );
-
-  }
-
-
-  if(keyword){
-
-    records =
-      records.filter(
-        record => {
-
-          const name =
-            String(
-              record.displayName
-              ??
-              ""
-            )
-            .toLowerCase();
-
-
-          const email =
-            String(
-              record.email
-              ??
-              ""
-            )
-            .toLowerCase();
-
-
-          const prize =
-            String(
-              record.prizeName
-              ??
-              ""
-            )
-            .toLowerCase();
-
-
-          return(
-            name.includes(
-              keyword
-            )
-            ||
-            email.includes(
-              keyword
-            )
-            ||
-            prize.includes(
-              keyword
-            )
-          );
-
-        }
-      );
-
-  }
-
-
-  renderRecords(
-    records
-  );
-
-}
-
-
-/* =========================================================
-   顯示
-========================================================= */
-
-function renderRecords(
-  records
-){
-
-  if(
-    records.length === 0
-  ){
-
-    recordsList.innerHTML = `
-
-      <div class="no-results">
-
-        🔍 沒有符合條件的抽獎紀錄
-
-      </div>
-
-    `;
-
-    return;
-
-  }
-
-
-  recordsList.innerHTML =
-    records
-      .map(
-        record => {
-
-          const time =
-            formatTimestamp(
-              record.drawnAt
-            );
-
-
-          const gameType =
-            record.gameType ===
-            "gold"
-            ?
-            "gold"
-            :
-            "silver";
-
-
-          const gameIcon =
-            gameType ===
-            "gold"
-            ?
-            "🥇"
-            :
-            "🥈";
-
-
-          const gameName =
-            record.gameName
-            ||
-            (
-              gameType ===
-              "gold"
-              ?
-              "金卡刮刮樂"
-              :
-              "銀卡刮刮樂"
-            );
-
-
-          return `
-
-            <article
-              class="
-                record
-                ${gameType}
-              "
-            >
-
-              <div class="time">
-
-                📅
-                ${escapeHTML(time.date)}
-
-                <br>
-
-                🕒
-                ${escapeHTML(time.time)}
-
-              </div>
-
-
-              <div class="student">
-
-                <div class="student-name">
-
-                  👤
-                  ${
-                    escapeHTML(
-                      record.displayName
-                      ||
-                      "未命名學生"
-                    )
-                  }
-
-                </div>
-
-
-                <div class="student-email">
-
-                  ${
-                    escapeHTML(
-                      record.email
-                      ||
-                      ""
-                    )
-                  }
-
-                </div>
-
-              </div>
-
-
-              <div
-                class="
-                  game
-                  ${gameType}
-                "
-              >
-
-                ${gameIcon}
-
-                ${escapeHTML(gameName)}
-
-              </div>
-
-
-              <div class="prize">
-
-                <div class="prize-icon">
-
-                  ${
-                    escapeHTML(
-                      record.prizeIcon
-                      ||
-                      "🎁"
-                    )
-                  }
-
-                </div>
-
-
-                <div>
-
-                  <div class="prize-name">
-
-                    ${
-                      escapeHTML(
-                        record.prizeName
-                        ||
-                        "未知獎項"
-                      )
-                    }
-
-                  </div>
-
-
-                  <div class="remaining">
-
-                    ${
-                      typeof record.remainingAfter
-                      ===
-                      "number"
-                      ?
-                      `抽完剩餘 ${record.remainingAfter} 張`
-                      :
-                      ""
-                    }
-
-                  </div>
-
-                </div>
-
-              </div>
-
-            </article>
-
-          `;
-
-        }
-      )
-      .join("");
-
-}
-
-
-/* =========================================================
-   Filter buttons
-========================================================= */
-
-document
-  .querySelectorAll(
-    ".filter-btn"
-  )
-  .forEach(
-    button => {
-
-      button.addEventListener(
-        "click",
-        () => {
-
-          currentFilter =
-            button.dataset.filter;
-
-
-          document
-            .querySelectorAll(
-              ".filter-btn"
-            )
-            .forEach(
-              b => {
-
-                b.classList.remove(
-                  "active"
-                );
-
-              }
-            );
-
-
-          button.classList.add(
-            "active"
-          );
-
-
-          applyFilters();
-
-        }
-      );
-
+      const y = dateObj.getFullYear();
+      const m = String(dateObj.getMonth()+1).padStart(2,"0");
+      const d = String(dateObj.getDate()).padStart(2,"0");
+      const hh = String(dateObj.getHours()).padStart(2,"0");
+      const mm = String(dateObj.getMinutes()).padStart(2,"0");
+      const ss = String(dateObj.getSeconds()).padStart(2,"0");
+
+      return {
+        date:`${y}/${m}/${d}`,
+        time:`${hh}:${mm}:${ss}`
+      };
     }
-  );
 
+    function updateStats(records){
+      totalRecords.textContent = records.length;
+      silverRecords.textContent = records.filter(r => r.gameType === "silver").length;
+      goldRecords.textContent = records.filter(r => r.gameType === "gold").length;
+      silverCardCount.textContent = records.filter(r => r.prizeId === "silverCard").length;
+      goldCardCount.textContent = records.filter(r => r.prizeId === "goldCard").length;
+    }
 
-/* =========================================================
-   Search
-========================================================= */
+    function getFilteredRecords(){
+      const keyword = searchInput.value.trim().toLowerCase();
 
-searchInput.addEventListener(
-  "input",
-  applyFilters
-);
+      return allRecords.filter(record => {
+        const matchFilter =
+          currentFilter === "all"
+            ? true
+            : record.gameType === currentFilter;
 
+        const name = (record.displayName || "").toLowerCase();
+        const matchSearch = keyword ? name.includes(keyword) : true;
 
-/* =========================================================
-   Refresh
-========================================================= */
+        return matchFilter && matchSearch;
+      });
+    }
 
-refreshBtn.addEventListener(
-  "click",
-  loadRecords
-);
+    function renderRecords(){
+      const records = getFilteredRecords();
 
+      if(records.length === 0){
+        recordList.innerHTML = `
+          <div class="empty">
+            目前沒有符合條件的紀錄
+          </div>
+        `;
+        return;
+      }
 
-/* =========================================================
-   Start
-========================================================= */
+      recordList.innerHTML = records.map(record => {
+        const dt = formatDateTime(record.drawnAt);
 
-loadRecords();
+        const gameText =
+          record.gameType === "silver"
+            ? "🥈 銀卡刮刮樂"
+            : "🥇 金卡刮刮樂";
 
-</script>
+        return `
+          <article class="record-card">
+            <div class="time-box">
+              <div class="time-date">📅 ${dt.date}</div>
+              <div class="time-clock">🕒 ${dt.time}</div>
+            </div>
 
+            <div class="student-box">
+              <div class="student-name">👤 ${record.displayName || "未命名學生"}</div>
+              <div class="student-note">抽獎學生</div>
+            </div>
+
+            <div class="game-box">
+              ${gameText}
+            </div>
+
+            <div class="prize-box">
+              <div class="prize-main">
+                ${record.prizeIcon || "🎁"} ${record.prizeName || "未知獎項"}
+              </div>
+              <div class="prize-sub">
+                抽獎後剩餘 ${record.remainingAfter ?? "--"} 張
+              </div>
+            </div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    async function loadRecords(){
+      recordList.innerHTML = `<div class="loading">讀取紀錄中……</div>`;
+
+      try{
+        const q = query(
+          collection(db, "drawRecords"),
+          orderBy("drawnAt", "desc")
+        );
+
+        const snapshot = await getDocs(q);
+
+        allRecords = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+
+        updateStats(allRecords);
+        renderRecords();
+      }catch(error){
+        console.error(error);
+        recordList.innerHTML = `
+          <div class="empty">
+            讀取失敗，請確認 Firebase 規則與網路連線
+          </div>
+        `;
+      }
+    }
+
+    filterButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        filterButtons.forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        currentFilter = btn.dataset.filter;
+        renderRecords();
+      });
+    });
+
+    searchInput.addEventListener("input", renderRecords);
+    refreshBtn.addEventListener("click", loadRecords);
+
+    loadRecords();
+  </script>
 </body>
 </html>
