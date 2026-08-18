@@ -23,10 +23,6 @@
       --gold2: #ffdf86;
       --gold-dark: #c99827;
 
-      --silver1: #f5f7f8;
-      --silver2: #c5cbd0;
-      --silver3: #929aa3;
-
       --cream: #fff9e9;
       --cream2: #f8edcf;
 
@@ -92,10 +88,6 @@
       text-align: center;
     }
 
-    /* =====================================================
-       標題
-    ===================================================== */
-
     h1 {
       margin: 4px 0 6px;
 
@@ -124,7 +116,6 @@
         );
 
       font-weight: 800;
-
       color: #72531c;
     }
 
@@ -233,9 +224,11 @@
       align-items: center;
     }
 
-    .stage.fan-stage {
-      min-height: 600px;
-      padding: 8px;
+    .stage.spread-stage {
+      align-items: flex-start;
+      min-height: 760px;
+      padding: 18px 10px 22px;
+      overflow: visible;
     }
 
     .hint {
@@ -484,17 +477,6 @@
       line-height: 1;
 
       margin-bottom: 8px;
-
-      filter:
-        drop-shadow(
-          0 4px 0
-          rgba(
-            25,
-            30,
-            65,
-            .35
-          )
-        );
     }
 
     .ticket-title {
@@ -749,7 +731,8 @@
 
       background: white;
 
-      border: 5px solid white;
+      border:
+        5px solid white;
 
       box-shadow:
         0 12px 25px
@@ -872,7 +855,6 @@
     @keyframes overhand1 {
       0% {
         opacity: 0;
-
         transform:
           translate(28px,-95px)
           rotate(-5deg);
@@ -884,7 +866,6 @@
 
       28% {
         opacity: 1;
-
         transform:
           translate(-1px,66px)
           rotate(2deg);
@@ -900,7 +881,6 @@
       0%,
       16% {
         opacity: 0;
-
         transform:
           translate(25px,-92px)
           rotate(-4deg);
@@ -912,7 +892,6 @@
 
       44% {
         opacity: 1;
-
         transform:
           translate(1px,72px)
           rotate(1deg);
@@ -928,7 +907,6 @@
       0%,
       32% {
         opacity: 0;
-
         transform:
           translate(20px,-88px)
           rotate(-3deg);
@@ -940,7 +918,6 @@
 
       60% {
         opacity: 1;
-
         transform:
           translate(-2px,78px)
           rotate(2deg);
@@ -956,7 +933,6 @@
       0%,
       48% {
         opacity: 0;
-
         transform:
           translate(17px,-85px)
           rotate(-2deg);
@@ -968,7 +944,6 @@
 
       76% {
         opacity: 1;
-
         transform:
           translate(2px,84px)
           rotate(1deg);
@@ -984,7 +959,6 @@
       0%,
       64% {
         opacity: 0;
-
         transform:
           translate(13px,-82px)
           rotate(-2deg);
@@ -996,7 +970,6 @@
 
       92% {
         opacity: 1;
-
         transform:
           translate(0,89px)
           rotate(1deg);
@@ -1022,150 +995,112 @@
       font-weight: 1000;
 
       letter-spacing: 3px;
-
-      animation:
-        shuffleText
-        .75s
-        ease-in-out
-        infinite
-        alternate;
-    }
-
-    @keyframes shuffleText {
-      to {
-        opacity: .55;
-        transform: scale(1.04);
-      }
     }
 
     /* =====================================================
-       賭場式扇形攤牌
+       新版：4 排 × 每排最多 10 張
+       橫向重疊，不做扇形
     ===================================================== */
 
-    .casino-fan {
+    .spread-board {
+      width: 100%;
+      max-width: 1280px;
+
+      display: flex;
+      flex-direction: column;
+
+      gap: 24px;
+
+      padding: 10px 0 20px;
+    }
+
+    .spread-row {
       position: relative;
 
-      width: min(1250px, 100%);
-      height: 570px;
+      width: min(1180px, 96vw);
+      height: 175px;
 
-      overflow: hidden;
+      margin: 0 auto;
 
-      perspective: 1500px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+
+      overflow: visible;
     }
 
-    .fan-center-shadow {
-      position: absolute;
+    .spread-row-inner {
+      position: relative;
 
-      left: 50%;
-      bottom: 12px;
-
-      width: 70%;
-      height: 80px;
-
-      transform:
-        translateX(-50%);
-
-      border-radius: 50%;
-
-      background:
-        radial-gradient(
-          ellipse at center,
-          rgba(36,40,70,.18),
-          transparent 70%
-        );
-
-      filter: blur(9px);
-
-      pointer-events: none;
+      height: 100%;
     }
 
-    .fan-card {
+    .spread-card {
       position: absolute;
 
-      left: 50%;
-      bottom: 22px;
+      top: 0;
 
-      width: var(--card-width);
-
-      aspect-ratio: 2 / 3;
+      width: 108px;
+      height: 162px;
 
       border-radius: 15px;
 
-      border:
-        4px solid white;
+      border: 4px solid white;
 
       background: white;
 
       box-shadow:
-        0 9px 20px
+        0 10px 20px
         rgba(
           37,
           35,
           68,
-          .23
+          .22
         );
-
-      cursor: pointer;
 
       overflow: hidden;
 
-      transform-origin:
-        50% 112%;
-
-      transform:
-        translateX(-50%)
-        translateX(var(--fan-x))
-        translateY(calc(-1 * var(--fan-rise)))
-        rotate(var(--fan-angle));
+      cursor: pointer;
 
       transition:
-        transform .24s ease,
-        filter .24s ease,
-        opacity .24s ease,
-        box-shadow .24s ease;
+        transform .22s ease,
+        filter .22s ease,
+        opacity .22s ease,
+        box-shadow .22s ease;
 
       animation:
-        casinoSpread
-        .62s
-        cubic-bezier(.18,.8,.25,1)
+        horizontalSpread
+        .48s
+        cubic-bezier(.2,.8,.2,1)
         both;
-
-      animation-delay:
-        var(--deal-delay);
     }
 
-    .fan-card:hover,
-    .fan-card:active {
-      z-index: 5000 !important;
+    .spread-card:hover,
+    .spread-card:active {
+      z-index: 9999 !important;
 
       transform:
-        translateX(-50%)
-        translateX(var(--fan-x))
-        translateY(calc(-1 * var(--fan-rise) - 24px))
-        rotate(var(--fan-angle))
-        scale(1.08);
+        translateY(-12px)
+        scale(1.07);
 
       filter: brightness(1.08);
 
       box-shadow:
-        0 18px 32px
+        0 17px 30px
         rgba(
           37,
           35,
           68,
-          .3
+          .28
         );
     }
 
-    .fan-card.selected {
-      z-index: 9999 !important;
+    .spread-card.selected {
+      z-index: 99999 !important;
 
       transform:
-        translateX(-50%)
-        translateX(var(--fan-x))
-        translateY(calc(-1 * var(--fan-rise) - 48px))
-        rotate(0deg)
-        scale(1.15);
+        translateY(-24px)
+        scale(1.13);
 
       box-shadow:
         0 22px 38px
@@ -1177,29 +1112,27 @@
         );
     }
 
-    .fan-card.dimmed {
+    .spread-card.dimmed {
       opacity: .13;
       filter: grayscale(.7);
     }
 
-    @keyframes casinoSpread {
+    @keyframes horizontalSpread {
       from {
         opacity: 0;
 
         transform:
-          translateX(-50%)
-          translateX(0)
-          translateY(100px)
-          rotate(0deg)
-          scale(.68);
+          translateX(-80px)
+          scale(.82);
       }
 
       to {
         opacity: 1;
+        transform: none;
       }
     }
 
-    .fan-card-number {
+    .spread-card-number {
       position: absolute;
 
       top: 5px;
@@ -1207,11 +1140,10 @@
 
       z-index: 10;
 
-      min-width: 27px;
-      height: 27px;
+      min-width: 26px;
+      height: 26px;
 
-      padding:
-        0 5px;
+      padding: 0 5px;
 
       border-radius: 999px;
 
@@ -1224,7 +1156,7 @@
           255,
           255,
           255,
-          .9
+          .92
         );
 
       color: var(--navy);
@@ -1238,30 +1170,29 @@
           30,
           30,
           60,
-          .16
+          .15
         );
     }
 
-    /* 攤開的小牌，字體縮小 */
-    .fan-card .ticket-icon {
-      font-size: 35px;
+    .spread-card .ticket-icon {
+      font-size: 34px;
       margin-bottom: 4px;
     }
 
-    .fan-card .ticket-title {
+    .spread-card .ticket-title {
       font-size: 16px;
-      line-height: 1.1;
+      line-height: 1.05;
       letter-spacing: 1px;
     }
 
-    .fan-card .ticket-text {
+    .spread-card .ticket-text {
       font-size: 8px;
       margin-top: 5px;
-      letter-spacing: 1px;
+      letter-spacing: .8px;
     }
 
     /* =====================================================
-       正式刮刮卡
+       刮刮樂本體
     ===================================================== */
 
     .scratch-wrap {
@@ -1281,7 +1212,6 @@
     @keyframes popIn {
       from {
         opacity: 0;
-
         transform:
           translateY(45px)
           scale(.72);
@@ -1359,7 +1289,6 @@
       color: #fff7d5;
 
       position: relative;
-
       z-index: 2;
     }
 
@@ -1402,15 +1331,10 @@
       letter-spacing: 2px;
     }
 
-    /* =====================================================
-       全滿銀色刮除區
-    ===================================================== */
-
     .scratch-area {
       position: relative;
 
       width: 100%;
-
       height: 57%;
 
       margin: 0;
@@ -1500,7 +1424,6 @@
         );
 
       font-weight: 1000;
-
       line-height: 1.2;
     }
 
@@ -1519,7 +1442,6 @@
         );
 
       font-weight: 900;
-
       line-height: 1.45;
     }
 
@@ -1533,7 +1455,6 @@
       display: block;
 
       cursor: crosshair;
-
       touch-action: none;
     }
 
@@ -1545,7 +1466,6 @@
       align-items: center;
 
       position: relative;
-
       z-index: 2;
 
       color: #fff7d3;
@@ -1558,7 +1478,6 @@
         );
 
       font-weight: 900;
-
       text-align: center;
     }
 
@@ -1731,26 +1650,35 @@
     }
 
     /* =====================================================
-       iPad / 平板
+       平板
     ===================================================== */
 
     @media (max-width: 900px) {
 
-      .stage {
-        min-height: 520px;
-        padding: 12px 5px;
-      }
-
-      .stage.fan-stage {
-        min-height: 520px;
+      .stage.spread-stage {
+        min-height: 700px;
       }
 
       .shuffle-table {
         transform: scale(.82);
       }
 
-      .casino-fan {
-        height: 500px;
+      .spread-row {
+        width: 96vw;
+        height: 152px;
+      }
+
+      .spread-card {
+        width: 92px;
+        height: 138px;
+      }
+
+      .spread-card .ticket-icon {
+        font-size: 28px;
+      }
+
+      .spread-card .ticket-title {
+        font-size: 13px;
       }
 
     }
@@ -1761,37 +1689,43 @@
 
     @media (max-width: 620px) {
 
-      .stage {
-        min-height: 460px;
-      }
-
-      .stage.fan-stage {
-        min-height: 430px;
+      .stage.spread-stage {
+        min-height: 600px;
       }
 
       .shuffle-table {
         transform: scale(.65);
       }
 
-      .casino-fan {
-        height: 410px;
+      .spread-board {
+        gap: 18px;
       }
 
-      .fan-card .ticket-icon {
-        font-size: 25px;
+      .spread-row {
+        width: 97vw;
+        height: 125px;
       }
 
-      .fan-card .ticket-title {
-        font-size: 11px;
+      .spread-card {
+        width: 76px;
+        height: 114px;
       }
 
-      .fan-card .ticket-text {
+      .spread-card .ticket-icon {
+        font-size: 22px;
+      }
+
+      .spread-card .ticket-title {
+        font-size: 10px;
+      }
+
+      .spread-card .ticket-text {
         display: none;
       }
 
-      .fan-card-number {
-        min-width: 22px;
-        height: 22px;
+      .spread-card-number {
+        min-width: 21px;
+        height: 21px;
         font-size: 9px;
       }
 
@@ -1963,8 +1897,7 @@
   <script>
 
     /* =====================================================
-       銀卡刮刮樂固定獎池
-       共 40 張
+       固定獎池 40 張
     ===================================================== */
 
     const PRIZE_DEFINITIONS = [
@@ -2052,49 +1985,29 @@
 
     ];
 
-    /*
-      沿用固定儲存名稱。
-      同一台裝置重新整理後，
-      剩餘獎池不會自動回到 40 張。
-    */
-
     const STORAGE_KEY =
       "classLuckyScratchPool_v2";
 
     const stage =
-      document.getElementById(
-        "stage"
-      );
+      document.getElementById("stage");
 
     const hint =
-      document.getElementById(
-        "hint"
-      );
+      document.getElementById("hint");
 
     const shuffleBtn =
-      document.getElementById(
-        "shuffleBtn"
-      );
+      document.getElementById("shuffleBtn");
 
     const nextBtn =
-      document.getElementById(
-        "nextBtn"
-      );
+      document.getElementById("nextBtn");
 
     const drawAgainBtn =
-      document.getElementById(
-        "drawAgainBtn"
-      );
+      document.getElementById("drawAgainBtn");
 
     const resetPoolBtn =
-      document.getElementById(
-        "resetPoolBtn"
-      );
+      document.getElementById("resetPoolBtn");
 
     const remainingCount =
-      document.getElementById(
-        "remainingCount"
-      );
+      document.getElementById("remainingCount");
 
     let prizePool = [];
 
@@ -2107,7 +2020,7 @@
       false;
 
     /* =====================================================
-       建立完整 40 張
+       建立完整獎池
     ===================================================== */
 
     function createFreshPool() {
@@ -2124,25 +2037,14 @@
           ) {
 
             pool.push({
-
-              id:
-                prize.id,
-
-              name:
-                prize.name,
-
-              icon:
-                prize.icon,
-
+              id: prize.id,
+              name: prize.name,
+              icon: prize.icon,
               description:
                 prize.description,
-
-              type:
-                prize.type,
-
+              type: prize.type,
               serial:
                 `${prize.id}-${i + 1}`
-
             });
 
           }
@@ -2150,29 +2052,21 @@
         }
       );
 
-      return shuffleArray(
-        pool
-      );
+      return shuffleArray(pool);
 
     }
 
     /* =====================================================
-       Fisher-Yates 真正亂數洗牌
+       真正洗牌
     ===================================================== */
 
-    function shuffleArray(
-      array
-    ) {
+    function shuffleArray(array) {
 
-      const result =
-        [...array];
+      const result = [...array];
 
       for (
-        let i =
-          result.length - 1;
-
+        let i = result.length - 1;
         i > 0;
-
         i--
       ) {
 
@@ -2199,16 +2093,14 @@
     }
 
     /* =====================================================
-       儲存獎池
+       儲存
     ===================================================== */
 
     function savePool() {
 
       localStorage.setItem(
         STORAGE_KEY,
-        JSON.stringify(
-          prizePool
-        )
+        JSON.stringify(prizePool)
       );
 
       updateRemainingCount();
@@ -2216,7 +2108,7 @@
     }
 
     /* =====================================================
-       載入獎池
+       載入
     ===================================================== */
 
     function loadPool() {
@@ -2231,14 +2123,10 @@
         try {
 
           const parsed =
-            JSON.parse(
-              saved
-            );
+            JSON.parse(saved);
 
           if (
-            Array.isArray(
-              parsed
-            )
+            Array.isArray(parsed)
           ) {
 
             prizePool =
@@ -2281,10 +2169,6 @@
 
     }
 
-    /* =====================================================
-       剩餘張數
-    ===================================================== */
-
     function updateRemainingCount() {
 
       remainingCount.textContent =
@@ -2322,10 +2206,7 @@
     }
 
     /* =====================================================
-       初始 / 下一位準備畫面
-
-       showReset = true
-       才顯示重設按鈕
+       初始 / 下一位
     ===================================================== */
 
     function showDeck(
@@ -2342,7 +2223,7 @@
         false;
 
       stage.classList.remove(
-        "fan-stage"
+        "spread-stage"
       );
 
       nextBtn.style.display =
@@ -2356,12 +2237,6 @@
 
       shuffleBtn.disabled =
         false;
-
-      /*
-        防誤觸設計：
-        只有初始狀態或「下一位」狀態
-        才顯示重設按鈕。
-      */
 
       resetPoolBtn.style.display =
         showReset
@@ -2391,10 +2266,7 @@
 
       stage.innerHTML = `
 
-        <div
-          class="deck"
-          id="deck"
-        >
+        <div class="deck">
 
           ${Array
             .from(
@@ -2417,12 +2289,12 @@
       `;
 
       hint.textContent =
-        `銀卡刮刮樂目前剩 ${prizePool.length} 張，請按「開始洗牌」！`;
+        `目前剩 ${prizePool.length} 張，請按「開始洗牌」！`;
 
     }
 
     /* =====================================================
-       開始真人上下洗牌
+       開始洗牌
     ===================================================== */
 
     function startShuffle() {
@@ -2436,11 +2308,6 @@
         return;
 
       }
-
-      /*
-        一開始洗牌，
-        立刻隱藏重設按鈕。
-      */
 
       resetPoolBtn.style.display =
         "none";
@@ -2457,19 +2324,13 @@
       hint.textContent =
         "正在上下洗牌中…… 🔀";
 
-      /*
-        動畫同時真正重新排列獎池。
-      */
-
       prizePool =
-        shuffleArray(
-          prizePool
-        );
+        shuffleArray(prizePool);
 
       savePool();
 
       stage.classList.remove(
-        "fan-stage"
+        "spread-stage"
       );
 
       stage.innerHTML = `
@@ -2519,19 +2380,12 @@
       setTimeout(
         () => {
 
-          /*
-            洗牌結束前再洗一次，
-            讓最終獎池與視覺洗牌同步。
-          */
-
           prizePool =
-            shuffleArray(
-              prizePool
-            );
+            shuffleArray(prizePool);
 
           savePool();
 
-          dealCasinoFan();
+          dealHorizontalRows();
 
         },
         3600
@@ -2540,225 +2394,156 @@
     }
 
     /* =====================================================
-       賭場扇面攤牌
-
-       目前剩幾張就全部攤幾張。
+       新版：
+       4 排，每排最多 10 張
+       每排橫向重疊
     ===================================================== */
 
-    function dealCasinoFan() {
+    function dealHorizontalRows() {
 
       stage.classList.add(
-        "fan-stage"
+        "spread-stage"
       );
 
       const total =
         prizePool.length;
 
-      /*
-        依剩餘張數調整扇面尺寸。
-      */
+      const rows = [];
 
-      let cardWidth;
-      let maxFanWidth;
-      let maxAngle;
-      let maxRise;
-
-      if (
-        total >= 35
+      for (
+        let i = 0;
+        i < total;
+        i += 10
       ) {
 
-        cardWidth = 92;
-        maxFanWidth = 1040;
-        maxAngle = 61;
-        maxRise = 170;
-
-      }
-
-      else if (
-        total >= 25
-      ) {
-
-        cardWidth = 100;
-        maxFanWidth = 1000;
-        maxAngle = 58;
-        maxRise = 165;
-
-      }
-
-      else if (
-        total >= 15
-      ) {
-
-        cardWidth = 112;
-        maxFanWidth = 930;
-        maxAngle = 52;
-        maxRise = 150;
-
-      }
-
-      else if (
-        total >= 8
-      ) {
-
-        cardWidth = 126;
-        maxFanWidth = 800;
-        maxAngle = 43;
-        maxRise = 125;
-
-      }
-
-      else {
-
-        cardWidth = 145;
-        maxFanWidth = 620;
-        maxAngle = 30;
-        maxRise = 90;
-
-      }
-
-      /*
-        iPad / 手機依實際螢幕寬度縮小。
-      */
-
-      const availableWidth =
-        Math.min(
-          window.innerWidth - 34,
-          maxFanWidth
+        rows.push(
+          prizePool.slice(
+            i,
+            i + 10
+          )
         );
 
-      /*
-        扇面的實際左右距離。
-      */
+      }
 
-      const totalSpread =
-        Math.max(
-          120,
-          availableWidth
-          -
-          cardWidth
-        );
+      let globalIndex = 0;
 
-      const center =
-        (total - 1) / 2;
+      let rowsHTML = "";
 
-      let cardsHTML =
-        "";
-
-      prizePool.forEach(
+      rows.forEach(
         (
-          prize,
-          index
+          rowCards,
+          rowIndex
         ) => {
 
-          const normalized =
-            center === 0
-              ? 0
-              : (
-                  index - center
-                )
-                /
-                center;
+          const rowCount =
+            rowCards.length;
 
           /*
-            左右位置
+            依螢幕寬度設定牌寬與重疊程度
           */
 
-          const x =
-            normalized
-            *
-            totalSpread
-            /
-            2;
+          let cardWidth = 108;
+          let overlap = 56;
+
+          if (
+            window.innerWidth <= 900
+          ) {
+
+            cardWidth = 92;
+            overlap = 47;
+
+          }
+
+          if (
+            window.innerWidth <= 620
+          ) {
+
+            cardWidth = 76;
+            overlap = 38;
+
+          }
 
           /*
-            扇形旋轉
+            rowInnerWidth：
+            第一張完整寬度
+            後面每張只增加 overlap 距離
           */
 
-          const angle =
-            normalized
-            *
-            maxAngle;
-
-          /*
-            中間最高，
-            左右兩側逐漸下降。
-
-            使用平方曲線讓扇面更像荷官攤牌。
-          */
-
-          const rise =
-            (
-              1
-              -
-              Math.pow(
-                Math.abs(
-                  normalized
-                ),
-                1.65
-              )
+          const rowInnerWidth =
+            cardWidth
+            +
+            Math.max(
+              0,
+              rowCount - 1
             )
             *
-            maxRise;
+            overlap;
 
-          /*
-            中央牌層級稍高。
-          */
+          let cardsHTML = "";
 
-          const zIndex =
-            Math.round(
-              500
-              -
-              Math.abs(
-                index
-                -
-                center
-              )
-            );
+          rowCards.forEach(
+            (
+              prize,
+              localIndex
+            ) => {
 
-          /*
-            從左至右快速展開。
-          */
+              const left =
+                localIndex
+                *
+                overlap;
 
-          const delay =
-            Math.min(
-              index
-              *
-              .022,
-              .8
-            );
+              const delay =
+                Math.min(
+                  globalIndex
+                  *
+                  .025,
+                  .8
+                );
 
-          cardsHTML += `
+              cardsHTML += `
 
-            <div
-              class="fan-card"
-              data-index="${index}"
+                <div
+                  class="spread-card"
 
-              style="
-                --card-width:
-                  ${cardWidth}px;
+                  data-index="${globalIndex}"
 
-                --fan-x:
-                  ${x}px;
+                  style="
+                    left:${left}px;
+                    z-index:${localIndex + 1};
+                    animation-delay:${delay}s;
+                  "
+                >
 
-                --fan-rise:
-                  ${rise}px;
+                  <div class="spread-card-number">
+                    ${globalIndex + 1}
+                  </div>
 
-                --fan-angle:
-                  ${angle}deg;
+                  ${ticketFaceHTML()}
 
-                --deal-delay:
-                  ${delay}s;
+                </div>
 
-                z-index:
-                  ${zIndex};
-              "
-            >
+              `;
 
-              <div class="fan-card-number">
-                ${index + 1}
+              globalIndex++;
+
+            }
+          );
+
+          rowsHTML += `
+
+            <div class="spread-row">
+
+              <div
+                class="spread-row-inner"
+
+                style="
+                  width:${rowInnerWidth}px;
+                "
+              >
+
+                ${cardsHTML}
+
               </div>
-
-              ${ticketFaceHTML()}
 
             </div>
 
@@ -2769,22 +2554,20 @@
 
       stage.innerHTML = `
 
-        <div class="casino-fan">
+        <div class="spread-board">
 
-          <div class="fan-center-shadow"></div>
-
-          ${cardsHTML}
+          ${rowsHTML}
 
         </div>
 
       `;
 
       hint.textContent =
-        `全部 ${total} 張已攤成扇面，請挑一張！ 👆`;
+        `全部 ${total} 張已攤開，請挑一張！ 👆`;
 
       document
         .querySelectorAll(
-          ".fan-card"
+          ".spread-card"
         )
         .forEach(
           card => {
@@ -2793,9 +2576,7 @@
               "click",
               () => {
 
-                selectCard(
-                  card
-                );
+                selectCard(card);
 
               }
             );
@@ -2806,19 +2587,15 @@
     }
 
     /* =====================================================
-       選擇一張卡
+       選卡
     ===================================================== */
 
-    function selectCard(
-      card
-    ) {
+    function selectCard(card) {
 
       if (
         cardSelected
       ) {
-
         return;
-
       }
 
       cardSelected =
@@ -2834,10 +2611,6 @@
           chosenIndex
         ];
 
-      /*
-        從真正獎池移除。
-      */
-
       prizePool.splice(
         chosenIndex,
         1
@@ -2851,7 +2624,7 @@
 
       document
         .querySelectorAll(
-          ".fan-card"
+          ".spread-card"
         )
         .forEach(
           otherCard => {
@@ -2870,27 +2643,26 @@
         );
 
       hint.textContent =
-        "就是這張！正在抽出你的銀卡刮刮樂…… ✨";
+        "就是這張！準備刮開獎項！ ✨";
 
       setTimeout(
         showScratchTicket,
-        750
+        700
       );
 
     }
 
     /* =====================================================
-       正式刮卡畫面
+       顯示刮刮樂
     ===================================================== */
 
     function showScratchTicket() {
 
       stage.classList.remove(
-        "fan-stage"
+        "spread-stage"
       );
 
-      let prizeClass =
-        "";
+      let prizeClass = "";
 
       if (
         currentPrize.type ===
@@ -2957,21 +2729,15 @@
               >
 
                 <div class="prize-icon">
-
                   ${currentPrize.icon}
-
                 </div>
 
                 <div class="prize-name">
-
                   ${currentPrize.name}
-
                 </div>
 
                 <div class="prize-description">
-
                   ${currentPrize.description}
-
                 </div>
 
               </div>
@@ -3005,7 +2771,7 @@
     }
 
     /* =====================================================
-       建立銀色塗層
+       刮除功能
     ===================================================== */
 
     function initScratch() {
@@ -3075,10 +2841,6 @@
         0
       );
 
-      /* =============================================
-         金屬銀色漸層
-      ============================================= */
-
       const gradient =
         ctx.createLinearGradient(
           0,
@@ -3137,10 +2899,6 @@
         rect.height
       );
 
-      /* =============================================
-         金屬亮點
-      ============================================= */
-
       ctx.fillStyle =
         "rgba(255,255,255,.32)";
 
@@ -3178,10 +2936,6 @@
 
       }
 
-      /* =============================================
-         銀色層提示字
-      ============================================= */
-
       ctx.textAlign =
         "center";
 
@@ -3209,10 +2963,6 @@
         rect.height / 2 + 28
       );
 
-      /*
-        後續筆畫全部變透明。
-      */
-
       ctx.globalCompositeOperation =
         "destination-out";
 
@@ -3222,9 +2972,7 @@
       let lastPoint =
         null;
 
-      function getPoint(
-        event
-      ) {
+      function getPoint(event) {
 
         const canvasRect =
           canvas.getBoundingClientRect();
@@ -3309,9 +3057,7 @@
 
       }
 
-      function scratch(
-        event
-      ) {
+      function scratch(event) {
 
         if (!drawing) {
           return;
@@ -3320,9 +3066,7 @@
         event.preventDefault();
 
         const point =
-          getPoint(
-            event
-          );
+          getPoint(event);
 
         if (
           lastPoint
@@ -3392,17 +3136,13 @@
 
       }
 
-      function startScratch(
-        event
-      ) {
+      function startScratch(event) {
 
         drawing =
           true;
 
         lastPoint =
-          getPoint(
-            event
-          );
+          getPoint(event);
 
         eraseCircle(
           lastPoint.x,
@@ -3432,10 +3172,6 @@
 
       }
 
-      /*
-        iPad / iPhone / Android / 電腦
-      */
-
       if (
         window.PointerEvent
       ) {
@@ -3454,9 +3190,7 @@
 
             catch {}
 
-            startScratch(
-              event
-            );
+            startScratch(event);
 
           }
         );
@@ -3499,8 +3233,7 @@
           "touchstart",
           startScratch,
           {
-            passive:
-              false
+            passive: false
           }
         );
 
@@ -3508,8 +3241,7 @@
           "touchmove",
           scratch,
           {
-            passive:
-              false
+            passive: false
           }
         );
 
@@ -3523,7 +3255,7 @@
     }
 
     /* =====================================================
-       計算刮除比例
+       刮除比例
     ===================================================== */
 
     function checkScratch(
@@ -3545,16 +3277,8 @@
           canvas.height
         ).data;
 
-      let transparent =
-        0;
-
-      let checked =
-        0;
-
-      /*
-        抽樣檢查，
-        避免 iPad 運算太重。
-      */
+      let transparent = 0;
+      let checked = 0;
 
       for (
         let i = 3;
@@ -3565,9 +3289,7 @@
         checked++;
 
         if (
-          data[i]
-          <
-          20
+          data[i] < 20
         ) {
 
           transparent++;
@@ -3581,18 +3303,11 @@
         /
         checked;
 
-      /*
-        約刮開 42% 後，
-        自動揭曉剩餘區域。
-      */
-
       if (
         ratio >= .42
       ) {
 
-        finishScratch(
-          canvas
-        );
+        finishScratch(canvas);
 
       }
 
@@ -3602,9 +3317,7 @@
        完成刮獎
     ===================================================== */
 
-    function finishScratch(
-      canvas
-    ) {
+    function finishScratch(canvas) {
 
       scratchingFinished =
         true;
@@ -3633,21 +3346,11 @@
           "result"
         );
 
-      /*
-        重設按鈕仍維持隱藏。
-        必須到下一位準備畫面才重新顯示。
-      */
-
       resetPoolBtn.style.display =
         "none";
 
-      /* =============================================
-         再抽一次
-      ============================================= */
-
       if (
-        currentPrize.type
-        ===
+        currentPrize.type ===
         "again"
       ) {
 
@@ -3667,13 +3370,8 @@
 
       }
 
-      /* =============================================
-         再接再厲
-      ============================================= */
-
       else if (
-        currentPrize.type
-        ===
+        currentPrize.type ===
         "none"
       ) {
 
@@ -3692,10 +3390,6 @@
           "none";
 
       }
-
-      /* =============================================
-         一般獎項
-      ============================================= */
 
       else {
 
@@ -3763,7 +3457,6 @@
 
         item.style.setProperty(
           "--x",
-
           `${
             (Math.random() - .5)
             *
@@ -3773,7 +3466,6 @@
 
         item.style.setProperty(
           "--y",
-
           `${
             (Math.random() - .5)
             *
@@ -3806,17 +3498,12 @@
     }
 
     /* =====================================================
-       下一位抽獎
-
-       回到準備畫面後，
-       重設按鈕才重新出現。
+       下一位
     ===================================================== */
 
     function nextPlayer() {
 
-      showDeck(
-        true
-      );
+      showDeck(true);
 
       hint.textContent =
         `👤 下一位同學準備抽獎，目前剩餘 ${prizePool.length} 張。`;
@@ -3825,16 +3512,11 @@
 
     /* =====================================================
        再抽一次
-
-       仍然是同一位學生，
-       所以重設按鈕繼續隱藏。
     ===================================================== */
 
     function drawAgain() {
 
-      showDeck(
-        false
-      );
+      showDeck(false);
 
       hint.textContent =
         "🎟️ 獲得再抽一次！請重新洗牌，再挑一張！";
@@ -3842,7 +3524,7 @@
     }
 
     /* =====================================================
-       重設完整 40 張
+       重設
     ===================================================== */
 
     function resetPool() {
@@ -3855,9 +3537,7 @@
       if (
         !confirmed
       ) {
-
         return;
-
       }
 
       prizePool =
@@ -3874,9 +3554,7 @@
       cardSelected =
         false;
 
-      showDeck(
-        true
-      );
+      showDeck(true);
 
       hint.textContent =
         "✅ 銀卡刮刮樂已重新建立完整 40 張獎池！";
@@ -3884,13 +3562,13 @@
     }
 
     /* =====================================================
-       全部抽完
+       抽完
     ===================================================== */
 
     function showEmptyPool() {
 
       stage.classList.remove(
-        "fan-stage"
+        "spread-stage"
       );
 
       stage.innerHTML = `
@@ -3927,11 +3605,6 @@
       drawAgainBtn.style.display =
         "none";
 
-      /*
-        全部抽完後，
-        必須讓老師可以重新建立獎池。
-      */
-
       resetPoolBtn.style.display =
         "";
 
@@ -3967,9 +3640,7 @@
 
     loadPool();
 
-    showDeck(
-      true
-    );
+    showDeck(true);
 
   </script>
 
