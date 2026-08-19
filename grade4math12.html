@@ -2,11 +2,11 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport"
-      content="width=device-width,
-               initial-scale=1.0,
-               maximum-scale=1.0,
-               user-scalable=no">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+>
 
 <title>四年級數學無限挑戰｜第一、二單元</title>
 
@@ -16,44 +16,30 @@
 }
 
 :root{
-  --green:#35a84a;
-  --green-dark:#208638;
-  --blue:#3189e3;
-  --purple:#8f57d9;
-  --red:#e84c46;
-  --text:#27333a;
-  --muted:#7c8983;
-  --bg:#f4f8f3;
-  --border:#dfe7e2;
-  --shadow:0 8px 28px rgba(35,70,45,.09);
+  --green:#2fa447;
+  --green-dark:#16823a;
+  --blue:#328ce5;
+  --purple:#8b58d5;
+  --red:#e64b45;
+  --text:#263238;
+  --muted:#7d8983;
+  --bg:#f3f8f3;
+  --border:#dce6df;
+  --shadow:0 8px 28px rgba(34,70,45,.08);
 }
 
 html,
 body{
   margin:0;
   min-height:100%;
-
   font-family:
     "Noto Sans TC",
     "PingFang TC",
     "Microsoft JhengHei",
     Arial,
     sans-serif;
-
   color:var(--text);
-
-  background:
-    radial-gradient(
-      circle at 0 0,
-      #edf9ec 0,
-      transparent 27%
-    ),
-    radial-gradient(
-      circle at 100% 0,
-      #eef7ff 0,
-      transparent 30%
-    ),
-    var(--bg);
+  background:#f3f8f3;
 }
 
 button,
@@ -66,11 +52,6 @@ button{
   cursor:pointer;
 }
 
-button:disabled{
-  cursor:default;
-}
-
-
 /* =========================================================
    頂端
    ========================================================= */
@@ -79,38 +60,26 @@ button:disabled{
   position:sticky;
   top:0;
   z-index:50;
-
   color:white;
-
-  background:
-    linear-gradient(
-      135deg,
-      #23913d,
-      #138241
-    );
-
-  box-shadow:
-    0 3px 16px
-    rgba(20,80,35,.18);
+  background:linear-gradient(135deg,#279843,#13843b);
+  box-shadow:0 3px 14px rgba(20,80,35,.17);
 }
 
 .top-inner{
-  max-width:1700px;
+  width:100%;
+  max-width:1800px;
+  min-height:70px;
   margin:auto;
-
-  min-height:66px;
+  padding:9px 22px;
 
   display:flex;
   align-items:center;
-
-  padding:8px 20px;
-
   gap:14px;
 }
 
 .logo{
-  font-size:27px;
   flex:none;
+  font-size:27px;
 }
 
 .title-area{
@@ -119,51 +88,47 @@ button:disabled{
 }
 
 .main-title{
-  font-size:22px;
+  font-size:23px;
   font-weight:900;
   line-height:1.2;
 }
 
 .main-subtitle{
-  margin-top:3px;
-
-  font-size:12px;
+  margin-top:4px;
+  font-size:13px;
   opacity:.85;
 }
 
 .header-stats{
   display:flex;
+  align-items:center;
   gap:9px;
 }
 
 .header-stat{
-  min-width:78px;
-
-  padding:6px 10px;
+  min-width:97px;
+  padding:8px 12px;
 
   text-align:center;
 
-  color:#26342c;
+  color:#29362e;
   background:white;
 
-  border-radius:13px;
+  border-radius:15px;
 
-  box-shadow:
-    0 3px 10px
-    rgba(0,0,0,.10);
+  box-shadow:0 3px 10px rgba(0,0,0,.10);
 }
 
 .header-stat-number{
-  font-size:19px;
-  line-height:1.05;
+  font-size:21px;
   font-weight:900;
+  line-height:1;
 }
 
 .header-stat-label{
-  margin-top:2px;
-
+  margin-top:4px;
+  color:#6e7972;
   font-size:11px;
-  color:#69746e;
 }
 
 
@@ -172,21 +137,24 @@ button:disabled{
    ========================================================= */
 
 .main{
-  max-width:1700px;
+  width:100%;
+  max-width:1800px;
   margin:auto;
-
-  padding:16px;
+  padding:16px 18px 22px;
 }
 
+/*
+  關鍵修改：
+  左側約 45%
+  右側計算紙約 55%
+
+  不再設定很大的 min-width，
+  因此 iPad 橫向也會保持左右排列。
+*/
 .layout{
   display:grid;
-
-  grid-template-columns:
-    minmax(560px,.95fr)
-    minmax(600px,1.05fr);
-
+  grid-template-columns:minmax(0,.88fr) minmax(0,1.12fr);
   gap:18px;
-
   align-items:start;
 }
 
@@ -198,15 +166,9 @@ button:disabled{
 .question-card,
 .scratch-card{
   background:white;
-
-  border-radius:20px;
-
-  border:
-    1px solid
-    rgba(220,230,223,.7);
-
-  box-shadow:
-    var(--shadow);
+  border:1px solid rgba(219,229,222,.85);
+  border-radius:21px;
+  box-shadow:var(--shadow);
 }
 
 
@@ -215,18 +177,15 @@ button:disabled{
    ========================================================= */
 
 .control-card{
-  padding:16px 18px;
-
-  margin-bottom:15px;
+  margin-bottom:14px;
+  padding:15px 17px;
 }
 
 .control-line{
   display:flex;
   align-items:center;
-
-  gap:13px;
-
-  margin-bottom:12px;
+  gap:12px;
+  margin-bottom:11px;
 }
 
 .control-line:last-child{
@@ -234,110 +193,76 @@ button:disabled{
 }
 
 .control-label{
-  width:95px;
+  width:90px;
   flex:none;
-
-  color:#3e4d44;
-
-  font-size:16px;
+  color:#3f4d45;
+  font-size:15px;
   font-weight:900;
 }
 
 .unit-buttons{
   flex:1;
-
   display:grid;
-
-  grid-template-columns:
-    repeat(3,1fr);
-
-  gap:9px;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;
 }
 
 .unit-btn{
-  min-height:58px;
+  min-height:57px;
+  padding:6px;
 
-  padding:6px 8px;
-
-  border:
-    2px solid
-    #d9e2dc;
-
+  border:2px solid #d8e2db;
   border-radius:14px;
 
-  background:white;
   color:#536159;
+  background:white;
 
-  font-size:15px;
+  font-size:14px;
   font-weight:900;
+  line-height:1.25;
 
-  transition:.16s;
+  transition:.15s;
 }
 
 .unit-btn:hover{
-  transform:
-    translateY(-1px);
+  transform:translateY(-1px);
 }
 
 .unit-btn.active[data-unit="1"]{
   color:white;
-
-  background:
-    linear-gradient(
-      135deg,
-      #45b758,
-      #2e9a45
-    );
-
-  border-color:#36a54a;
-
-  box-shadow:
-    0 5px 13px
-    rgba(49,159,68,.18);
+  border-color:#37a94d;
+  background:linear-gradient(135deg,#47b75a,#2f9d46);
 }
 
 .unit-btn.active[data-unit="2"]{
-  color:#1971ce;
-
+  color:#2778c6;
+  border-color:#70b0ed;
   background:#eef7ff;
-
-  border-color:#6caef0;
 }
 
 .unit-btn.active[data-unit="mix"]{
-  color:#7a42c2;
-
+  color:#7b46bd;
+  border-color:#aa7be4;
   background:#f7efff;
-
-  border-color:#aa78e7;
 }
 
 #typeSelect{
   flex:1;
-
+  min-width:0;
   min-height:42px;
 
-  padding:
-    8px 38px
-    8px 13px;
+  padding:8px 35px 8px 12px;
 
-  border:
-    1.5px solid
-    #ccd8d1;
-
+  border:1.5px solid #cdd9d1;
   border-radius:11px;
 
-  background:white;
-
   outline:none;
+  background:white;
 }
 
 #typeSelect:focus{
-  border-color:#5eb86c;
-
-  box-shadow:
-    0 0 0 3px
-    rgba(70,177,85,.10);
+  border-color:#63b66c;
+  box-shadow:0 0 0 3px rgba(70,177,85,.10);
 }
 
 
@@ -346,69 +271,50 @@ button:disabled{
    ========================================================= */
 
 .progress-area{
-  margin-top:10px;
-
   display:flex;
   align-items:center;
-
-  gap:11px;
+  gap:10px;
+  margin-top:10px;
 }
 
 .streak-text{
   flex:none;
-
-  color:#87652d;
-
-  font-size:13px;
+  color:#85662d;
+  font-size:12px;
   font-weight:900;
 }
 
 .progress-wrap{
   flex:1;
-
   height:7px;
-
   overflow:hidden;
-
   border-radius:999px;
-
   background:#e7ede9;
 }
 
 .progress-bar{
   width:0;
   height:100%;
-
   border-radius:999px;
-
-  background:
-    linear-gradient(
-      90deg,
-      #59b75e,
-      #3a90df
-    );
-
-  transition:.3s;
+  background:linear-gradient(90deg,#59b760,#3c91dd);
+  transition:.25s;
 }
 
 
 /* =========================================================
-   題目卡
+   題目
    ========================================================= */
 
 .question-card{
-  min-height:680px;
-
-  padding:18px;
+  min-height:720px;
+  padding:20px;
 }
 
 .question-top{
   display:flex;
   align-items:center;
-
+  gap:9px;
   flex-wrap:wrap;
-
-  gap:10px;
 }
 
 .question-number{
@@ -416,82 +322,63 @@ button:disabled{
   align-items:center;
   justify-content:center;
 
-  padding:5px 12px;
-
+  padding:5px 11px;
   border-radius:9px;
 
   color:white;
-  background:#43a854;
+  background:#43a955;
 
   font-size:14px;
   font-weight:900;
 }
 
 .type-name{
-  color:#348a43;
-
+  color:#328944;
   font-size:16px;
   font-weight:900;
 }
 
 .chapter-label{
   margin-left:auto;
-
-  display:inline-flex;
-  align-items:center;
-
-  padding:5px 12px;
+  padding:5px 11px;
 
   border-radius:999px;
 
-  font-size:13px;
+  font-size:12px;
   font-weight:900;
 }
 
 .chapter-label.u1{
-  color:#25833a;
+  color:#28823b;
   background:#eaf8eb;
 }
 
 .chapter-label.u2{
-  color:#317ac4;
+  color:#2876bd;
   background:#eaf4ff;
 }
 
 .question-text{
-  margin-top:18px;
-  margin-bottom:20px;
+  margin:19px 0 20px;
 
-  font-size:
-    clamp(
-      26px,
-      2.7vw,
-      38px
-    );
-
+  font-size:clamp(27px,2.4vw,38px);
+  line-height:1.5;
   font-weight:900;
-
-  line-height:1.55;
 
   word-break:break-word;
 }
 
 .question-text.small{
-  font-size:
-    clamp(
-      21px,
-      2.3vw,
-      30px
-    );
+  font-size:clamp(21px,2vw,29px);
 }
 
 .number-highlight{
-  color:#1e75c5;
+  color:#2177c6;
 }
 
 
 /* =========================================================
-   作答區
+   答案區
    ========================================================= */
 
 .answer-area{
@@ -500,145 +387,98 @@ button:disabled{
 
 .answer-row{
   display:flex;
-
-  gap:11px;
+  gap:10px;
 }
 
 .answer-input{
   flex:1;
   min-width:0;
+  min-height:62px;
 
-  min-height:60px;
+  padding:12px 16px;
 
-  padding:12px 17px;
-
-  border:
-    2px solid
-    #d8e1dc;
-
+  border:2px solid #d7e1da;
   border-radius:15px;
 
   outline:none;
-
   background:#fcfefd;
 
-  font-size:24px;
+  font-size:23px;
   font-weight:800;
 }
 
 .answer-input:focus{
-  border-color:#54ad61;
-
-  box-shadow:
-    0 0 0 4px
-    rgba(69,170,84,.10);
+  border-color:#57ae63;
+  box-shadow:0 0 0 4px rgba(74,170,86,.10);
 }
 
 .submit-btn{
   flex:none;
-
   min-width:145px;
 
-  padding:10px 22px;
+  padding:10px 19px;
 
   border:none;
   border-radius:15px;
 
   color:white;
+  background:linear-gradient(135deg,#48b75a,#2d9b44);
 
-  background:
-    linear-gradient(
-      135deg,
-      #48b558,
-      #2e9a43
-    );
+  box-shadow:0 5px 13px rgba(44,149,64,.18);
 
-  box-shadow:
-    0 5px 13px
-    rgba(44,149,64,.20);
-
-  font-size:18px;
+  font-size:17px;
   font-weight:900;
 }
 
 .answer-tip{
   margin-top:7px;
-
   color:#909b95;
-
   font-size:12px;
 }
 
 .choice-grid{
   display:grid;
-
-  grid-template-columns:
-    repeat(
-      2,
-      minmax(0,1fr)
-    );
-
+  grid-template-columns:repeat(2,minmax(0,1fr));
   gap:10px;
 }
 
 .choice-btn{
   min-height:68px;
+  padding:10px 12px;
 
-  padding:10px 13px;
-
-  border:
-    2px solid
-    #dce5df;
-
+  border:2px solid #dce5df;
   border-radius:14px;
 
-  color:#33423a;
+  color:#334239;
   background:#fcfefd;
 
-  font-size:17px;
+  line-height:1.45;
+  font-size:16px;
   font-weight:800;
-
-  line-height:1.5;
-
-  transition:.15s;
 }
 
 .choice-btn:hover{
+  border-color:#74be7d;
   background:#f2faf3;
-
-  border-color:#73bf7d;
 }
 
 .symbol-grid{
   display:flex;
-
-  gap:14px;
+  gap:12px;
 }
 
 .symbol-btn{
   flex:1;
-
   max-width:130px;
+  min-height:70px;
 
-  min-height:72px;
+  border:2px solid #d8e2dc;
+  border-radius:15px;
 
-  border:
-    2px solid
-    #d8e2dc;
-
-  border-radius:16px;
-
-  color:#33423a;
   background:white;
 
-  font-size:36px;
+  font-size:34px;
   font-weight:900;
-}
-
-.symbol-btn:hover{
-  background:#eef8ef;
-
-  border-color:#6fba78;
 }
 
 
@@ -648,16 +488,11 @@ button:disabled{
 
 .feedback{
   display:none;
-
-  margin-top:20px;
-
+  margin-top:19px;
   overflow:hidden;
 
-  border:
-    1px solid
-    #e0e7e2;
-
-  border-radius:17px;
+  border:1px solid #dfe7e2;
+  border-radius:16px;
 }
 
 .feedback.show{
@@ -665,57 +500,43 @@ button:disabled{
 }
 
 .feedback-head{
-  padding:13px 17px;
-
-  font-size:20px;
+  padding:13px 16px;
+  font-size:19px;
   font-weight:900;
 }
 
 .feedback.correct{
-  border-color:#c8e8cd;
+  border-color:#c7e8cc;
 }
 
-.feedback.correct
-.feedback-head{
-  color:#268338;
-
+.feedback.correct .feedback-head{
+  color:#298438;
   background:#e9f8eb;
 }
 
 .feedback.wrong{
-  border-color:#f3c9c6;
+  border-color:#f2cbc8;
 }
 
-.feedback.wrong
-.feedback-head{
-  color:#d53f39;
-
+.feedback.wrong .feedback-head{
+  color:#d8423d;
   background:#fff0ee;
 }
 
 .feedback-body{
-  padding:17px;
-
+  padding:16px;
   background:#fff;
-
-  line-height:1.75;
+  line-height:1.7;
 }
 
-.user-answer-line{
-  margin-bottom:9px;
-
-  font-size:17px;
-}
-
+.user-answer-line,
 .correct-answer-line{
-  margin-bottom:14px;
-
+  margin-bottom:9px;
   font-size:17px;
 }
 
 .correct-answer{
-  color:#e44842;
-
+  color:#e44943;
   font-size:19px;
   font-weight:900;
 }
@@ -726,16 +547,8 @@ button:disabled{
    ========================================================= */
 
 .explanation-title{
-  display:flex;
-  align-items:center;
-
-  gap:7px;
-
-  margin:
-    12px 0
-    9px;
-
-  font-size:19px;
+  margin:12px 0 8px;
+  font-size:18px;
   font-weight:900;
 }
 
@@ -743,19 +556,11 @@ button:disabled{
   margin-bottom:10px;
 }
 
-.ex-step{
-  margin:8px 0;
-}
-
 .explain-step-card{
   margin:8px 0;
-
   padding:10px 12px;
 
-  border:
-    1px solid
-    #dce5df;
-
+  border:1px solid #dce5df;
   border-radius:12px;
 
   background:#fbfdfc;
@@ -763,21 +568,14 @@ button:disabled{
 
 .explain-step-title{
   margin-bottom:4px;
-
-  color:#325d8f;
-
+  color:#315d8e;
   font-size:15px;
   font-weight:900;
 }
 
-.explain-step-text{
-  font-size:16px;
-}
-
 .math-box{
   margin:8px 0;
-
-  padding:11px 14px;
+  padding:10px 13px;
 
   overflow:auto;
 
@@ -785,89 +583,59 @@ button:disabled{
 
   background:#f2f7f3;
 
-  font-size:19px;
+  font-size:18px;
   font-weight:900;
-
-  line-height:1.55;
 }
 
 .vertical{
   display:inline-block;
-
-  min-width:180px;
-
+  min-width:170px;
   margin:8px 0;
+  padding:12px 18px;
 
-  padding:13px 20px;
-
-  border:
-    1px solid
-    #d9e1dc;
-
+  border:1px solid #d9e1dc;
   border-radius:12px;
 
   background:#f8faf9;
 
-  font-family:
-    "Courier New",
-    monospace;
-
-  font-size:20px;
-  line-height:1.32;
-
+  font-family:"Courier New",monospace;
+  font-size:19px;
+  line-height:1.3;
   text-align:right;
-
   white-space:pre;
 }
 
 .vertical-sum{
   display:inline-block;
-
   margin:8px 0;
+  padding:12px 23px;
 
-  padding:12px 25px;
-
-  border:
-    1px solid
-    #f1d98a;
-
+  border:1px solid #efd98c;
   border-radius:12px;
 
   background:#fffaf0;
 
-  font-family:
-    "Courier New",
-    monospace;
-
-  font-size:20px;
-
+  font-family:"Courier New",monospace;
+  font-size:19px;
   line-height:1.38;
-
   text-align:right;
-
   white-space:pre;
 }
 
 .answer-highlight{
-  color:#d8423c;
-
+  color:#d9433d;
   font-weight:900;
 }
 
 .key-point{
   margin-top:10px;
+  padding:10px 12px;
 
-  padding:10px 13px;
-
-  border-left:
-    5px solid
-    #57ad62;
-
+  border-left:5px solid #58ad63;
   border-radius:8px;
 
+  color:#3e5945;
   background:#f3faf4;
-
-  color:#3e5944;
 }
 
 
@@ -877,15 +645,12 @@ button:disabled{
 
 .next-row{
   display:flex;
-
   justify-content:flex-end;
-
-  margin-top:17px;
+  margin-top:16px;
 }
 
 .next-btn{
   display:none;
-
   min-width:135px;
 
   padding:11px 18px;
@@ -894,17 +659,7 @@ button:disabled{
   border-radius:13px;
 
   color:white;
-
-  background:
-    linear-gradient(
-      135deg,
-      #3695ed,
-      #267dd2
-    );
-
-  box-shadow:
-    0 5px 13px
-    rgba(47,135,215,.20);
+  background:linear-gradient(135deg,#3895ed,#277ed3);
 
   font-size:17px;
   font-weight:900;
@@ -916,26 +671,21 @@ button:disabled{
 
 
 /* =========================================================
-   計算紙
+   右側計算紙
    ========================================================= */
 
 .scratch-card{
   position:sticky;
-
-  top:82px;
-
+  top:86px;
   overflow:hidden;
 }
 
 .scratch-header{
   display:flex;
   align-items:center;
-
-  padding:
-    15px 17px
-    10px;
-
   gap:10px;
+
+  padding:15px 17px 10px;
 }
 
 .scratch-header-text{
@@ -943,137 +693,92 @@ button:disabled{
 }
 
 .scratch-title{
-  font-size:20px;
+  font-size:21px;
   font-weight:900;
 }
 
 .scratch-subtitle{
   margin-top:2px;
-
-  color:#89958f;
-
+  color:#88958e;
   font-size:12px;
 }
 
 .scratch-tools{
   display:flex;
-
   gap:7px;
 }
 
 .tool-btn{
-  min-width:85px;
+  min-width:88px;
+  padding:8px 11px;
 
-  padding:8px 12px;
-
-  border:
-    1px solid
-    #d5ddd8;
-
+  border:1px solid #d4ded7;
   border-radius:10px;
 
   color:#536159;
   background:#fff;
 
-  font-size:14px;
+  font-size:13px;
   font-weight:800;
 }
 
 .tool-btn.active{
   color:white;
-
   border-color:#36a94d;
-
-  background:
-    linear-gradient(
-      135deg,
-      #45b758,
-      #2e9c46
-    );
+  background:linear-gradient(135deg,#47b85b,#2d9c45);
 }
 
 .tool-btn.clear{
-  color:#d84944;
+  color:#d74a45;
 }
 
 
-/* =========================================================
-   計算紙外框
-   禁止文字選取、長按、拖曳
-   ========================================================= */
-
+/*
+  計算紙外框
+*/
 .canvas-wrap{
-  margin:0 16px;
+  margin:0 15px;
 
   overflow:hidden;
 
-  border:
-    1px solid
-    #d9e2dc;
-
+  border:1px solid #d7e1dc;
   border-radius:15px;
 
   background:white;
 
   user-select:none;
   -webkit-user-select:none;
-
   -webkit-touch-callout:none;
-
   -webkit-user-drag:none;
 
   touch-action:none;
-
   overscroll-behavior:none;
 }
 
 .canvas-wrap *{
   user-select:none;
   -webkit-user-select:none;
-
   -webkit-touch-callout:none;
-
   -webkit-user-drag:none;
 }
 
 
-/* =========================================================
-   實際計算紙
-   ========================================================= */
-
+/*
+  這次把計算紙上下再加長。
+  寬度會自動佔右側整欄。
+*/
 #scratchCanvas{
   display:block;
 
   width:100%;
+  height:820px;
 
-  /*
-    上下加長
-  */
-  height:720px;
-
-  /*
-    觸控只能用於書寫，
-    不交給瀏覽器捲動或縮放
-  */
   touch-action:none;
-
   overscroll-behavior:none;
 
-  /*
-    禁止選字
-  */
   user-select:none;
   -webkit-user-select:none;
-
-  /*
-    iPad / iPhone 長按
-    不叫出系統選單
-  */
   -webkit-touch-callout:none;
-
-  /*
-    禁止拖曳
-  */
   -webkit-user-drag:none;
 
   cursor:crosshair;
@@ -1081,48 +786,107 @@ button:disabled{
   background-color:#fffefb;
 
   background-image:
-
     linear-gradient(
       #dce9ef 1px,
       transparent 1px
     ),
-
     linear-gradient(
       90deg,
       #dce9ef 1px,
       transparent 1px
     );
 
-  background-size:
-    31px 31px;
+  background-size:31px 31px;
 }
 
 .scratch-reminder{
-  margin:14px 16px 16px;
+  margin:13px 15px 15px;
+  padding:10px 12px;
 
-  padding:10px 13px;
-
-  border:
-    1px solid
-    #f0dc9d;
-
+  border:1px solid #f0dc9d;
   border-radius:11px;
 
-  color:#66582f;
-
+  color:#68592f;
   background:#fff9e7;
 
-  font-size:13px;
-
-  line-height:1.65;
+  font-size:12px;
+  line-height:1.6;
 }
 
 
 /* =========================================================
-   平板
+   iPad / 小型平板
+   保持左右兩欄
    ========================================================= */
 
-@media(max-width:1180px){
+@media(max-width:1100px){
+
+  .main{
+    padding:12px;
+  }
+
+  .layout{
+    grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);
+    gap:12px;
+  }
+
+  .control-card{
+    padding:13px;
+  }
+
+  .control-label{
+    width:78px;
+    font-size:13px;
+  }
+
+  .unit-btn{
+    min-height:52px;
+    font-size:12px;
+  }
+
+  .question-card{
+    padding:15px;
+  }
+
+  .question-text{
+    font-size:25px;
+  }
+
+  .answer-row{
+    display:block;
+  }
+
+  .submit-btn{
+    width:100%;
+    min-height:51px;
+    margin-top:8px;
+  }
+
+  .scratch-header{
+    display:block;
+  }
+
+  .scratch-tools{
+    margin-top:9px;
+  }
+
+  .tool-btn{
+    flex:1;
+    min-width:0;
+  }
+
+  #scratchCanvas{
+    height:760px;
+  }
+
+}
+
+
+/* =========================================================
+   只有真正較窄的手機才上下排列
+   ========================================================= */
+
+@media(max-width:760px){
 
   .layout{
     grid-template-columns:1fr;
@@ -1130,27 +894,6 @@ button:disabled{
 
   .scratch-card{
     position:static;
-  }
-
-  #scratchCanvas{
-    height:650px;
-  }
-
-}
-
-
-/* =========================================================
-   手機
-   ========================================================= */
-
-@media(max-width:760px){
-
-  .main{
-    padding:9px;
-  }
-
-  .top-inner{
-    padding:8px 10px;
   }
 
   .main-title{
@@ -1167,8 +910,7 @@ button:disabled{
 
   .header-stat{
     min-width:50px;
-
-    padding:5px 6px;
+    padding:5px;
   }
 
   .header-stat-number{
@@ -1185,7 +927,6 @@ button:disabled{
 
   .control-label{
     width:auto;
-
     margin-bottom:7px;
   }
 
@@ -1193,50 +934,15 @@ button:disabled{
     grid-template-columns:1fr;
   }
 
-  .question-card{
-    min-height:auto;
-
-    padding:14px;
-  }
-
-  .question-text{
-    font-size:24px;
-  }
-
-  .answer-row{
-    display:block;
-  }
-
-  .submit-btn{
-    width:100%;
-
-    min-height:54px;
-
-    margin-top:9px;
-  }
-
   .choice-grid{
     grid-template-columns:1fr;
   }
 
-  .scratch-header{
-    display:block;
-  }
-
-  .scratch-tools{
-    margin-top:10px;
-  }
-
-  .tool-btn{
-    flex:1;
-    min-width:0;
-  }
-
   #scratchCanvas{
-    height:540px;
+    height:560px;
   }
-
 }
+
 </style>
 </head>
 
@@ -1245,91 +951,80 @@ button:disabled{
 
 <header class="topbar">
 
-<div class="top-inner">
+  <div class="top-inner">
 
-  <div class="logo">
-    📖
-  </div>
-
-  <div class="title-area">
-
-    <div class="main-title">
-      四年級數學無限挑戰
+    <div class="logo">
+      📖
     </div>
 
-    <div class="main-subtitle">
-      第一單元：一億以內的數　｜　第二單元：乘法
-    </div>
+    <div class="title-area">
 
-  </div>
-
-
-  <div class="header-stats">
-
-    <div class="header-stat">
-
-      <div
-        id="totalStat"
-        class="header-stat-number">
-        0
+      <div class="main-title">
+        四年級數學無限挑戰
       </div>
 
-      <div class="header-stat-label">
-        作答
+      <div class="main-subtitle">
+        第一單元：一億以內的數　｜　第二單元：乘法
       </div>
 
     </div>
 
 
-    <div class="header-stat">
+    <div class="header-stats">
 
-      <div
-        id="correctStat"
-        class="header-stat-number">
-        0
+      <div class="header-stat">
+        <div
+          id="totalStat"
+          class="header-stat-number">
+          0
+        </div>
+        <div class="header-stat-label">
+          作答
+        </div>
       </div>
 
-      <div class="header-stat-label">
-        答對
+
+      <div class="header-stat">
+        <div
+          id="correctStat"
+          class="header-stat-number">
+          0
+        </div>
+        <div class="header-stat-label">
+          答對
+        </div>
       </div>
 
-    </div>
 
-
-    <div class="header-stat">
-
-      <div
-        id="accuracyStat"
-        class="header-stat-number">
-        0%
+      <div class="header-stat">
+        <div
+          id="accuracyStat"
+          class="header-stat-number">
+          0%
+        </div>
+        <div class="header-stat-label">
+          正確率
+        </div>
       </div>
 
-      <div class="header-stat-label">
-        正確率
-      </div>
 
-    </div>
-
-
-    <div class="header-stat">
-
-      <div
-        id="streakStat"
-        class="header-stat-number">
-        0
-      </div>
-
-      <div class="header-stat-label">
-        🔥連續
+      <div class="header-stat">
+        <div
+          id="streakStat"
+          class="header-stat-number">
+          0
+        </div>
+        <div class="header-stat-label">
+          🔥連續
+        </div>
       </div>
 
     </div>
 
   </div>
-
-</div>
 
 </header>
+
 
 
 <main class="main">
@@ -1351,7 +1046,6 @@ button:disabled{
     <div class="control-label">
       選擇單元：
     </div>
-
 
     <div class="unit-buttons">
 
@@ -1398,8 +1092,7 @@ button:disabled{
       練習模式：
     </div>
 
-    <select id="typeSelect">
-    </select>
+    <select id="typeSelect"></select>
 
   </div>
 
@@ -1417,7 +1110,6 @@ button:disabled{
       題
 
     </div>
-
 
     <div class="progress-wrap">
 
@@ -1441,24 +1133,18 @@ button:disabled{
     <div
       id="questionNo"
       class="question-number">
-
       第 1 題
-
     </div>
-
 
     <div
       id="typeName"
       class="type-name">
     </div>
 
-
     <div
       id="chapterLabel"
       class="chapter-label u1">
-
       第一單元
-
     </div>
 
   </div>
@@ -1485,7 +1171,6 @@ button:disabled{
       class="feedback-head">
     </div>
 
-
     <div
       id="feedbackBody"
       class="feedback-body">
@@ -1511,6 +1196,7 @@ button:disabled{
 </div>
 
 
+
 <!-- =====================================================
      右側計算紙
      ===================================================== -->
@@ -1526,7 +1212,7 @@ button:disabled{
       </div>
 
       <div class="scratch-subtitle">
-        計算紙內只用來書寫
+        題目在左邊，直接在右側計算
       </div>
 
     </div>
@@ -1578,10 +1264,11 @@ button:disabled{
 
   <div class="scratch-reminder">
 
-    💡 <b>小提醒：</b>
-    先在計算紙上想一想，再送出答案。
-    答錯時記得看看詳解，加深印象喔！
-    每次進入下一題時，計算紙會自動清空。
+    💡
+    <b>小提醒：</b>
+    先在計算紙上想一想，再送出答案；
+    答錯時記得看詳解。
+    進入下一題時，計算紙會自動清空。
 
   </div>
 
@@ -1593,12 +1280,13 @@ button:disabled{
 </main>
 
 
+
 <script>
 "use strict";
 
 
 /* =========================================================
-   共用工具
+   基本工具
    ========================================================= */
 
 function randInt(min,max){
@@ -1639,7 +1327,6 @@ function shuffle(arr){
         (i+1)
       );
 
-
     [
       a[i],
       a[j]
@@ -1665,11 +1352,7 @@ function formatNum(n){
 }
 
 
-function clamp(
-  n,
-  min,
-  max
-){
+function clamp(n,min,max){
 
   return Math.max(
     min,
@@ -1698,13 +1381,11 @@ function trailingZeros(n){
       Math.abs(n)
     );
 
-  const m=
-    s.match(
-      /0+$/
-    );
+  const match=
+    s.match(/0+$/);
 
-  return m
-    ? m[0].length
+  return match
+    ? match[0].length
     : 0;
 
 }
@@ -1714,30 +1395,11 @@ function escapeHTML(str){
 
   return String(str)
 
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-
-    .replace(
-      /</g,
-      "&lt;"
-    )
-
-    .replace(
-      />/g,
-      "&gt;"
-    )
-
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-
-    .replace(
-      /'/g,
-      "&#039;"
-    );
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 
 }
 
@@ -1747,43 +1409,25 @@ function escapeHTML(str){
    ========================================================= */
 
 const CN_DIGITS=[
-
-  "零",
-  "一",
-  "二",
-  "三",
-  "四",
-
-  "五",
-  "六",
-  "七",
-  "八",
-  "九"
-
+  "零","一","二","三","四",
+  "五","六","七","八","九"
 ];
 
 
 function sectionToChinese(num){
 
   if(num===0){
-
     return "";
-
   }
 
-
   const units=[
-
     "",
     "十",
     "百",
     "千"
-
   ];
 
-
   let result="";
-
   let zeroPending=false;
 
 
@@ -1798,7 +1442,6 @@ function sectionToChinese(num){
         10,
         pos
       );
-
 
     const digit=
       Math.floor(
@@ -1824,7 +1467,6 @@ function sectionToChinese(num){
       if(zeroPending){
 
         result+="零";
-
         zeroPending=false;
 
       }
@@ -1843,14 +1485,12 @@ function sectionToChinese(num){
 
       }
 
-
       result+=
         units[pos];
 
     }
 
   }
-
 
   return result;
 
@@ -1866,28 +1506,7 @@ function numberToChinese(n){
 
 
   if(n===0){
-
     return "零";
-
-  }
-
-
-  if(n<0){
-
-    return "負"+
-      numberToChinese(
-        -n
-      );
-
-  }
-
-
-  if(
-    n>=100000000
-  ){
-
-    return String(n);
-
   }
 
 
@@ -1895,7 +1514,6 @@ function numberToChinese(n){
     Math.floor(
       n/10000
     );
-
 
   const low=
     n%10000;
@@ -1951,90 +1569,75 @@ const typeSelect=
     "typeSelect"
   );
 
-
 const questionText=
   document.getElementById(
     "questionText"
   );
-
 
 const typeName=
   document.getElementById(
     "typeName"
   );
 
-
 const answerArea=
   document.getElementById(
     "answerArea"
   );
-
 
 const feedback=
   document.getElementById(
     "feedback"
   );
 
-
 const feedbackHead=
   document.getElementById(
     "feedbackHead"
   );
-
 
 const feedbackBody=
   document.getElementById(
     "feedbackBody"
   );
 
-
 const nextBtn=
   document.getElementById(
     "nextBtn"
   );
-
 
 const chapterLabel=
   document.getElementById(
     "chapterLabel"
   );
 
-
 const questionNo=
   document.getElementById(
     "questionNo"
   );
-
 
 const totalStat=
   document.getElementById(
     "totalStat"
   );
 
-
 const correctStat=
   document.getElementById(
     "correctStat"
   );
-
 
 const accuracyStat=
   document.getElementById(
     "accuracyStat"
   );
 
-
 const streakText=
   document.getElementById(
     "streakText"
   );
 
-
 const streakStat=
   document.getElementById(
     "streakStat"
   );
-
 
 const progressBar=
   document.getElementById(
@@ -2067,135 +1670,66 @@ let stats={
 
 
 /* =========================================================
-   題型設定
+   題型
    ========================================================= */
 
 const UNIT1_TYPES=[
 
-  [
-    "all",
-    "全部題型"
-  ],
+  ["all","全部題型"],
 
-  [
-    "u1_place",
-    "位值與數字代表多少"
-  ],
+  ["u1_place","位值與數字代表多少"],
 
-  [
-    "u1_compose",
-    "大數化聚"
-  ],
+  ["u1_compose","大數化聚"],
 
-  [
-    "u1_sequence",
-    "數詞序列"
-  ],
+  ["u1_sequence","數詞序列"],
 
-  [
-    "u1_read",
-    "大數讀法"
-  ],
+  ["u1_read","大數讀法"],
 
-  [
-    "u1_write",
-    "中文數字寫成數字"
-  ],
+  ["u1_write","中文數字寫成數字"],
 
-  [
-    "u1_family",
-    "萬的家族與一的家族"
-  ],
+  ["u1_family","萬的家族與一的家族"],
 
-  [
-    "u1_compare",
-    "大數大小比較"
-  ],
+  ["u1_compare","大數大小比較"],
 
-  [
-    "u1_addsub",
-    "大數加減"
-  ],
+  ["u1_addsub","大數加減"],
 
-  [
-    "u1_wanAddSub",
-    "以萬為單位加減"
-  ],
+  ["u1_wanAddSub","以萬為單位加減"],
 
-  [
-    "u1_app",
-    "生活應用題"
-  ]
+  ["u1_app","生活應用題"]
 
 ];
 
 
 const UNIT2_TYPES=[
 
-  [
-    "all",
-    "全部題型"
-  ],
+  ["all","全部題型"],
 
-  [
-    "u2_4x1",
-    "四位數 × 一位數"
-  ],
+  ["u2_4x1","四位數 × 一位數"],
 
-  [
-    "u2_x2",
-    "乘以二位數"
-  ],
+  ["u2_x2","乘以二位數"],
 
-  [
-    "u2_x3",
-    "乘以三位數"
-  ],
+  ["u2_x3","乘以三位數"],
 
-  [
-    "u2_tens",
-    "乘以整十／整百"
-  ],
+  ["u2_tens","乘以整十／整百"],
 
-  [
-    "u2_zero",
-    "乘法中 0 的規律"
-  ],
+  ["u2_zero","乘法中 0 的規律"],
 
-  [
-    "u2_relation",
-    "乘法關係推理"
-  ],
+  ["u2_relation","乘法關係推理"],
 
-  [
-    "u2_method",
-    "判斷正確算法"
-  ],
+  ["u2_method","判斷正確算法"],
 
-  [
-    "u2_app",
-    "乘法生活應用題"
-  ]
+  ["u2_app","乘法生活應用題"]
 
 ];
 
 
 const MIX_TYPES=[
 
-  [
-    "all",
-    "第一、二單元全部混合"
-  ],
+  ["all","第一、二單元全部混合"],
 
-  [
-    "unit1",
-    "只抽第一單元"
-  ],
+  ["unit1","只抽第一單元"],
 
-  [
-    "unit2",
-    "只抽第二單元"
-  ]
+  ["unit2","只抽第二單元"]
 
 ];
 
@@ -2205,9 +1739,7 @@ const MIX_TYPES=[
    ========================================================= */
 
 document
-.querySelectorAll(
-  ".unit-btn"
-)
+.querySelectorAll(".unit-btn")
 .forEach(btn=>{
 
   btn.addEventListener(
@@ -2251,11 +1783,7 @@ document
 typeSelect
 .addEventListener(
   "change",
-  ()=>{
-
-    newQuestion();
-
-  }
+  newQuestion
 );
 
 
@@ -2264,9 +1792,7 @@ function buildTypeSelect(){
   let data;
 
 
-  if(
-    currentUnit==="1"
-  ){
+  if(currentUnit==="1"){
 
     data=
       UNIT1_TYPES;
@@ -2302,14 +1828,11 @@ function buildTypeSelect(){
           "option"
         );
 
-
       option.value=
         value;
 
-
       option.textContent=
         label;
-
 
       typeSelect
       .appendChild(
@@ -2362,10 +1885,7 @@ function genU1Place(){
     const digit=
       Math.floor(
         n/
-        Math.pow(
-          10,
-          p
-        )
+        Math.pow(10,p)
       )%10;
 
 
@@ -2373,9 +1893,9 @@ function genU1Place(){
 
       valid.push({
 
-        p:p,
+        p,
 
-        digit:digit,
+        digit,
 
         value:
           digit*
@@ -2430,9 +1950,8 @@ function genU1Place(){
       </div>
 
       <div class="explanation-intro">
-        先看這個數字在什麼位值。
+        先找出這個數字所在的位值。
       </div>
-
 
       <div class="explain-step-card">
 
@@ -2440,39 +1959,35 @@ function genU1Place(){
           ① 找位值
         </div>
 
-        <div class="explain-step-text">
+        ${x.digit}
+        在
+        <b>${positions[x.p]}</b>，
 
-          ${x.digit}
-          在
-          <b>${positions[x.p]}</b>，
+        每 1 個表示
 
-          每 1 個代表
-
-          ${formatNum(placeValue)}。
-
-        </div>
+        ${formatNum(placeValue)}。
 
       </div>
-
 
       <div class="explain-step-card">
 
         <div class="explain-step-title">
-          ② 算出它表示多少
+          ② 算出表示的數量
         </div>
 
-        <div class="explain-step-text">
+        ${x.digit}
 
-          ${x.digit}
-          ×
-          ${formatNum(placeValue)}
-          ＝
-          <b>${formatNum(x.value)}</b>
+        ×
 
-        </div>
+        ${formatNum(placeValue)}
+
+        ＝
+
+        <b>
+          ${formatNum(x.value)}
+        </b>
 
       </div>
-
 
       <div class="key-point">
 
@@ -2584,10 +2099,10 @@ function genU1Compose(){
       "number",
 
     question:
+
       `${parts.join("、")}合起來是多少？`,
 
-    answer:
-      answer,
+    answer,
 
     explanation:`
 
@@ -2595,14 +2110,9 @@ function genU1Compose(){
         📘 詳解
       </div>
 
-
       <div class="explanation-intro">
-
-        每個數量要放在正確的位值上，
-        再合起來。
-
+        把每個數字放到正確的位值。
       </div>
-
 
       <div class="math-box">
 
@@ -2617,10 +2127,9 @@ function genU1Compose(){
 
       </div>
 
-
       <div class="key-point">
 
-        合起來是
+        所以合起來是
 
         <span class="answer-highlight">
           ${formatNum(answer)}
@@ -2650,34 +2159,17 @@ function genU1Sequence(){
     ]);
 
 
-  let start;
+  let start=
+    randInt(
+      10000,
+      90000000
+    );
 
 
-  if(step===10000){
-
-    start=
-      randInt(
-        2,
-        8000
-      )*10000;
-
-  }
-
-  else{
-
-    start=
-      randInt(
-        10000,
-        90000000
-      );
-
-
-    start=
-      Math.floor(
-        start/step
-      )*step;
-
-  }
+  start=
+    Math.floor(
+      start/step
+    )*step;
 
 
   const direction=
@@ -2744,7 +2236,6 @@ function genU1Sequence(){
         📘 詳解
       </div>
 
-
       <div class="explain-step-card">
 
         <div class="explain-step-title">
@@ -2765,12 +2256,7 @@ function genU1Sequence(){
 
       </div>
 
-
-      <div class="explain-step-card">
-
-        <div class="explain-step-title">
-          ② 接著計算
-        </div>
+      <div class="math-box">
 
         ${formatNum(c)}
 
@@ -2784,14 +2270,13 @@ function genU1Sequence(){
 
         ＝
 
-        <b>${formatNum(d)}</b>
+        ${formatNum(d)}
 
       </div>
 
-
       <div class="key-point">
 
-        所以空格是
+        所以答案是
 
         <span class="answer-highlight">
           ${formatNum(d)}
@@ -2806,7 +2291,7 @@ function genU1Sequence(){
 
 
 /* =========================================================
-   第一單元：大數讀法
+   大數讀法
    ========================================================= */
 
 function makeReadDistractors(n){
@@ -2833,7 +2318,6 @@ function makeReadDistractors(n){
       )
     );
 
-
     arr.push(
       correct.replace(
         /零/g,
@@ -2844,18 +2328,13 @@ function makeReadDistractors(n){
   }
 
 
-  const candidates=[
-
+  [
     n+10000,
     n-10000,
     n+1000,
-    n-1000,
-    n+100
-
-  ];
-
-
-  candidates.forEach(x=>{
+    n-1000
+  ]
+  .forEach(x=>{
 
     if(
       x>=10000 &&
@@ -2880,55 +2359,36 @@ function makeReadDistractors(n){
 
 function genU1Read(){
 
-  let n;
+  const wan=
+    randInt(
+      10,
+      9999
+    );
 
 
-  if(
-    Math.random()<.55
-  ){
+  const low=
+    pick([
 
-    const wan=
-      randInt(
-        10,
-        9999
-      );
+      randInt(1,99),
 
+      randInt(100,999),
 
-    const low=
-      pick([
+      randInt(1000,9999),
 
-        randInt(1,99),
+      randInt(1,9)*1000
 
-        randInt(100,999),
-
-        randInt(1000,9999),
-
-        randInt(1,9)*1000,
-
-        randInt(1,9)*100
-
-      ]);
+    ]);
 
 
-    n=
-      wan*10000+
-      low;
-
-  }
-
-  else{
-
-    n=
-      randInt(
-        10000,
-        99999999
-      );
-
-  }
+  const n=
+    wan*10000+
+    low;
 
 
   const correct=
-    numberToChinese(n);
+    numberToChinese(
+      n
+    );
 
 
   let choices=
@@ -2986,16 +2446,6 @@ function genU1Read(){
     );
 
 
-  const wan=
-    Math.floor(
-      n/10000
-    );
-
-
-  const one=
-    n%10000;
-
-
   return{
 
     unit:1,
@@ -3012,8 +2462,7 @@ function genU1Read(){
       +
       `正確的讀法是哪一個？`,
 
-    choices:
-      choices,
+    choices,
 
     answer:
       correct,
@@ -3024,26 +2473,20 @@ function genU1Read(){
         📘 詳解
       </div>
 
-
       <div class="explanation-intro">
 
-        大數報讀時，
-        可以由右往左每 4 位分成一組。
+        大數可以由右往左，
+        每 4 位分成一組。
 
       </div>
 
-
       <div class="math-box">
 
-        ${wan}
+        ${Math.floor(n/10000)}
 
         ｜
 
-        ${String(one)
-          .padStart(
-            4,
-            "0"
-          )}
+        ${String(n%10000).padStart(4,"0")}
 
         <br>
 
@@ -3053,39 +2496,10 @@ function genU1Read(){
 
       </div>
 
-
       <div class="explain-step-card">
 
-        <div class="explain-step-title">
-          ① 先讀萬的家族
-        </div>
-
-        ${wan}
-
-        讀作
-
-        <b>
-          ${sectionToChinese(wan)}
-        </b>，
-
-        再加上「萬」。
-
-      </div>
-
-
-      <div class="explain-step-card">
-
-        <div class="explain-step-title">
-          ② 再讀一的家族
-        </div>
-
-        ${String(one)
-          .padStart(
-            4,
-            "0"
-          )}
-
-        依照千、百、十、個位來讀。
+        先讀萬的家族，
+        再讀一的家族。
 
         <br>
 
@@ -3093,7 +2507,6 @@ function genU1Read(){
         不需要一個一個念。
 
       </div>
-
 
       <div class="key-point">
 
@@ -3112,66 +2525,33 @@ function genU1Read(){
 
 
 /* =========================================================
-   第一單元：中文數字寫成數字
+   中文寫數字
    ========================================================= */
 
 function genU1Write(){
 
-  let n;
-
-
-  if(
-    Math.random()<.55
-  ){
-
-    const wan=
-      randInt(
-        10,
-        9999
-      );
-
-
-    const low=
-      pick([
-
-        randInt(1,99),
-
-        randInt(100,999),
-
-        randInt(1000,9999)
-
-      ]);
-
-
-    n=
-      wan*10000+
-      low;
-
-  }
-
-  else{
-
-    n=
-      randInt(
-        10000,
-        99999999
-      );
-
-  }
-
-
-  const cn=
-    numberToChinese(n);
-
-
   const wan=
-    Math.floor(
-      n/10000
+    randInt(
+      10,
+      9999
     );
 
 
-  const one=
-    n%10000;
+  const low=
+    pick([
+
+      randInt(1,99),
+
+      randInt(100,999),
+
+      randInt(1000,9999)
+
+    ]);
+
+
+  const n=
+    wan*10000+
+    low;
 
 
   return{
@@ -3186,25 +2566,17 @@ function genU1Write(){
 
     question:
 
-      `「<span class="number-highlight">${cn}</span>」記作多少？`,
+      `「<span class="number-highlight">${numberToChinese(n)}</span>」`
+      +
+      `記作多少？`,
 
-    answer:
-      n,
+    answer:n,
 
     explanation:`
 
       <div class="explanation-title">
         📘 詳解
       </div>
-
-
-      <div class="explanation-intro">
-
-        可以把大數分成
-        「萬的家族」和「一的家族」。
-
-      </div>
-
 
       <div class="math-box">
 
@@ -3213,11 +2585,10 @@ function genU1Write(){
 
         ＋
 
-        ${one}
+        ${low}
         個一
 
       </div>
-
 
       <div class="math-box">
 
@@ -3227,14 +2598,13 @@ function genU1Write(){
 
         ＋
 
-        ${one}
+        ${low}
 
         ＝
 
         ${formatNum(n)}
 
       </div>
-
 
       <div class="key-point">
 
@@ -3253,7 +2623,7 @@ function genU1Write(){
 
 
 /* =========================================================
-   第一單元：萬與一
+   萬的家族與一的家族
    ========================================================= */
 
 function genU1Family(){
@@ -3264,151 +2634,15 @@ function genU1Family(){
       9999
     );
 
-
   const one=
     randInt(
       0,
       9999
     );
 
-
   const n=
     wan*10000+
     one;
-
-
-  const mode=
-    pick([
-      "whole",
-      "wan",
-      "one"
-    ]);
-
-
-  if(
-    mode==="wan"
-  ){
-
-    return{
-
-      unit:1,
-
-      type:
-        "萬的家族與一的家族",
-
-      answerType:
-        "number",
-
-      question:
-
-        `「${formatNum(n)}」`
-        +
-        `可以分成幾個萬和 ${one} 個一？`,
-
-      answer:
-        wan,
-
-      explanation:`
-
-        <div class="explanation-title">
-          📘 詳解
-        </div>
-
-
-        <div class="math-box">
-
-          ${formatNum(n)}
-
-          ＝
-
-          ${wan}
-          個萬
-
-          ＋
-
-          ${one}
-          個一
-
-        </div>
-
-
-        <div class="key-point">
-
-          所以有
-
-          <span class="answer-highlight">
-            ${wan} 個萬
-          </span>。
-
-        </div>
-      `
-
-    };
-
-  }
-
-
-  if(
-    mode==="one"
-  ){
-
-    return{
-
-      unit:1,
-
-      type:
-        "萬的家族與一的家族",
-
-      answerType:
-        "number",
-
-      question:
-
-        `「${formatNum(n)}」`
-        +
-        `可以分成 ${wan} 個萬和幾個一？`,
-
-      answer:
-        one,
-
-      explanation:`
-
-        <div class="explanation-title">
-          📘 詳解
-        </div>
-
-
-        <div class="math-box">
-
-          ${formatNum(n)}
-
-          ＝
-
-          ${wan}
-          個萬
-
-          ＋
-
-          ${one}
-          個一
-
-        </div>
-
-
-        <div class="key-point">
-
-          一的家族是
-
-          <span class="answer-highlight">
-            ${one}
-          </span>。
-
-        </div>
-      `
-
-    };
-
-  }
 
 
   return{
@@ -3425,8 +2659,7 @@ function genU1Family(){
 
       `${wan} 個萬和 ${one} 個一合起來是多少？`,
 
-    answer:
-      n,
+    answer:n,
 
     explanation:`
 
@@ -3434,26 +2667,11 @@ function genU1Family(){
         📘 詳解
       </div>
 
-
       <div class="math-box">
 
         ${wan}
-        個萬
-
-        ＝
-
-        ${formatNum(
-          wan*10000
-        )}
-
-      </div>
-
-
-      <div class="math-box">
-
-        ${formatNum(
-          wan*10000
-        )}
+        ×
+        10000
 
         ＋
 
@@ -3465,10 +2683,9 @@ function genU1Family(){
 
       </div>
 
-
       <div class="key-point">
 
-        答案是
+        所以答案是
 
         <span class="answer-highlight">
           ${formatNum(n)}
@@ -3483,89 +2700,8 @@ function genU1Family(){
 
 
 /* =========================================================
-   第一單元：大小比較
+   比較大小
    ========================================================= */
-
-function compareReason(
-  a,
-  b
-){
-
-  if(a===b){
-
-    return`
-
-      左右兩個數完全相同，
-      所以填「＝」。
-
-    `;
-
-  }
-
-
-  const sa=
-    String(a);
-
-  const sb=
-    String(b);
-
-
-  if(
-    sa.length!==
-    sb.length
-  ){
-
-    return`
-
-      先比較位數。
-
-      ${formatNum(a)}
-      有 ${sa.length} 位，
-
-      ${formatNum(b)}
-      有 ${sb.length} 位。
-
-      位數較多的數比較大。
-
-    `;
-
-  }
-
-
-  let index=0;
-
-
-  while(
-    index<sa.length &&
-    sa[index]===
-    sb[index]
-  ){
-
-    index++;
-
-  }
-
-
-  return`
-
-    兩個數的位數相同，
-    所以從最高位開始比較。
-
-    前面的數字都相同，
-    比到第一個不同的位值時，
-
-    ${sa[index]}
-
-    和
-
-    ${sb[index]}
-
-    就能決定大小。
-
-  `;
-
-}
-
 
 function genU1Compare(){
 
@@ -3575,61 +2711,15 @@ function genU1Compare(){
       99999999
     );
 
-
-  let b;
-
-
-  if(
-    Math.random()<.55
-  ){
-
-    const power=
-      Math.pow(
-        10,
-        randInt(
-          0,
-          6
-        )
-      );
-
-
-    b=
-      a+
-      pick([
-        -1,
-        1
-      ])
-      *
-      randInt(
-        1,
-        9
-      )
-      *
-      power;
-
-
-    b=
-      clamp(
-        b,
-        10000,
-        99999999
-      );
-
-  }
-
-  else{
-
-    b=
-      randInt(
-        10000,
-        99999999
-      );
-
-  }
+  let b=
+    randInt(
+      10000,
+      99999999
+    );
 
 
   if(
-    Math.random()<.07
+    Math.random()<.08
   ){
 
     b=a;
@@ -3665,8 +2755,7 @@ function genU1Compare(){
       +
       `<span class="number-highlight">${formatNum(b)}</span>`,
 
-    answer:
-      answer,
+    answer,
 
     explanation:`
 
@@ -3674,16 +2763,16 @@ function genU1Compare(){
         📘 詳解
       </div>
 
-
       <div class="explain-step-card">
 
-        ${compareReason(
-          a,
-          b
-        )}
+        先比較位數。
+
+        <br>
+
+        位數相同時，
+        從最高位開始依序比較。
 
       </div>
-
 
       <div class="math-box">
 
@@ -3694,7 +2783,6 @@ function genU1Compare(){
         ${formatNum(b)}
 
       </div>
-
 
       <div class="key-point">
 
@@ -3713,7 +2801,7 @@ function genU1Compare(){
 
 
 /* =========================================================
-   第一單元：加減直式
+   大數加減
    ========================================================= */
 
 function verticalAddSub(
@@ -3725,13 +2813,9 @@ function verticalAddSub(
 
   const width=
     Math.max(
-
       String(a).length,
-
       String(b).length+1,
-
       String(answer).length
-
     );
 
 
@@ -3768,13 +2852,11 @@ function genU1AddSub(){
         60000000
       );
 
-
     b=
       randInt(
         10000,
         99999999-a
       );
-
 
     answer=
       a+b;
@@ -3789,13 +2871,11 @@ function genU1AddSub(){
         99999999
       );
 
-
     b=
       randInt(
         10000,
         a
       );
-
 
     answer=
       a-b;
@@ -3823,8 +2903,7 @@ function genU1AddSub(){
       +
       ` ＝ □`,
 
-    answer:
-      answer,
+    answer,
 
     explanation:`
 
@@ -3832,45 +2911,21 @@ function genU1AddSub(){
         📘 詳解
       </div>
 
-
       <div class="explanation-intro">
 
-        大數加減的直式，
-        和以前學過的加減法一樣，
-
-        相同位值要上下對齊。
+        相同位值要上下對齊，
+        再依序計算。
 
       </div>
-
-
-      <div class="explain-step-card">
-
-        <div class="explain-step-title">
-          ① 位值對齊
-        </div>
-
-        個位對個位、
-        十位對十位、
-        百位對百位、
-        千位對千位，
-        再依序往高位計算。
-
-      </div>
-
 
       ${
         verticalAddSub(
-
           a,
           b,
-
           op==="+" ? "+" : "-",
-
           answer
-
         )
       }
-
 
       <div class="key-point">
 
@@ -3889,7 +2944,7 @@ function genU1AddSub(){
 
 
 /* =========================================================
-   第一單元：以萬為單位
+   以萬為單位
    ========================================================= */
 
 function genU1WanAddSub(){
@@ -3902,7 +2957,6 @@ function genU1WanAddSub(){
 
   let aWan;
   let bWan;
-  let answerWan;
 
 
   if(op==="+"){
@@ -3910,19 +2964,14 @@ function genU1WanAddSub(){
     aWan=
       randInt(
         100,
-        6000
+        5000
       );
-
 
     bWan=
       randInt(
         10,
-        9999-aWan
+        4000
       );
-
-
-    answerWan=
-      aWan+bWan;
 
   }
 
@@ -3930,10 +2979,9 @@ function genU1WanAddSub(){
 
     aWan=
       randInt(
-        100,
-        9999
+        500,
+        9000
       );
-
 
     bWan=
       randInt(
@@ -3941,26 +2989,23 @@ function genU1WanAddSub(){
         aWan
       );
 
-
-    answerWan=
-      aWan-bWan;
-
   }
 
 
-  const a=
-    aWan*
-    10000;
+  const answerWan=
+    op==="+"
+    ? aWan+bWan
+    : aWan-bWan;
 
+
+  const a=
+    aWan*10000;
 
   const b=
-    bWan*
-    10000;
-
+    bWan*10000;
 
   const answer=
-    answerWan*
-    10000;
+    answerWan*10000;
 
 
   return{
@@ -3983,8 +3028,7 @@ function genU1WanAddSub(){
       +
       ` ＝ □`,
 
-    answer:
-      answer,
+    answer,
 
     explanation:`
 
@@ -3992,35 +3036,17 @@ function genU1WanAddSub(){
         📘 詳解
       </div>
 
-
       <div class="explanation-intro">
 
         兩個數都是整萬，
-        可以先看成「幾個萬」來計算。
+        可以先看成幾個萬。
 
       </div>
-
-
-      <div class="explain-step-card">
-
-        <div class="explain-step-title">
-          ① 改用「萬」為單位
-        </div>
-
-        ${formatNum(a)}
-        是
-        ${aWan} 萬；
-
-        ${formatNum(b)}
-        是
-        ${bWan} 萬。
-
-      </div>
-
 
       <div class="math-box">
 
-        ${aWan} 萬
+        ${aWan}
+        萬
 
         ${
           op==="+"
@@ -4028,25 +3054,26 @@ function genU1WanAddSub(){
           : "－"
         }
 
-        ${bWan} 萬
+        ${bWan}
+        萬
 
         ＝
 
-        ${answerWan} 萬
+        ${answerWan}
+        萬
 
       </div>
 
-
       <div class="math-box">
 
-        ${answerWan} 萬
+        ${answerWan}
+        萬
 
         ＝
 
         ${formatNum(answer)}
 
       </div>
-
 
       <div class="key-point">
 
@@ -4065,192 +3092,105 @@ function genU1WanAddSub(){
 
 
 /* =========================================================
-   第一單元：生活題
+   第一單元生活題
    ========================================================= */
 
 function genU1App(){
 
-  const templates=[
+  const isAdd=
+    Math.random()<.5;
 
 
-    ()=>{
+  if(isAdd){
 
-      const a=
-        randInt(
-          120000,
-          8000000
-        );
+    const a=
+      randInt(
+        200000,
+        8000000
+      );
 
+    const b=
+      randInt(
+        100000,
+        5000000
+      );
 
-      const b=
-        randInt(
-          100000,
-          5000000
-        );
 
+    return{
 
-      return{
+      unit:1,
 
-        text:
+      type:
+        "生活應用題",
 
-          `某城市去年有 ${formatNum(a)} 人，`
-          +
-          `今年增加 ${formatNum(b)} 人，`
-          +
-          `今年共有多少人？`,
+      answerType:
+        "number",
 
-        a:a,
+      question:
 
-        b:b,
+        `某城市原有 ${formatNum(a)} 人，`
+        +
+        `今年增加 ${formatNum(b)} 人，`
+        +
+        `現在共有多少人？`,
 
-        op:"+",
+      answer:
+        a+b,
 
-        answer:
-          a+b,
+      explanation:`
 
-        unitWord:
-          "人"
+        <div class="explanation-title">
+          📘 詳解
+        </div>
 
-      };
+        <div class="explain-step-card">
 
-    },
+          求合起來共有多少，
+          所以使用加法。
 
+        </div>
 
-    ()=>{
+        <div class="math-box">
 
-      const a=
-        randInt(
-          2000000,
-          90000000
-        );
+          ${formatNum(a)}
 
+          ＋
 
-      const b=
-        randInt(
-          100000,
-          a-1
-        );
+          ${formatNum(b)}
 
+          ＝
 
-      return{
+          ${formatNum(a+b)}
 
-        text:
+        </div>
 
-          `甲地人口有 ${formatNum(a)} 人，`
-          +
-          `乙地人口有 ${formatNum(b)} 人，`
-          +
-          `甲地比乙地多多少人？`,
+        <div class="key-point">
 
-        a:a,
+          答：
 
-        b:b,
+          <span class="answer-highlight">
+            ${formatNum(a+b)} 人
+          </span>
 
-        op:"-",
+        </div>
+      `
 
-        answer:
-          a-b,
+    };
 
-        unitWord:
-          "人"
+  }
 
-      };
 
-    },
+  const a=
+    randInt(
+      2000000,
+      90000000
+    );
 
-
-    ()=>{
-
-      const a=
-        randInt(
-          500000,
-          40000000
-        );
-
-
-      const b=
-        randInt(
-          100000,
-          20000000
-        );
-
-
-      return{
-
-        text:
-
-          `圖書館原有 ${formatNum(a)} 本書，`
-          +
-          `又增加 ${formatNum(b)} 本，`
-          +
-          `現在共有多少本書？`,
-
-        a:a,
-
-        b:b,
-
-        op:"+",
-
-        answer:
-          a+b,
-
-        unitWord:
-          "本"
-
-      };
-
-    },
-
-
-    ()=>{
-
-      const a=
-        randInt(
-          1000000,
-          50000000
-        );
-
-
-      const b=
-        randInt(
-          100000,
-          a-1
-        );
-
-
-      return{
-
-        text:
-
-          `活動準備了 ${formatNum(a)} 張票，`
-          +
-          `已經送出 ${formatNum(b)} 張，`
-          +
-          `還剩多少張？`,
-
-        a:a,
-
-        b:b,
-
-        op:"-",
-
-        answer:
-          a-b,
-
-        unitWord:
-          "張"
-
-      };
-
-    }
-
-  ];
-
-
-  const q=
-    pick(
-      templates
-    )();
+  const b=
+    randInt(
+      100000,
+      a-1
+    );
 
 
   return{
@@ -4264,10 +3204,15 @@ function genU1App(){
       "number",
 
     question:
-      q.text,
+
+      `甲地人口有 ${formatNum(a)} 人，`
+      +
+      `乙地人口有 ${formatNum(b)} 人，`
+      +
+      `甲地比乙地多多少人？`,
 
     answer:
-      q.answer,
+      a-b,
 
     explanation:`
 
@@ -4275,52 +3220,33 @@ function genU1App(){
         📘 詳解
       </div>
 
-
       <div class="explain-step-card">
 
-        <div class="explain-step-title">
-          ① 判斷運算
-        </div>
-
-        ${
-          q.op==="+"
-          ?
-          "題目是把兩部分合起來，所以使用加法。"
-          :
-          "題目要求剩下或相差多少，所以使用減法。"
-        }
+        求兩個數相差多少，
+        所以使用減法。
 
       </div>
-
 
       <div class="math-box">
 
-        ${formatNum(q.a)}
+        ${formatNum(a)}
 
-        ${
-          q.op==="+"
-          ? "＋"
-          : "－"
-        }
+        －
 
-        ${formatNum(q.b)}
+        ${formatNum(b)}
 
         ＝
 
-        ${formatNum(q.answer)}
+        ${formatNum(a-b)}
 
       </div>
-
 
       <div class="key-point">
 
         答：
 
         <span class="answer-highlight">
-
-          ${formatNum(q.answer)}
-          ${q.unitWord}
-
+          ${formatNum(a-b)} 人
         </span>
 
       </div>
@@ -4332,8 +3258,7 @@ function genU1App(){
 
 
 /* =========================================================
-   第二單元共用：
-   乘數位值拆解
+   第二單元共用
    ========================================================= */
 
 function getMultiplicationParts(
@@ -4349,12 +3274,10 @@ function getMultiplicationParts(
 
 
   const placeNames=[
-
     "個位",
     "十位",
     "百位",
     "千位"
-
   ];
 
 
@@ -4370,11 +3293,11 @@ function getMultiplicationParts(
 
       return{
 
-        index:index,
+        index,
 
-        digit:digit,
+        digit,
 
-        place:place,
+        place,
 
         placeName:
           placeNames[index]
@@ -4402,10 +3325,6 @@ function getMultiplicationParts(
 }
 
 
-/* =========================================================
-   各部分合起來
-   ========================================================= */
-
 function buildPartialSumVertical(
   parts,
   answer
@@ -4425,15 +3344,11 @@ function buildPartialSumVertical(
 
   const width=
     Math.max(
-
       8,
-
       ...texts.map(
-        t=>t.length
+        x=>x.length
       ),
-
       formatNum(answer).length
-
     );
 
 
@@ -4481,13 +3396,11 @@ function buildPartialSumVertical(
 
 
   lines.push(
-
     formatNum(answer)
     .padStart(
       width,
       " "
     )
-
   );
 
 
@@ -4501,8 +3414,7 @@ function buildPartialSumVertical(
 
 
 /* =========================================================
-   第二單元：
-   教材概念式多位數乘法詳解
+   課本概念多位數乘法詳解
    ========================================================= */
 
 function textbookMultiplicationExplanation(
@@ -4524,16 +3436,12 @@ function textbookMultiplicationExplanation(
   parts.forEach(
     (p,index)=>{
 
-
-      const stepNumber=
-        index+1;
+      let unitWord="一";
 
 
-      let unitWord=
-        "一";
-
-
-      if(p.index===1){
+      if(
+        p.index===1
+      ){
 
         unitWord="十";
 
@@ -4547,45 +3455,36 @@ function textbookMultiplicationExplanation(
 
       }
 
-      else if(
-        p.index===3
+
+      let detail="";
+
+
+      if(
+        p.digit===0
       ){
-
-        unitWord="千";
-
-      }
-
-
-      let detail;
-
-
-      if(p.digit===0){
 
         detail=`
 
           ${p.placeName}
-          的數字是
-          <b>0</b>，
+          的數字是 0，
 
           表示有
 
-          <b>0 個${unitWord}</b>。
+          <b>
+            0 個${unitWord}
+          </b>。
 
           <br>
 
-          所以這一部分的積是
-
-          <b>0</b>。
+          所以這一部分的積是 0。
 
           ${
             p.index>0
             ?
             `
             <br>
-            直式計算時，
-            這一層可以省略，
-            但下一個高位的乘積，
-            仍然要從正確的位值開始記。
+            直式中這一層可以省略，
+            但下一個高位仍然要從正確位值開始記錄。
             `
             :
             ""
@@ -4602,22 +3501,20 @@ function textbookMultiplicationExplanation(
         detail=`
 
           ${a}
+
           ×
+
           ${p.digit}
 
           ＝
 
           <b>
-            ${formatNum(
-              p.rawProduct
-            )}
+            ${formatNum(p.rawProduct)}
           </b>
 
           ，是
 
-          ${formatNum(
-            p.rawProduct
-          )}
+          ${formatNum(p.rawProduct)}
 
           個一。
 
@@ -4630,7 +3527,9 @@ function textbookMultiplicationExplanation(
         detail=`
 
           ${p.digit}
+
           在
+
           ${p.placeName}，
 
           表示
@@ -4643,31 +3542,25 @@ function textbookMultiplicationExplanation(
           <br>
 
           ${a}
+
           ×
+
           ${p.digit}
 
           ＝
 
-          ${formatNum(
-            p.rawProduct
-          )}
+          ${formatNum(p.rawProduct)}
 
           ，是
 
-          ${formatNum(
-            p.rawProduct
-          )}
+          ${formatNum(p.rawProduct)}
 
-          個${unitWord}。
-
-          <br>
+          個${unitWord}，
 
           也就是
 
           <b>
-            ${formatNum(
-              p.result
-            )}
+            ${formatNum(p.result)}
           </b>。
 
         `;
@@ -4681,19 +3574,14 @@ function textbookMultiplicationExplanation(
 
           <div class="explain-step-title">
 
-            ${stepNumber}．
+            ${index+1}．
             ${p.placeName}
             ${p.digit}
             的部分
 
           </div>
 
-
-          <div class="explain-step-text">
-
-            ${detail}
-
-          </div>
+          ${detail}
 
         </div>
 
@@ -4705,19 +3593,7 @@ function textbookMultiplicationExplanation(
 
   const activeParts=
     parts.filter(
-      p=>
-        p.result!==0
-    );
-
-
-  const decomposition=
-    parts
-    .map(
-      p=>
-        p.multiplier
-    )
-    .join(
-      " ＋ "
+      p=>p.result!==0
     );
 
 
@@ -4727,29 +3603,15 @@ function textbookMultiplicationExplanation(
       📘 詳解
     </div>
 
-
     <div class="explanation-intro">
 
       依照乘數的
       個位、十位、百位
       分別計算。
 
-      <br>
-
-      ${b}
-      可以看成
-
-      <b>
-        ${decomposition}
-      </b>
-
-      合起來。
-
     </div>
 
-
     ${steps}
-
 
     <div class="explain-step-card">
 
@@ -4760,7 +3622,6 @@ function textbookMultiplicationExplanation(
 
       </div>
 
-
       ${
         buildPartialSumVertical(
           activeParts,
@@ -4769,7 +3630,6 @@ function textbookMultiplicationExplanation(
       }
 
     </div>
-
 
     <div class="key-point">
 
@@ -4797,7 +3657,6 @@ function textbookMultiplicationExplanation(
 
 
 /* =========================================================
-   第二單元：
    四位數 × 一位數
    ========================================================= */
 
@@ -4809,36 +3668,14 @@ function genU24x1(){
       9999
     );
 
-
   const b=
     randInt(
       2,
       9
     );
 
-
   const answer=
     a*b;
-
-
-  const thousands=
-    Math.floor(
-      a/1000
-    );
-
-
-  const lower=
-    a%1000;
-
-
-  const lowerProduct=
-    lower*b;
-
-
-  const thousandProduct=
-    thousands*
-    1000*
-    b;
 
 
   return{
@@ -4855,8 +3692,7 @@ function genU24x1(){
 
       `${formatNum(a)} × ${b} ＝ □`,
 
-    answer:
-      answer,
+    answer,
 
     explanation:`
 
@@ -4864,58 +3700,16 @@ function genU24x1(){
         📘 詳解
       </div>
 
-
       <div class="explanation-intro">
 
-        四位數乘以一位數，
-        可以把已經學過的三位數乘法，
-        再和千位乘以一位數合起來。
+        由個位開始乘，
+        再依序計算十位、百位、千位。
 
       </div>
 
+      <div class="math-box">
 
-      <div class="explain-step-card">
-
-        <div class="explain-step-title">
-          ① 先算千位以下
-        </div>
-
-        ${lower}
-        ×
-        ${b}
-
-        ＝
-
-        <b>
-          ${formatNum(
-            lowerProduct
-          )}
-        </b>
-
-      </div>
-
-
-      <div class="explain-step-card">
-
-        <div class="explain-step-title">
-          ② 再看千位
-        </div>
-
-        ${thousands}
-        個千的
-        ${b}
-        倍，
-
-        是
-
-        ${thousands*b}
-        個千。
-
-        <br>
-
-        ${formatNum(
-          thousands*1000
-        )}
+        ${formatNum(a)}
 
         ×
 
@@ -4923,45 +3717,13 @@ function genU24x1(){
 
         ＝
 
-        <b>
-          ${formatNum(
-            thousandProduct
-          )}
-        </b>
+        ${formatNum(answer)}
 
       </div>
-
-
-      <div class="explain-step-card">
-
-        <div class="explain-step-title">
-          ③ 合起來
-        </div>
-
-        ${formatNum(
-          lowerProduct
-        )}
-
-        ＋
-
-        ${formatNum(
-          thousandProduct
-        )}
-
-        ＝
-
-        <b>
-          ${formatNum(
-            answer
-          )}
-        </b>
-
-      </div>
-
 
       <div class="key-point">
 
-        所以答案是
+        答案是
 
         <span class="answer-highlight">
           ${formatNum(answer)}
@@ -4976,55 +3738,16 @@ function genU24x1(){
 
 
 /* =========================================================
-   第二單元：
    乘以二位數
    ========================================================= */
 
 function genU2x2(){
 
-  const len=
-    pick([
-      1,
-      2,
-      3
-    ]);
-
-
-  let a;
-
-
-  if(len===1){
-
-    a=
-      randInt(
-        2,
-        9
-      );
-
-  }
-
-  else if(
-    len===2
-  ){
-
-    a=
-      randInt(
-        11,
-        99
-      );
-
-  }
-
-  else{
-
-    a=
-      randInt(
-        101,
-        999
-      );
-
-  }
-
+  const a=
+    randInt(
+      11,
+      999
+    );
 
   const b=
     randInt(
@@ -5032,7 +3755,6 @@ function genU2x2(){
       99
     );
 
-
   const answer=
     a*b;
 
@@ -5042,16 +3764,7 @@ function genU2x2(){
     unit:2,
 
     type:
-
-      `${
-        len===3
-        ? "三位數"
-        :
-        len===2
-        ? "二位數"
-        :
-        "一位數"
-      } × 二位數`,
+      "乘以二位數",
 
     answerType:
       "number",
@@ -5060,17 +3773,14 @@ function genU2x2(){
 
       `${formatNum(a)} × ${b} ＝ □`,
 
-    answer:
-      answer,
+    answer,
 
     explanation:
 
       textbookMultiplicationExplanation(
-
         a,
         b,
         answer
-
       )
 
   };
@@ -5079,79 +3789,30 @@ function genU2x2(){
 
 
 /* =========================================================
-   第二單元：
    乘以三位數
    ========================================================= */
 
 function genU2x3(){
 
-  const len=
-    pick([
-      1,
-      2,
-      3
-    ]);
-
-
-  let a;
-
-
-  if(len===1){
-
-    a=
-      randInt(
-        2,
-        9
-      );
-
-  }
-
-  else if(
-    len===2
-  ){
-
-    a=
-      randInt(
-        11,
-        99
-      );
-
-  }
-
-  else{
-
-    a=
-      randInt(
-        101,
-        999
-      );
-
-  }
+  const a=
+    randInt(
+      11,
+      999
+    );
 
 
   let b;
 
 
-  /*
-    特別增加乘數中間為 0 的題目
-    例如 407、305、208
-  */
-
   if(
-    Math.random()<.30
+    Math.random()<.3
   ){
 
     b=
-      randInt(
-        1,
-        9
-      )*
+      randInt(1,9)*
       100
       +
-      randInt(
-        1,
-        9
-      );
+      randInt(1,9);
 
   }
 
@@ -5175,16 +3836,7 @@ function genU2x3(){
     unit:2,
 
     type:
-
-      `${
-        len===3
-        ? "三位數"
-        :
-        len===2
-        ? "二位數"
-        :
-        "一位數"
-      } × 三位數`,
+      "乘以三位數",
 
     answerType:
       "number",
@@ -5193,17 +3845,14 @@ function genU2x3(){
 
       `${formatNum(a)} × ${b} ＝ □`,
 
-    answer:
-      answer,
+    answer,
 
     explanation:
 
       textbookMultiplicationExplanation(
-
         a,
         b,
         answer
-
       )
 
   };
@@ -5212,8 +3861,7 @@ function genU2x3(){
 
 
 /* =========================================================
-   第二單元：
-   乘以整十、整百
+   整十整百
    ========================================================= */
 
 function genU2Tens(){
@@ -5228,22 +3876,15 @@ function genU2Tens(){
   const factor=
     pick([
 
-      randInt(
-        1,
-        9
-      )*10,
+      randInt(1,9)*10,
 
-      randInt(
-        1,
-        9
-      )*100
+      randInt(1,9)*100
 
     ]);
 
 
   const answer=
-    a*
-    factor;
+    a*factor;
 
 
   const zeroCount=
@@ -5280,8 +3921,7 @@ function genU2Tens(){
 
       `${a} × ${factor} ＝ □`,
 
-    answer:
-      answer,
+    answer,
 
     explanation:`
 
@@ -5289,78 +3929,52 @@ function genU2Tens(){
         📘 詳解
       </div>
 
-
-      <div class="explanation-intro">
-
-        乘以整十、整百時，
-        可以把答案看成
-        「幾個十」或「幾個百」。
-
-      </div>
-
-
       <div class="explain-step-card">
-
-        <div class="explain-step-title">
-          ① 看成幾個${unitName}
-        </div>
 
         ${factor}
+
         是
 
-        <b>
-          ${base}
-          個${unitName}
-        </b>。
+        ${base}
+
+        個${unitName}。
 
       </div>
 
+      <div class="math-box">
 
-      <div class="explain-step-card">
-
-        <div class="explain-step-title">
-          ② 先算不是 0 的部分
-        </div>
+        先算
 
         ${a}
+
         ×
+
         ${base}
 
         ＝
 
-        <b>
-          ${a*base}
-        </b>
+        ${a*base}
 
       </div>
 
-
-      <div class="explain-step-card">
-
-        <div class="explain-step-title">
-          ③ 放回正確位值
-        </div>
+      <div class="math-box">
 
         ${a*base}
+
         個${unitName}
 
         ＝
 
-        <b>
-          ${formatNum(answer)}
-        </b>
+        ${formatNum(answer)}
 
       </div>
 
-
       <div class="key-point">
 
-        所以答案是
+        答案是
 
         <span class="answer-highlight">
-
           ${formatNum(answer)}
-
         </span>。
 
       </div>
@@ -5372,53 +3986,28 @@ function genU2Tens(){
 
 
 /* =========================================================
-   第二單元：
    0 的規律
    ========================================================= */
 
 function genU2Zero(){
 
-  let aBase=
+  const aBase=
     randInt(
       2,
       9
     );
 
-
-  let bBase=
+  const bBase=
     randInt(
       2,
       9
     );
-
-
-  if(
-    Math.random()<.30
-  ){
-
-    [
-      aBase,
-      bBase
-    ]=
-      pick([
-
-        [5,4],
-        [5,6],
-        [8,5],
-        [4,5],
-        [2,5]
-
-      ]);
-
-  }
-
 
   const za=
     randInt(
       1,
       3
     );
-
 
   const zb=
     randInt(
@@ -5434,7 +4023,6 @@ function genU2Zero(){
       za
     );
 
-
   const b=
     bBase*
     Math.pow(
@@ -5442,148 +4030,8 @@ function genU2Zero(){
       zb
     );
 
-
   const answer=
     a*b;
-
-
-  const baseProduct=
-    aBase*
-    bBase;
-
-
-  const mode=
-    Math.random()<.5
-    ? "product"
-    : "zeros";
-
-
-  if(
-    mode==="zeros"
-  ){
-
-    const zeros=
-      trailingZeros(
-        answer
-      );
-
-
-    return{
-
-      unit:2,
-
-      type:
-        "乘法中 0 的規律",
-
-      answerType:
-        "number",
-
-      question:
-
-        `${formatNum(a)} × ${formatNum(b)} 的答案末尾共有幾個 0？`,
-
-      answer:
-        zeros,
-
-      explanation:`
-
-        <div class="explanation-title">
-          📘 詳解
-        </div>
-
-
-        <div class="explanation-intro">
-
-          後面有 0 的兩數相乘，
-          可以先算不是 0 的部分。
-
-        </div>
-
-
-        <div class="explain-step-card">
-
-          <div class="explain-step-title">
-            ① 先算不是 0 的部分
-          </div>
-
-          ${aBase}
-          ×
-          ${bBase}
-
-          ＝
-
-          <b>
-            ${baseProduct}
-          </b>
-
-        </div>
-
-
-        <div class="explain-step-card">
-
-          <div class="explain-step-title">
-            ② 看原本有幾個 0
-          </div>
-
-          ${formatNum(a)}
-          末尾有
-          ${za}
-          個 0。
-
-          <br>
-
-          ${formatNum(b)}
-          末尾有
-          ${zb}
-          個 0。
-
-        </div>
-
-
-        <div class="math-box">
-
-          ${formatNum(a)}
-          ×
-          ${formatNum(b)}
-
-          ＝
-
-          ${formatNum(answer)}
-
-        </div>
-
-
-        <div class="key-point">
-
-          所以積的末尾共有
-
-          <span class="answer-highlight">
-
-            ${zeros} 個 0
-
-          </span>。
-
-          ${
-            trailingZeros(
-              baseProduct
-            )>0
-            ?
-            `
-            <br>
-            注意：
-            前面的乘積本身也產生了 0，
-            這個 0 也要算進去。
-            `
-            :
-            ""
-          }
-
-        </div>
-      `
-
-    };
-
-  }
 
 
   return{
@@ -5600,8 +4048,7 @@ function genU2Zero(){
 
       `${formatNum(a)} × ${formatNum(b)} ＝ □`,
 
-    answer:
-      answer,
+    answer,
 
     explanation:`
 
@@ -5609,55 +4056,39 @@ function genU2Zero(){
         📘 詳解
       </div>
 
-
-      <div class="explanation-intro">
-
-        先算不是 0 的部分，
-        再依照位值把 0 放回去。
-
-      </div>
-
-
       <div class="explain-step-card">
 
-        <div class="explain-step-title">
-          ① 先算
-        </div>
+        先算不是 0 的部分：
+
+        <br>
 
         ${aBase}
+
         ×
+
         ${bBase}
 
         ＝
 
         <b>
-          ${baseProduct}
+          ${aBase*bBase}
         </b>
 
       </div>
 
-
       <div class="explain-step-card">
 
-        <div class="explain-step-title">
-          ② 看原本的 0
-        </div>
-
-        兩個乘數末尾
-        原本共有
-
-        <b>
-          ${za+zb}
-          個 0
-        </b>。
+        再依照原本的位值，
+        把 0 放回去。
 
       </div>
-
 
       <div class="math-box">
 
         ${formatNum(a)}
+
         ×
+
         ${formatNum(b)}
 
         ＝
@@ -5665,7 +4096,6 @@ function genU2Zero(){
         ${formatNum(answer)}
 
       </div>
-
 
       <div class="key-point">
 
@@ -5686,8 +4116,7 @@ function genU2Zero(){
 
 
 /* =========================================================
-   第二單元：
-   乘法關係推理
+   乘法關係
    ========================================================= */
 
 function genU2Relation(){
@@ -5698,23 +4127,15 @@ function genU2Relation(){
       99
     );
 
-
   const center=
     pick([
-
-      randInt(
-        2,
-        9
-      )*10,
-
+      50,
+      60,
+      70,
       100,
-
       200,
-
       300
-
     ]);
-
 
   const delta=
     pick([
@@ -5722,16 +4143,13 @@ function genU2Relation(){
       1
     ]);
 
-
   const target=
     center+
     delta;
 
-
   const known=
     a*
     center;
-
 
   const answer=
     a*
@@ -5756,8 +4174,7 @@ function genU2Relation(){
       +
       `${a} × ${target} ＝ □`,
 
-    answer:
-      answer,
+    answer,
 
     explanation:`
 
@@ -5765,23 +4182,12 @@ function genU2Relation(){
         📘 詳解
       </div>
 
-
-      <div class="explanation-intro">
-
-        觀察兩個乘法算式，
-        乘數只差 1。
-
-      </div>
-
-
       <div class="explain-step-card">
 
-        <div class="explain-step-title">
-          ① 比較乘數
-        </div>
-
         ${target}
+
         比
+
         ${center}
 
         ${
@@ -5792,12 +4198,7 @@ function genU2Relation(){
 
       </div>
 
-
-      <div class="explain-step-card">
-
-        <div class="explain-step-title">
-          ② 積就多或少 1 個 ${a}
-        </div>
+      <div class="math-box">
 
         ${formatNum(known)}
 
@@ -5811,27 +4212,16 @@ function genU2Relation(){
 
         ＝
 
-        <b>
-          ${formatNum(answer)}
-        </b>
+        ${formatNum(answer)}
 
       </div>
 
-
       <div class="key-point">
 
-        所以
-
-        ${a}
-        ×
-        ${target}
-
-        ＝
+        答案是
 
         <span class="answer-highlight">
-
           ${formatNum(answer)}
-
         </span>。
 
       </div>
@@ -5843,7 +4233,6 @@ function genU2Relation(){
 
 
 /* =========================================================
-   第二單元：
    判斷算法
    ========================================================= */
 
@@ -5854,7 +4243,6 @@ function genU2Method(){
       101,
       499
     );
-
 
   const b=
     randInt(
@@ -5868,15 +4256,12 @@ function genU2Method(){
       b/10
     );
 
-
   const ones=
     b%10;
 
-
-  const tensValue=
+  const tens=
     tensDigit*
     10;
-
 
   const answer=
     a*b;
@@ -5886,7 +4271,7 @@ function genU2Method(){
 
     `${a}×${ones}＝${formatNum(a*ones)}；`
     +
-    `${a}×${tensValue}＝${formatNum(a*tensValue)}；`
+    `${a}×${tens}＝${formatNum(a*tens)}；`
     +
     `兩個積相加＝${formatNum(answer)}`;
 
@@ -5897,31 +4282,17 @@ function genU2Method(){
     +
     `${a}×${tensDigit}＝${formatNum(a*tensDigit)}；`
     +
-    `再把兩個積相加`;
+    `直接相加`;
 
 
   const wrong2=
 
-    `只算 ${a}×${ones}，因為個位在最右邊`;
+    `只計算 ${a}×${ones}`;
 
 
   const wrong3=
 
-    `把 ${b} 看成 ${tensValue*10}＋${ones}`;
-
-
-  const choices=
-    shuffle([
-
-      correct,
-
-      wrong1,
-
-      wrong2,
-
-      wrong3
-
-    ]);
+    `把 ${b} 看成 ${tens*10}＋${ones}`;
 
 
   return{
@@ -5936,10 +4307,16 @@ function genU2Method(){
 
     question:
 
-      `計算 ${a} × ${b}，下面哪一個想法正確？`,
+      `計算 ${a} × ${b}，哪一個想法正確？`,
 
     choices:
-      choices,
+
+      shuffle([
+        correct,
+        wrong1,
+        wrong2,
+        wrong3
+      ]),
 
     answer:
       correct,
@@ -5950,32 +4327,13 @@ function genU2Method(){
         📘 詳解
       </div>
 
-
-      <div class="explanation-intro">
-
-        ${b}
-        是
-
-        ${ones}
-        個一
-
-        和
-
-        ${tensDigit}
-        個十
-
-        合起來的。
-
-      </div>
-
-
       <div class="math-box">
 
         ${b}
 
         ＝
 
-        ${tensValue}
+        ${tens}
 
         ＋
 
@@ -5983,88 +4341,49 @@ function genU2Method(){
 
       </div>
 
-
       <div class="explain-step-card">
 
-        <div class="explain-step-title">
-          ① 個位的部分
-        </div>
+        個位：
 
         ${a}
+
         ×
+
         ${ones}
 
         ＝
 
-        <b>
-          ${formatNum(
-            a*ones
-          )}
-        </b>
+        ${formatNum(a*ones)}
 
       </div>
 
-
       <div class="explain-step-card">
 
-        <div class="explain-step-title">
-          ② 十位的部分
-        </div>
+        十位的
 
         ${tensDigit}
-        在十位，
 
-        表示
+        代表的是
 
-        <b>
-          ${tensValue}
-        </b>，
-
-        不是只有
-
-        ${tensDigit}。
+        ${tens}。
 
         <br>
 
         ${a}
+
         ×
-        ${tensValue}
+
+        ${tens}
 
         ＝
 
-        <b>
-          ${formatNum(
-            a*tensValue
-          )}
-        </b>
+        ${formatNum(a*tens)}
 
       </div>
-
-
-      <div class="math-box">
-
-        ${formatNum(
-          a*ones
-        )}
-
-        ＋
-
-        ${formatNum(
-          a*tensValue
-        )}
-
-        ＝
-
-        ${formatNum(
-          answer
-        )}
-
-      </div>
-
 
       <div class="key-point">
 
-        正確想法是：
+        所以正確想法是：
 
         <br>
 
@@ -6083,278 +4402,25 @@ function genU2Method(){
 
 
 /* =========================================================
-   第二單元：
-   乘法生活題
+   第二單元生活題
    ========================================================= */
 
 function genU2App(){
 
-  const templates=[
-
-
-    ()=>{
-
-      const price=
-        randInt(
-          1000,
-          9000
-        );
-
-
-      const count=
-        randInt(
-          2,
-          9
-        );
-
-
-      return{
-
-        text:
-
-          `一箱水果售價 ${price} 元，`
-          +
-          `買 ${count} 箱共要付多少元？`,
-
-        a:
-          price,
-
-        b:
-          count,
-
-        unitWord:
-          "元"
-
-      };
-
-    },
-
-
-    ()=>{
-
-      const per=
-        randInt(
-          20,
-          99
-        );
-
-
-      const count=
-        randInt(
-          11,
-          99
-        );
-
-
-      return{
-
-        text:
-
-          `一輛遊覽車可以坐 ${per} 人，`
-          +
-          `${count} 輛最多可以坐多少人？`,
-
-        a:
-          per,
-
-        b:
-          count,
-
-        unitWord:
-          "人"
-
-      };
-
-    },
-
-
-    ()=>{
-
-      const per=
-        randInt(
-          101,
-          999
-        );
-
-
-      const count=
-        randInt(
-          11,
-          99
-        );
-
-
-      return{
-
-        text:
-
-          `工廠每天製作 ${per} 個零件，`
-          +
-          `連續生產 ${count} 天，`
-          +
-          `共製作多少個？`,
-
-        a:
-          per,
-
-        b:
-          count,
-
-        unitWord:
-          "個"
-
-      };
-
-    },
-
-
-    ()=>{
-
-      const per=
-        randInt(
-          20,
-          399
-        );
-
-
-      const count=
-        randInt(
-          101,
-          399
-        );
-
-
-      return{
-
-        text:
-
-          `一盒有 ${per} 顆棋子，`
-          +
-          `${count} 盒共有多少顆棋子？`,
-
-        a:
-          per,
-
-        b:
-          count,
-
-        unitWord:
-          "顆"
-
-      };
-
-    },
-
-
-    ()=>{
-
-      const per=
-        randInt(
-          100,
-          999
-        );
-
-
-      const count=
-        pick([
-
-          100,
-          200,
-          300,
-          400,
-          500
-
-        ]);
-
-
-      return{
-
-        text:
-
-          `每袋紅豆重 ${per} 公克，`
-          +
-          `${count} 袋共重多少公克？`,
-
-        a:
-          per,
-
-        b:
-          count,
-
-        unitWord:
-          "公克"
-
-      };
-
-    }
-
-  ];
-
-
-  const q=
-    pick(
-      templates
-    )();
-
+  const a=
+    randInt(
+      100,
+      999
+    );
+
+  const b=
+    randInt(
+      11,
+      99
+    );
 
   const answer=
-    q.a*
-    q.b;
-
-
-  let detail;
-
-
-  if(q.b>=10){
-
-    detail=
-      textbookMultiplicationExplanation(
-
-        q.a,
-        q.b,
-        answer
-
-      );
-
-  }
-
-  else{
-
-    detail=`
-
-      <div class="explanation-title">
-        📘 詳解
-      </div>
-
-
-      <div class="explain-step-card">
-
-        <div class="explain-step-title">
-          ① 列出乘法算式
-        </div>
-
-        ${q.a}
-        ×
-        ${q.b}
-
-      </div>
-
-
-      <div class="math-box">
-
-        ${q.a}
-        ×
-        ${q.b}
-
-        ＝
-
-        ${formatNum(answer)}
-
-      </div>
-
-    `;
-
-  }
+    a*b;
 
 
   return{
@@ -6368,39 +4434,35 @@ function genU2App(){
       "number",
 
     question:
-      q.text,
 
-    answer:
-      answer,
+      `一盒有 ${a} 顆積木，`
+      +
+      `${b} 盒共有多少顆積木？`,
+
+    answer,
 
     explanation:`
 
       <div class="explain-step-card">
 
-        <div class="explain-step-title">
-          先列式
-        </div>
-
-        每一份有
-        ${q.a}，
-
-        有
-        ${q.b}
-        份，
+        每盒有 ${a} 顆，
+        有 ${b} 盒，
 
         所以列式：
 
         <b>
-          ${q.a}
-          ×
-          ${q.b}
+          ${a} × ${b}
         </b>
 
       </div>
 
-
-      ${detail}
-
+      ${
+        textbookMultiplicationExplanation(
+          a,
+          b,
+          answer
+        )
+      }
 
       <div class="key-point">
 
@@ -6409,7 +4471,7 @@ function genU2App(){
         <span class="answer-highlight">
 
           ${formatNum(answer)}
-          ${q.unitWord}
+          顆
 
         </span>
 
@@ -6422,7 +4484,7 @@ function genU2App(){
 
 
 /* =========================================================
-   題目生成器
+   生成器
    ========================================================= */
 
 const generators={
@@ -6487,34 +4549,26 @@ const generators={
 
 const U1_KEYS=
   UNIT1_TYPES
-
   .filter(
-    x=>
-      x[0]!=="all"
+    x=>x[0]!=="all"
   )
-
   .map(
-    x=>
-      x[0]
+    x=>x[0]
   );
 
 
 const U2_KEYS=
   UNIT2_TYPES
-
   .filter(
-    x=>
-      x[0]!=="all"
+    x=>x[0]!=="all"
   )
-
   .map(
-    x=>
-      x[0]
+    x=>x[0]
   );
 
 
 /* =========================================================
-   選題
+   選擇生成器
    ========================================================= */
 
 function chooseGenerator(){
@@ -6532,13 +4586,10 @@ function chooseGenerator(){
     ){
 
       return generators[
-        pick(
-          U1_KEYS
-        )
+        pick(U1_KEYS)
       ];
 
     }
-
 
     return generators[
       selected
@@ -6556,13 +4607,10 @@ function chooseGenerator(){
     ){
 
       return generators[
-        pick(
-          U2_KEYS
-        )
+        pick(U2_KEYS)
       ];
 
     }
-
 
     return generators[
       selected
@@ -6576,9 +4624,7 @@ function chooseGenerator(){
   ){
 
     return generators[
-      pick(
-        U1_KEYS
-      )
+      pick(U1_KEYS)
     ];
 
   }
@@ -6589,9 +4635,7 @@ function chooseGenerator(){
   ){
 
     return generators[
-      pick(
-        U2_KEYS
-      )
+      pick(U2_KEYS)
     ];
 
   }
@@ -6610,7 +4654,7 @@ function chooseGenerator(){
 
 
 /* =========================================================
-   新題目
+   新題
    ========================================================= */
 
 function newQuestion(){
@@ -6621,15 +4665,13 @@ function newQuestion(){
 
 
   /*
-    每一題開始時
-    自動清空計算紙
+    每一題自動清空計算紙
   */
   clearScratchPad();
 
 
   feedback.className=
     "feedback";
-
 
   feedbackHead.innerHTML="";
 
@@ -6693,13 +4735,11 @@ function newQuestion(){
 
 
   if(
-    currentQuestion
-    .unit===1
+    currentQuestion.unit===1
   ){
 
     chapterLabel.className=
       "chapter-label u1";
-
 
     chapterLabel.textContent=
       "第一單元";
@@ -6711,7 +4751,6 @@ function newQuestion(){
     chapterLabel.className=
       "chapter-label u2";
 
-
     chapterLabel.textContent=
       "第二單元";
 
@@ -6720,30 +4759,11 @@ function newQuestion(){
 
   renderAnswerArea();
 
-
-  setTimeout(()=>{
-
-    document
-    .querySelector(
-      ".question-card"
-    )
-    .scrollIntoView({
-
-      behavior:
-        "smooth",
-
-      block:
-        "start"
-
-    });
-
-  },50);
-
 }
 
 
 /* =========================================================
-   作答欄
+   作答區
    ========================================================= */
 
 function renderAnswerArea(){
@@ -6770,7 +4790,6 @@ function renderAnswerArea(){
           placeholder="請輸入答案"
         >
 
-
         <button
           id="submitAnswerBtn"
           class="submit-btn">
@@ -6780,7 +4799,6 @@ function renderAnswerArea(){
         </button>
 
       </div>
-
 
       <div class="answer-tip">
 
@@ -6823,13 +4841,6 @@ function renderAnswerArea(){
       }
     );
 
-
-    setTimeout(()=>{
-
-      input.focus();
-
-    },80);
-
   }
 
 
@@ -6845,7 +4856,6 @@ function renderAnswerArea(){
         "div"
       );
 
-
     grid.className=
       "choice-grid";
 
@@ -6860,10 +4870,8 @@ function renderAnswerArea(){
           "button"
         );
 
-
       button.className=
         "choice-btn";
-
 
       button.textContent=
         choice;
@@ -6874,11 +4882,8 @@ function renderAnswerArea(){
         ()=>{
 
           if(answered){
-
             return;
-
           }
-
 
           checkAnswer(
             choice
@@ -6903,18 +4908,13 @@ function renderAnswerArea(){
   }
 
 
-  else if(
-    currentQuestion
-    .answerType===
-    "symbol"
-  ){
+  else{
 
     const grid=
       document
       .createElement(
         "div"
       );
-
 
     grid.className=
       "symbol-grid";
@@ -6933,10 +4933,8 @@ function renderAnswerArea(){
           "button"
         );
 
-
       button.className=
         "symbol-btn";
-
 
       button.textContent=
         symbol;
@@ -6947,11 +4945,8 @@ function renderAnswerArea(){
         ()=>{
 
           if(answered){
-
             return;
-
           }
-
 
           checkAnswer(
             symbol
@@ -6979,15 +4974,13 @@ function renderAnswerArea(){
 
 
 /* =========================================================
-   數字作答
+   輸入答案
    ========================================================= */
 
 function submitNumberAnswer(){
 
   if(answered){
-
     return;
-
   }
 
 
@@ -6998,13 +4991,11 @@ function submitNumberAnswer(){
 
 
   if(!input){
-
     return;
-
   }
 
 
-  let value=
+  const raw=
     input.value
     .trim()
 
@@ -7019,7 +5010,7 @@ function submitNumberAnswer(){
     );
 
 
-  if(value===""){
+  if(raw===""){
 
     input.focus();
 
@@ -7028,19 +5019,15 @@ function submitNumberAnswer(){
   }
 
 
-  const number=
-    Number(value);
+  const value=
+    Number(raw);
 
 
   if(
-    Number.isNaN(number)
+    Number.isNaN(value)
   ){
 
     input.value="";
-
-    input.placeholder=
-      "請輸入數字";
-
 
     input.focus();
 
@@ -7050,14 +5037,14 @@ function submitNumberAnswer(){
 
 
   checkAnswer(
-    number
+    value
   );
 
 }
 
 
 /* =========================================================
-   判定答案
+   判定
    ========================================================= */
 
 function checkAnswer(
@@ -7065,16 +5052,14 @@ function checkAnswer(
 ){
 
   if(answered){
-
     return;
-
   }
 
 
   answered=true;
 
 
-  let correct=false;
+  let correct;
 
 
   if(
@@ -7142,11 +5127,10 @@ function checkAnswer(
 
       </div>
 
-
       <div class="key-point">
 
         🌟 做得很好！
-        按「下一題」繼續練習。
+        繼續挑戰下一題吧！
 
       </div>
 
@@ -7174,15 +5158,10 @@ function checkAnswer(
         你的答案：
 
         <b>
-          ${
-            escapeHTML(
-              userAnswer
-            )
-          }
+          ${escapeHTML(userAnswer)}
         </b>
 
       </div>
-
 
       <div class="correct-answer-line">
 
@@ -7200,7 +5179,6 @@ function checkAnswer(
 
       </div>
 
-
       ${
         currentQuestion
         .explanation
@@ -7211,7 +5189,16 @@ function checkAnswer(
   }
 
 
-  disableAnswerControls();
+  answerArea
+  .querySelectorAll(
+    "button,input"
+  )
+  .forEach(el=>{
+
+    el.disabled=true;
+
+  });
+
 
   updateStats();
 
@@ -7221,22 +5208,6 @@ function checkAnswer(
   .add(
     "show"
   );
-
-
-  setTimeout(()=>{
-
-    feedback
-    .scrollIntoView({
-
-      behavior:
-        "smooth",
-
-      block:
-        "nearest"
-
-    });
-
-  },100);
 
 }
 
@@ -7267,36 +5238,13 @@ function displayAnswer(q){
 
 
 /* =========================================================
-   作答後鎖定
-   ========================================================= */
-
-function disableAnswerControls(){
-
-  answerArea
-  .querySelectorAll(
-    "button,input"
-  )
-  .forEach(el=>{
-
-    el.disabled=true;
-
-  });
-
-}
-
-
-/* =========================================================
    下一題
    ========================================================= */
 
 nextBtn
 .addEventListener(
   "click",
-  ()=>{
-
-    newQuestion();
-
-  }
+  newQuestion
 );
 
 
@@ -7309,12 +5257,12 @@ function updateStats(){
   totalStat.textContent=
     stats.total;
 
-
   correctStat.textContent=
     stats.correct;
 
 
   const accuracy=
+
     stats.total===0
     ?
     0
@@ -7384,19 +5332,13 @@ function loadStats(){
       stats={
 
         total:
-          Number(
-            obj.total
-          )||0,
+          Number(obj.total)||0,
 
         correct:
-          Number(
-            obj.correct
-          )||0,
+          Number(obj.correct)||0,
 
         streak:
-          Number(
-            obj.streak
-          )||0
+          Number(obj.streak)||0
 
       };
 
@@ -7421,30 +5363,25 @@ const canvas=
     "scratchCanvas"
   );
 
-
 const canvasWrap=
   document.getElementById(
     "canvasWrap"
   );
-
 
 const ctx=
   canvas.getContext(
     "2d"
   );
 
-
 const penBtn=
   document.getElementById(
     "penBtn"
   );
 
-
 const eraserBtn=
   document.getElementById(
     "eraserBtn"
   );
-
 
 const clearBtn=
   document.getElementById(
@@ -7462,13 +5399,18 @@ let lastY=0;
 
 
 /* =========================================================
-   計算紙：
-   禁止右鍵、長按、選取、拖曳等
+   禁止右鍵、長按、選取
    ========================================================= */
 
 function blockDefaultAction(e){
 
-  e.preventDefault();
+  if(
+    e.cancelable
+  ){
+
+    e.preventDefault();
+
+  }
 
   e.stopPropagation();
 
@@ -7477,109 +5419,77 @@ function blockDefaultAction(e){
 }
 
 
-/*
-  滑鼠右鍵選單
-*/
-canvas.addEventListener(
+[
   "contextmenu",
-  blockDefaultAction
-);
-
-canvasWrap.addEventListener(
-  "contextmenu",
-  blockDefaultAction
-);
-
-
-/*
-  禁止選取
-*/
-canvas.addEventListener(
   "selectstart",
-  blockDefaultAction
-);
-
-canvasWrap.addEventListener(
-  "selectstart",
-  blockDefaultAction
-);
-
-
-/*
-  禁止拖曳
-*/
-canvas.addEventListener(
   "dragstart",
-  blockDefaultAction
-);
+  "auxclick"
+]
+.forEach(eventName=>{
 
-canvasWrap.addEventListener(
-  "dragstart",
-  blockDefaultAction
-);
+  canvas
+  .addEventListener(
+    eventName,
+    blockDefaultAction
+  );
+
+  canvasWrap
+  .addEventListener(
+    eventName,
+    blockDefaultAction
+  );
+
+});
 
 
-/*
-  禁止中鍵、右鍵的 auxclick
-*/
-canvas.addEventListener(
-  "auxclick",
-  blockDefaultAction
-);
-
-
-/*
-  iOS Safari 有些長按會送出
-  contextmenu 或 gesture 事件
-*/
-canvas.addEventListener(
+[
   "gesturestart",
-  blockDefaultAction,
-  {
-    passive:false
-  }
-);
-
-canvas.addEventListener(
   "gesturechange",
-  blockDefaultAction,
-  {
-    passive:false
-  }
-);
+  "gestureend"
+]
+.forEach(eventName=>{
+
+  canvas
+  .addEventListener(
+
+    eventName,
+
+    blockDefaultAction,
+
+    {
+      passive:false
+    }
+
+  );
+
+});
+
 
 canvas.addEventListener(
-  "gestureend",
-  blockDefaultAction,
-  {
-    passive:false
-  }
-);
 
-
-/*
-  防止觸控在畫布內
-  觸發頁面移動
-*/
-canvas.addEventListener(
   "touchmove",
+
   e=>{
 
-    if(e.cancelable){
+    if(
+      e.cancelable
+    ){
 
       e.preventDefault();
 
     }
 
   },
+
   {
     passive:false
   }
+
 );
 
 
 /* =========================================================
-   計算紙尺寸
+   Canvas 尺寸
    ========================================================= */
 
 function resizeCanvas(){
@@ -7599,22 +5509,17 @@ function resizeCanvas(){
   }
 
 
-  /*
-    保存現有筆跡
-  */
-
-  const oldCanvas=
+  const temp=
     document
     .createElement(
       "canvas"
     );
 
 
-  oldCanvas.width=
+  temp.width=
     canvas.width;
 
-
-  oldCanvas.height=
+  temp.height=
     canvas.height;
 
 
@@ -7623,7 +5528,7 @@ function resizeCanvas(){
     canvas.height>0
   ){
 
-    oldCanvas
+    temp
     .getContext(
       "2d"
     )
@@ -7658,39 +5563,36 @@ function resizeCanvas(){
 
 
   ctx.setTransform(
-
     ratio,
     0,
     0,
     ratio,
     0,
     0
-
   );
 
 
   ctx.lineCap=
     "round";
 
-
   ctx.lineJoin=
     "round";
 
 
   if(
-    oldCanvas.width>0 &&
-    oldCanvas.height>0
+    temp.width>0 &&
+    temp.height>0
   ){
 
     ctx.drawImage(
 
-      oldCanvas,
+      temp,
 
       0,
       0,
 
-      oldCanvas.width,
-      oldCanvas.height,
+      temp.width,
+      temp.height,
 
       0,
       0,
@@ -7706,7 +5608,7 @@ function resizeCanvas(){
 
 
 /* =========================================================
-   清空計算紙
+   清空
    ========================================================= */
 
 function clearScratchPad(){
@@ -7725,25 +5627,20 @@ function clearScratchPad(){
 
 
   ctx.setTransform(
-
     1,
     0,
     0,
     1,
     0,
     0
-
   );
 
 
   ctx.clearRect(
-
     0,
     0,
-
     canvas.width,
     canvas.height
-
   );
 
 
@@ -7753,7 +5650,7 @@ function clearScratchPad(){
 
 
 /* =========================================================
-   計算紙座標
+   座標
    ========================================================= */
 
 function getPoint(e){
@@ -7779,7 +5676,7 @@ function getPoint(e){
 
 
 /* =========================================================
-   開始書寫
+   開始畫
    ========================================================= */
 
 canvas.addEventListener(
@@ -7787,40 +5684,28 @@ canvas.addEventListener(
   e=>{
 
     /*
-      滑鼠只允許左鍵。
-
-      右鍵、中鍵
-      完全不觸發書寫。
+      滑鼠只接受左鍵
     */
-
     if(
       e.pointerType==="mouse"
       &&
       e.button!==0
     ){
 
-      e.preventDefault();
-
-      e.stopPropagation();
+      blockDefaultAction(e);
 
       return;
 
     }
 
 
-    /*
-      禁止瀏覽器接手
-      這一次操作
-    */
-
-    if(e.cancelable){
+    if(
+      e.cancelable
+    ){
 
       e.preventDefault();
 
     }
-
-
-    e.stopPropagation();
 
 
     drawing=true;
@@ -7838,33 +5723,32 @@ canvas.addEventListener(
     catch(err){}
 
 
-    const p=
+    const point=
       getPoint(e);
 
 
-    lastX=p.x;
+    lastX=
+      point.x;
 
-    lastY=p.y;
+    lastY=
+      point.y;
 
 
     /*
-      點一下也留下筆跡
+      點一下也有筆跡
     */
-
     ctx.beginPath();
-
 
     ctx.arc(
 
-      p.x,
-      p.y,
+      point.x,
+      point.y,
 
       tool==="pen"
       ? 1.6
-      : 14,
+      : 15,
 
       0,
-
       Math.PI*2
 
     );
@@ -7877,9 +5761,8 @@ canvas.addEventListener(
       ctx.globalCompositeOperation=
         "source-over";
 
-
       ctx.fillStyle=
-        "#27333a";
+        "#263238";
 
     }
 
@@ -7898,7 +5781,7 @@ canvas.addEventListener(
 
 
 /* =========================================================
-   書寫
+   畫線
    ========================================================= */
 
 canvas.addEventListener(
@@ -7906,23 +5789,20 @@ canvas.addEventListener(
   e=>{
 
     if(!drawing){
-
       return;
-
     }
 
 
-    if(e.cancelable){
+    if(
+      e.cancelable
+    ){
 
       e.preventDefault();
 
     }
 
 
-    e.stopPropagation();
-
-
-    const p=
+    const point=
       getPoint(e);
 
 
@@ -7936,8 +5816,8 @@ canvas.addEventListener(
 
 
     ctx.lineTo(
-      p.x,
-      p.y
+      point.x,
+      point.y
     );
 
 
@@ -7948,15 +5828,9 @@ canvas.addEventListener(
       ctx.globalCompositeOperation=
         "source-over";
 
-
       ctx.strokeStyle=
-        "#27333a";
+        "#263238";
 
-
-      /*
-        Apple Pencil
-        有壓力值時稍微反映筆壓
-      */
 
       if(
         e.pointerType==="pen"
@@ -7984,8 +5858,7 @@ canvas.addEventListener(
       ctx.globalCompositeOperation=
         "destination-out";
 
-
-      ctx.lineWidth=30;
+      ctx.lineWidth=31;
 
     }
 
@@ -7993,16 +5866,18 @@ canvas.addEventListener(
     ctx.stroke();
 
 
-    lastX=p.x;
+    lastX=
+      point.x;
 
-    lastY=p.y;
+    lastY=
+      point.y;
 
   }
 );
 
 
 /* =========================================================
-   停止書寫
+   停止
    ========================================================= */
 
 function stopDrawing(e){
@@ -8010,31 +5885,26 @@ function stopDrawing(e){
   drawing=false;
 
 
-  if(
-    e &&
-    e.pointerId!==undefined
-  ){
+  try{
 
-    try{
+    if(
+      e &&
+      e.pointerId!==undefined &&
+      canvas.hasPointerCapture(
+        e.pointerId
+      )
+    ){
 
-      if(
-        canvas.hasPointerCapture(
-          e.pointerId
-        )
-      ){
-
-        canvas
-        .releasePointerCapture(
-          e.pointerId
-        );
-
-      }
+      canvas
+      .releasePointerCapture(
+        e.pointerId
+      );
 
     }
 
-    catch(err){}
-
   }
+
+  catch(err){}
 
 }
 
@@ -8044,12 +5914,10 @@ canvas.addEventListener(
   stopDrawing
 );
 
-
 canvas.addEventListener(
   "pointercancel",
   stopDrawing
 );
-
 
 canvas.addEventListener(
   "lostpointercapture",
@@ -8062,7 +5930,7 @@ canvas.addEventListener(
 
 
 /* =========================================================
-   筆
+   工具
    ========================================================= */
 
 penBtn.addEventListener(
@@ -8071,13 +5939,11 @@ penBtn.addEventListener(
 
     tool="pen";
 
-
     penBtn
     .classList
     .add(
       "active"
     );
-
 
     eraserBtn
     .classList
@@ -8088,10 +5954,6 @@ penBtn.addEventListener(
   }
 );
 
-
-/* =========================================================
-   橡皮擦
-   ========================================================= */
 
 eraserBtn.addEventListener(
   "click",
@@ -8099,13 +5961,11 @@ eraserBtn.addEventListener(
 
     tool="eraser";
 
-
     eraserBtn
     .classList
     .add(
       "active"
     );
-
 
     penBtn
     .classList
@@ -8117,25 +5977,17 @@ eraserBtn.addEventListener(
 );
 
 
-/* =========================================================
-   清空
-   ========================================================= */
-
 clearBtn.addEventListener(
   "click",
-  ()=>{
-
-    clearScratchPad();
-
-  }
+  clearScratchPad
 );
 
 
 /* =========================================================
-   Resize
+   視窗變化
    ========================================================= */
 
-let resizeTimer=null;
+let resizeTimer;
 
 
 window.addEventListener(
@@ -8166,13 +6018,16 @@ buildTypeSelect();
 loadStats();
 
 
-setTimeout(()=>{
+setTimeout(
+  ()=>{
 
-  resizeCanvas();
+    resizeCanvas();
 
-  newQuestion();
+    newQuestion();
 
-},80);
+  },
+  80
+);
 
 </script>
 
