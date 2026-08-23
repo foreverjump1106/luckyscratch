@@ -118,25 +118,38 @@
             </div>
             <form id="contactBookForm">
                 <div class="row g-3">
-                    <!-- 基本欄位：夥伴選擇 -->
-                    <div class="col-12">
-                        <label for="contactBookStudentNo" class="form-label fw-bold text-warning">選擇夥伴（座號 / 姓名）</label>
-                        <select class="form-select form-select-lg" id="contactBookStudentNo" required style="font-size: 1rem;">
+                    <!-- 基本欄位：最上方的日期與夥伴選單 -->
+                    <div class="col-md-6">
+                        <label for="contactBookDate" class="form-label fw-bold text-warning">📅 航行日期選擇</label>
+                        <input type="date" class="form-control" id="contactBookDate" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="contactBookStudentNo" class="form-label fw-bold text-warning">🏴‍☠️ 選擇夥伴（座號 / 姓名）</label>
+                        <select class="form-select" id="contactBookStudentNo" required style="font-size: 1rem;">
                             <option value="">-- 請選擇夥伴座號與姓名 --</option>
                         </select>
                     </div>
 
                     <hr class="my-3" style="border-color: #2a437e;">
 
-                    <!-- 各項勾選與檢核（包含 1. 日期） -->
+                    <!-- 各項勾選與檢核（包含 1. 日期狀態） -->
                     <div class="col-12">
-                        <div class="section-title">各項冒險任務檢核（含 1. 日期）</div>
+                        <div class="section-title">各項冒險任務檢核 (1~7項)</div>
                         <div class="row g-3">
-                            <!-- 1. 日期 -->
+                            <!-- 1. 日期檢核 -->
                             <div class="col-md-4">
                                 <div class="check-group">
-                                    <label for="contactBookDate" class="form-label fw-bold mb-2 text-warning">1. 航行日期</label>
-                                    <input type="date" class="form-control" id="contactBookDate" required>
+                                    <label class="form-label fw-bold mb-2">1. 日期</label>
+                                    <div class="d-flex gap-4">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="contactBookDateCheck" id="dateYes" value="完成" checked>
+                                            <label class="form-check-label text-success" for="dateYes">完成</label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="contactBookDateCheck" id="dateNo" value="未填/漏寫">
+                                            <label class="form-check-label text-danger" for="dateNo">未完成</label>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -144,7 +157,7 @@
                             <div class="col-md-4">
                                 <div class="check-group">
                                     <label class="form-label fw-bold mb-2">2. 考試、作業紀錄</label>
-                                    <div class="d-flex gap-4 mt-2">
+                                    <div class="d-flex gap-4">
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="contactBookExamHw" id="examHwYes" value="完成/正常" checked>
                                             <label class="form-check-label text-success" for="examHwYes">完成</label>
@@ -161,7 +174,7 @@
                             <div class="col-md-4">
                                 <div class="check-group">
                                     <label class="form-label fw-bold mb-2">3. 英文佳句抄寫</label>
-                                    <div class="d-flex gap-4 mt-2">
+                                    <div class="d-flex gap-4">
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="contactBookEnglishCopy" id="engYes" value="已完成" checked>
                                             <label class="form-check-label text-success" for="engYes">完成</label>
@@ -178,7 +191,7 @@
                             <div class="col-md-4">
                                 <div class="check-group">
                                     <label class="form-label fw-bold mb-2">4. 文章重點摘要</label>
-                                    <div class="d-flex gap-4 mt-2">
+                                    <div class="d-flex gap-4">
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="contactBookArticleSummary" id="sumYes" value="已完成" checked>
                                             <label class="form-check-label text-success" for="sumYes">完成</label>
@@ -195,7 +208,7 @@
                             <div class="col-md-4">
                                 <div class="check-group">
                                     <label class="form-label fw-bold mb-2">5. 到校與返家時間</label>
-                                    <div class="d-flex gap-4 mt-2">
+                                    <div class="d-flex gap-4">
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="contactBookTimeRecord" id="timeYes" value="正常" checked>
                                             <label class="form-check-label text-success" for="timeYes">正常</label>
@@ -212,7 +225,7 @@
                             <div class="col-md-4">
                                 <div class="check-group">
                                     <label class="form-label fw-bold mb-2">6. 生活札記</label>
-                                    <div class="d-flex gap-4 mt-2">
+                                    <div class="d-flex gap-4">
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="contactBookLifeNote" id="lifeYes" value="已寫" checked>
                                             <label class="form-check-label text-success" for="lifeYes">完成</label>
@@ -229,7 +242,7 @@
                             <div class="col-md-4">
                                 <div class="check-group">
                                     <label class="form-label fw-bold mb-2">7. 家長簽名</label>
-                                    <div class="d-flex gap-4 mt-2">
+                                    <div class="d-flex gap-4">
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="contactBookParentSign" id="signYes" value="已簽名" checked>
                                             <label class="form-check-label text-success" for="signYes">已簽名</label>
@@ -263,17 +276,18 @@
                         <tr style="font-size: 0.95rem;">
                             <th>日期</th>
                             <th>座號/姓名</th>
-                            <th>作業/考試</th>
-                            <th>英文抄寫</th>
-                            <th>文章摘要</th>
-                            <th>時間狀況</th>
-                            <th>生活札記</th>
-                            <th>家長簽名狀況</th>
+                            <th>1.日期</th>
+                            <th>2.作業/考試</th>
+                            <th>3.英文抄寫</th>
+                            <th>4.文章摘要</th>
+                            <th>5.時間狀況</th>
+                            <th>6.生活札記</th>
+                            <th>7.家長簽名</th>
                             <th>操作</th>
                         </tr>
                     </thead>
                     <tbody id="contactBookTableBody">
-                        <tr><td colspan="9" class="text-center text-muted text-light">載入中...</td></tr>
+                        <tr><td colspan="10" class="text-center text-muted text-light">載入中...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -324,8 +338,9 @@
         // 自動填入今天日期
         document.getElementById('contactBookDate').valueAsDate = new Date();
 
-        // 一鍵全完成按鈕事件
+        // 一鍵全完成按鈕事件（將 1~7 項全部設為完成/正常/已簽名）
         document.getElementById('oneClickCompleteBtn').addEventListener('click', function() {
+            document.getElementById('dateYes').checked = true;
             document.getElementById('examHwYes').checked = true;
             document.getElementById('engYes').checked = true;
             document.getElementById('sumYes').checked = true;
@@ -354,6 +369,7 @@
                 date: document.getElementById('contactBookDate').value,
                 studentNo: Number(studentNoVal),
                 studentName: contactBookStudents[studentNoVal],
+                dateCheck: getSelectedRadioValue('contactBookDateCheck'),
                 examHw: getSelectedRadioValue('contactBookExamHw'),
                 englishCopy: getSelectedRadioValue('contactBookEnglishCopy'),
                 articleSummary: getSelectedRadioValue('contactBookArticleSummary'),
@@ -398,7 +414,7 @@
             contactBookDb.ref('contact_book_records').orderByChild('timestamp').limitToLast(150).once('value', (snapshot) => {
                 tbody.innerHTML = '';
                 if (!snapshot.exists()) {
-                    tbody.innerHTML = `<tr><td colspan="9" class="text-center text-muted">目前沒有任何夥伴紀錄</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="10" class="text-center text-muted">目前沒有任何夥伴紀錄</td></tr>`;
                     return;
                 }
 
@@ -414,6 +430,7 @@
                 // 過濾掉「全部都是完成/正常/已簽名」的紀錄
                 let filteredRecords = records.filter(item => {
                     let isAllComplete = 
+                        (item.dateCheck === '完成' || !item.dateCheck) &&
                         (item.examHw === '完成/正常' || item.examHw === '已完成') &&
                         item.englishCopy === '已完成' &&
                         item.articleSummary === '已完成' &&
@@ -425,7 +442,7 @@
                 });
 
                 if (filteredRecords.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="9" class="text-center text-warning">🏴‍☠️ 航海大成功！目前所有已登記的 804 夥伴皆完美通關，無任何異常！</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="10" class="text-center text-warning">🏴‍☠️ 航海大成功！目前所有已登記的 804 夥伴皆完美通關，無任何異常！</td></tr>`;
                     return;
                 }
 
@@ -447,7 +464,7 @@
                     }
 
                     function renderStatus(val) {
-                        if (!val || val.includes('未') || val.includes('異常')) {
+                        if (!val || val.includes('未') || val.includes('異常') || val.includes('漏寫')) {
                             return `<span class="text-danger fw-bold">✕ ${val || '未完成'}</span>`;
                         }
                         return `<span class="text-success">✓ ${val}</span>`;
@@ -457,6 +474,7 @@
                     tr.innerHTML = `
                         <td>${item.date}</td>
                         <td><strong>${item.studentNo} 號<br>${name}</strong></td>
+                        <td>${renderStatus(item.dateCheck)}</td>
                         <td>${renderStatus(item.examHw)}</td>
                         <td>${renderStatus(item.englishCopy)}</td>
                         <td>${renderStatus(item.articleSummary)}</td>
