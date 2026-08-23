@@ -359,9 +359,13 @@
         firebase.initializeApp(contactBookFirebaseConfig);
         const contactBookDb = firebase.database();
 
-        // 自動填入今天日期
+        // 精準抓取裝置當地當天日期（避免時區誤差導致跳到前一天）
         const dateInput = document.getElementById('contactBookDate');
-        dateInput.valueAsDate = new Date();
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        dateInput.value = `${year}-${month}-${day}`;
 
         // 讓整個日期輸入框點擊任意位置都能直接叫出日曆選單
         dateInput.addEventListener('click', function() {
