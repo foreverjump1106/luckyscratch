@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         body { 
-            background-color: #0b1d3a; /* 深海藍色調 */
+            background-color: #0b1d3a; 
             background-image: linear-gradient(to bottom, #0b1d3a, #142850);
             font-family: 'Noto Sans TC', sans-serif;
             color: #f1f1f1;
@@ -22,7 +22,7 @@
         }
         h2, h4, .section-title {
             font-family: 'Cinzel', serif, 'Noto Sans TC', sans-serif;
-            color: #f4d06f; /* 航海金 */
+            color: #f4d06f; 
             text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
         }
         .card { 
@@ -102,6 +102,15 @@
             padding-bottom: 5px;
             margin-bottom: 10px;
         }
+        .quote-box {
+            background: rgba(244, 208, 111, 0.1);
+            border: 1px dashed #f4d06f;
+            border-radius: 8px;
+            padding: 10px 15px;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            color: #f4d06f;
+        }
     </style>
 </head>
 <body>
@@ -109,7 +118,10 @@
         <div class="text-center mb-4">
             <div class="pirate-banner">🏴‍☠️ ONE PIECE • 804 偉大航道日誌 ⚓</div>
             <h2 class="fw-bold mt-2">✨ 804 班聯絡簿航海冒險系統</h2>
-            <p class="text-warning" style="letter-spacing: 1px;">「我是要成為航海王的男人！」—— 帶領 804 夥伴們突破每一天的挑戰！</p>
+            <!-- 航海王經典金句提示區 -->
+            <div class="quote-box mt-3 text-center" id="pirateQuote">
+                🌊 「我是要成為航海王的男人！」—— 帶領 804 夥伴們突破每一天的挑戰！
+            </div>
         </div>
 
         <!-- 輸入表單區塊 -->
@@ -302,6 +314,15 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 
     <script>
+        // 隨機航海王金句輪播
+        const quotes = [
+            "🌊 「我是要成為航海王的男人！」—— 帶領 804 夥伴們突破每一天的挑戰！",
+            "⚔️ 「背後的傷疤是劍士的恥辱。」—— 培養 804 夥伴們的責任感與榮譽心！",
+            "🍖 「我要吃肉！！」—— 記得督促夥伴們認真學習也要好好補充體力！",
+            "🗺️ 「我的航海圖是完美的！」—— 804 班的每一天都在朝著夢想前進！"
+        ];
+        document.getElementById('pirateQuote').textContent = quotes[Math.floor(Math.random() * quotes.length)];
+
         // 學生名條對照表 (804班)
         const contactBookStudents = {
             1: "王禹涵", 2: "江育緹", 3: "呂思儀", 4: "李詠祺", 
