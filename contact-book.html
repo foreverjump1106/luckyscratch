@@ -3,91 +3,127 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>804班春風化雨聯絡簿批閱系統</title>
+    <title>704 偉大航道聯絡簿航海日誌</title>
     <!-- 引入 Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- 引入 Google 字型（更有溫潤感） -->
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- 引入 Google 字型 -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         body { 
-            background-color: #fcfaf2; /* 溫馨米色調 */
+            background-color: #0b1d3a; /* 深海藍色調 */
+            background-image: linear-gradient(to bottom, #0b1d3a, #142850);
             font-family: 'Noto Sans TC', sans-serif;
-            color: #4a403a;
+            color: #f1f1f1;
             padding-top: 30px; 
             padding-bottom: 50px;
+            min-height: 100vh;
         }
         h2, h4, .section-title {
-            font-family: 'Noto Serif TC', serif;
-            color: #5c4b37;
+            font-family: 'Cinzel', serif, 'Noto Sans TC', sans-serif;
+            color: #f4d06f; /* 航海金 */
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
         }
         .card { 
-            background-color: #ffffff;
-            border: 1px solid #e6dec9;
+            background-color: #1f3460;
+            border: 2px solid #f4d06f;
             border-radius: 12px;
-            box-shadow: 0 6px 15px rgba(120, 100, 80, 0.06); 
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4); 
+            color: #ffffff;
         }
         .form-control, .form-select {
-            border-color: #dcd0bc;
-            background-color: #fdfbf7;
+            border-color: #f4d06f;
+            background-color: #122244;
+            color: #ffffff;
         }
         .form-control:focus, .form-select:focus {
-            border-color: #8c7355;
-            box-shadow: 0 0 0 0.25rem rgba(140, 115, 85, 0.15);
+            border-color: #ffd700;
+            background-color: #122244;
+            color: #ffffff;
+            box-shadow: 0 0 0 0.25rem rgba(244, 208, 111, 0.25);
         }
-        .btn-primary {
-            background-color: #705b43;
-            border-color: #705b43;
+        .form-select option {
+            background-color: #122244;
+            color: #ffffff;
         }
-        .btn-primary:hover {
-            background-color: #584632;
-            border-color: #584632;
+        .btn-gold {
+            background-color: #f4d06f;
+            border-color: #f4d06f;
+            color: #112240;
+            font-weight: bold;
+        }
+        .btn-gold:hover {
+            background-color: #ffd700;
+            border-color: #ffd700;
+            color: #0b1d3a;
         }
         .section-title { 
             font-size: 1.1rem; 
             font-weight: bold; 
-            border-left: 4px solid #a38a6d; 
+            border-left: 4px solid #f4d06f; 
             padding-left: 10px; 
             margin-bottom: 15px; 
-            color: #6b533d;
         }
         .check-group {
-            background: #f7f4ed;
+            background: #162a53;
             padding: 12px 15px;
             border-radius: 8px;
-            border: 1px solid #ede7db;
+            border: 1px solid #2a437e;
             height: 100%;
+        }
+        .table {
+            color: #ffffff;
+        }
+        .table-light {
+            background-color: #122244 !important;
+            color: #f4d06f !important;
+        }
+        .table-light th {
+            background-color: #122244 !important;
+            color: #f4d06f !important;
+            border-color: #2a437e;
+        }
+        .table-hover tbody tr:hover {
+            color: #ffffff;
+            background-color: rgba(244, 208, 111, 0.1);
+        }
+        td, th {
+            border-color: #2a437e !important;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="text-center mb-4">
-            <h2 class="fw-bold">🌱 804 班春風化雨聯絡簿批閱系統</h2>
-            <p class="text-muted" style="font-family: 'Noto Serif TC', serif;">細心呵護每一位孩子的成長點滴</p>
+            <h2 class="fw-bold">🏴‍☠️ 804 偉大航道聯絡簿航海日誌</h2>
+            <p class="text-warning" style="letter-spacing: 1px;">航向偉大的航道，守護每一位夥伴的冒險旅程！</p>
         </div>
 
         <!-- 輸入表單區塊 -->
         <div class="card p-4 mb-4">
-            <h4 class="mb-3">每日批閱快速登記</h4>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="mb-0">今日航行紀錄登記</h4>
+                <!-- 一鍵全完成按鈕 -->
+                <button type="button" class="btn btn-gold btn-sm" id="oneClickCompleteBtn">⚓ 夥伴全員順利（一鍵全勾）</button>
+            </div>
             <form id="contactBookForm">
                 <div class="row g-3">
                     <!-- 基本欄位：日期與座號 -->
                     <div class="col-md-6">
-                        <label for="contactBookDate" class="form-label fw-bold">1. 日期</label>
+                        <label for="contactBookDate" class="form-label fw-bold text-warning">1. 航行日期</label>
                         <input type="date" class="form-control" id="contactBookDate" required>
                     </div>
                     <div class="col-md-6">
-                        <label for="contactBookStudentNo" class="form-label fw-bold">選擇學生（座號 / 姓名）</label>
+                        <label for="contactBookStudentNo" class="form-label fw-bold text-warning">選擇夥伴（座號 / 姓名）</label>
                         <select class="form-select form-select-lg" id="contactBookStudentNo" required style="font-size: 1rem;">
-                            <option value="">-- 請點擊選擇學生 --</option>
+                            <option value="">-- 請選擇夥伴座號與姓名 --</option>
                         </select>
                     </div>
 
-                    <hr class="my-3" style="border-color: #ede7db;">
+                    <hr class="my-3" style="border-color: #2a437e;">
 
                     <!-- 各項勾選與檢核 -->
                     <div class="col-12">
-                        <div class="section-title">各項學習與生活狀況勾選</div>
+                        <div class="section-title">各項冒險任務檢核</div>
                         <div class="row g-3">
                             <!-- 2. 考試、作業紀錄 -->
                             <div class="col-md-4">
@@ -96,11 +132,11 @@
                                     <div class="d-flex gap-4">
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="contactBookExamHw" id="examHwYes" value="完成/正常" checked>
-                                            <label class="form-check-label" for="examHwYes">有 (完成)</label>
+                                            <label class="form-check-label text-success" for="examHwYes">完成</label>
                                         </div>
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="contactBookExamHw" id="examHwNo" value="未交/未完成">
-                                            <label class="form-check-label text-danger" for="examHwNo">無 (未交)</label>
+                                            <label class="form-check-label text-danger" for="examHwNo">未交</label>
                                         </div>
                                     </div>
                                 </div>
@@ -113,11 +149,11 @@
                                     <div class="d-flex gap-4">
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="contactBookEnglishCopy" id="engYes" value="已完成" checked>
-                                            <label class="form-check-label" for="engYes">有 (完成)</label>
+                                            <label class="form-check-label text-success" for="engYes">完成</label>
                                         </div>
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="contactBookEnglishCopy" id="engNo" value="未完成">
-                                            <label class="form-check-label text-danger" for="engNo">無 (未完成)</label>
+                                            <label class="form-check-label text-danger" for="engNo">未完成</label>
                                         </div>
                                     </div>
                                 </div>
@@ -130,11 +166,11 @@
                                     <div class="d-flex gap-4">
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="contactBookArticleSummary" id="sumYes" value="已完成" checked>
-                                            <label class="form-check-label" for="sumYes">有 (完成)</label>
+                                            <label class="form-check-label text-success" for="sumYes">完成</label>
                                         </div>
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="contactBookArticleSummary" id="sumNo" value="未完成">
-                                            <label class="form-check-label text-danger" for="sumNo">無 (未完成)</label>
+                                            <label class="form-check-label text-danger" for="sumNo">未完成</label>
                                         </div>
                                     </div>
                                 </div>
@@ -147,11 +183,11 @@
                                     <div class="d-flex gap-4">
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="contactBookTimeRecord" id="timeYes" value="正常" checked>
-                                            <label class="form-check-label" for="timeYes">正常</label>
+                                            <label class="form-check-label text-success" for="timeYes">正常</label>
                                         </div>
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="contactBookTimeRecord" id="timeNo" value="異常/遲到/請假">
-                                            <label class="form-check-label text-danger" for="timeNo">異常 (遲到/早退)</label>
+                                            <label class="form-check-label text-danger" for="timeNo">異常</label>
                                         </div>
                                     </div>
                                 </div>
@@ -164,11 +200,11 @@
                                     <div class="d-flex gap-4">
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="contactBookLifeNote" id="lifeYes" value="已寫" checked>
-                                            <label class="form-check-label" for="lifeYes">有 (完成)</label>
+                                            <label class="form-check-label text-success" for="lifeYes">完成</label>
                                         </div>
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="contactBookLifeNote" id="lifeNo" value="未寫">
-                                            <label class="form-check-label text-danger" for="lifeNo">無 (未寫)</label>
+                                            <label class="form-check-label text-danger" for="lifeNo">未寫</label>
                                         </div>
                                     </div>
                                 </div>
@@ -181,11 +217,11 @@
                                     <div class="d-flex gap-4">
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="contactBookParentSign" id="signYes" value="已簽名" checked>
-                                            <label class="form-check-label" for="signYes">有 (已簽)</label>
+                                            <label class="form-check-label text-success" for="signYes">已簽名</label>
                                         </div>
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="contactBookParentSign" id="signNo" value="未簽名">
-                                            <label class="form-check-label text-danger" for="signNo">無 (未簽)</label>
+                                            <label class="form-check-label text-danger" for="signNo">未簽名</label>
                                         </div>
                                     </div>
                                 </div>
@@ -194,7 +230,7 @@
                     </div>
 
                     <div class="col-12 text-end mt-4">
-                        <button type="submit" class="btn btn-primary px-5 py-2 fw-bold shadow-sm">儲存此筆紀錄</button>
+                        <button type="submit" class="btn btn-gold px-5 py-2 fw-bold shadow-sm">紀錄此位夥伴狀況</button>
                     </div>
                 </div>
             </form>
@@ -203,8 +239,8 @@
         <!-- 紀錄檢視區塊 -->
         <div class="card p-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h4 class="mb-0">批閱清單與未簽名追蹤</h4>
-                <button class="btn btn-outline-secondary btn-sm" id="contactBookRefreshBtn">重新載入</button>
+                <h4 class="mb-0">需要關注的夥伴清單（已過濾全部完成者）</h4>
+                <button class="btn btn-outline-light btn-sm" id="contactBookRefreshBtn">重新載入</button>
             </div>
             <div class="table-responsive">
                 <table class="table table-hover align-middle">
@@ -222,7 +258,7 @@
                         </tr>
                     </thead>
                     <tbody id="contactBookTableBody">
-                        <tr><td colspan="9" class="text-center text-muted">載入中...</td></tr>
+                        <tr><td colspan="9" class="text-center text-muted text-light">載入中...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -273,6 +309,16 @@
         // 自動填入今天日期
         document.getElementById('contactBookDate').valueAsDate = new Date();
 
+        // 一鍵全完成按鈕事件
+        document.getElementById('oneClickCompleteBtn').addEventListener('click', function() {
+            document.getElementById('examHwYes').checked = true;
+            document.getElementById('engYes').checked = true;
+            document.getElementById('sumYes').checked = true;
+            document.getElementById('timeYes').checked = true;
+            document.getElementById('lifeYes').checked = true;
+            document.getElementById('signYes').checked = true;
+        });
+
         // 取得選取 Radio 按鈕值的輔助函式
         function getSelectedRadioValue(name) {
             const ele = document.querySelector(`input[name="${name}"]:checked`);
@@ -285,7 +331,7 @@
 
             const studentNoVal = document.getElementById('contactBookStudentNo').value;
             if (!studentNoVal) {
-                alert("請選擇學生座號與姓名！");
+                alert("請選擇夥伴座號與姓名！");
                 return;
             }
 
@@ -306,8 +352,9 @@
                 if (error) {
                     alert("儲存失敗：" + error.message);
                 } else {
-                    // 重設部分欄位保留日期，座號清空並聚焦方便連續輸入
                     document.getElementById('contactBookStudentNo').value = '';
+                    // 順便重設為預設的全勾狀態，方便下一位
+                    document.getElementById('oneClickCompleteBtn').click();
                     document.getElementById('contactBookStudentNo').focus();
                     loadContactBookRecords();
                 }
@@ -318,7 +365,7 @@
         function calculateContactBookUnsignedStreak(allRecords, currentStudentNo, currentDate) {
             let studentRecords = allRecords
                 .filter(r => r.studentNo === currentStudentNo && r.date <= currentDate)
-                .sort((a, b) => new Date(b.date) - new Date(a.date));
+                .sort((a, b) => new Date(b.date) - new Date(b.date)); // 確保時間正確排序
 
             let count = 0;
             for (let r of studentRecords) {
@@ -334,10 +381,10 @@
         // 載入紀錄函數
         function loadContactBookRecords() {
             const tbody = document.getElementById('contactBookTableBody');
-            contactBookDb.ref('contact_book_records').orderByChild('timestamp').limitToLast(100).once('value', (snapshot) => {
+            contactBookDb.ref('contact_book_records').orderByChild('timestamp').limitToLast(150).once('value', (snapshot) => {
                 tbody.innerHTML = '';
                 if (!snapshot.exists()) {
-                    tbody.innerHTML = `<tr><td colspan="9" class="text-center text-muted">目前沒有任何聯絡簿紀錄</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="9" class="text-center text-muted">目前沒有任何夥伴紀錄</td></tr>`;
                     return;
                 }
 
@@ -350,7 +397,25 @@
 
                 records.reverse();
 
-                records.forEach((item) => {
+                // 過濾掉「全部都是完成/正常/已簽名」的紀錄，不顯示在清單中
+                let filteredRecords = records.filter(item => {
+                    let isAllComplete = 
+                        (item.examHw === '完成/正常' || item.examHw === '已完成') &&
+                        item.englishCopy === '已完成' &&
+                        item.articleSummary === '已完成' &&
+                        item.timeRecord === '正常' &&
+                        (item.lifeNote === '已寫' || !item.lifeNote) &&
+                        item.parentSign === '已簽名';
+                    
+                    return !isAllComplete; // 回傳 true 代表「有狀況需要顯示」，false 代表「全部完成，隱藏」
+                });
+
+                if (filteredRecords.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="9" class="text-center text-warning">✨ 太棒了！目前所有已登記的夥伴皆全部順利完成，無異常狀況！</td></tr>`;
+                    return;
+                }
+
+                filteredRecords.forEach((item) => {
                     let name = contactBookStudents[item.studentNo] || item.studentName || '';
                     
                     let unsignedStreak = 0;
@@ -367,10 +432,9 @@
                         signDisplay = `<span class="badge bg-success">已簽名</span>`;
                     }
 
-                    // 簡易標籤呈現函式
                     function renderStatus(val) {
-                        if (val.includes('未') || val.includes('異常')) {
-                            return `<span class="text-danger fw-bold">✕ ${val}</span>`;
+                        if (!val || val.includes('未') || val.includes('異常')) {
+                            return `<span class="text-danger fw-bold">✕ ${val || '未完成'}</span>`;
                         }
                         return `<span class="text-success">✓ ${val}</span>`;
                     }
@@ -393,7 +457,7 @@
         }
 
         window.deleteContactBookRecord = function(id) {
-            if (confirm("確定要刪除這筆聯絡簿紀錄嗎？")) {
+            if (confirm("確定要刪除這筆航行紀錄嗎？")) {
                 contactBookDb.ref('contact_book_records/' + id).remove().then(() => {
                     loadContactBookRecords();
                 });
