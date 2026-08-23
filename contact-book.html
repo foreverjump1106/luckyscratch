@@ -34,6 +34,7 @@
             border-color: #f4d06f;
             background-color: #122244;
             color: #ffffff;
+            cursor: pointer; /* 讓滑鼠移上去變成點擊手勢 */
         }
         .form-control:focus, .form-select:focus {
             border-color: #ffd700;
@@ -336,7 +337,15 @@
         const contactBookDb = firebase.database();
 
         // 自動填入今天日期
-        document.getElementById('contactBookDate').valueAsDate = new Date();
+        const dateInput = document.getElementById('contactBookDate');
+        dateInput.valueAsDate = new Date();
+
+        // 讓整個日期輸入框點擊任意位置都能直接叫出日曆選單
+        dateInput.addEventListener('click', function() {
+            if (typeof this.showPicker === 'function') {
+                this.showPicker();
+            }
+        });
 
         // 一鍵全完成按鈕事件
         document.getElementById('oneClickCompleteBtn').addEventListener('click', function() {
@@ -369,7 +378,6 @@
             const parentSignVal = getSelectedRadioValue('contactBookParentSign');
             const studentNoNum = Number(studentNoVal);
 
-            // 抓取現有所有紀錄來計算真正的累積未簽名天數
             contactBookDb.ref('contact_book_records').orderByChild('timestamp').once('value', (snapshot) => {
                 let existingRecords = [];
                 if (snapshot.exists()) {
@@ -378,14 +386,12 @@
                     });
                 }
 
-                // 計算該學生在此之前的累積未簽名天數
                 let previousStreak = 0;
                 let studentPastRecords = existingRecords
                     .filter(r => r.studentNo === studentNoNum)
                     .sort((a, b) => new Date(b.date) - new Date(a.date));
 
                 if (parentSignVal === '未簽名') {
-                    // 找出最近一次「已簽名」或往前連續未簽名的天數
                     for (let r of studentPastRecords) {
                         if (r.parentSign === '未簽名') {
                             previousStreak = r.unsignedStreak || 1;
@@ -394,9 +400,9 @@
                             break;
                         }
                     }
-                    previousStreak += 1; // 加上今天這一天
+                    previousStreak += 1;
                 } else {
-                    previousStreak = 0; // 如果今天是已簽名，天數歸零
+                    previousStreak = 0;
                 }
 
                 const contactBookRecordData = {
@@ -410,7 +416,7 @@
                     timeRecord: getSelectedRadioValue('contactBookTimeRecord'),
                     lifeNote: getSelectedRadioValue('contactBookLifeNote'),
                     parentSign: parentSignVal,
-                    unsignedStreak: previousStreak, // 直接將累計天數鎖定在這筆資料中！
+                    unsignedStreak: previousStreak,
                     timestamp: Date.now()
                 };
 
@@ -446,7 +452,6 @@
 
                 records.reverse();
 
-                // 過濾掉「全部都是完成/正常/已簽名」的紀錄
                 let filteredRecords = records.filter(item => {
                     let isAllComplete = 
                         (item.dateCheck === '完成' || !item.dateCheck) &&
