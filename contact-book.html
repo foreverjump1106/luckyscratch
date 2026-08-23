@@ -132,7 +132,7 @@
 
                     <hr class="my-3" style="border-color: #2a437e;">
 
-                    <!-- 各項勾選與檢核（包含 1. 日期狀態） -->
+                    <!-- 各項勾選與檢核 -->
                     <div class="col-12">
                         <div class="section-title">各項冒險任務檢核 (1~7項)</div>
                         <div class="row g-3">
@@ -365,57 +365,72 @@
                 return;
             }
 
-            const contactBookRecordData = {
-                date: document.getElementById('contactBookDate').value,
-                studentNo: Number(studentNoVal),
-                studentName: contactBookStudents[studentNoVal],
-                dateCheck: getSelectedRadioValue('contactBookDateCheck'),
-                examHw: getSelectedRadioValue('contactBookExamHw'),
-                englishCopy: getSelectedRadioValue('contactBookEnglishCopy'),
-                articleSummary: getSelectedRadioValue('contactBookArticleSummary'),
-                timeRecord: getSelectedRadioValue('contactBookTimeRecord'),
-                lifeNote: getSelectedRadioValue('contactBookLifeNote'),
-                parentSign: getSelectedRadioValue('contactBookParentSign'),
-                timestamp: Date.now()
-            };
+            const currentDate = document.getElementById('contactBookDate').value;
+            const parentSignVal = getSelectedRadioValue('contactBookParentSign');
+            const studentNoNum = Number(studentNoVal);
 
-            contactBookDb.ref('contact_book_records').push(contactBookRecordData, function(error) {
-                if (error) {
-                    alert("儲存失敗：" + error.message);
-                } else {
-                    document.getElementById('contactBookStudentNo').value = '';
-                    document.getElementById('oneClickCompleteBtn').click(); 
-                    document.getElementById('contactBookStudentNo').focus();
-                    loadContactBookRecords();
+            // 抓取現有所有紀錄來計算真正的累積未簽名天數
+            contactBookDb.ref('contact_book_records').orderByChild('timestamp').once('value', (snapshot) => {
+                let existingRecords = [];
+                if (snapshot.exists()) {
+                    snapshot.forEach((childSnapshot) => {
+                        existingRecords.push(childSnapshot.val());
+                    });
                 }
+
+                // 計算該學生在此之前的累積未簽名天數
+                let previousStreak = 0;
+                let studentPastRecords = existingRecords
+                    .filter(r => r.studentNo === studentNoNum)
+                    .sort((a, b) => new Date(b.date) - new Date(a.date));
+
+                if (parentSignVal === '未簽名') {
+                    // 找出最近一次「已簽名」或往前連續未簽名的天數
+                    for (let r of studentPastRecords) {
+                        if (r.parentSign === '未簽名') {
+                            previousStreak = r.unsignedStreak || 1;
+                            break;
+                        } else if (r.parentSign === '已簽名') {
+                            break;
+                        }
+                    }
+                    previousStreak += 1; // 加上今天這一天
+                } else {
+                    previousStreak = 0; // 如果今天是已簽名，天數歸零
+                }
+
+                const contactBookRecordData = {
+                    date: currentDate,
+                    studentNo: studentNoNum,
+                    studentName: contactBookStudents[studentNoVal],
+                    dateCheck: getSelectedRadioValue('contactBookDateCheck'),
+                    examHw: getSelectedRadioValue('contactBookExamHw'),
+                    englishCopy: getSelectedRadioValue('contactBookEnglishCopy'),
+                    articleSummary: getSelectedRadioValue('contactBookArticleSummary'),
+                    timeRecord: getSelectedRadioValue('contactBookTimeRecord'),
+                    lifeNote: getSelectedRadioValue('contactBookLifeNote'),
+                    parentSign: parentSignVal,
+                    unsignedStreak: previousStreak, // 直接將累計天數鎖定在這筆資料中！
+                    timestamp: Date.now()
+                };
+
+                contactBookDb.ref('contact_book_records').push(contactBookRecordData, function(error) {
+                    if (error) {
+                        alert("儲存失敗：" + error.message);
+                    } else {
+                        document.getElementById('contactBookStudentNo').value = '';
+                        document.getElementById('oneClickCompleteBtn').click(); 
+                        document.getElementById('contactBookStudentNo').focus();
+                        loadContactBookRecords();
+                    }
+                });
             });
         });
-
-        // 改進版：計算連續未簽名天數（獨立追蹤該學生的未簽名歷史記錄，不會因單筆刪除而完全歸零，除非有「已簽名」或中間沒有登記）
-        function calculateContactBookUnsignedStreak(allRecords, currentStudentNo, currentDate) {
-            // 找出該學生在「當天或之前」的所有紀錄，按日期由新到舊排序
-            let studentRecords = allRecords
-                .filter(r => r.studentNo === currentStudentNo && r.date <= currentDate)
-                .sort((a, b) => new Date(b.date) - new Date(a.date));
-
-            let count = 0;
-            for (let i = 0; i < studentRecords.length; i++) {
-                let r = studentRecords[i];
-                if (r.parentSign === '未簽名') {
-                    count++;
-                } else {
-                    break; // 遇到已簽名就停止累加
-                }
-            }
-            return count;
-        }
 
         // 載入紀錄函數
         function loadContactBookRecords() {
             const tbody = document.getElementById('contactBookTableBody');
-            
-            // 為了確保能抓到歷史未簽名，我們同時抓取「已經被刪除以外」雲端上實際存在的所有歷史資料
-            contactBookDb.ref('contact_book_records').orderByChild('timestamp').limitToLast(300).once('value', (snapshot) => {
+            contactBookDb.ref('contact_book_records').orderByChild('timestamp').limitToLast(150).once('value', (snapshot) => {
                 tbody.innerHTML = '';
                 if (!snapshot.exists()) {
                     tbody.innerHTML = `<tr><td colspan="10" class="text-center text-muted">目前沒有任何夥伴紀錄</td></tr>`;
@@ -428,11 +443,6 @@
                     item.id = childSnapshot.key;
                     records.push(item);
                 });
-
-                // 為了計算連續未簽名，我們需要一個「包含所有歷史未簽名事件」的狀態表。
-                // 這裡我們建立一個全域對照，或者直接從雲端撈取該學生過去未簽名的累積次數。
-                // 為了最符合你的需求：只要使用者有登錄沒簽名，就算中間把該筆紀錄的「生活札記」刪掉，
-                // 只要資料庫裡還留有他那天的「未簽名」足跡，或者我們用一個獨立的學生狀態節點來記帳。
 
                 records.reverse();
 
@@ -458,17 +468,15 @@
                 filteredRecords.forEach((item) => {
                     let name = contactBookStudents[item.studentNo] || item.studentName || '';
                     
-                    let unsignedStreak = 0;
-                    if (item.parentSign === '未簽名') {
-                        // 追蹤該學生在資料庫中所有未簽名的紀錄筆數（代表累積未簽名天數）
-                        unsignedStreak = records.filter(r => r.studentNo === item.studentNo && r.parentSign === '未簽名' && r.date <= item.date).length;
-                    }
-
                     let signDisplay = item.parentSign;
-                    if (unsignedStreak > 1) {
-                        signDisplay = `<span class="badge bg-danger">❌ 未簽名 (已連續 ${unsignedStreak} 天)</span>`;
-                    } else if (item.parentSign === '未簽名') {
-                        signDisplay = `<span class="badge bg-warning text-dark">❌ 未簽名 (連續 1 天)</span>`;
+                    let streak = item.unsignedStreak || 1;
+                    
+                    if (item.parentSign === '未簽名') {
+                        if (streak > 1) {
+                            signDisplay = `<span class="badge bg-danger">❌ 未簽名 (已連續 ${streak} 天)</span>`;
+                        } else {
+                            signDisplay = `<span class="badge bg-warning text-dark">❌ 未簽名 (連續 1 天)</span>`;
+                        }
                     } else {
                         signDisplay = `<span class="badge bg-success">已簽名</span>`;
                     }
