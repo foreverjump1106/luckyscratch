@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>704班聯絡簿與心情雜記批閱紀錄器</title>
+    <!-- 引入 Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; padding-top: 20px; }
+        .card { box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .section-title { font-size: 1.1rem; font-weight: bold; color: #495057; border-left: 4px solid #0d6efd; padding-left: 8px; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+    <div class="container mb-5">
+        <h2 class="mb-4 text-center">📖 704班聯絡簿與心情雜記批閱紀錄器</h2>
+
+        <!-- 輸入表單區塊 -->
+        <div class="card p-4 mb-4">
+            <h4 class="mb-3">聯絡簿批閱登記</h4>
+            <form id="contactBookForm">
+                <div class="row g-3">
+                    <!-- 基本欄位 -->
+                    <div class="col-md-4">
+                        <label for="contactBookDate" class="form-label">1. 日期</label>
+                        <input type="date" class="form-control" id="contactBookDate" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="contactBookStudentNo" class="form-label">學生座號 / 姓名</label>
+                        <select class="form-select" id="contactBookStudentNo" required>
+                            <option value="">請選擇座號/姓名</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="contactBookTimeRecord" class="form-label">5. 到校與返家時間狀況</label>
+                        <input type="text" class="form-control" id="contactBookTimeRecord" placeholder="例如: 正常 / 遲到8:20 / 請假">
+                    </div>
+
+                    <hr class="my-2">
+
+                    <!-- 各項檢核與紀錄 -->
+                    <div class="col-12">
+                        <div class="section-title">聯絡簿內文與學習狀況檢核</div>
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <label for="contactBookExamHw" class="form-label">2. 考試、作業紀錄</label>
+                                <input type="text" class="form-control" id="contactBookExamHw" placeholder="例如: 國習未交、數學訂正中">
+                            </div>
+                            <div class="col-md-4">
+                                <label for="contactBookEnglishCopy" class="form-label">3. 英文佳句抄寫</label>
+                                <select class="form-select" id="contactBookEnglishCopy">
+                                    <option value="已完成">已完成 / 正常</option>
+                                    <option value="未交/未完成">未交 / 未完成</option>
+                                    <option value="字跡需改善">字跡需改善</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="contactBookArticleSummary" class="form-label">4. 文章重點摘要</label>
+                                <select class="form-select" id="contactBookArticleSummary">
+                                    <option value="已完成">已完成 / 正常</option>
+                                    <option value="未交/未完成">未交 / 未完成</option>
+                                    <option value="內容需充實">內容需充實</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 mt-3">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="contactBookLifeNote" class="form-label">6. 生活札記（心情雜記）狀況</label>
+                                <textarea class="form-control" id="contactBookLifeNote" rows="2" placeholder="紀錄心情低落、特別事件或老師回饋..."></textarea>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="contactBookParentSign" class="form-label">7. 家長簽名</label>
+                                <select class="form-select" id="contactBookParentSign" required>
+                                    <option value="已簽名">已簽名</option>
+                                    <option value="未簽名">❌ 未簽名</option>
+                                </select>
+                                <div class="form-text text-muted">若選擇「未簽名」，系統將自動計算並追蹤連續未簽名天數。</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 text-end mt-4">
+                        <button type="submit" class="btn btn-primary px-5 py-2">儲存聯絡簿紀錄</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- 紀錄檢視區塊 -->
+        <div class="card p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="mb-0">聯絡簿批閱清單與未簽名追蹤</h4>
+                <button class="btn btn-outline-secondary btn-sm" id="contactBookRefreshBtn">重新載入</button>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>日期</th>
+                            <th>座號/姓名</th>
+                            <th>作業/考試</th>
+                            <th>英文/摘要</th>
+                            <th>時間狀況</th>
+                            <th>生活札記</th>
+                            <th>家長簽名狀態</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="contactBookTableBody">
+                        <tr><td colspan="8" class="text-center text-muted">載入中...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+    <script>
+        // 學生名條對照表
+        const contactBookStudents = {
+            1: "王禹涵", 2: "江育緹", 3: "呂思儀", 4: "李詠祺", 
+            5: "林子歆", 6: "林禹萱", 7: "張馨勻", 8: "陳昕樂", 
+            9: "陳梓安", 10: "陳筠蓁", 11: "陳苙絜", 12: "楊錚諭", 
+            13: "趙安諭", 14: "魏語潔", 15: "江靚恩", 16: "王洋振", 
+            17: "吳昊丞", 18: "李祐誠", 19: "林宸陞", 20: "林維辰", 
+            21: "林鈺棟", 22: "洪楷祥", 23: "陳兆楷", 24: "陳沂璟", 
+            25: "黑肚・尤明", 26: "賴震宇", 27: "戴震龍", 28: "謝宇哲"
+        };
+
+        // 初始化下拉選單
+        const contactBookStudentSelect = document.getElementById('contactBookStudentNo');
+        for (let i = 1; i <= 28; i++) {
+            let option = document.createElement('option');
+            option.value = i;
+            option.textContent = `${i} 號 - ${contactBookStudents[i]}`;
+            contactBookStudentSelect.appendChild(option);
+        }
+
+        // ==========================================
+        // 請在此處填入你從 Firebase 控制台取得的設定
+        // ==========================================
+        const contactBookFirebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            databaseURL: "YOUR_DATABASE_URL",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        firebase.initializeApp(contactBookFirebaseConfig);
+        const contactBookDb = firebase.database();
+
+        // 自動填入今天日期
+        document.getElementById('contactBookDate').valueAsDate = new Date();
+
+        // 監聽表單送出
+        document.getElementById('contactBookForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const contactBookRecordData = {
+                date: document.getElementById('contactBookDate').value,
+                studentNo: Number(document.getElementById('contactBookStudentNo').value),
+                studentName: contactBookStudents[document.getElementById('contactBookStudentNo'].value],
+                examHw: document.getElementById('contactBookExamHw').value || '正常',
+                englishCopy: document.getElementById('contactBookEnglishCopy').value,
+                articleSummary: document.getElementById('contactBookArticleSummary').value,
+                timeRecord: document.getElementById('contactBookTimeRecord').value || '正常',
+                lifeNote: document.getElementById('contactBookLifeNote').value || '',
+                parentSign: document.getElementById('contactBookParentSign').value,
+                timestamp: Date.now()
+            };
+
+            contactBookDb.ref('contact_book_records').push(contactBookRecordData, function(error) {
+                if (error) {
+                    alert("儲存失敗：" + error.message);
+                } else {
+                    document.getElementById('contactBookExamHw').value = '';
+                    document.getElementById('contactBookTimeRecord').value = '';
+                    document.getElementById('contactBookLifeNote').value = '';
+                    document.getElementById('contactBookParentSign').value = '已簽名';
+                    document.getElementById('contactBookStudentNo').value = '';
+                    document.getElementById('contactBookStudentNo').focus();
+                    loadContactBookRecords();
+                }
+            });
+        });
+
+        // 計算連續未簽名天數的輔助函數
+        function calculateContactBookUnsignedStreak(allRecords, currentStudentNo, currentDate) {
+            let studentRecords = allRecords
+                .filter(r => r.studentNo === currentStudentNo && r.date <= currentDate)
+                .sort((a, b) => new Date(b.date) - new Date(a.date));
+
+            let count = 0;
+            for (let r of studentRecords) {
+                if (r.parentSign === '未簽名') {
+                    count++;
+                } else {
+                    break; 
+                }
+            }
+            return count;
+        }
+
+        // 載入紀錄函數
+        function loadContactBookRecords() {
+            const tbody = document.getElementById('contactBookTableBody');
+            contactBookDb.ref('contact_book_records').orderByChild('timestamp').limitToLast(100).once('value', (snapshot) => {
+                tbody.innerHTML = '';
+                if (!snapshot.exists()) {
+                    tbody.innerHTML = `<tr><td colspan="8" class="text-center text-muted">目前沒有任何聯絡簿紀錄</td></tr>`;
+                    return;
+                }
+
+                let records = [];
+                snapshot.forEach((childSnapshot) => {
+                    let item = childSnapshot.val();
+                    item.id = childSnapshot.key;
+                    records.push(item);
+                });
+
+                records.reverse();
+
+                records.forEach((item) => {
+                    let name = contactBookStudents[item.studentNo] || item.studentName || '';
+                    
+                    let unsignedStreak = 0;
+                    if (item.parentSign === '未簽名') {
+                        unsignedStreak = calculateContactBookUnsignedStreak(records, item.studentNo, item.date);
+                    }
+
+                    let signDisplay = item.parentSign;
+                    if (unsignedStreak > 1) {
+                        signDisplay = `<span class="badge bg-danger">❌ 未簽名 (已連續 ${unsignedStreak} 天)</span>`;
+                    } else if (item.parentSign === '未簽名') {
+                        signDisplay = `<span class="badge bg-warning text-dark">❌ 未簽名 (連續 1 天)</span>`;
+                    } else {
+                        signDisplay = `<span class="badge bg-success">已簽名</span>`;
+                    }
+
+                    let tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${item.date}</td>
+                        <td><strong>${item.studentNo} 號<br>${name}</strong></td>
+                        <td><small>${item.examHw}</small></td>
+                        <td><small>英文: ${item.englishCopy}<br>摘要: ${item.articleSummary}</small></td>
+                        <td><small>${item.timeRecord}</small></td>
+                        <td><small>${item.lifeNote || '(無)'}</small></td>
+                        <td>${signDisplay}</td>
+                        <td><button class="btn btn-outline-danger btn-sm" onclick="deleteContactBookRecord('${item.id}')">刪除</button></td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            });
+        }
+
+        window.deleteContactBookRecord = function(id) {
+            if (confirm("確定要刪除這筆聯絡簿紀錄嗎？")) {
+                contactBookDb.ref('contact_book_records/' + id).remove().then(() => {
+                    loadContactBookRecords();
+                });
+            }
+        }
+
+        document.getElementById('contactBookRefreshBtn').addEventListener('click', loadContactBookRecords);
+
+        loadContactBookRecords();
+    </script>
+</body>
+</html>
