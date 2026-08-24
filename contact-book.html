@@ -132,10 +132,39 @@
             font-size: 0.95rem;
             color: #f4d06f;
         }
+        /* 登入遮罩樣式 */
+        #loginOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #0b1d3a;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
+    <!-- 🔐 導師專屬登入驗證畫面 -->
+    <div id="loginOverlay">
+        <div class="card p-5 text-center shadow-lg" style="max-width: 400px; width: 90%;">
+            <div class="pirate-banner mb-3">🏴‍☠️ 導師身分驗證 ⚓</div>
+            <h4 class="mb-3 text-warning">804 偉大航道通行密碼</h4>
+            <p class="text-muted small text-light mb-4">請輸入導師專屬密碼以解鎖聯絡簿系統</p>
+            <form id="loginForm">
+                <div class="mb-3">
+                    <input type="password" class="form-control text-center py-2" id="teacherPasswordInput" placeholder="請輸入密碼" required style="letter-spacing: 3px;">
+                </div>
+                <button type="submit" class="btn btn-gold w-100 py-2 fw-bold">解鎖航海日誌 🚀</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 主系統內容（預設隱藏，通過驗證後顯示） -->
+    <div class="container" id="mainSystemContainer" style="display: none;">
         <div class="text-center mb-4">
             <div class="pirate-banner">🏴‍☠️ ONE PIECE • 804 偉大航道日誌 ⚓</div>
             <h2 class="fw-bold mt-2">✨ 804 班聯絡簿航海冒險系統</h2>
@@ -374,6 +403,25 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 
     <script>
+        // ==========================================
+        // 🔐 導師登入密碼設定（可自行修改密碼）
+        // ==========================================
+        const TEACHER_PASSWORD = "804"; 
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const inputVal = document.getElementById('teacherPasswordInput').value;
+            if (inputVal === TEACHER_PASSWORD) {
+                document.getElementById('loginOverlay').style.display = 'none';
+                document.getElementById('mainSystemContainer').style.display = 'block';
+                loadAllData(); // 通過驗證後才載入系統資料
+            } else {
+                alert("密碼錯誤！請重新輸入。");
+                document.getElementById('teacherPasswordInput').value = '';
+                document.getElementById('teacherPasswordInput').focus();
+            }
+        });
+
         // 隨機航海王金句輪播
         const quotes = [
             "🌊 「我是要成為航海王的男人！」—— 帶領 804 夥伴們突破每一天的挑戰！",
@@ -510,11 +558,10 @@
                 if (alreadyExists) {
                     let confirmAgain = confirm(`⚠️ 【防呆提醒】\n\n夥伴「${studentNoNum} 號 - ${studentName}」在 ${currentDate} 已經輸入過紀錄囉！\n\n是否選錯夥伴？點擊「確定」將繼續新增，點擊「取消」返回修改座號。`);
                     if (!confirmAgain) {
-                        return; // 取消送出
+                        return;
                     }
                 }
 
-                // 繼續執行原本的儲存流程
                 const parentSignVal = getSelectedRadioValue('contactBookParentSign');
                 const currentSubmissionStatus = isNotSubmittedMode ? "未繳交" : "已繳交";
 
@@ -701,7 +748,6 @@
             });
         }
 
-        // 前端直接隱藏該列，不重新整理頁面
         window.hideFrontendRecord = function(btn) {
             let row = btn.closest('tr');
             if (row) {
@@ -847,9 +893,6 @@
         }
 
         document.getElementById('contactBookRefreshBtn').addEventListener('click', loadAllData);
-
-        // 初始載入
-        loadAllData();
     </script>
 </body>
 </html>
