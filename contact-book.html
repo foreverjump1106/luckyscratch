@@ -455,8 +455,8 @@
                     date: currentDate,
                     studentNo: studentNoNum,
                     studentName: contactBookStudents[studentNoVal],
-                    submissionStatus: "未繳交", // 預設點擊送出即為未繳交
-                    subStreak: previousSubStreak, // 累計未繳交天數
+                    submissionStatus: "未繳交", 
+                    subStreak: previousSubStreak, 
                     dateCheck: getSelectedRadioValue('contactBookDateCheck'),
                     examHw: getSelectedRadioValue('contactBookExamHw'),
                     englishCopy: getSelectedRadioValue('contactBookEnglishCopy'),
@@ -527,7 +527,9 @@
                     // 聯絡簿繳交狀態與連續未交天數顯示
                     let subStatusDisplay = `<span class="badge bg-success">已繳交</span>`;
                     let subStreak = item.subStreak || 1;
-                    if (item.submissionStatus === "未繳交") {
+                    let isNotSubmitted = (item.submissionStatus === "未繳交");
+
+                    if (isNotSubmitted) {
                         if (subStreak > 1) {
                             subStatusDisplay = `<span class="badge bg-danger">❌ 未繳交 (已連續 ${subStreak} 天)</span>`;
                         } else {
@@ -535,24 +537,32 @@
                         }
                     }
 
-                    let signDisplay = item.parentSign;
-                    let streak = item.unsignedStreak || 1;
-                    
-                    if (item.parentSign === '未簽名') {
-                        if (streak > 1) {
-                            signDisplay = `<span class="badge bg-danger">❌ 未簽名 (已連續 ${streak} 天)</span>`;
-                        } else {
-                            signDisplay = `<span class="badge bg-warning text-dark">❌ 未簽名 (連續 1 天)</span>`;
+                    // 如果未繳交，1~7項檢核狀態顯示為 "?"
+                    function renderStatus(val, isUnsubmitted) {
+                        if (isUnsubmitted) {
+                            return `<span class="text-warning fw-bold">?</span>`;
                         }
-                    } else {
-                        signDisplay = `<span class="badge bg-success">已簽名</span>`;
-                    }
-
-                    function renderStatus(val) {
                         if (!val || val.includes('未') || val.includes('異常') || val.includes('漏寫')) {
                             return `<span class="text-danger fw-bold">✕ ${val || '未完成'}</span>`;
                         }
                         return `<span class="text-success">✓ ${val}</span>`;
+                    }
+
+                    let signDisplay = item.parentSign;
+                    let streak = item.unsignedStreak || 1;
+                    
+                    if (isNotSubmitted) {
+                        signDisplay = `<span class="text-warning fw-bold">?</span>`;
+                    } else {
+                        if (item.parentSign === '未簽名') {
+                            if (streak > 1) {
+                                signDisplay = `<span class="badge bg-danger">❌ 未簽名 (已連續 ${streak} 天)</span>`;
+                            } else {
+                                signDisplay = `<span class="badge bg-warning text-dark">❌ 未簽名 (連續 1 天)</span>`;
+                            }
+                        } else {
+                            signDisplay = `<span class="badge bg-success">已簽名</span>`;
+                        }
                     }
 
                     let tr = document.createElement('tr');
@@ -560,12 +570,12 @@
                         <td>${item.date}</td>
                         <td><strong>${item.studentNo} 號<br>${name}</strong></td>
                         <td>${subStatusDisplay}</td>
-                        <td>${renderStatus(item.dateCheck)}</td>
-                        <td>${renderStatus(item.examHw)}</td>
-                        <td>${renderStatus(item.englishCopy)}</td>
-                        <td>${renderStatus(item.articleSummary)}</td>
-                        <td>${renderStatus(item.timeRecord)}</td>
-                        <td>${renderStatus(item.lifeNote)}</td>
+                        <td>${renderStatus(item.dateCheck, isNotSubmitted)}</td>
+                        <td>${renderStatus(item.examHw, isNotSubmitted)}</td>
+                        <td>${renderStatus(item.englishCopy, isNotSubmitted)}</td>
+                        <td>${renderStatus(item.articleSummary, isNotSubmitted)}</td>
+                        <td>${renderStatus(item.timeRecord, isNotSubmitted)}</td>
+                        <td>${renderStatus(item.lifeNote, isNotSubmitted)}</td>
                         <td>${signDisplay}</td>
                         <td><button class="btn btn-outline-danger btn-sm" onclick="deleteContactBookRecord('${item.id}')">刪除</button></td>
                     `;
