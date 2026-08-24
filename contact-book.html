@@ -669,7 +669,7 @@
                     <td>${signDisplay}</td>
                     <td>
                         <div class="d-flex flex-column gap-1">
-                            <button class="btn btn-outline-warning btn-sm py-0" style="font-size: 0.8rem;" onclick="hideFrontendRecord('${item.id}')">🧹 移除關注</button>
+                            <button class="btn btn-outline-warning btn-sm py-0" style="font-size: 0.8rem;" onclick="hideFrontendRecord(this)">🧹 移除關注</button>
                             <button class="btn btn-outline-danger btn-sm py-0" style="font-size: 0.8rem;" onclick="deleteBackendRecord('${item.id}', '${item.date}', '${name}')">🗑️ 刪除後端</button>
                         </div>
                     </td>
@@ -678,9 +678,13 @@
             });
         }
 
-        window.hideFrontendRecord = function(id) {
-            if (confirm("確定要從前端關注清單中移除此筆提醒嗎？（後端每週統計仍會保留數據）")) {
-                loadAllData();
+        // 前端直接隱藏該列，不重新整理頁面（達成移除關注效果）
+        window.hideFrontendRecord = function(btn) {
+            let row = btn.closest('tr');
+            if (row) {
+                row.style.transition = 'opacity 0.3s ease';
+                row.style.opacity = '0';
+                setTimeout(() => row.remove(), 300);
             }
         }
 
