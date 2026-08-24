@@ -537,10 +537,10 @@
                         }
                     }
 
-                    // 如果未繳交，1~7項檢核狀態顯示為 "?"
+                    // 如果未繳交，1~7項檢核狀態顯示為黑色粗體 "?"
                     function renderStatus(val, isUnsubmitted) {
                         if (isUnsubmitted) {
-                            return `<span class="text-warning fw-bold">?</span>`;
+                            return `<span class="fw-bold" style="color: #000000;">?</span>`;
                         }
                         if (!val || val.includes('未') || val.includes('異常') || val.includes('漏寫')) {
                             return `<span class="text-danger fw-bold">✕ ${val || '未完成'}</span>`;
@@ -552,7 +552,7 @@
                     let streak = item.unsignedStreak || 1;
                     
                     if (isNotSubmitted) {
-                        signDisplay = `<span class="text-warning fw-bold">?</span>`;
+                        signDisplay = `<span class="fw-bold" style="color: #000000;">?</span>`;
                     } else {
                         if (item.parentSign === '未簽名') {
                             if (streak > 1) {
