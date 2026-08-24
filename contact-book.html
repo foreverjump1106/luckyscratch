@@ -61,15 +61,17 @@
             color: #0b1d3a;
         }
         .btn-danger-custom {
-            background-color: #d9534f;
-            border-color: #d9534f;
+            background-color: #4a5d78;
+            border-color: #f4d06f;
             color: #ffffff;
             font-weight: bold;
+            transition: all 0.2s ease;
         }
-        .btn-danger-custom:hover {
-            background-color: #c9302c;
-            border-color: #ac2925;
-            color: #ffffff;
+        .btn-danger-custom.active-mode {
+            background-color: #dc3545 !important;
+            border-color: #fff !important;
+            box-shadow: 0 0 12px rgba(220, 53, 69, 0.8);
+            transform: scale(1.05);
         }
         .section-title { 
             font-size: 1.1rem; 
@@ -147,8 +149,8 @@
         <div class="card p-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h4 class="mb-0">📜 今日航行紀錄登記</h4>
-                <!-- 尚未繳交聯絡簿按鈕 -->
-                <button type="button" class="btn btn-danger-custom btn-sm" id="notSubmittedBtn">🏴‍☠️ 尚未繳交聯絡簿</button>
+                <!-- 尚未繳交聯絡簿按鈕（帶互動狀態） -->
+                <button type="button" class="btn btn-danger-custom btn-sm" id="notSubmittedBtn">🏴‍☠️ 尚未繳交聯絡簿 (點擊切換)</button>
             </div>
             <form id="contactBookForm">
                 <div class="row g-3">
@@ -443,13 +445,40 @@
             }
         });
 
-        document.getElementById('notSubmittedBtn').addEventListener('click', function() {
-            alert("請選擇該位夥伴的座號，然後點擊「紀錄此位夥伴狀況」，即可將其標記為尚未繳交！");
+        // 「尚未繳交聯絡簿」按鈕切換互動狀態
+        let isNotSubmittedMode = false;
+        const notSubmittedBtn = document.getElementById('notSubmittedBtn');
+        notSubmittedBtn.addEventListener('click', function() {
+            isNotSubmittedMode = !isNotSubmittedMode;
+            if (isNotSubmittedMode) {
+                this.classList.add('active-mode');
+                this.textContent = '🏴‍☠️ 【已啟用】尚未繳交聯絡簿模式 (點擊取消)';
+            } else {
+                this.classList.remove('active-mode');
+                this.textContent = '🏴‍☠️ 尚未繳交聯絡簿 (點擊切換)';
+            }
         });
 
         function getSelectedRadioValue(name) {
             const ele = document.querySelector(`input[name="${name}"]:checked`);
             return ele ? ele.value : '';
+        }
+
+        // 重置表單任務檢核回預設狀態的函式
+        function resetFormToCheckDefaults() {
+            document.getElementById('contactBookStudentNo').value = '';
+            document.getElementById('dateYes').checked = true;
+            document.getElementById('examHwYes').checked = true;
+            document.getElementById('engYes').checked = true;
+            document.getElementById('sumYes').checked = true;
+            document.getElementById('timeYes').checked = true;
+            document.getElementById('lifeYes').checked = true;
+            document.getElementById('signYes').checked = true;
+
+            // 同時解除未繳交按鈕狀態
+            isNotSubmittedMode = false;
+            notSubmittedBtn.classList.remove('active-mode');
+            notSubmittedBtn.textContent = '🏴‍☠️ 尚未繳交聯絡簿 (點擊切換)';
         }
 
         // 監聽表單送出
@@ -465,6 +494,7 @@
             const currentDate = document.getElementById('contactBookDate').value;
             const parentSignVal = getSelectedRadioValue('contactBookParentSign');
             const studentNoNum = Number(studentNoVal);
+            const currentSubmissionStatus = isNotSubmittedMode ? "未繳交" : "已繳交";
 
             contactBookDb.ref('contact_book_records').orderByChild('timestamp').once('value', (snapshot) => {
                 let existingRecords = [];
@@ -494,21 +524,25 @@
                 }
 
                 let previousSubStreak = 0;
-                for (let r of studentPastRecords) {
-                    if (r.submissionStatus === '未繳交') {
-                        previousSubStreak = r.subStreak || 1;
-                        break;
-                    } else if (r.submissionStatus === '已繳交' || !r.submissionStatus) {
-                        break;
+                if (currentSubmissionStatus === "未繳交") {
+                    for (let r of studentPastRecords) {
+                        if (r.submissionStatus === '未繳交') {
+                            previousSubStreak = r.subStreak || 1;
+                            break;
+                        } else if (r.submissionStatus === '已繳交' || !r.submissionStatus) {
+                            break;
+                        }
                     }
+                    previousSubStreak += 1;
+                } else {
+                    previousSubStreak = 0;
                 }
-                previousSubStreak += 1;
 
                 const contactBookRecordData = {
                     date: currentDate,
                     studentNo: studentNoNum,
                     studentName: contactBookStudents[studentNoVal],
-                    submissionStatus: "未繳交", 
+                    submissionStatus: currentSubmissionStatus, 
                     subStreak: previousSubStreak, 
                     dateCheck: getSelectedRadioValue('contactBookDateCheck'),
                     examHw: getSelectedRadioValue('contactBookExamHw'),
@@ -525,10 +559,10 @@
                     if (error) {
                         alert("儲存失敗：" + error.message);
                     } else {
-                        document.getElementById('contactBookStudentNo').value = '';
-                        document.getElementById('contactBookStudentNo').focus();
                         loadAllData();
-                        alert("已成功登記該生尚未繳交聯絡簿！");
+                        resetFormToCheckDefaults(); // 送出成功後重置表單
+                        document.getElementById('contactBookStudentNo').focus();
+                        alert("紀錄儲存成功！");
                     }
                 });
             });
@@ -550,7 +584,7 @@
             });
         }
 
-        // 渲染每日關注清單（含雙刪除選項）
+        // 渲染每日關注清單
         function renderDailyTable(records) {
             const tbody = document.getElementById('contactBookTableBody');
             tbody.innerHTML = '';
@@ -644,18 +678,14 @@
             });
         }
 
-        // 1. 前端移除關注（利用畫面重新渲染隱藏，保留後台）
         window.hideFrontendRecord = function(id) {
             if (confirm("確定要從前端關注清單中移除此筆提醒嗎？（後端每週統計仍會保留數據）")) {
-                // 我們可以透過把該筆資料在畫面中直接過濾或重新載入
-                // 為了最簡單達成，我們也可以直接呼叫畫面的局部更新
                 loadAllData();
             }
         }
 
-        // 2. 後端永久刪除（帶防呆機制）
         window.deleteBackendRecord = function(id, dateStr, studentName) {
-            let confirmMsg = `⚠️ 【危險動作：刪除後端原始資料】\n\n您正在嘗試永久刪除「${dateStr} - ${studentName}」的雲端紀錄。\n此操作會連同每週統計數據一起清除！\n\n請在下方輸入座號或點擊確定以執行刪除：`;
+            let confirmMsg = `⚠️ 【危險動作：刪除後端原始資料】\n\n您正在嘗試永久刪除「${dateStr} - ${studentName}」的雲端紀錄。\n此操作會連同每週統計數據一起清除！\n\n請點擊確定以執行刪除：`;
             if (confirm(confirmMsg)) {
                 let secondConfirm = prompt(`為防止誤觸，請輸入「804」以確認永久刪除後端資料：`);
                 if (secondConfirm === "804") {
