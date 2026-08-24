@@ -59,6 +59,17 @@
             border-color: #ffd700;
             color: #0b1d3a;
         }
+        .btn-danger-custom {
+            background-color: #d9534f;
+            border-color: #d9534f;
+            color: #ffffff;
+            font-weight: bold;
+        }
+        .btn-danger-custom:hover {
+            background-color: #c9302c;
+            border-color: #ac2925;
+            color: #ffffff;
+        }
         .section-title { 
             font-size: 1.1rem; 
             font-weight: bold; 
@@ -128,8 +139,8 @@
         <div class="card p-4 mb-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h4 class="mb-0">📜 今日航行紀錄登記</h4>
-                <!-- 一鍵全完成按鈕 -->
-                <button type="button" class="btn btn-gold btn-sm" id="oneClickCompleteBtn">⚓ 夥伴全員順利（一鍵全勾）</button>
+                <!-- 尚未繳交聯絡簿按鈕 -->
+                <button type="button" class="btn btn-danger-custom btn-sm" id="notSubmittedBtn">🏴‍☠️ 尚未繳交聯絡簿</button>
             </div>
             <form id="contactBookForm">
                 <div class="row g-3">
@@ -291,6 +302,7 @@
                         <tr style="font-size: 0.95rem;">
                             <th>日期</th>
                             <th>座號/姓名</th>
+                            <th>聯絡簿狀態</th>
                             <th>1.日期</th>
                             <th>2.作業/考試</th>
                             <th>3.英文抄寫</th>
@@ -302,7 +314,7 @@
                         </tr>
                     </thead>
                     <tbody id="contactBookTableBody">
-                        <tr><td colspan="10" class="text-center text-muted text-light">載入中...</td></tr>
+                        <tr><td colspan="11" class="text-center text-muted text-light">載入中...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -359,7 +371,7 @@
         firebase.initializeApp(contactBookFirebaseConfig);
         const contactBookDb = firebase.database();
 
-        // 精準抓取裝置當地當天日期（避免時區誤差導致跳到前一天）
+        // 精準抓取裝置當地當天日期
         const dateInput = document.getElementById('contactBookDate');
         const today = new Date();
         const year = today.getFullYear();
@@ -374,8 +386,8 @@
             }
         });
 
-        // 一鍵全完成按鈕事件
-        document.getElementById('oneClickCompleteBtn').addEventListener('click', function() {
+        // 「尚未繳交聯絡簿」按鈕事件（快速切換狀態）
+        document.getElementById('notSubmittedBtn').addEventListener('click', function() {
             document.getElementById('dateYes').checked = true;
             document.getElementById('examHwYes').checked = true;
             document.getElementById('engYes').checked = true;
@@ -383,6 +395,8 @@
             document.getElementById('timeYes').checked = true;
             document.getElementById('lifeYes').checked = true;
             document.getElementById('signYes').checked = true;
+            // 這裡點擊後可以提示老師已切換，或者直接幫忙送出未繳交狀態
+            alert("已為您標記該生狀態。請確認座號後點擊「紀錄此位夥伴狀況」送出尚未繳交紀錄！");
         });
 
         // 取得選取 Radio 按鈕值的輔助函式
@@ -436,6 +450,7 @@
                     date: currentDate,
                     studentNo: studentNoNum,
                     studentName: contactBookStudents[studentNoVal],
+                    submissionStatus: "未繳交", // 獨立的聯絡簿繳交狀態
                     dateCheck: getSelectedRadioValue('contactBookDateCheck'),
                     examHw: getSelectedRadioValue('contactBookExamHw'),
                     englishCopy: getSelectedRadioValue('contactBookEnglishCopy'),
@@ -452,7 +467,6 @@
                         alert("儲存失敗：" + error.message);
                     } else {
                         document.getElementById('contactBookStudentNo').value = '';
-                        document.getElementById('oneClickCompleteBtn').click(); 
                         document.getElementById('contactBookStudentNo').focus();
                         loadContactBookRecords();
                     }
@@ -466,7 +480,7 @@
             contactBookDb.ref('contact_book_records').orderByChild('timestamp').limitToLast(150).once('value', (snapshot) => {
                 tbody.innerHTML = '';
                 if (!snapshot.exists()) {
-                    tbody.innerHTML = `<tr><td colspan="10" class="text-center text-muted">目前沒有任何夥伴紀錄</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="11" class="text-center text-muted">目前沒有任何夥伴紀錄</td></tr>`;
                     return;
                 }
 
@@ -479,8 +493,11 @@
 
                 records.reverse();
 
+                // 過濾掉「聯絡簿已繳交且 1~7 項全正常」的紀錄
                 let filteredRecords = records.filter(item => {
+                    let isSubmitted = (item.submissionStatus !== "未繳交");
                     let isAllComplete = 
+                        isSubmitted &&
                         (item.dateCheck === '完成' || !item.dateCheck) &&
                         (item.examHw === '完成/正常' || item.examHw === '已完成') &&
                         item.englishCopy === '已完成' &&
@@ -493,13 +510,19 @@
                 });
 
                 if (filteredRecords.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="10" class="text-center text-warning">🏴‍☠️ 航海大成功！目前所有已登記的 804 夥伴皆完美通關，無任何異常！</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="11" class="text-center text-warning">🏴‍☠️ 航海大成功！目前所有已登記的 804 夥伴皆完美通關，無任何異常！</td></tr>`;
                     return;
                 }
 
                 filteredRecords.forEach((item) => {
                     let name = contactBookStudents[item.studentNo] || item.studentName || '';
                     
+                    // 聯絡簿繳交狀態顯示
+                    let subStatusDisplay = `<span class="badge bg-success">已繳交</span>`;
+                    if (item.submissionStatus === "未繳交") {
+                        subStatusDisplay = `<span class="badge bg-danger">❌ 未繳交</span>`;
+                    }
+
                     let signDisplay = item.parentSign;
                     let streak = item.unsignedStreak || 1;
                     
@@ -524,6 +547,7 @@
                     tr.innerHTML = `
                         <td>${item.date}</td>
                         <td><strong>${item.studentNo} 號<br>${name}</strong></td>
+                        <td>${subStatusDisplay}</td>
                         <td>${renderStatus(item.dateCheck)}</td>
                         <td>${renderStatus(item.examHw)}</td>
                         <td>${renderStatus(item.englishCopy)}</td>
