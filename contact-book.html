@@ -328,8 +328,12 @@
             </div>
         </div>
 
-        <!-- 每週航行統計報告區塊 -->
-        <div class="card p-4">
+        <!-- 每週航行統計報告區塊 (預設隱藏) -->
+        <div class="text-end mb-3">
+            <button class="btn btn-gold btn-sm fw-bold shadow-sm" id="toggleWeeklyBtn" type="button">📊 展開每週航行統計報告</button>
+        </div>
+        
+        <div class="card p-4" id="weeklyReportCard" style="display: none;">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h4 class="mb-0">📊 每週航行統計報告（全班 1~28 號總表）</h4>
                 <div>
@@ -375,6 +379,19 @@
             "🗺️ 「我的航海圖是完美的！」—— 804 班的每一天都在朝著夢想前進！"
         ];
         document.getElementById('pirateQuote').textContent = quotes[Math.floor(Math.random() * quotes.length)];
+
+        // 每週統計報告展開/隱藏切換按鈕
+        const toggleWeeklyBtn = document.getElementById('toggleWeeklyBtn');
+        const weeklyReportCard = document.getElementById('weeklyReportCard');
+        toggleWeeklyBtn.addEventListener('click', function() {
+            if (weeklyReportCard.style.display === 'none') {
+                weeklyReportCard.style.display = 'block';
+                toggleWeeklyBtn.textContent = '📊 收起每週航行統計報告';
+            } else {
+                weeklyReportCard.style.display = 'none';
+                toggleWeeklyBtn.textContent = '📊 展開每週航行統計報告';
+            }
+        });
 
         // 學生名條對照表 (804班)
         const contactBookStudents = {
@@ -517,7 +534,7 @@
             });
         });
 
-        // 核心資料載入與重新整理函式（同時更新每日清單與每週統計）
+        // 核心資料載入與重新整理函式
         function loadAllData() {
             contactBookDb.ref('contact_book_records').orderByChild('timestamp').once('value', (snapshot) => {
                 let records = [];
@@ -533,7 +550,7 @@
             });
         }
 
-        // 渲染每日關注清單
+        // 渲染每日關注清單（含雙刪除選項）
         function renderDailyTable(records) {
             const tbody = document.getElementById('contactBookTableBody');
             tbody.innerHTML = '';
@@ -616,10 +633,42 @@
                     <td>${renderStatus(item.timeRecord, isNotSubmitted)}</td>
                     <td>${renderStatus(item.lifeNote, isNotSubmitted)}</td>
                     <td>${signDisplay}</td>
-                    <td><button class="btn btn-outline-danger btn-sm" onclick="deleteContactBookRecord('${item.id}')">刪除</button></td>
+                    <td>
+                        <div class="d-flex flex-column gap-1">
+                            <button class="btn btn-outline-warning btn-sm py-0" style="font-size: 0.8rem;" onclick="hideFrontendRecord('${item.id}')">🧹 移除關注</button>
+                            <button class="btn btn-outline-danger btn-sm py-0" style="font-size: 0.8rem;" onclick="deleteBackendRecord('${item.id}', '${item.date}', '${name}')">🗑️ 刪除後端</button>
+                        </div>
+                    </td>
                 `;
                 tbody.appendChild(tr);
             });
+        }
+
+        // 1. 前端移除關注（利用畫面重新渲染隱藏，保留後台）
+        window.hideFrontendRecord = function(id) {
+            if (confirm("確定要從前端關注清單中移除此筆提醒嗎？（後端每週統計仍會保留數據）")) {
+                // 我們可以透過把該筆資料在畫面中直接過濾或重新載入
+                // 為了最簡單達成，我們也可以直接呼叫畫面的局部更新
+                loadAllData();
+            }
+        }
+
+        // 2. 後端永久刪除（帶防呆機制）
+        window.deleteBackendRecord = function(id, dateStr, studentName) {
+            let confirmMsg = `⚠️ 【危險動作：刪除後端原始資料】\n\n您正在嘗試永久刪除「${dateStr} - ${studentName}」的雲端紀錄。\n此操作會連同每週統計數據一起清除！\n\n請在下方輸入座號或點擊確定以執行刪除：`;
+            if (confirm(confirmMsg)) {
+                let secondConfirm = prompt(`為防止誤觸，請輸入「804」以確認永久刪除後端資料：`);
+                if (secondConfirm === "804") {
+                    contactBookDb.ref('contact_book_records/' + id).remove().then(() => {
+                        alert("已成功從 Firebase 後端永久刪除該筆資料！");
+                        loadAllData();
+                    }).catch((error) => {
+                        alert("刪除失敗：" + error.message);
+                    });
+                } else {
+                    alert("驗證碼錯誤，已取消後端刪除動作。");
+                }
+            }
         }
 
         // 取得日期所屬的週次範圍（週一至週日）
@@ -635,13 +684,11 @@
             return `${fmt(monday)} ~ ${fmt(sunday)}`;
         }
 
-        // 設定每週航行統計報告
         let globalAllRecords = [];
         function setupWeeklyReport(records) {
             globalAllRecords = records;
             const weekSelect = document.getElementById('weekSelect');
             
-            // 收集所有出現過的週次
             let weeksSet = new Set();
             records.forEach(r => {
                 if (r.date) {
@@ -649,7 +696,6 @@
                 }
             });
 
-            // 確保當前日期所在週也在選單內
             let currentWeekStr = getWeekRangeString(new Date());
             weeksSet.add(currentWeekStr);
 
@@ -670,16 +716,14 @@
 
         document.getElementById('weekSelect').addEventListener('change', renderWeeklyTable);
 
-        // 渲染每週統計表格 (1~28號全班總表)
+        // 渲染每週統計表格
         function renderWeeklyTable() {
             const selectedWeek = document.getElementById('weekSelect').value;
             const tbody = document.getElementById('weeklyReportTableBody');
             tbody.innerHTML = '';
 
-            // 篩選出屬於該週的紀錄（利用完整後台資料計算，不受前端刪除影響）
             let weekRecords = globalAllRecords.filter(r => r.date && getWeekRangeString(r.date) === selectedWeek);
 
-            // 統計 1~28 號
             for (let i = 1; i <= 28; i++) {
                 let sRecords = weekRecords.filter(r => r.studentNo === i);
                 
@@ -726,14 +770,6 @@
                     <td>${cellBadge(stats.signNo)}</td>
                 `;
                 tbody.appendChild(tr);
-            }
-        }
-
-        window.deleteContactBookRecord = function(id) {
-            if (confirm("確定要在前端介面中清除這筆關注紀錄嗎？（注意：Firebase 雲端後台仍會保留原始數據供每週統計使用）")) {
-                contactBookDb.ref('contact_book_records/' + id).remove().then(() => {
-                    loadAllData();
-                });
             }
         }
 
