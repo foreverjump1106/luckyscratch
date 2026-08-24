@@ -386,17 +386,9 @@
             }
         });
 
-        // 「尚未繳交聯絡簿」按鈕事件（快速切換狀態）
+        // 點擊「尚未繳交聯絡簿」按鈕時的提示與引導
         document.getElementById('notSubmittedBtn').addEventListener('click', function() {
-            document.getElementById('dateYes').checked = true;
-            document.getElementById('examHwYes').checked = true;
-            document.getElementById('engYes').checked = true;
-            document.getElementById('sumYes').checked = true;
-            document.getElementById('timeYes').checked = true;
-            document.getElementById('lifeYes').checked = true;
-            document.getElementById('signYes').checked = true;
-            // 這裡點擊後可以提示老師已切換，或者直接幫忙送出未繳交狀態
-            alert("已為您標記該生狀態。請確認座號後點擊「紀錄此位夥伴狀況」送出尚未繳交紀錄！");
+            alert("請選擇該位夥伴的座號，然後點擊「紀錄此位夥伴狀況」，即可將其標記為尚未繳交！");
         });
 
         // 取得選取 Radio 按鈕值的輔助函式
@@ -427,7 +419,8 @@
                     });
                 }
 
-                let previousStreak = 0;
+                // 計算家長簽名連續天數
+                let previousSignStreak = 0;
                 let studentPastRecords = existingRecords
                     .filter(r => r.studentNo === studentNoNum)
                     .sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -435,22 +428,35 @@
                 if (parentSignVal === '未簽名') {
                     for (let r of studentPastRecords) {
                         if (r.parentSign === '未簽名') {
-                            previousStreak = r.unsignedStreak || 1;
+                            previousSignStreak = r.unsignedStreak || 1;
                             break;
                         } else if (r.parentSign === '已簽名') {
                             break;
                         }
                     }
-                    previousStreak += 1;
+                    previousSignStreak += 1;
                 } else {
-                    previousStreak = 0;
+                    previousSignStreak = 0;
                 }
+
+                // 計算聯絡簿未繳交連續天數
+                let previousSubStreak = 0;
+                for (let r of studentPastRecords) {
+                    if (r.submissionStatus === '未繳交') {
+                        previousSubStreak = r.subStreak || 1;
+                        break;
+                    } else if (r.submissionStatus === '已繳交' || !r.submissionStatus) {
+                        break;
+                    }
+                }
+                previousSubStreak += 1;
 
                 const contactBookRecordData = {
                     date: currentDate,
                     studentNo: studentNoNum,
                     studentName: contactBookStudents[studentNoVal],
-                    submissionStatus: "未繳交", // 獨立的聯絡簿繳交狀態
+                    submissionStatus: "未繳交", // 預設點擊送出即為未繳交
+                    subStreak: previousSubStreak, // 累計未繳交天數
                     dateCheck: getSelectedRadioValue('contactBookDateCheck'),
                     examHw: getSelectedRadioValue('contactBookExamHw'),
                     englishCopy: getSelectedRadioValue('contactBookEnglishCopy'),
@@ -458,7 +464,7 @@
                     timeRecord: getSelectedRadioValue('contactBookTimeRecord'),
                     lifeNote: getSelectedRadioValue('contactBookLifeNote'),
                     parentSign: parentSignVal,
-                    unsignedStreak: previousStreak,
+                    unsignedStreak: previousSignStreak,
                     timestamp: Date.now()
                 };
 
@@ -469,6 +475,7 @@
                         document.getElementById('contactBookStudentNo').value = '';
                         document.getElementById('contactBookStudentNo').focus();
                         loadContactBookRecords();
+                        alert("已成功登記該生尚未繳交聯絡簿！");
                     }
                 });
             });
@@ -517,10 +524,15 @@
                 filteredRecords.forEach((item) => {
                     let name = contactBookStudents[item.studentNo] || item.studentName || '';
                     
-                    // 聯絡簿繳交狀態顯示
+                    // 聯絡簿繳交狀態與連續未交天數顯示
                     let subStatusDisplay = `<span class="badge bg-success">已繳交</span>`;
+                    let subStreak = item.subStreak || 1;
                     if (item.submissionStatus === "未繳交") {
-                        subStatusDisplay = `<span class="badge bg-danger">❌ 未繳交</span>`;
+                        if (subStreak > 1) {
+                            subStatusDisplay = `<span class="badge bg-danger">❌ 未繳交 (已連續 ${subStreak} 天)</span>`;
+                        } else {
+                            subStatusDisplay = `<span class="badge bg-warning text-dark">❌ 未繳交 (連續 1 天)</span>`;
+                        }
                     }
 
                     let signDisplay = item.parentSign;
