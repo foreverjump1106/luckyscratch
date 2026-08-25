@@ -22,15 +22,15 @@
             color: #fdf6e2;
             font-family: "Microsoft JhengHei", sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 10px;
         }
 
         h1 {
             text-align: center;
             color: var(--gold);
             text-shadow: 2px 2px 4px #000;
-            font-size: 2.2rem;
-            margin-bottom: 5px;
+            font-size: 1.8rem;
+            margin-bottom: 2px;
             letter-spacing: 2px;
         }
 
@@ -38,110 +38,138 @@
             text-align: center;
             color: #d1b693;
             font-style: italic;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
         }
 
-        /* 主容器左右分欄 */
+        /* 主容器左右分欄，防止超出畫面 */
         .main-container {
             display: flex;
-            gap: 20px;
-            max-width: 1400px;
+            gap: 15px;
+            max-width: 1350px;
             margin: 0 auto;
             align-items: flex-start;
+            justify-content: center;
         }
 
         /* 左側：未入座學生區 */
         .sidebar-left {
-            width: 250px;
-            background: rgba(44, 29, 17, 0.9);
+            width: 220px;
+            background: rgba(44, 29, 17, 0.95);
             border: 3px solid var(--gold);
             border-radius: 10px;
-            padding: 15px;
+            padding: 10px;
             box-shadow: 0 8px 16px rgba(0,0,0,0.6);
-            max-height: 80vh;
-            overflow-y: auto;
+            height: 78vh;
+            display: flex;
+            flex-direction: column;
         }
 
         .sidebar-left h3 {
             color: var(--gold);
             text-align: center;
             margin-top: 0;
+            font-size: 1rem;
             border-bottom: 2px solid var(--gold);
-            padding-bottom: 8px;
+            padding-bottom: 5px;
+        }
+
+        /* 側邊欄內的卡片清單容器：改為可獨立滾動且單張卡片清楚呈現 */
+        #unassigned-list {
+            flex-grow: 1;
+            background: rgba(0,0,0,0.3);
+            border-radius: 5px;
+            padding: 8px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
 
         /* 中間：教室座位區 */
         .classroom-area {
-            flex-grow: 1;
-            background: rgba(20, 12, 6, 0.85);
+            width: 680px;
+            background: rgba(20, 12, 6, 0.9);
             border: 4px solid var(--gold);
             border-radius: 15px;
-            padding: 20px;
+            padding: 15px;
             box-shadow: inset 0 0 20px rgba(0,0,0,0.8), 0 8px 16px rgba(0,0,0,0.6);
             display: flex;
             flex-direction: column;
             align-items: center;
+            box-sizing: border-box;
         }
 
         .podium {
             background: linear-gradient(to bottom, #8b5a2b, #5c3a21);
             color: var(--gold);
             border: 2px solid var(--gold);
-            padding: 10px 50px;
+            padding: 6px 40px;
             border-radius: 8px;
             font-weight: bold;
-            font-size: 1.2rem;
+            font-size: 1rem;
             box-shadow: 0 4px 8px rgba(0,0,0,0.4);
-            letter-spacing: 5px;
+            letter-spacing: 3px;
         }
 
-        /* 6x6 座位網格預設 (學生視角：講台在上) */
-        .grid-6x6 {
+        /* 6x5 座位網格 (6欄, 5行 = 共30格) 適當縮減卡片高度避免遮擋按鈕 */
+        .grid-6x5 {
             display: grid;
             grid-template-columns: repeat(6, 1fr);
-            gap: 12px;
+            grid-template-rows: repeat(5, 1fr);
+            gap: 8px;
             width: 100%;
-            max-width: 720px;
+            margin: 10px 0;
         }
 
-        /* 老師視角：使用 CSS Grid 的 direction: rtl 讓排版由右至左，或透過順序反轉 */
-        /* 老師視角容器設定 */
-        .grid-6x6.teacher-view {
-            direction: rtl; /* 由右到左，讓第一排從左下方開始（因為視覺上反轉） */
+        /* 學生觀看版本：1號在右上角 (利用 grid 排列配合 rtl 或行序控制) */
+        /* 當為學生視角時，我們讓整體 grid 採 rtl，使第一行從右到左排列，1號自然落在右上角 */
+        .grid-6x5.student-view {
+            direction: rtl;
         }
-        .grid-6x6.teacher-view .seat-cell {
-            direction: ltr; /* 恢復文字正常顯示 */
+        .grid-6x5.student-view .seat-cell {
+            direction: ltr;
+        }
+
+        /* 老師視角：講台在下方，1號在左下方 */
+        .grid-6x5.teacher-view {
+            /* 老師視角正常由左到右，但因為講台在下方，我們透過行列反轉讓第一排在下方 */
+            transform: scaleY(-1);
+        }
+        .grid-6x5.teacher-view .seat-cell {
+            transform: scaleY(-1); /* 讓字正回來 */
         }
 
         .seat-cell {
-            aspect-ratio: 1 / 1;
+            aspect-ratio: 4 / 3; /* 調整長寬比例，避免太高而撐破畫面 */
             background: var(--parchment);
             color: #333;
             border: 2px dashed #8b5a2b;
-            border-radius: 8px;
+            border-radius: 6px;
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
             cursor: pointer;
             transition: all 0.2s;
+            overflow: hidden;
         }
 
         .seat-cell.drag-over {
             background: #ffeaa7;
             border-color: #d63031;
-            transform: scale(1.05);
+            transform: scale(1.03);
         }
 
         /* 右側：幹部與小老師區 */
         .sidebar-right {
-            width: 320px;
-            background: rgba(44, 29, 17, 0.9);
+            width: 260px;
+            background: rgba(44, 29, 17, 0.95);
             border: 3px solid var(--gold);
             border-radius: 10px;
-            padding: 15px;
+            padding: 10px;
             box-shadow: 0 8px 16px rgba(0,0,0,0.6);
-            max-height: 80vh;
+            height: 78vh;
             overflow-y: auto;
         }
 
@@ -149,49 +177,55 @@
             color: var(--gold);
             text-align: center;
             margin-top: 0;
+            font-size: 1rem;
             border-bottom: 2px solid var(--gold);
-            padding-bottom: 8px;
+            padding-bottom: 5px;
         }
 
         .staff-group {
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
 
         .staff-group label {
             display: block;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             color: var(--gold);
-            margin-bottom: 3px;
+            margin-bottom: 2px;
             font-weight: bold;
         }
 
         .staff-group select {
             width: 100%;
-            padding: 6px;
+            padding: 4px;
             background: var(--parchment);
             border: 1px solid var(--gold);
             border-radius: 4px;
             font-family: inherit;
             color: #2c1d11;
+            font-size: 0.85rem;
             font-weight: bold;
         }
 
-        /* 學生卡片樣式 (懸賞單風格) */
+        /* 學生卡片樣式 (懸賞單風格) 調整尺寸以完美適應格子 */
         .student-card {
             background: linear-gradient(135deg, #fdf6e2 0%, #e6d5b8 100%);
             color: #2c1d11;
             border: 2px solid #5c3a21;
-            border-radius: 6px;
-            padding: 8px 4px;
+            border-radius: 5px;
+            padding: 4px 2px;
             text-align: center;
             font-weight: bold;
             cursor: grab;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
             user-select: none;
-            width: 90%;
+            width: 92%;
+            height: 88%;
             box-sizing: border-box;
-            margin: 5px auto;
-            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.1s;
         }
 
         .student-card:active {
@@ -199,30 +233,23 @@
         }
 
         .student-card .s-id {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: #8b5a2b;
+            line-height: 1;
         }
 
         .student-card .s-name {
-            font-size: 0.95rem;
+            font-size: 0.85rem;
+            line-height: 1.2;
+            margin-top: 2px;
         }
 
-        /* 側邊欄內的卡片清單容器 */
-        #unassigned-list {
-            min-height: 100px;
-            background: rgba(0,0,0,0.2);
-            border-radius: 5px;
-            padding: 5px;
-            max-height: 60vh;
-            overflow-y: auto;
-        }
-
-        /* 控制按鈕列 */
+        /* 控制按鈕列：固定大小不被擠壓 */
         .control-bar {
             display: flex;
             justify-content: center;
-            gap: 15px;
-            margin-top: 20px;
+            gap: 8px;
+            margin-top: 10px;
             flex-wrap: wrap;
         }
 
@@ -230,12 +257,12 @@
             background: linear-gradient(to bottom, #d4af37, #aa820a);
             color: #1a1008;
             border: 2px solid #fff;
-            padding: 10px 18px;
+            padding: 6px 12px;
             font-weight: bold;
-            font-size: 0.95rem;
-            border-radius: 8px;
+            font-size: 0.85rem;
+            border-radius: 6px;
             cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+            box-shadow: 0 3px 6px rgba(0,0,0,0.4);
             transition: all 0.2s;
         }
 
@@ -261,8 +288,8 @@
             display: none;
         }
         .seat-cell.flipped .student-card::after {
-            content: "⚓ 懸賞中";
-            font-size: 0.9rem;
+            content: "⚓ 懸賞";
+            font-size: 0.8rem;
             letter-spacing: 1px;
         }
     </style>
@@ -283,28 +310,27 @@
 
         <!-- 中間：教室座位區 -->
         <div class="classroom-area" id="capture-area">
-            <!-- 講台位置會隨模式動態調整上下 -->
-            <div id="podium-top" class="podium" style="margin-bottom: 20px;">🌟 偉大的航道 (講台 / 黑板) 🌟</div>
+            <div id="podium-top" class="podium">🌟 偉大的航道 (講台 / 黑板) 🌟</div>
             
-            <div class="grid-6x6" id="seat-grid">
-                <!-- 動態生成 36 格 -->
+            <div class="grid-6x5 student-view" id="seat-grid">
+                <!-- 動態生成 30 格 (6x5) -->
             </div>
 
-            <div id="podium-bottom" class="podium" style="margin-top: 20px; display: none;">🌟 偉大的航道 (講台 / 黑板) 🌟</div>
+            <div id="podium-bottom" class="podium" style="display: none;">🌟 偉大的航道 (講台 / 黑板) 🌟</div>
 
             <div class="control-bar">
-                <button class="pirate-btn" id="btn-student-view" onclick="setMode('student')">👨‍🎓 學生觀看版本</button>
-                <button class="pirate-btn" id="btn-teacher-view" onclick="setMode('teacher')">👩‍🏫 老師觀看版</button>
-                <button class="pirate-btn" id="btn-flip-view" onclick="setMode('flip')">🃏 翻牌神祕模式</button>
-                <button class="pirate-btn" onclick="randomAssign()">🎲 惡魔果實隨機排位</button>
-                <button class="pirate-btn" onclick="saveData()">💾 儲存座位與幹部</button>
-                <button class="pirate-btn" onclick="downloadImage()">📷 下載座位表圖片</button>
+                <button class="pirate-btn active-mode" id="btn-student-view" onclick="setMode('student')">👨‍🎓 學生觀看</button>
+                <button class="pirate-btn" id="btn-teacher-view" onclick="setMode('teacher')">👩‍🏫 老師觀看</button>
+                <button class="pirate-btn" id="btn-flip-view" onclick="setMode('flip')">🃏 翻牌神祕</button>
+                <button class="pirate-btn" onclick="randomAssign()">🎲 隨機排位</button>
+                <button class="pirate-btn" onclick="saveData()">💾 儲存</button>
+                <button class="pirate-btn" onclick="downloadImage()">📷 下載圖片</button>
             </div>
         </div>
 
         <!-- 右側：幹部與小老師下拉選單 -->
         <div class="sidebar-right">
-            <h3>👑 核心幹部與小老師</h3>
+            <h3>👑 幹部與小老師</h3>
             <div id="staff-container">
                 <!-- 動態生成選單 -->
             </div>
@@ -335,26 +361,21 @@
 
     let seatMap = {}; // 記錄每個格子放了誰 { "cell-0": studentObj, ... }
     let unassignedStudents = [...students];
-    let staffAssignments = {}; // 記錄職務指派
-    
-    // 模式狀態: 'student' (學生觀看), 'teacher' (老師觀看), 'flip' (翻牌模式)
-    let currentMode = 'student'; 
-    let flippedStatus = {}; // 記錄翻牌狀態
+    let staffAssignments = {}; 
+    let currentMode = 'student'; // 'student', 'teacher', 'flip'
+    let flippedStatus = {}; 
 
-    // 初始化頁面
     function init() {
         renderUnassigned();
         renderStaff();
-        loadData(); // 嘗試讀取本地儲存
+        loadData();
         updateViewModeUI();
     }
 
-    // 切換模式主邏輯
     function setMode(mode) {
         currentMode = mode;
         if (currentMode === 'flip') {
-            // 進入翻牌模式時，預設全部翻背面
-            for (let i = 0; i < 36; i++) {
+            for (let i = 0; i < 30; i++) {
                 if (seatMap[`cell-${i}`]) {
                     flippedStatus[`cell-${i}`] = false;
                 }
@@ -364,7 +385,6 @@
         renderGrid();
     }
 
-    // 更新介面與按鈕樣式
     function updateViewModeUI() {
         document.getElementById("btn-student-view").className = "pirate-btn" + (currentMode === 'student' ? " active-mode" : "");
         document.getElementById("btn-teacher-view").className = "pirate-btn" + (currentMode === 'teacher' ? " active-mode" : "");
@@ -374,19 +394,21 @@
         const podiumBottom = document.getElementById("podium-bottom");
         const grid = document.getElementById("seat-grid");
 
-        // 根據模式調整講台位置與排版方向
         if (currentMode === 'teacher') {
             podiumTop.style.display = "none";
             podiumBottom.style.display = "block";
-            grid.className = "grid-6x6 teacher-view";
+            grid.className = "grid-6x5 teacher-view";
         } else {
             podiumTop.style.display = "block";
             podiumBottom.style.display = "none";
-            grid.className = "grid-6x6";
+            if (currentMode === 'student' || currentMode === 'flip') {
+                grid.className = "grid-6x5 student-view";
+            } else {
+                grid.className = "grid-6x5";
+            }
         }
     }
 
-    // 渲染未入座區
     function renderUnassigned() {
         const container = document.getElementById("unassigned-list");
         container.innerHTML = "";
@@ -395,56 +417,34 @@
         });
     }
 
-    // 渲染 6x6 座位格子 (共36格)
+    // 渲染 6x5 座位格子 (共30格)
     function renderGrid() {
         const grid = document.getElementById("seat-grid");
         grid.innerHTML = "";
 
-        // 依照您要求的視覺順序：
-        // 學生觀看：第一排在右上方 (傳統由左到右編號 0~35 或由右到左)
-        // 老師觀看版：第一排在左下方開始
-        for (let i = 0; i < 36; i++) {
-            let cellIndex = i;
-            
-            // 如果是老師視角，我們將格子陣列順序反轉，讓第一排（原本的最後一排 30~35）跑到最下方，且由左開始
-            if (currentMode === 'teacher') {
-                // 數學轉換：讓 35~30 變成第一行，以此類推
-                let row = Math.floor(i / 6);
-                let col = i % 6;
-                let newRow = 5 - row;
-                let newCol = 5 - col; // 因為 teacher-view 加了 rtl，所以 col 要對應
-                cellIndex = newRow * 6 + newCol;
-            }
-
-            const cellId = `cell-${cellIndex}`;
+        for (let i = 0; i < 30; i++) {
+            const cellId = `cell-${i}`;
             const cell = document.createElement("div");
             cell.className = "seat-cell";
             cell.id = cellId;
-            cell.dataset.index = cellIndex;
+            cell.dataset.index = i;
 
-            // 拖曳事件綁定
             cell.ondragover = allowDrop;
             cell.ondragleave = removeDropStyle;
             cell.ondrop = dropToCell;
 
-            // 如果該格原本就有學生
             if (seatMap[cellId]) {
-                const card = createCardElement(seatMap[seatMap[cellId] ? cellId : cellIndex]); // 確保正確抓取
-                // 修正卡片物件抓取
-                cell.innerHTML = "";
                 cell.appendChild(createCardElement(seatMap[cellId]));
-                
                 if (currentMode === 'flip' && flippedStatus[cellId] === false) {
                     cell.classList.add("flipped");
                 }
             } else {
-                cell.innerText = cellIndex + 1; // 顯示座位編號
+                cell.innerText = i + 1; 
                 cell.style.color = "#8b5a2b";
-                cell.style.fontSize = "0.8rem";
+                cell.style.fontSize = "0.75rem";
             }
 
-            // 點擊事件：若在翻牌模式下，點擊可翻面
-            cell.onclick = (e) => {
+            cell.onclick = () => {
                 if (currentMode === 'flip' && seatMap[cellId]) {
                     flippedStatus[cellId] = !flippedStatus[cellId];
                     if (flippedStatus[cellId]) {
@@ -459,7 +459,6 @@
         }
     }
 
-    // 建立學生卡片 DOM
     function createCardElement(student) {
         const card = document.createElement("div");
         card.className = "student-card";
@@ -473,7 +472,6 @@
         return card;
     }
 
-    // 渲染右側幹部選單
     function renderStaff() {
         const container = document.getElementById("staff-container");
         container.innerHTML = "";
@@ -510,7 +508,6 @@
         });
     }
 
-    // 拖曳相關邏輯
     let draggedStudentId = null;
     let sourceLocation = null;
 
@@ -582,7 +579,6 @@
         }
     }
 
-    // 隨機排位 (惡魔果實亂數)
     function randomAssign() {
         let allPool = [...students];
         allPool.sort(() => Math.random() - 0.5);
@@ -603,18 +599,12 @@
         renderGrid();
     }
 
-    // 本地儲存
     function saveData() {
-        const data = {
-            seatMap,
-            unassignedStudents,
-            staffAssignments
-        };
+        const data = { seatMap, unassignedStudents, staffAssignments };
         localStorage.setItem("one_piece_seat_data", JSON.stringify(data));
-        alert("🏴‍☠️ 航海日誌紀錄成功！座位與幹部資料已順利儲存！");
+        alert("🏴‍☠️ 航海日誌紀錄成功！資料已儲存至本機！");
     }
 
-    // 讀取儲存
     function loadData() {
         const saved = localStorage.getItem("one_piece_seat_data");
         if (saved) {
@@ -632,9 +622,7 @@
         }
     }
 
-    // 下載圖片功能
     function downloadImage() {
-        // 截圖前先暫時轉為學生觀看正常模式，確保列印畫面直觀
         const prevMode = currentMode;
         if (currentMode === 'flip') {
             currentMode = 'student';
