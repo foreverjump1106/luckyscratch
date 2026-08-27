@@ -20,6 +20,7 @@
             padding-bottom: 40px;
             min-height: 100vh;
         }
+        /* 統一標題與區塊標籤字體大小與風格 */
         .pirate-main-title {
             font-family: 'Cinzel', serif, 'Noto Sans TC', sans-serif;
             color: #f4d06f; 
@@ -40,6 +41,7 @@
             color: #ffffff;
             margin-bottom: 20px;
         }
+        /* 表單內部文字大小與夥伴清單標題一致 (約 0.95rem) */
         .form-label {
             font-size: 0.95rem;
         }
@@ -151,6 +153,7 @@
             font-size: 0.9rem;
             color: #f4d06f;
         }
+        /* 登入遮罩樣式 */
         #loginOverlay {
             position: fixed;
             top: 0;
@@ -166,22 +169,17 @@
     </style>
 </head>
 <body>
-    <!-- 🔐 導師信箱與密碼登入驗證畫面 -->
+    <!-- 🔐 導師專屬密碼登入驗證畫面 -->
     <div id="loginOverlay">
         <div class="card p-4 text-center shadow-lg" style="max-width: 380px; width: 90%;">
             <div class="pirate-banner mb-2">🏴‍☠️ 導師身分驗證 ⚓</div>
-            <h4 class="mb-2 text-warning" style="font-size: 1.1rem;">804 偉大航道通行授權</h4>
-            <p class="text-muted small text-light mb-3" style="font-size: 0.9rem;">請輸入後台設定的導師信箱與密碼登入</p>
+            <h4 class="mb-2 text-warning" style="font-size: 1.1rem;">804 偉大航道通行密碼</h4>
+            <p class="text-muted small text-light mb-3" style="font-size: 0.9rem;">請輸入導師專屬密碼以解鎖系統</p>
             <form id="loginForm">
-                <div class="mb-3 text-start">
-                    <label for="loginEmail" class="form-label text-warning small">電子信箱</label>
-                    <input type="email" class="form-control py-2" id="loginEmail" placeholder="foreverjump@tmail.ilc.edu.tw" required>
+                <div class="mb-3">
+                    <input type="password" class="form-control text-center py-2" id="teacherPasswordInput" placeholder="請輸入密碼" required style="letter-spacing: 3px;">
                 </div>
-                <div class="mb-3 text-start">
-                    <label for="loginPassword" class="form-label text-warning small">密碼</label>
-                    <input type="password" class="form-control py-2" id="loginPassword" placeholder="請輸入密碼" required>
-                </div>
-                <button type="submit" class="btn btn-gold w-100 py-2 fw-bold">登入航海日誌 🚀</button>
+                <button type="submit" class="btn btn-gold w-100 py-2 fw-bold">解鎖航海日誌 🚀</button>
             </form>
         </div>
     </div>
@@ -421,47 +419,28 @@
         </div>
     </div>
 
-    <!-- Firebase SDK (僅需 App 與 Database，完美避開 Auth 衝突) -->
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 
     <script>
         // ==========================================
-        // Firebase 設定與初始化
+        // 🔐 導師登入密碼設定（可自行修改密碼）
         // ==========================================
-        const contactBookFirebaseConfig = {
-            apiKey: "AIzaSyBvzuDSKlNJUprlmnak5yV1hg1nlanP0yA",
-            authDomain: "contactbook-543b0.firebaseapp.com",
-            databaseURL: "https://contactbook-543b0-default-rtdb.asia-southeast1.firebasedatabase.app/",
-            projectId: "contactbook-543b0",
-            storageBucket: "contactbook-543b0.appspot.com",
-            messagingSenderId: "882240051516",
-            appId: "1:882240051516:web:aefdaa20a8f4a3a8be6639"
-        };
+        const TEACHER_PASSWORD = "804"; 
 
-        firebase.initializeApp(contactBookFirebaseConfig);
-        const contactBookDb = firebase.database();
-
-        // 🔐 資料庫比對登入驗證（完美避開 apiKey 報錯）
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            const inputEmail = document.getElementById('loginEmail').value.trim();
-            const inputPassword = document.getElementById('loginPassword').value.trim();
-
-            contactBookDb.ref('teacher_auth').once('value', (snapshot) => {
-                if (snapshot.exists()) {
-                    const authData = snapshot.val();
-                    if (authData.email === inputEmail && authData.password === inputPassword) {
-                        document.getElementById('loginOverlay').style.display = 'none';
-                        document.getElementById('mainSystemContainer').style.display = 'block';
-                        loadAllData();
-                    } else {
-                        alert("登入失敗：信箱或密碼錯誤！");
-                    }
-                } else {
-                    alert("系統提示：後端尚未設定教師帳號，請先至 Firebase 資料庫新增 teacher_auth 節點！");
-                }
-            });
+            const inputVal = document.getElementById('teacherPasswordInput').value;
+            if (inputVal === TEACHER_PASSWORD) {
+                document.getElementById('loginOverlay').style.display = 'none';
+                document.getElementById('mainSystemContainer').style.display = 'block';
+                loadAllData(); // 通過驗證後才載入系統資料
+            } else {
+                alert("密碼錯誤！請重新輸入。");
+                document.getElementById('teacherPasswordInput').value = '';
+                document.getElementById('teacherPasswordInput').focus();
+            }
         });
 
         // 隨機航海王金句輪播
@@ -505,6 +484,22 @@
             option.textContent = `${i} 號 - ${contactBookStudents[i]}`;
             contactBookStudentSelect.appendChild(option);
         }
+
+        // ==========================================
+        // 請在此處填入你從 Firebase 控制台取得的設定
+        // ==========================================
+        const contactBookFirebaseConfig = {
+            apiKey: "AIzaSyBvzuDSKlNJUprlmnak5yV1hg1nlanP0yA",
+            authDomain: "contactbook-543b0.firebaseapp.com",
+            databaseURL: "https://contactbook-543b0-default-rtdb.asia-southeast1.firebasedatabase.app/",
+            projectId: "contactbook-543b0",
+            storageBucket: "contactbook-543b0.appspot.com",
+            messagingSenderId: "882240051516",
+            appId: "1:882240051516:web:aefdaa20a8f4a3a8be6639"
+        };
+
+        firebase.initializeApp(contactBookFirebaseConfig);
+        const contactBookDb = firebase.database();
 
         // 精準抓取裝置當地當天日期
         const dateInput = document.getElementById('contactBookDate');
