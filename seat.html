@@ -48,23 +48,23 @@
         .main-container {
             display: flex;
             gap: 15px;
-            max-width: 1280px;
+            max-width: 1320px;
             margin: 0 auto;
             align-items: flex-start;
             justify-content: center;
         }
 
-        /* 左側：未入座學生區與歷史紀錄區 */
+        /* 左側：未入座學生區與歷史紀錄區 (再拉長高度) */
         .sidebar-left {
-            width: 260px;
-            min-width: 240px;
+            width: 280px;
+            min-width: 260px;
             background: rgba(44, 29, 17, 0.95);
             border: 3px solid var(--gold);
             border-radius: 10px;
             padding: 10px;
             box-shadow: 0 8px 16px rgba(0,0,0,0.6);
-            height: 84vh;
-            min-height: 560px;
+            height: 89vh;
+            min-height: 620px;
             display: flex;
             flex-direction: column;
             gap: 10px;
@@ -89,16 +89,16 @@
             display: flex;
             flex-direction: column;
             gap: 8px;
-            min-height: 120px;
+            min-height: 180px;
         }
 
-        /* 歷史紀錄面板 */
+        /* 歷史紀錄面板拉長 */
         .history-box {
             background: rgba(0,0,0,0.4);
             border: 1px solid var(--gold);
             border-radius: 6px;
             padding: 6px;
-            max-height: 130px;
+            height: 160px;
             overflow-y: auto;
         }
 
@@ -125,7 +125,7 @@
             font-size: 0.7rem;
         }
 
-        /* 截圖專用大容器 (#capture-area)：上下拉寬，包含座位區與幹部面板 */
+        /* 截圖專用大容器 (#capture-area)：包含座位區與右側直接內建下拉選單的幹部面板 */
         .capture-wrapper {
             display: flex;
             gap: 20px;
@@ -134,7 +134,7 @@
             border-radius: 15px;
             border: 4px solid var(--gold);
             box-shadow: inset 0 0 20px rgba(0,0,0,0.8), 0 8px 16px rgba(0,0,0,0.6);
-            align-items: center;
+            align-items: flex-start;
         }
 
         /* 中間：教室座位區 */
@@ -205,10 +205,9 @@
             transform: scale(1.03);
         }
 
-        /* 下載圖片專用的幹部/小老師面板 */
+        /* 右側內建下拉選單的幹部面板（完美對齊） */
         .export-staff-panel {
-            width: 310px;
-            height: 410px;
+            width: 320px;
             background: rgba(44, 29, 17, 0.95);
             border: 2px solid var(--gold);
             border-radius: 10px;
@@ -216,7 +215,6 @@
             display: flex;
             flex-direction: column;
             box-sizing: border-box;
-            justify-content: space-between;
         }
 
         .export-staff-panel h3 {
@@ -238,15 +236,14 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 3px;
-            justify-content: space-around;
+            gap: 4px;
         }
 
         .staff-column h4 {
             color: var(--gold);
             font-size: 0.75rem;
             text-align: center;
-            margin: 0 0 2px 0;
+            margin: 0 0 3px 0;
             border-bottom: 1px dashed var(--gold);
             padding-bottom: 2px;
         }
@@ -254,75 +251,30 @@
         .staff-row-item {
             background: var(--parchment);
             color: #2c1d11;
-            padding: 3px 5px;
-            border-radius: 4px;
+            padding: 2px 4px;
+            border-radius: 3px;
             font-size: 0.7rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
             font-weight: bold;
+            height: 22px;
         }
 
         .staff-row-item .title {
             color: #8b5a2b;
             font-size: 0.65rem;
+            width: 45%;
         }
 
-        .staff-row-item .name {
-            color: #2c1d11;
-            font-size: 0.7rem;
-        }
-
-        /* 幹部與小老師下拉選單控制區：寬 4 個、長 3 個 */
-        .staff-control-section {
-            margin-top: 12px;
-            background: rgba(44, 29, 17, 0.95);
-            border: 3px solid var(--gold);
-            border-radius: 10px;
-            padding: 12px;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
-        .staff-control-section h3 {
-            color: var(--gold);
-            text-align: center;
-            margin: 0 0 10px 0;
-            font-size: 0.95rem;
-            border-bottom: 2px solid var(--gold);
-            padding-bottom: 4px;
-        }
-
-        .staff-grid-controls {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-template-rows: repeat(3, auto);
-            gap: 8px;
-        }
-
-        .staff-ctrl-item {
-            background: rgba(0,0,0,0.3);
-            padding: 6px;
-            border-radius: 4px;
-            border: 1px solid var(--gold);
-        }
-
-        .staff-ctrl-item label {
-            display: block;
-            font-size: 0.75rem;
-            color: var(--gold);
-            margin-bottom: 3px;
-            font-weight: bold;
-        }
-
-        .staff-ctrl-item select {
-            width: 100%;
-            background: var(--parchment);
+        .staff-row-item select {
+            width: 55%;
+            background: #fff;
             color: #2c1d11;
             border: 1px solid var(--gold);
-            border-radius: 3px;
-            font-size: 0.75rem;
-            padding: 3px;
+            border-radius: 2px;
+            font-size: 0.65rem;
+            padding: 1px;
             font-weight: bold;
         }
 
@@ -386,7 +338,7 @@
             margin-top: 2px;
         }
 
-        /* 控制按鈕列：放在截圖框下方，下載圖片時不會被拍進去 */
+        /* 控制按鈕列：放在大框框下方，獨立於截圖範圍外 */
         .control-bar {
             display: flex;
             justify-content: center;
@@ -443,7 +395,7 @@
     <div class="subtitle">「目標是成為海賊王！找到屬於你的黃金座位！」</div>
 
     <div class="main-container">
-        <!-- 左側：候補船員名單與歷次段考紀錄 -->
+        <!-- 左側：候補船員名單與拉長後的歷史紀錄 -->
         <div class="sidebar-left">
             <h3>📜 候補船員名單</h3>
             <div id="unassigned-list" ondragover="allowDrop(event)" ondragleave="removeDropStyle(event)" ondrop="dropToUnassigned(event)">
@@ -451,7 +403,7 @@
             </div>
             
             <h3>🗺️ 歷次段考紀錄</h3>
-            <div style="display: flex; gap: 5px;">
+            <div style="display: flex; gap: 5px; margin-bottom: 5px;">
                 <input type="text" id="history-name" placeholder="例: 第一次段考" style="width: 100%; padding: 4px; font-size: 0.8rem; border-radius: 4px; border: 1px solid var(--gold); background: var(--parchment); color: #2c1d11;">
                 <button class="pirate-btn" onclick="saveHistory()" style="padding: 4px 8px; font-size: 0.8rem;">存檔</button>
             </div>
@@ -461,8 +413,8 @@
         </div>
 
         <!-- 右側主區域 -->
-        <div style="display: flex; flex-direction: column; align-items: center; width: 960px;">
-            <!-- 截圖範圍 -->
+        <div style="display: flex; flex-direction: column; align-items: center; width: 980px;">
+            <!-- 截圖範圍 (包含座位區與內建下拉選單的幹部名單) -->
             <div class="capture-wrapper" id="capture-area" style="width: 100%; box-sizing: border-box;">
                 <!-- 中間：教室座位區 -->
                 <div class="classroom-area">
@@ -475,17 +427,17 @@
                     <div id="podium-bottom" class="podium" style="display: none;">🌟 偉大的航道 (講台 / 黑板) 🌟</div>
                 </div>
 
-                <!-- 截圖專用面板 -->
+                <!-- 右側內建下拉選單的幹部面板 -->
                 <div class="export-staff-panel">
                     <h3>👑 幹部與小老師名單</h3>
                     <div class="staff-table-container">
                         <div class="staff-column">
                             <h4>班級幹部</h4>
-                            <div id="export-leaders-list" style="display: flex; flex-direction: column; gap: 2px;"></div>
+                            <div id="export-leaders-list" style="display: flex; flex-direction: column; gap: 3px;"></div>
                         </div>
                         <div class="staff-column">
                             <h4>各科小老師</h4>
-                            <div id="export-teachers-list" style="display: flex; flex-direction: column; gap: 2px;"></div>
+                            <div id="export-teachers-list" style="display: flex; flex-direction: column; gap: 3px;"></div>
                         </div>
                     </div>
                 </div>
@@ -498,16 +450,8 @@
                 <button class="pirate-btn" id="btn-flip-view" onclick="setMode('flip')">🃏 翻牌神祕</button>
                 <button class="pirate-btn" onclick="randomAssign()">🎲 隨機排位</button>
                 <button class="pirate-btn" onclick="resetSeats()" style="background: linear-gradient(to bottom, #c0392b, #962d22); color: #fff;">🔄 座位復位</button>
-                <button class="pirate-btn" onclick="saveDataToFirebase()">💾 儲存至雲端</button>
+                <button class="pirate-btn" onclick="saveDataToFirebaseWithAuth()">💾 儲存至雲端</button>
                 <button class="pirate-btn" onclick="downloadImage()">📷 下載圖片</button>
-            </div>
-
-            <!-- 幹部與小老師下拉選單設定區 (寬4個、長3個網格) -->
-            <div class="staff-control-section">
-                <h3>👑 幹部與小老師指派 (下拉選單設定)</h3>
-                <div class="staff-grid-controls" id="staff-controls-grid">
-                    <!-- 動態生成下拉選單 -->
-                </div>
             </div>
         </div>
     </div>
@@ -530,7 +474,15 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    window.saveDataToFirebase = function() {
+    // 帶有密碼保護的雲端儲存功能（單一帳號權限防護）
+    window.saveDataToFirebaseWithAuth = function() {
+        let password = prompt("🔐 請輸入管理員密碼以同步至雲端：");
+        if (password === null) return; // 按取消
+        if (password !== "804804") { // 設定預設密碼為 804804，老師您也可以自行修改
+            alert("❌ 密碼錯誤，無法儲存至雲端！");
+            return;
+        }
+
         const data = { seatMap, unassignedStudents, staffAssignments, examHistory };
         set(ref(db, 'class_804/seat_data'), data)
             .then(() => {
@@ -539,6 +491,14 @@
             .catch((error) => {
                 alert("❌ 儲存失敗：" + error.message);
             });
+    };
+
+    // 背景直接儲存（用於歷史紀錄刪除等自動更新）
+    window.saveDataToFirebaseSilent = function() {
+        const data = { seatMap, unassignedStudents, staffAssignments, examHistory };
+        set(ref(db, 'class_804/seat_data'), data).catch((error) => {
+            console.error("自動同步失敗", error);
+        });
     };
 
     window.loadDataFromFirebase = function() {
@@ -553,12 +513,10 @@
                 
                 renderUnassigned();
                 renderGrid();
-                renderStaffControls();
                 renderExportStaffTable();
                 renderHistory();
             } else {
                 renderUnassigned();
-                renderStaffControls();
                 renderExportStaffTable();
             }
         }).catch((error) => {
@@ -606,7 +564,6 @@
 
     function init() {
         renderUnassigned();
-        renderStaffControls();
         renderExportStaffTable();
     }
 
@@ -700,49 +657,7 @@
         return card;
     }
 
-    function renderStaffControls() {
-        const container = document.getElementById("staff-controls-grid");
-        container.innerHTML = "";
-
-        staffList.forEach(title => {
-            const item = document.createElement("div");
-            item.className = "staff-ctrl-item";
-
-            const label = document.createElement("label");
-            label.innerText = title;
-
-            const select = document.createElement("select");
-            select.onchange = (e) => {
-                if (e.target.value === "") {
-                    delete staffAssignments[title];
-                } else {
-                    staffAssignments[title] = e.target.value;
-                }
-                renderExportStaffTable();
-                saveDataToFirebase();
-            };
-
-            const defaultOpt = document.createElement("option");
-            defaultOpt.value = "";
-            defaultOpt.innerText = "未指派";
-            select.appendChild(defaultOpt);
-
-            students.forEach(s => {
-                const opt = document.createElement("option");
-                opt.value = s.name;
-                opt.innerText = `${s.id}.${s.name}`;
-                if (staffAssignments[title] === s.name) {
-                    opt.selected = true;
-                }
-                select.appendChild(opt);
-            });
-
-            item.appendChild(label);
-            item.appendChild(select);
-            container.appendChild(item);
-        });
-    }
-
+    // 渲染右側整合面板 (內建完美對齊的下拉式選單)
     function renderExportStaffTable() {
         const leadersContainer = document.getElementById("export-leaders-list");
         const teachersContainer = document.getElementById("export-teachers-list");
@@ -753,20 +668,50 @@
         teachersContainer.innerHTML = "";
 
         leaderList.forEach(title => {
-            const name = staffAssignments[title] || "未指派";
-            const item = document.createElement("div");
-            item.className = "staff-row-item";
-            item.innerHTML = `<span class="title">${title}</span><span class="name">${name}</span>`;
-            leadersContainer.appendChild(item);
+            leadersContainer.appendChild(createStaffRow(title));
         });
 
         subjectTeacherList.forEach(title => {
-            const name = staffAssignments[title] || "未指派";
-            const item = document.createElement("div");
-            item.className = "staff-row-item";
-            item.innerHTML = `<span class="title">${title}</span><span class="name">${name}</span>`;
-            teachersContainer.appendChild(item);
+            teachersContainer.appendChild(createStaffRow(title));
         });
+    }
+
+    function createStaffRow(title) {
+        const item = document.createElement("div");
+        item.className = "staff-row-item";
+
+        const titleSpan = document.createElement("span");
+        titleSpan.className = "title";
+        titleSpan.innerText = title;
+
+        const select = document.createElement("select");
+        select.onchange = (e) => {
+            if (e.target.value === "") {
+                delete staffAssignments[title];
+            } else {
+                staffAssignments[title] = e.target.value;
+            }
+            window.saveDataToFirebaseSilent();
+        };
+
+        const defaultOpt = document.createElement("option");
+        defaultOpt.value = "";
+        defaultOpt.innerText = "未指派";
+        select.appendChild(defaultOpt);
+
+        students.forEach(s => {
+            const opt = document.createElement("option");
+            opt.value = s.name;
+            opt.innerText = `${s.id}.${s.name}`;
+            if (staffAssignments[title] === s.name) {
+                opt.selected = true;
+            }
+            select.appendChild(opt);
+        });
+
+        item.appendChild(titleSpan);
+        item.appendChild(select);
+        return item;
     }
 
     let draggedStudentId = null;
@@ -816,6 +761,7 @@
 
         renderUnassigned();
         renderGrid();
+        window.saveDataToFirebaseSilent();
     }
 
     function dropToUnassigned(event) {
@@ -832,6 +778,7 @@
             }
             renderUnassigned();
             renderGrid();
+            window.saveDataToFirebaseSilent();
         }
     }
 
@@ -853,6 +800,7 @@
 
         renderUnassigned();
         renderGrid();
+        window.saveDataToFirebaseSilent();
     }
 
     function resetSeats() {
@@ -863,6 +811,7 @@
             flippedStatus = {};
             renderUnassigned();
             renderGrid();
+            window.saveDataToFirebaseSilent();
         }
     }
 
@@ -884,7 +833,7 @@
         examHistory.push(newRecord);
         nameInput.value = "";
         renderHistory();
-        saveDataToFirebase();
+        window.saveDataToFirebaseSilent();
         alert(`已成功將「${title}」加入歷史紀錄並同步至雲端！`);
     }
 
@@ -922,8 +871,8 @@
                 
                 renderUnassigned();
                 renderGrid();
-                renderStaffControls();
                 renderExportStaffTable();
+                window.saveDataToFirebaseSilent();
                 alert(`已成功切換至「${record.title}」！`);
             }
         }
@@ -933,7 +882,7 @@
         if (confirm("確定要刪除這筆歷史紀錄嗎？")) {
             examHistory = examHistory.filter(h => h.id !== id);
             renderHistory();
-            saveDataToFirebase();
+            window.saveDataToFirebaseSilent();
         }
     }
 
