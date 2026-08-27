@@ -46,7 +46,7 @@
         .main-container {
             display: flex;
             gap: 15px;
-            max-width: 1250px;
+            max-width: 1280px;
             margin: 0 auto;
             align-items: flex-start;
             justify-content: center;
@@ -123,7 +123,7 @@
             font-size: 0.7rem;
         }
 
-        /* 右側截圖專用大容器 (#capture-area)：包含座位區與內建下拉選單的幹部面板 */
+        /* 右側截圖專用大容器 (#capture-area)：包含座位區與幹部面板 */
         .capture-wrapper {
             display: flex;
             gap: 15px;
@@ -202,32 +202,31 @@
             transform: scale(1.03);
         }
 
-        /* 整合在座位表右側的幹部/小老師下拉選單面板 */
+        /* 下載圖片專用的幹部/小老師面板 (使用純文字排版，確保截圖清晰不跑版) */
         .export-staff-panel {
-            width: 290px;
+            width: 310px;
             background: rgba(44, 29, 17, 0.95);
             border: 2px solid var(--gold);
             border-radius: 10px;
-            padding: 8px;
+            padding: 10px;
             display: flex;
             flex-direction: column;
             box-sizing: border-box;
             max-height: 520px;
-            overflow-y: auto;
         }
 
         .export-staff-panel h3 {
             color: var(--gold);
             text-align: center;
-            margin: 0 0 4px 0;
-            font-size: 0.9rem;
+            margin: 0 0 6px 0;
+            font-size: 0.95rem;
             border-bottom: 2px solid var(--gold);
-            padding-bottom: 2px;
+            padding-bottom: 3px;
         }
 
         .staff-table-container {
             display: flex;
-            gap: 6px;
+            gap: 8px;
             flex-grow: 1;
         }
 
@@ -235,46 +234,90 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 3px;
+            gap: 4px;
         }
 
         .staff-column h4 {
             color: var(--gold);
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             text-align: center;
-            margin: 0 0 2px 0;
+            margin: 0 0 3px 0;
             border-bottom: 1px dashed var(--gold);
-            padding-bottom: 1px;
+            padding-bottom: 2px;
         }
 
         .staff-row-item {
             background: var(--parchment);
             color: #2c1d11;
-            padding: 2px 4px;
-            border-radius: 3px;
-            font-size: 0.7rem;
+            padding: 3px 5px;
+            border-radius: 4px;
+            font-size: 0.75rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
             font-weight: bold;
-            line-height: 1.2;
         }
 
         .staff-row-item .title {
             color: #8b5a2b;
-            font-size: 0.65rem;
-            width: 42%;
+            font-size: 0.7rem;
         }
 
-        /* 下拉選單樣式設計 */
-        .staff-row-item select {
-            width: 58%;
-            background: #fff;
+        .staff-row-item .name {
+            color: #2c1d11;
+            font-size: 0.75rem;
+        }
+
+        /* 網頁平時操作用的控制行或下拉選單區 */
+        .staff-control-section {
+            margin-top: 10px;
+            background: rgba(44, 29, 17, 0.95);
+            border: 3px solid var(--gold);
+            border-radius: 10px;
+            padding: 10px;
+            width: 620px;
+            box-sizing: border-box;
+        }
+
+        .staff-control-section h3 {
+            color: var(--gold);
+            text-align: center;
+            margin: 0 0 8px 0;
+            font-size: 0.95rem;
+            border-bottom: 2px solid var(--gold);
+            padding-bottom: 4px;
+        }
+
+        .staff-grid-controls {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 6px;
+            max-height: 180px;
+            overflow-y: auto;
+        }
+
+        .staff-ctrl-item {
+            background: rgba(0,0,0,0.3);
+            padding: 4px;
+            border-radius: 4px;
+            border: 1px solid var(--gold);
+        }
+
+        .staff-ctrl-item label {
+            display: block;
+            font-size: 0.7rem;
+            color: var(--gold);
+            margin-bottom: 2px;
+        }
+
+        .staff-ctrl-item select {
+            width: 100%;
+            background: var(--parchment);
             color: #2c1d11;
             border: 1px solid var(--gold);
             border-radius: 3px;
-            font-size: 0.65rem;
-            padding: 1px;
+            font-size: 0.75rem;
+            padding: 2px;
             font-weight: bold;
         }
 
@@ -411,8 +454,9 @@
             </div>
         </div>
 
-        <!-- 右側主區域：包含座位區、內建下拉選單的幹部面板，以及下方控制按鈕 -->
+        <!-- 右側主區域：包含截圖範圍與下方按鈕 -->
         <div style="display: flex; flex-direction: column; align-items: center;">
+            <!-- 截圖範圍 -->
             <div class="capture-wrapper" id="capture-area">
                 <!-- 中間：教室座位區 -->
                 <div class="classroom-area">
@@ -425,21 +469,27 @@
                     <div id="podium-bottom" class="podium" style="display: none;">🌟 偉大的航道 (講台 / 黑板) 🌟</div>
                 </div>
 
-                <!-- 內建下拉式選單的幹部與小老師面板 -->
+                <!-- 截圖專用：純文字排版的幹部與小老師面板 (確保下載圖片清晰整齊) -->
                 <div class="export-staff-panel">
                     <h3>👑 幹部與小老師名單</h3>
                     <div class="staff-table-container">
-                        <!-- 左側：班級幹部欄 -->
                         <div class="staff-column">
                             <h4>班級幹部</h4>
-                            <div id="leaders-select-list" style="display: flex; flex-direction: column; gap: 3px;"></div>
+                            <div id="export-leaders-list" style="display: flex; flex-direction: column; gap: 3px;"></div>
                         </div>
-                        <!-- 右側：各科小老師欄 -->
                         <div class="staff-column">
                             <h4>各科小老師</h4>
-                            <div id="teachers-select-list" style="display: flex; flex-direction: column; gap: 3px;"></div>
+                            <div id="export-teachers-list" style="display: flex; flex-direction: column; gap: 3px;"></div>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- 平時操作用的幹部與小老師下拉選單控制區 -->
+            <div class="staff-control-section">
+                <h3>👑 幹部與小老師指派 (下拉選單設定)</h3>
+                <div class="staff-grid-controls" id="staff-controls-grid">
+                    <!-- 動態生成下拉選單 -->
                 </div>
             </div>
 
@@ -497,11 +547,13 @@
                 
                 renderUnassigned();
                 renderGrid();
-                renderStaffSelects();
+                renderStaffControls();
+                renderExportStaffTable();
                 renderHistory();
             } else {
                 renderUnassigned();
-                renderStaffSelects();
+                renderStaffControls();
+                renderExportStaffTable();
             }
         }).catch((error) => {
             console.error("讀取雲端資料失敗", error);
@@ -537,6 +589,8 @@
         "情繫小老師", "圖書志工(一)", "圖書志工(二)"
     ];
 
+    const staffList = [...leaderList, ...subjectTeacherList];
+
     let seatMap = {}; 
     let unassignedStudents = [...students];
     let staffAssignments = {}; 
@@ -546,7 +600,8 @@
 
     function init() {
         renderUnassigned();
-        renderStaffSelects();
+        renderStaffControls();
+        renderExportStaffTable();
     }
 
     function setMode(mode) {
@@ -639,10 +694,54 @@
         return card;
     }
 
-    // 渲染座位表右側整合面板內的下拉式選單 (選取 1-28 號學生)
-    function renderStaffSelects() {
-        const leadersContainer = document.getElementById("leaders-select-list");
-        const teachersContainer = document.getElementById("teachers-select-list");
+    // 渲染下方操作用的下拉選單控制網格
+    function renderStaffControls() {
+        const container = document.getElementById("staff-controls-grid");
+        container.innerHTML = "";
+
+        staffList.forEach(title => {
+            const item = document.createElement("div");
+            item.className = "staff-ctrl-item";
+
+            const label = document.createElement("label");
+            label.innerText = title;
+
+            const select = document.createElement("select");
+            select.onchange = (e) => {
+                if (e.target.value === "") {
+                    delete staffAssignments[title];
+                } else {
+                    staffAssignments[title] = e.target.value;
+                }
+                renderExportStaffTable();
+                saveDataToFirebase();
+            };
+
+            const defaultOpt = document.createElement("option");
+            defaultOpt.value = "";
+            defaultOpt.innerText = "未指派";
+            select.appendChild(defaultOpt);
+
+            students.forEach(s => {
+                const opt = document.createElement("option");
+                opt.value = s.name;
+                opt.innerText = `${s.id}.${s.name}`;
+                if (staffAssignments[title] === s.name) {
+                    opt.selected = true;
+                }
+                select.appendChild(opt);
+            });
+
+            item.appendChild(label);
+            item.appendChild(select);
+            container.appendChild(item);
+        });
+    }
+
+    // 渲染截圖專用面板 (純文字顯示，確保下載圖片時不跑版)
+    function renderExportStaffTable() {
+        const leadersContainer = document.getElementById("export-leaders-list");
+        const teachersContainer = document.getElementById("export-teachers-list");
         
         if (!leadersContainer || !teachersContainer) return;
 
@@ -650,50 +749,20 @@
         teachersContainer.innerHTML = "";
 
         leaderList.forEach(title => {
-            leadersContainer.appendChild(createStaffRow(title));
+            const name = staffAssignments[title] || "未指派";
+            const item = document.createElement("div");
+            item.className = "staff-row-item";
+            item.innerHTML = `<span class="title">${title}</span><span class="name">${name}</span>`;
+            leadersContainer.appendChild(item);
         });
 
         subjectTeacherList.forEach(title => {
-            teachersContainer.appendChild(createStaffRow(title));
+            const name = staffAssignments[title] || "未指派";
+            const item = document.createElement("div");
+            item.className = "staff-row-item";
+            item.innerHTML = `<span class="title">${title}</span><span class="name">${name}</span>`;
+            teachersContainer.appendChild(item);
         });
-    }
-
-    function createStaffRow(title) {
-        const item = document.createElement("div");
-        item.className = "staff-row-item";
-
-        const titleSpan = document.createElement("span");
-        titleSpan.className = "title";
-        titleSpan.innerText = title;
-
-        const select = document.createElement("select");
-        select.onchange = (e) => {
-            if (e.target.value === "") {
-                delete staffAssignments[title];
-            } else {
-                staffAssignments[title] = e.target.value;
-            }
-            saveDataToFirebase();
-        };
-
-        const defaultOpt = document.createElement("option");
-        defaultOpt.value = "";
-        defaultOpt.innerText = "未指派";
-        select.appendChild(defaultOpt);
-
-        students.forEach(s => {
-            const opt = document.createElement("option");
-            opt.value = s.name;
-            opt.innerText = `${s.id}.${s.name}`;
-            if (staffAssignments[title] === s.name) {
-                opt.selected = true;
-            }
-            select.appendChild(opt);
-        });
-
-        item.appendChild(titleSpan);
-        item.appendChild(select);
-        return item;
     }
 
     let draggedStudentId = null;
@@ -849,7 +918,8 @@
                 
                 renderUnassigned();
                 renderGrid();
-                renderStaffSelects();
+                renderStaffControls();
+                renderExportStaffTable();
                 alert(`已成功切換至「${record.title}」！`);
             }
         }
