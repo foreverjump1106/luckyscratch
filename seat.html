@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>偉大的航道 - 804班級座位編排系統 (海賊王風)</title>
+    <!-- 網頁標題圖示 (Favicon) -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E⚓%3C/text%3E%3C/svg%3E">
     <!-- 引入 html2canvas 以支援下載圖片功能 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
@@ -123,7 +125,7 @@
             font-size: 0.7rem;
         }
 
-        /* 截圖專用大容器 (#capture-area)：上下拉寬一些，內部包含座位區與幹部面板 */
+        /* 截圖專用大容器 (#capture-area)：上下拉寬，包含座位區與幹部面板 */
         .capture-wrapper {
             display: flex;
             gap: 20px;
@@ -203,7 +205,7 @@
             transform: scale(1.03);
         }
 
-        /* 下載圖片專用的幹部/小老師面板 (拉高填滿框框) */
+        /* 下載圖片專用的幹部/小老師面板 */
         .export-staff-panel {
             width: 310px;
             height: 410px;
@@ -271,7 +273,7 @@
             font-size: 0.7rem;
         }
 
-        /* 幹部與小老師下拉選單控制區：改為寬 4 個、長 3 個的網格 */
+        /* 幹部與小老師下拉選單控制區：寬 4 個、長 3 個 */
         .staff-control-section {
             margin-top: 12px;
             background: rgba(44, 29, 17, 0.95);
@@ -293,8 +295,8 @@
 
         .staff-grid-controls {
             display: grid;
-            grid-template-columns: repeat(4, 1fr); /* 寬 4 個 */
-            grid-template-rows: repeat(3, auto);     /* 長 3 個 */
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(3, auto);
             gap: 8px;
         }
 
@@ -384,7 +386,7 @@
             margin-top: 2px;
         }
 
-        /* 控制按鈕列：放在大框框正下方，且獨立於 capture-wrapper 之外（下載截圖時不會被拍進去） */
+        /* 控制按鈕列：放在截圖框下方，下載圖片時不會被拍進去 */
         .control-bar {
             display: flex;
             justify-content: center;
@@ -460,7 +462,7 @@
 
         <!-- 右側主區域 -->
         <div style="display: flex; flex-direction: column; align-items: center; width: 960px;">
-            <!-- 截圖範圍 (包含放大後的座位區與右側幹部名單，下載時只會拍到這裡) -->
+            <!-- 截圖範圍 -->
             <div class="capture-wrapper" id="capture-area" style="width: 100%; box-sizing: border-box;">
                 <!-- 中間：教室座位區 -->
                 <div class="classroom-area">
@@ -489,7 +491,7 @@
                 </div>
             </div>
 
-            <!-- 控制按鈕列：放在截圖框下方，下載圖片時不會被包含進去 -->
+            <!-- 控制按鈕列 -->
             <div class="control-bar">
                 <button class="pirate-btn active-mode" id="btn-student-view" onclick="setMode('student')">👨‍🎓 學生觀看</button>
                 <button class="pirate-btn" id="btn-teacher-view" onclick="setMode('teacher')">👩‍🏫 老師觀看</button>
@@ -910,7 +912,7 @@
 
     window.loadHistory = function(id) {
         const record = examHistory.find(h => h.id === id);
-        if, (record) {
+        if (record) {
             if (confirm(`確定要載入「${record.title}」的座位嗎？這會覆蓋目前的排位。`)) {
                 seatMap = {...record.seatMap};
                 staffAssignments = {...record.staffAssignments};
