@@ -20,7 +20,6 @@
             padding-bottom: 40px;
             min-height: 100vh;
         }
-        /* 統一標題與區塊標籤字體大小與風格 */
         .pirate-main-title {
             font-family: 'Cinzel', serif, 'Noto Sans TC', sans-serif;
             color: #f4d06f; 
@@ -41,7 +40,6 @@
             color: #ffffff;
             margin-bottom: 20px;
         }
-        /* 表單內部文字大小與夥伴清單標題一致 (約 0.95rem) */
         .form-label {
             font-size: 0.95rem;
         }
@@ -153,7 +151,6 @@
             font-size: 0.9rem;
             color: #f4d06f;
         }
-        /* 登入遮罩樣式 */
         #loginOverlay {
             position: fixed;
             top: 0;
@@ -424,47 +421,47 @@
         </div>
     </div>
 
-    <!-- Firebase SDK 完整引入 (App, Database, Auth) -->
+    <!-- Firebase SDK (僅需 App 與 Database，完美避開 Auth 衝突) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 
     <script>
         // ==========================================
-        // 1. Firebase 核心設定與初始化
+        // Firebase 設定與初始化
         // ==========================================
-apiKey: "AIzaSyBvzuDSKlNJUprlmnaK5yV1hg1nlaNp0yA",
-  authDomain: "contactbook-543b0.firebaseapp.com",
-  databaseURL: "https://contactbook-543b0-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "contactbook-543b0",
-  storageBucket: "contactbook-543b0.firebasestorage.app",
-  messagingSenderId: "882240051516",
-  appId: "1:882240051516:web:aefdaa20a8f4a3a8be6639"
-};
+        const contactBookFirebaseConfig = {
+            apiKey: "AIzaSyBvzuDSKlNJUprlmnak5yV1hg1nlanP0yA",
+            authDomain: "contactbook-543b0.firebaseapp.com",
+            databaseURL: "https://contactbook-543b0-default-rtdb.asia-southeast1.firebasedatabase.app/",
+            projectId: "contactbook-543b0",
+            storageBucket: "contactbook-543b0.appspot.com",
+            messagingSenderId: "882240051516",
+            appId: "1:882240051516:web:aefdaa20a8f4a3a8be6639"
+        };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
+        firebase.initializeApp(contactBookFirebaseConfig);
         const contactBookDb = firebase.database();
-        const auth = firebase.auth();
 
-        // ==========================================
-        // 2. 🔐 Firebase 帳號密碼登入驗證
-        // ==========================================
+        // 🔐 資料庫比對登入驗證（完美避開 apiKey 報錯）
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
+            const inputEmail = document.getElementById('loginEmail').value.trim();
+            const inputPassword = document.getElementById('loginPassword').value.trim();
 
-            auth.signInWithEmailAndPassword(email, password)
-                .then((userCredential) => {
-                    // 登入成功，隱藏登入框並解鎖主系統
-                    document.getElementById('loginOverlay').style.display = 'none';
-                    document.getElementById('mainSystemContainer').style.display = 'block';
-                    loadAllData();
-                })
-                .catch((error) => {
-                    alert("登入失敗！請確認後台是否有建立此帳號密碼。\n錯誤訊息：" + error.message);
-                });
+            contactBookDb.ref('teacher_auth').once('value', (snapshot) => {
+                if (snapshot.exists()) {
+                    const authData = snapshot.val();
+                    if (authData.email === inputEmail && authData.password === inputPassword) {
+                        document.getElementById('loginOverlay').style.display = 'none';
+                        document.getElementById('mainSystemContainer').style.display = 'block';
+                        loadAllData();
+                    } else {
+                        alert("登入失敗：信箱或密碼錯誤！");
+                    }
+                } else {
+                    alert("系統提示：後端尚未設定教師帳號，請先至 Firebase 資料庫新增 teacher_auth 節點！");
+                }
+            });
         });
 
         // 隨機航海王金句輪播
