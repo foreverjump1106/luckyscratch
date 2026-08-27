@@ -91,14 +91,14 @@
             display: flex;
             gap: 10px;
             width: 100%;
-            max-width: 1120px;
+            max-width: 1220px;
             margin: 0 auto;
             align-items: flex-start;
             justify-content: center;
             flex-wrap: nowrap;
         }
 
-        /* 左側：未入座學生區與歷史紀錄區 (大幅縮短寬度，消除右側空白) */
+        /* 左側：未入座學生區與歷史紀錄區 (適度保留精煉寬度) */
         .sidebar-left {
             width: 150px;
             min-width: 140px;
@@ -180,7 +180,7 @@
         /* 截圖專用大容器 */
         .capture-wrapper {
             display: flex;
-            gap: 10px;
+            gap: 12px;
             background: rgba(20, 12, 6, 0.9);
             padding: 12px 10px;
             border-radius: 12px;
@@ -249,10 +249,10 @@
             transform: scale(1.03);
         }
 
-        /* 右側幹部面板 */
+        /* 右側幹部面板 (適度加寬至 290px，確保文字與下拉選單絕對不跑版或重疊) */
         .export-staff-panel {
-            width: 250px;
-            min-width: 240px;
+            width: 290px;
+            min-width: 280px;
             background: rgba(44, 29, 17, 0.95);
             border: 2px solid var(--gold);
             border-radius: 10px;
@@ -267,14 +267,14 @@
             color: var(--gold);
             text-align: center;
             margin: 0 0 3px 0;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             border-bottom: 2px solid var(--gold);
             padding-bottom: 2px;
         }
 
         .staff-table-container {
             display: flex;
-            gap: 4px;
+            gap: 6px;
             flex-grow: 1;
         }
 
@@ -282,12 +282,12 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 2px;
+            gap: 3px;
         }
 
         .staff-column h4 {
             color: var(--gold);
-            font-size: 0.6rem;
+            font-size: 0.65rem;
             text-align: center;
             margin: 0 0 2px 0;
             border-bottom: 1px dashed var(--gold);
@@ -297,37 +297,37 @@
         .staff-row-item {
             background: var(--parchment);
             color: #2c1d11;
-            padding: 1px 3px;
+            padding: 2px 4px;
             border-radius: 3px;
-            font-size: 0.58rem;
+            font-size: 0.65rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
             font-weight: bold;
-            height: 20px;
+            height: 22px;
             box-sizing: border-box;
         }
 
-        .staff-row-item .title { color: #8b5a2b; font-size: 0.55rem; width: 42%; flex-shrink: 0; }
-        .staff-row-item select { width: 58%; background: #fff; color: #2c1d11; border: 1px solid var(--gold); border-radius: 2px; font-size: 0.58rem; padding: 0px; font-weight: bold; box-sizing: border-box; }
+        .staff-row-item .title { color: #8b5a2b; font-size: 0.6rem; width: 44%; flex-shrink: 0; }
+        .staff-row-item select { width: 56%; background: #fff; color: #2c1d11; border: 1px solid var(--gold); border-radius: 2px; font-size: 0.63rem; padding: 1px; font-weight: bold; box-sizing: border-box; }
 
         .staff-row-text {
             background: var(--parchment);
             color: #2c1d11;
-            padding: 1px 3px;
+            padding: 2px 4px;
             border-radius: 3px;
-            font-size: 0.58rem;
+            font-size: 0.65rem;
             display: none;
             justify-content: space-between;
             align-items: center;
             font-weight: bold;
-            height: 20px;
+            height: 22px;
             box-sizing: border-box;
         }
-        .staff-row-text .title { color: #8b5a2b; font-size: 0.55rem; width: 42%; flex-shrink: 0; }
-        .staff-row-text .name { color: #2c1d11; font-size: 0.58rem; width: 58%; text-align: right; box-sizing: border-box; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .staff-row-text .title { color: #8b5a2b; font-size: 0.6rem; width: 44%; flex-shrink: 0; }
+        .staff-row-text .name { color: #2c1d11; font-size: 0.63rem; width: 56%; text-align: right; box-sizing: border-box; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-        /* 左側候選學生卡片：拿掉寬度限制與多餘空白，緊湊精煉 */
+        /* 左側候選學生卡片 */
         .student-card {
             background: linear-gradient(135deg, #fdf6e2 0%, #e6d5b8 100%);
             color: #2c1d11;
@@ -413,7 +413,7 @@
     </div>
 
     <div class="main-container">
-        <!-- 左側：候補船員名單與歷史紀錄 (已縮減寬度消除空白) -->
+        <!-- 左側：候補船員名單與歷史紀錄 -->
         <div class="sidebar-left">
             <h3>📜 候補船員名單</h3>
             <div id="unassigned-list" ondragover="allowDrop(event)" ondragleave="removeDropStyle(event)" ondrop="dropToUnassigned(event)"></div>
@@ -427,7 +427,7 @@
         </div>
 
         <!-- 右側主區域 -->
-        <div style="display: flex; flex-direction: column; align-items: center; flex-grow: 1; max-width: 760px;">
+        <div style="display: flex; flex-direction: column; align-items: center; flex-grow: 1; max-width: 800px;">
             <!-- 截圖範圍 -->
             <div class="capture-wrapper" id="capture-area" style="width: 100%; box-sizing: border-box;">
                 <!-- 中間：教室座位區 -->
@@ -437,7 +437,7 @@
                     <div id="podium-bottom" class="podium" style="display: none;">🌟 偉大的航道 (講台 / 黑板) 🌟</div>
                 </div>
 
-                <!-- 右側幹部與小老師面板 -->
+                <!-- 右側幹部與小老師面板 (適度加寬避免文字重疊) -->
                 <div class="export-staff-panel">
                     <h3>👑 幹部與小老師名單</h3>
                     <div class="staff-table-container">
