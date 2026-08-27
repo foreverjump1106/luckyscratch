@@ -86,15 +86,15 @@
             font-weight: bold;
         }
 
-        /* 主容器：固定左右橫幅並自動依螢幕縮放 */
+        /* 主容器：支援各載具彈性佈局 */
         .main-container {
             display: flex;
             gap: 12px;
-            max-width: 1320px;
+            max-width: 1400px;
             margin: 0 auto;
             align-items: flex-start;
             justify-content: center;
-            flex-wrap: nowrap;
+            flex-wrap: wrap; /* 允許在極窄螢幕自動換行保護版面 */
         }
 
         /* 左側：未入座學生區與歷史紀錄區 */
@@ -169,7 +169,7 @@
             font-size: 0.65rem;
         }
 
-        /* 截圖專用大容器 */
+        /* 截圖專用大容器 (採用彈性自適應寬度，適應平板與電腦) */
         .capture-wrapper {
             display: flex;
             gap: 15px;
@@ -179,11 +179,15 @@
             border: 4px solid var(--gold);
             box-shadow: inset 0 0 20px rgba(0,0,0,0.8), 0 8px 16px rgba(0,0,0,0.6);
             align-items: flex-start;
+            flex-wrap: wrap; /* 支援平板自動調整 */
+            justify-content: center;
         }
 
         /* 中間：教室座位區 */
         .classroom-area {
-            width: 560px;
+            width: 540px;
+            min-width: 480px;
+            flex-grow: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -238,9 +242,11 @@
             transform: scale(1.03);
         }
 
-        /* 右側幹部面板 */
+        /* 右側幹部面板 (改為彈性寬度，平板上自動縮放不被卡掉) */
         .export-staff-panel {
-            width: 290px;
+            width: 310px;
+            min-width: 280px;
+            flex-shrink: 0;
             background: rgba(44, 29, 17, 0.95);
             border: 2px solid var(--gold);
             border-radius: 10px;
@@ -291,12 +297,12 @@
             justify-content: space-between;
             align-items: center;
             font-weight: bold;
-            height: 22px;
+            height: 24px;
             box-sizing: border-box;
         }
 
-        .staff-row-item .title { color: #8b5a2b; font-size: 0.6rem; width: 45%; }
-        .staff-row-item select { width: 55%; background: #fff; color: #2c1d11; border: 1px solid var(--gold); border-radius: 2px; font-size: 0.65rem; padding: 1px; font-weight: bold; }
+        .staff-row-item .title { color: #8b5a2b; font-size: 0.6rem; width: 42%; flex-shrink: 0; }
+        .staff-row-item select { width: 58%; background: #fff; color: #2c1d11; border: 1px solid var(--gold); border-radius: 2px; font-size: 0.65rem; padding: 1px; font-weight: bold; box-sizing: border-box; }
 
         .staff-row-text {
             background: var(--parchment);
@@ -308,11 +314,11 @@
             justify-content: space-between;
             align-items: center;
             font-weight: bold;
-            height: 22px;
+            height: 24px;
             box-sizing: border-box;
         }
-        .staff-row-text .title { color: #8b5a2b; font-size: 0.6rem; width: 45%; }
-        .staff-row-text .name { color: #2c1d11; font-size: 0.65rem; width: 55%; text-align: right; }
+        .staff-row-text .title { color: #8b5a2b; font-size: 0.6rem; width: 42%; flex-shrink: 0; }
+        .staff-row-text .name { color: #2c1d11; font-size: 0.65rem; width: 58%; text-align: right; box-sizing: border-box; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
         .student-card {
             background: linear-gradient(135deg, #fdf6e2 0%, #e6d5b8 100%);
@@ -394,36 +400,28 @@
         <!-- 左側：候補船員名單與歷史紀錄 -->
         <div class="sidebar-left">
             <h3>📜 候補船員名單</h3>
-            <div id="unassigned-list" ondragover="allowDrop(event)" ondragleave="removeDropStyle(event)" ondrop="dropToUnassigned(event)">
-                <!-- 動態生成 -->
-            </div>
+            <div id="unassigned-list" ondragover="allowDrop(event)" ondragleave="removeDropStyle(event)" ondrop="dropToUnassigned(event)"></div>
             
             <h3>🗺️ 歷次段考紀錄</h3>
             <div style="display: flex; gap: 4px; margin-bottom: 4px;">
                 <input type="text" id="history-name" placeholder="例: 第一次段考" style="width: 100%; padding: 3px; font-size: 0.75rem; border-radius: 4px; border: 1px solid var(--gold); background: var(--parchment); color: #2c1d11;">
                 <button class="pirate-btn" onclick="saveHistory()" style="padding: 3px 6px; font-size: 0.75rem;">存檔</button>
             </div>
-            <div class="history-box" id="history-list">
-                <!-- 歷史紀錄列表 -->
-            </div>
+            <div class="history-box" id="history-list"></div>
         </div>
 
         <!-- 右側主區域 -->
-        <div style="display: flex; flex-direction: column; align-items: center; flex-grow: 1; max-width: 900px;">
+        <div style="display: flex; flex-direction: column; align-items: center; flex-grow: 1; max-width: 920px;">
             <!-- 截圖範圍 -->
             <div class="capture-wrapper" id="capture-area" style="width: 100%; box-sizing: border-box;">
                 <!-- 中間：教室座位區 -->
                 <div class="classroom-area">
                     <div id="podium-top" class="podium">🌟 偉大的航道 (講台 / 黑板) 🌟</div>
-                    
-                    <div class="grid-6x5 student-view" id="seat-grid">
-                        <!-- 動態生成 30 格 (6x5) -->
-                    </div>
-
+                    <div class="grid-6x5 student-view" id="seat-grid"></div>
                     <div id="podium-bottom" class="podium" style="display: none;">🌟 偉大的航道 (講台 / 黑板) 🌟</div>
                 </div>
 
-                <!-- 右側幹部與小老師面板 -->
+                <!-- 右側幹部與小老師面板 (彈性調整不卡字) -->
                 <div class="export-staff-panel">
                     <h3>👑 幹部與小老師名單</h3>
                     <div class="staff-table-container">
