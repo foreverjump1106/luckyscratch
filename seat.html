@@ -45,7 +45,7 @@
             font-size: 0.9rem;
         }
 
-        /* 主容器：固定左右橫幅並自動依螢幕縮放，絕不上下堆疊 */
+        /* 主容器：固定左右橫幅並自動依螢幕縮放 */
         .main-container {
             display: flex;
             gap: 12px;
@@ -56,7 +56,7 @@
             flex-wrap: nowrap;
         }
 
-        /* 左側：未入座學生區與歷史紀錄區 (固定在左側) */
+        /* 左側：未入座學生區與歷史紀錄區 */
         .sidebar-left {
             width: 250px;
             min-width: 230px;
@@ -424,10 +424,10 @@
 <body>
 
     <h1>🏴‍☠️ 偉大的航道：804班級座位編排 ⚓</h1>
-    <div class="subtitle">「目標是成為海賊王！找到屬於你的黃金座位！」</div>
+    <div class="subtitle"><span>「目標是成為海賊王！找到屬於你的黃金座位！」</span></div>
 
     <div class="main-container">
-        <!-- 左側：候補船員名單與歷史紀錄 (永遠固定在左側) -->
+        <!-- 左側：候補船員名單與歷史紀錄 -->
         <div class="sidebar-left">
             <h3>📜 候補船員名單</h3>
             <div id="unassigned-list" ondragover="allowDrop(event)" ondragleave="removeDropStyle(event)" ondrop="dropToUnassigned(event)">
@@ -832,21 +832,43 @@
         }
     }
 
+    // 隨機排位：保留已在格子內的名字不動，剩餘空白格子隨機排位
     function randomAssign() {
-        let allPool = [...students];
-        allPool.sort(() => Math.random() - 0.5);
-        
-        seatMap = {};
-        unassignedStudents = [];
-        flippedStatus = {};
+        // 1. 收集目前已經在格子裡的學生 ID
+        let assignedStudentIds = [];
+        for (let i = 0; i < 30; i++) {
+            let cellId = `cell-${i}`;
+            if (seatMap[cellId]) {
+                assignedStudentIds.push(seatMap[cellId].id);
+            }
+        }
 
-        for (let i = 0; i < 30 && i < allPool.length; i++) {
-            seatMap[`cell-${i}`] = allPool[i];
-            if (currentMode === 'flip') flippedStatus[`cell-${i}`] = false;
+        // 2. 找出尚未入座的學生作為隨機池
+        let availablePool = students.filter(s => !assignedStudentIds.includes(s.id));
+        availablePool.sort(() => Math.random() - 0.5);
+
+        // 3. 填入所有未被佔用的空白格子
+        let poolIndex = 0;
+        for (let i = 0; i < 30; i++) {
+            let cellId = `cell-${i}`;
+            if (!seatMap[cellId]) {
+                if (poolIndex < availablePool.length) {
+                    seatMap[cellId] = availablePool[poolIndex];
+                    if (currentMode === 'flip') flippedStatus[cellId] = false;
+                    poolIndex++;
+                }
+            }
         }
-        for (let i = 30; i < allPool.length; i++) {
-            unassignedStudents.push(allPool[i]);
+
+        // 4. 更新候補名單（留在候補區的應該是都沒有被排入格子的）
+        let allAssignedIds = [];
+        for (let i = 0; i < 30; i++) {
+            let cellId = `cell-${i}`;
+            if (seatMap[cellId]) {
+                allAssignedIds.push(seatMap[cellId].id);
+            }
         }
+        unassignedStudents = students.filter(s => !allAssignedIds.includes(s.id));
 
         renderUnassigned();
         renderGrid();
