@@ -42,15 +42,14 @@
             font-size: 0.9rem;
         }
 
-        /* 主容器左右分欄 (支援平板與手機捲動，避免左側被擠不見) */
+        /* 兩欄式完美排版：確保平板與電腦都能完整顯示左側候補名單 */
         .main-container {
             display: flex;
             gap: 15px;
-            max-width: 1400px;
+            max-width: 1250px;
             margin: 0 auto;
             align-items: flex-start;
             justify-content: center;
-            flex-wrap: wrap;
         }
 
         /* 左側：未入座學生區與歷史紀錄區 */
@@ -62,11 +61,12 @@
             border-radius: 10px;
             padding: 10px;
             box-shadow: 0 8px 16px rgba(0,0,0,0.6);
-            height: 78vh;
-            min-height: 500px;
+            height: 82vh;
+            min-height: 520px;
             display: flex;
             flex-direction: column;
             gap: 10px;
+            box-sizing: border-box;
         }
 
         .sidebar-left h3 {
@@ -123,7 +123,7 @@
             font-size: 0.7rem;
         }
 
-        /* 截圖專用的大外框容器 (包含中間座位與右側幹部小老師表格) */
+        /* 右側截圖專用大容器 (#capture-area)：包含座位區與內建下拉選單的幹部面板 */
         .capture-wrapper {
             display: flex;
             gap: 15px;
@@ -136,7 +136,7 @@
 
         /* 中間：教室座位區 */
         .classroom-area {
-            width: 680px;
+            width: 620px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -202,61 +202,9 @@
             transform: scale(1.03);
         }
 
-        /* 右側：網頁上的幹部與小老師操作區 */
-        .sidebar-right {
-            width: 260px;
-            min-width: 240px;
-            background: rgba(44, 29, 17, 0.95);
-            border: 3px solid var(--gold);
-            border-radius: 10px;
-            padding: 10px;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.6);
-            height: 78vh;
-            min-height: 500px;
-            overflow-y: auto;
-        }
-
-        .sidebar-right h3 {
-            color: var(--gold);
-            text-align: center;
-            margin-top: 0;
-            font-size: 1rem;
-            border-bottom: 2px solid var(--gold);
-            padding-bottom: 5px;
-        }
-
-        .staff-item-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: var(--parchment);
-            color: #2c1d11;
-            padding: 5px 8px;
-            margin-bottom: 6px;
-            border-radius: 4px;
-            font-size: 0.85rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .staff-item-row:hover {
-            background: #ffeaa7;
-        }
-
-        .staff-item-row .staff-title {
-            color: #8b5a2b;
-            font-size: 0.8rem;
-        }
-
-        .staff-item-row .staff-name {
-            color: #2c1d11;
-            font-size: 0.85rem;
-        }
-
-        /* 下載圖片專用的幹部/小老師左右表格面板 (緊湊無多餘空白) */
+        /* 整合在座位表右側的幹部/小老師下拉選單面板 */
         .export-staff-panel {
-            width: 280px;
+            width: 290px;
             background: rgba(44, 29, 17, 0.95);
             border: 2px solid var(--gold);
             border-radius: 10px;
@@ -264,14 +212,15 @@
             display: flex;
             flex-direction: column;
             box-sizing: border-box;
-            max-height: 500px;
+            max-height: 520px;
+            overflow-y: auto;
         }
 
         .export-staff-panel h3 {
             color: var(--gold);
             text-align: center;
             margin: 0 0 4px 0;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             border-bottom: 2px solid var(--gold);
             padding-bottom: 2px;
         }
@@ -280,14 +229,13 @@
             display: flex;
             gap: 6px;
             flex-grow: 1;
-            overflow: hidden;
         }
 
         .staff-column {
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 2px;
+            gap: 3px;
         }
 
         .staff-column h4 {
@@ -309,12 +257,25 @@
             justify-content: space-between;
             align-items: center;
             font-weight: bold;
-            line-height: 1.1;
+            line-height: 1.2;
         }
 
         .staff-row-item .title {
             color: #8b5a2b;
             font-size: 0.65rem;
+            width: 42%;
+        }
+
+        /* 下拉選單樣式設計 */
+        .staff-row-item select {
+            width: 58%;
+            background: #fff;
+            color: #2c1d11;
+            border: 1px solid var(--gold);
+            border-radius: 3px;
+            font-size: 0.65rem;
+            padding: 1px;
+            font-weight: bold;
         }
 
         /* 左側候補學生卡片放大與文字對齊 */
@@ -433,7 +394,7 @@
     <div class="subtitle">「目標是成為海賊王！找到屬於你的黃金座位！」</div>
 
     <div class="main-container">
-        <!-- 左側：未入座學生區與歷史紀錄區 -->
+        <!-- 左側：候補船員名單與歷次段考紀錄 -->
         <div class="sidebar-left">
             <h3>📜 候補船員名單</h3>
             <div id="unassigned-list" ondragover="allowDrop(event)" ondragleave="removeDropStyle(event)" ondrop="dropToUnassigned(event)">
@@ -450,7 +411,7 @@
             </div>
         </div>
 
-        <!-- 中間與右側合併：截圖專用大容器 (#capture-area) -->
+        <!-- 右側主區域：包含座位區、內建下拉選單的幹部面板，以及下方控制按鈕 -->
         <div style="display: flex; flex-direction: column; align-items: center;">
             <div class="capture-wrapper" id="capture-area">
                 <!-- 中間：教室座位區 -->
@@ -464,19 +425,19 @@
                     <div id="podium-bottom" class="podium" style="display: none;">🌟 偉大的航道 (講台 / 黑板) 🌟</div>
                 </div>
 
-                <!-- 截圖專用：左右分欄的幹部與小老師表格面板 (排版緊湊無多餘空白) -->
+                <!-- 內建下拉式選單的幹部與小老師面板 -->
                 <div class="export-staff-panel">
                     <h3>👑 幹部與小老師名單</h3>
                     <div class="staff-table-container">
-                        <!-- 左側：幹部欄 -->
+                        <!-- 左側：班級幹部欄 -->
                         <div class="staff-column">
                             <h4>班級幹部</h4>
-                            <div id="export-leaders-list" style="display: flex; flex-direction: column; gap: 2px;"></div>
+                            <div id="leaders-select-list" style="display: flex; flex-direction: column; gap: 3px;"></div>
                         </div>
-                        <!-- 右側：小老師欄 -->
+                        <!-- 右側：各科小老師欄 -->
                         <div class="staff-column">
                             <h4>各科小老師</h4>
-                            <div id="export-teachers-list" style="display: flex; flex-direction: column; gap: 2px;"></div>
+                            <div id="teachers-select-list" style="display: flex; flex-direction: column; gap: 3px;"></div>
                         </div>
                     </div>
                 </div>
@@ -491,14 +452,6 @@
                 <button class="pirate-btn" onclick="resetSeats()" style="background: linear-gradient(to bottom, #c0392b, #962d22); color: #fff;">🔄 座位復位</button>
                 <button class="pirate-btn" onclick="saveDataToFirebase()">💾 儲存至雲端</button>
                 <button class="pirate-btn" onclick="downloadImage()">📷 下載圖片</button>
-            </div>
-        </div>
-
-        <!-- 右側：幹部與小老師點選指定區 (點擊即彈出選擇 1-28 號) -->
-        <div class="sidebar-right">
-            <h3>👑 幹部與小老師</h3>
-            <div id="staff-container">
-                <!-- 動態生成 -->
             </div>
         </div>
     </div>
@@ -544,11 +497,11 @@
                 
                 renderUnassigned();
                 renderGrid();
-                renderStaff();
+                renderStaffSelects();
                 renderHistory();
-                renderExportStaffTable();
             } else {
                 renderUnassigned();
+                renderStaffSelects();
             }
         }).catch((error) => {
             console.error("讀取雲端資料失敗", error);
@@ -584,8 +537,6 @@
         "情繫小老師", "圖書志工(一)", "圖書志工(二)"
     ];
 
-    const staffList = [...leaderList, ...subjectTeacherList];
-
     let seatMap = {}; 
     let unassignedStudents = [...students];
     let staffAssignments = {}; 
@@ -595,8 +546,7 @@
 
     function init() {
         renderUnassigned();
-        renderStaff();
-        renderExportStaffTable();
+        renderStaffSelects();
     }
 
     function setMode(mode) {
@@ -689,52 +639,10 @@
         return card;
     }
 
-    // 渲染右側點選指定介面（點擊整列即可修改，顯示「未指派」或學生姓名）
-    function renderStaff() {
-        const container = document.getElementById("staff-container");
-        container.innerHTML = "";
-        staffList.forEach(title => {
-            const row = document.createElement("div");
-            row.className = "staff-item-row";
-            
-            const currentAssignName = staffAssignments[title] || "未指派";
-            const displayColor = staffAssignments[title] ? "#2c1d11" : "#a0522d";
-
-            row.innerHTML = `
-                <span class="staff-title">${title}</span>
-                <span class="staff-name" style="color: ${displayColor};">${currentAssignName}</span>
-            `;
-            // 點擊整列即可輸入座號或姓名指派
-            row.onclick = () => assignStaffPrompt(title);
-            container.appendChild(row);
-        });
-    }
-
-    window.assignStaffPrompt = function(title) {
-        let promptText = `請輸入要擔任「${title}」的學生座號 (1-28) 或姓名：\n(若要取消指派請直接按確定或留空)`;
-        let input = prompt(promptText);
-        if (input !== null) {
-            input = input.trim();
-            if (input === "") {
-                delete staffAssignments[title];
-            } else {
-                let found = students.find(s => s.id == input || s.name === input);
-                if (found) {
-                    staffAssignments[title] = found.name;
-                } else {
-                    alert("找不到該學生，請確認 1~28 號座號或姓名是否正確！");
-                    return;
-                }
-            }
-            renderStaff();
-            renderExportStaffTable();
-            saveDataToFirebase();
-        }
-    }
-
-    function renderExportStaffTable() {
-        const leadersContainer = document.getElementById("export-leaders-list");
-        const teachersContainer = document.getElementById("export-teachers-list");
+    // 渲染座位表右側整合面板內的下拉式選單 (選取 1-28 號學生)
+    function renderStaffSelects() {
+        const leadersContainer = document.getElementById("leaders-select-list");
+        const teachersContainer = document.getElementById("teachers-select-list");
         
         if (!leadersContainer || !teachersContainer) return;
 
@@ -742,20 +650,50 @@
         teachersContainer.innerHTML = "";
 
         leaderList.forEach(title => {
-            const name = staffAssignments[title] || "未指派";
-            const item = document.createElement("div");
-            item.className = "staff-row-item";
-            item.innerHTML = `<span class="title">${title}</span><span>${name}</span>`;
-            leadersContainer.appendChild(item);
+            leadersContainer.appendChild(createStaffRow(title));
         });
 
         subjectTeacherList.forEach(title => {
-            const name = staffAssignments[title] || "未指派";
-            const item = document.createElement("div");
-            item.className = "staff-row-item";
-            item.innerHTML = `<span class="title">${title}</span><span>${name}</span>`;
-            teachersContainer.appendChild(item);
+            teachersContainer.appendChild(createStaffRow(title));
         });
+    }
+
+    function createStaffRow(title) {
+        const item = document.createElement("div");
+        item.className = "staff-row-item";
+
+        const titleSpan = document.createElement("span");
+        titleSpan.className = "title";
+        titleSpan.innerText = title;
+
+        const select = document.createElement("select");
+        select.onchange = (e) => {
+            if (e.target.value === "") {
+                delete staffAssignments[title];
+            } else {
+                staffAssignments[title] = e.target.value;
+            }
+            saveDataToFirebase();
+        };
+
+        const defaultOpt = document.createElement("option");
+        defaultOpt.value = "";
+        defaultOpt.innerText = "未指派";
+        select.appendChild(defaultOpt);
+
+        students.forEach(s => {
+            const opt = document.createElement("option");
+            opt.value = s.name;
+            opt.innerText = `${s.id}.${s.name}`;
+            if (staffAssignments[title] === s.name) {
+                opt.selected = true;
+            }
+            select.appendChild(opt);
+        });
+
+        item.appendChild(titleSpan);
+        item.appendChild(select);
+        return item;
     }
 
     let draggedStudentId = null;
@@ -911,8 +849,7 @@
                 
                 renderUnassigned();
                 renderGrid();
-                renderStaff();
-                renderExportStaffTable();
+                renderStaffSelects();
                 alert(`已成功切換至「${record.title}」！`);
             }
         }
