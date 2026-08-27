@@ -42,7 +42,7 @@
             font-size: 0.9rem;
         }
 
-        /* 兩欄式完美排版：確保平板與電腦都能完整顯示左側候補名單 */
+        /* 兩欄式完美排版 */
         .main-container {
             display: flex;
             gap: 15px;
@@ -61,8 +61,8 @@
             border-radius: 10px;
             padding: 10px;
             box-shadow: 0 8px 16px rgba(0,0,0,0.6);
-            height: 82vh;
-            min-height: 520px;
+            height: 84vh;
+            min-height: 560px;
             display: flex;
             flex-direction: column;
             gap: 10px;
@@ -123,15 +123,16 @@
             font-size: 0.7rem;
         }
 
-        /* 右側截圖專用大容器 (#capture-area)：包含座位區與幹部面板 */
+        /* 截圖專用大容器 (#capture-area)：上下拉寬一些，內部包含座位區與幹部面板 */
         .capture-wrapper {
             display: flex;
-            gap: 15px;
+            gap: 20px;
             background: rgba(20, 12, 6, 0.9);
-            padding: 15px;
+            padding: 25px 20px;
             border-radius: 15px;
             border: 4px solid var(--gold);
             box-shadow: inset 0 0 20px rgba(0,0,0,0.8), 0 8px 16px rgba(0,0,0,0.6);
+            align-items: center;
         }
 
         /* 中間：教室座位區 */
@@ -147,7 +148,7 @@
             background: linear-gradient(to bottom, #8b5a2b, #5c3a21);
             color: var(--gold);
             border: 2px solid var(--gold);
-            padding: 6px 40px;
+            padding: 8px 40px;
             border-radius: 8px;
             font-weight: bold;
             font-size: 1rem;
@@ -160,9 +161,9 @@
             display: grid;
             grid-template-columns: repeat(6, 1fr);
             grid-template-rows: repeat(5, 1fr);
-            gap: 8px;
+            gap: 10px;
             width: 100%;
-            margin: 10px 0;
+            margin: 15px 0;
         }
 
         /* 學生觀看版本：1號在右上角 */
@@ -202,9 +203,10 @@
             transform: scale(1.03);
         }
 
-        /* 下載圖片專用的幹部/小老師面板 (使用純文字排版，確保截圖清晰不跑版) */
+        /* 下載圖片專用的幹部/小老師面板 (拉高填滿框框) */
         .export-staff-panel {
             width: 310px;
+            height: 410px;
             background: rgba(44, 29, 17, 0.95);
             border: 2px solid var(--gold);
             border-radius: 10px;
@@ -212,7 +214,7 @@
             display: flex;
             flex-direction: column;
             box-sizing: border-box;
-            max-height: 520px;
+            justify-content: space-between;
         }
 
         .export-staff-panel h3 {
@@ -234,14 +236,15 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 3px;
+            justify-content: space-around;
         }
 
         .staff-column h4 {
             color: var(--gold);
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             text-align: center;
-            margin: 0 0 3px 0;
+            margin: 0 0 2px 0;
             border-bottom: 1px dashed var(--gold);
             padding-bottom: 2px;
         }
@@ -251,7 +254,7 @@
             color: #2c1d11;
             padding: 3px 5px;
             border-radius: 4px;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -260,29 +263,29 @@
 
         .staff-row-item .title {
             color: #8b5a2b;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
         }
 
         .staff-row-item .name {
             color: #2c1d11;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
         }
 
-        /* 網頁平時操作用的控制行或下拉選單區 */
+        /* 幹部與小老師下拉選單控制區：改為寬 4 個、長 3 個的網格 */
         .staff-control-section {
-            margin-top: 10px;
+            margin-top: 12px;
             background: rgba(44, 29, 17, 0.95);
             border: 3px solid var(--gold);
             border-radius: 10px;
-            padding: 10px;
-            width: 620px;
+            padding: 12px;
+            width: 100%;
             box-sizing: border-box;
         }
 
         .staff-control-section h3 {
             color: var(--gold);
             text-align: center;
-            margin: 0 0 8px 0;
+            margin: 0 0 10px 0;
             font-size: 0.95rem;
             border-bottom: 2px solid var(--gold);
             padding-bottom: 4px;
@@ -290,24 +293,24 @@
 
         .staff-grid-controls {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 6px;
-            max-height: 180px;
-            overflow-y: auto;
+            grid-template-columns: repeat(4, 1fr); /* 寬 4 個 */
+            grid-template-rows: repeat(3, auto);     /* 長 3 個 */
+            gap: 8px;
         }
 
         .staff-ctrl-item {
             background: rgba(0,0,0,0.3);
-            padding: 4px;
+            padding: 6px;
             border-radius: 4px;
             border: 1px solid var(--gold);
         }
 
         .staff-ctrl-item label {
             display: block;
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             color: var(--gold);
-            margin-bottom: 2px;
+            margin-bottom: 3px;
+            font-weight: bold;
         }
 
         .staff-ctrl-item select {
@@ -317,11 +320,11 @@
             border: 1px solid var(--gold);
             border-radius: 3px;
             font-size: 0.75rem;
-            padding: 2px;
+            padding: 3px;
             font-weight: bold;
         }
 
-        /* 左側候補學生卡片放大與文字對齊 */
+        /* 左側候補學生卡片 */
         .student-card {
             background: linear-gradient(135deg, #fdf6e2 0%, #e6d5b8 100%);
             color: #2c1d11;
@@ -381,22 +384,23 @@
             margin-top: 2px;
         }
 
-        /* 控制按鈕列 */
+        /* 控制按鈕列：放在大框框正下方，且獨立於 capture-wrapper 之外（下載截圖時不會被拍進去） */
         .control-bar {
             display: flex;
             justify-content: center;
-            gap: 8px;
-            margin-top: 10px;
+            gap: 10px;
+            margin-top: 15px;
             flex-wrap: wrap;
+            width: 100%;
         }
 
         .pirate-btn {
             background: linear-gradient(to bottom, #d4af37, #aa820a);
             color: #1a1008;
             border: 2px solid #fff;
-            padding: 6px 12px;
+            padding: 8px 16px;
             font-weight: bold;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             border-radius: 6px;
             cursor: pointer;
             box-shadow: 0 3px 6px rgba(0,0,0,0.4);
@@ -454,10 +458,10 @@
             </div>
         </div>
 
-        <!-- 右側主區域：包含截圖範圍與下方按鈕 -->
-        <div style="display: flex; flex-direction: column; align-items: center;">
-            <!-- 截圖範圍 -->
-            <div class="capture-wrapper" id="capture-area">
+        <!-- 右側主區域 -->
+        <div style="display: flex; flex-direction: column; align-items: center; width: 960px;">
+            <!-- 截圖範圍 (包含放大後的座位區與右側幹部名單，下載時只會拍到這裡) -->
+            <div class="capture-wrapper" id="capture-area" style="width: 100%; box-sizing: border-box;">
                 <!-- 中間：教室座位區 -->
                 <div class="classroom-area">
                     <div id="podium-top" class="podium">🌟 偉大的航道 (講台 / 黑板) 🌟</div>
@@ -469,31 +473,23 @@
                     <div id="podium-bottom" class="podium" style="display: none;">🌟 偉大的航道 (講台 / 黑板) 🌟</div>
                 </div>
 
-                <!-- 截圖專用：純文字排版的幹部與小老師面板 (確保下載圖片清晰整齊) -->
+                <!-- 截圖專用面板 -->
                 <div class="export-staff-panel">
                     <h3>👑 幹部與小老師名單</h3>
                     <div class="staff-table-container">
                         <div class="staff-column">
                             <h4>班級幹部</h4>
-                            <div id="export-leaders-list" style="display: flex; flex-direction: column; gap: 3px;"></div>
+                            <div id="export-leaders-list" style="display: flex; flex-direction: column; gap: 2px;"></div>
                         </div>
                         <div class="staff-column">
                             <h4>各科小老師</h4>
-                            <div id="export-teachers-list" style="display: flex; flex-direction: column; gap: 3px;"></div>
+                            <div id="export-teachers-list" style="display: flex; flex-direction: column; gap: 2px;"></div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- 平時操作用的幹部與小老師下拉選單控制區 -->
-            <div class="staff-control-section">
-                <h3>👑 幹部與小老師指派 (下拉選單設定)</h3>
-                <div class="staff-grid-controls" id="staff-controls-grid">
-                    <!-- 動態生成下拉選單 -->
-                </div>
-            </div>
-
-            <!-- 控制按鈕列 -->
+            <!-- 控制按鈕列：放在截圖框下方，下載圖片時不會被包含進去 -->
             <div class="control-bar">
                 <button class="pirate-btn active-mode" id="btn-student-view" onclick="setMode('student')">👨‍🎓 學生觀看</button>
                 <button class="pirate-btn" id="btn-teacher-view" onclick="setMode('teacher')">👩‍🏫 老師觀看</button>
@@ -502,6 +498,14 @@
                 <button class="pirate-btn" onclick="resetSeats()" style="background: linear-gradient(to bottom, #c0392b, #962d22); color: #fff;">🔄 座位復位</button>
                 <button class="pirate-btn" onclick="saveDataToFirebase()">💾 儲存至雲端</button>
                 <button class="pirate-btn" onclick="downloadImage()">📷 下載圖片</button>
+            </div>
+
+            <!-- 幹部與小老師下拉選單設定區 (寬4個、長3個網格) -->
+            <div class="staff-control-section">
+                <h3>👑 幹部與小老師指派 (下拉選單設定)</h3>
+                <div class="staff-grid-controls" id="staff-controls-grid">
+                    <!-- 動態生成下拉選單 -->
+                </div>
             </div>
         </div>
     </div>
@@ -694,7 +698,6 @@
         return card;
     }
 
-    // 渲染下方操作用的下拉選單控制網格
     function renderStaffControls() {
         const container = document.getElementById("staff-controls-grid");
         container.innerHTML = "";
@@ -738,7 +741,6 @@
         });
     }
 
-    // 渲染截圖專用面板 (純文字顯示，確保下載圖片時不跑版)
     function renderExportStaffTable() {
         const leadersContainer = document.getElementById("export-leaders-list");
         const teachersContainer = document.getElementById("export-teachers-list");
@@ -908,7 +910,7 @@
 
     window.loadHistory = function(id) {
         const record = examHistory.find(h => h.id === id);
-        if (record) {
+        if, (record) {
             if (confirm(`確定要載入「${record.title}」的座位嗎？這會覆蓋目前的排位。`)) {
                 seatMap = {...record.seatMap};
                 staffAssignments = {...record.staffAssignments};
