@@ -2,6 +2,7 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>偉大的航道 - 804班級座位編排系統 (海賊王風)</title>
     <!-- 網頁標題圖示 (Favicon) -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%%3E%3Ctext y=%22.9em%22 font-size=%2290%22%3E⚓%3C/text%3E%3C/svg%3E">
@@ -44,14 +45,15 @@
             font-size: 0.9rem;
         }
 
-        /* 兩欄式完美排版 */
+        /* 主容器：採用彈性並允許在小螢幕自動換行，絕不切掉 */
         .main-container {
             display: flex;
             gap: 15px;
-            max-width: 1320px;
+            max-width: 1350px;
             margin: 0 auto;
             align-items: flex-start;
             justify-content: center;
+            flex-wrap: wrap; /* 關鍵：螢幕不夠時自動往下掉，適應平板與手機 */
         }
 
         /* 左側：未入座學生區與歷史紀錄區 */
@@ -63,8 +65,8 @@
             border-radius: 10px;
             padding: 10px;
             box-shadow: 0 8px 16px rgba(0,0,0,0.6);
-            height: 89vh;
-            min-height: 620px;
+            height: 85vh;
+            min-height: 580px;
             display: flex;
             flex-direction: column;
             gap: 10px;
@@ -89,7 +91,7 @@
             display: flex;
             flex-direction: column;
             gap: 8px;
-            min-height: 180px;
+            min-height: 150px;
         }
 
         /* 歷史紀錄面板 */
@@ -98,7 +100,7 @@
             border: 1px solid var(--gold);
             border-radius: 6px;
             padding: 6px;
-            height: 160px;
+            height: 150px;
             overflow-y: auto;
         }
 
@@ -125,7 +127,7 @@
             font-size: 0.7rem;
         }
 
-        /* 截圖專用大容器 (#capture-area) */
+        /* 截圖專用大容器 (#capture-wrapper) */
         .capture-wrapper {
             display: flex;
             gap: 20px;
@@ -139,7 +141,7 @@
 
         /* 中間：教室座位區 */
         .classroom-area {
-            width: 620px;
+            width: 600px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -163,7 +165,7 @@
             display: grid;
             grid-template-columns: repeat(6, 1fr);
             grid-template-rows: repeat(5, 1fr);
-            gap: 10px;
+            gap: 8px;
             width: 100%;
             margin: 15px 0;
         }
@@ -207,7 +209,7 @@
 
         /* 右側幹部面板 */
         .export-staff-panel {
-            width: 320px;
+            width: 300px;
             background: rgba(44, 29, 17, 0.95);
             border: 2px solid var(--gold);
             border-radius: 10px;
@@ -251,59 +253,58 @@
         .staff-row-item {
             background: var(--parchment);
             color: #2c1d11;
-            padding: 3px 6px;
+            padding: 2px 5px;
             border-radius: 3px;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
             font-weight: bold;
-            height: 24px;
+            height: 23px;
             box-sizing: border-box;
         }
 
         .staff-row-item .title {
             color: #8b5a2b;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             width: 45%;
         }
 
-        /* 下拉選單樣式 */
         .staff-row-item select {
             width: 55%;
             background: #fff;
             color: #2c1d11;
             border: 1px solid var(--gold);
             border-radius: 2px;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             padding: 1px;
             font-weight: bold;
         }
 
-        /* 截圖專用純文字樣式 (平時隱藏，下載圖片時自動切換顯示，確保名字絕對不會被卡掉) */
+        /* 截圖專用純文字樣式 */
         .staff-row-text {
             background: var(--parchment);
             color: #2c1d11;
-            padding: 3px 6px;
+            padding: 2px 5px;
             border-radius: 3px;
-            font-size: 0.75rem;
-            display: none; /* 平時不顯示 */
+            font-size: 0.7rem;
+            display: none;
             justify-content: space-between;
             align-items: center;
             font-weight: bold;
-            height: 24px;
+            height: 23px;
             box-sizing: border-box;
         }
 
         .staff-row-text .title {
             color: #8b5a2b;
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             width: 45%;
         }
 
         .staff-row-text .name {
             color: #2c1d11;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             width: 55%;
             text-align: right;
         }
@@ -417,6 +418,29 @@
             font-size: 0.8rem;
             letter-spacing: 1px;
         }
+
+        /* 行動裝置與平板響應式優化 (螢幕較小時自動適應縮放，防止切掉) */
+        @media screen and (max-width: 1024px) {
+            .main-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            .sidebar-left {
+                width: 100%;
+                max-width: 950px;
+                height: 350px;
+                min-height: auto;
+            }
+            .capture-wrapper {
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+                box-sizing: border-box;
+            }
+            .export-staff-panel {
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
@@ -443,7 +467,7 @@
         </div>
 
         <!-- 右側主區域 -->
-        <div style="display: flex; flex-direction: column; align-items: center; width: 980px;">
+        <div style="display: flex; flex-direction: column; align-items: center; max-width: 980px; width: 100%;">
             <!-- 截圖範圍 -->
             <div class="capture-wrapper" id="capture-area" style="width: 100%; box-sizing: border-box;">
                 <!-- 中間：教室座位區 -->
@@ -685,7 +709,6 @@
         return card;
     }
 
-    // 渲染右側面板：同時建立下拉選單（平時操作）與純文字（截圖專用）
     function renderExportStaffTable() {
         const leadersContainer = document.getElementById("export-leaders-list");
         const teachersContainer = document.getElementById("export-teachers-list");
@@ -707,7 +730,6 @@
     function createStaffRow(title) {
         const container = document.createElement("div");
 
-        // 1. 平時操作用的下拉選單列
         const item = document.createElement("div");
         item.className = "staff-row-item";
         item.id = `staff-select-row-${title}`;
@@ -744,7 +766,6 @@
         item.appendChild(titleSpan);
         item.appendChild(select);
 
-        // 2. 截圖專用的純文字列 (平時隱藏，截圖時顯示以防跑版)
         const textItem = document.createElement("div");
         textItem.className = "staff-row-text";
         textItem.id = `staff-text-row-${title}`;
@@ -945,7 +966,6 @@
             renderGrid();
         }
 
-        // 1. 截圖前：隱藏下拉選單列，顯示乾淨的純文字名字列，確保絕對不被卡掉
         staffList.forEach(title => {
             const selectRow = document.getElementById(`staff-select-row-${title}`);
             const textRow = document.getElementById(`staff-text-row-${title}`);
@@ -959,7 +979,6 @@
 
         const captureElement = document.getElementById("capture-area");
         html2canvas(captureElement, { backgroundColor: "#140c06", scale: 2 }).then(canvas => {
-            // 2. 截圖完成後：立刻恢復顯示下拉選單列，隱藏純文字列
             staffList.forEach(title => {
                 const selectRow = document.getElementById(`staff-select-row-${title}`);
                 const textRow = document.getElementById(`staff-text-row-${title}`);
