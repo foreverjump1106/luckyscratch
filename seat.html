@@ -54,7 +54,7 @@
             justify-content: center;
         }
 
-        /* 左側：未入座學生區與歷史紀錄區 (再拉長高度) */
+        /* 左側：未入座學生區與歷史紀錄區 */
         .sidebar-left {
             width: 280px;
             min-width: 260px;
@@ -92,7 +92,7 @@
             min-height: 180px;
         }
 
-        /* 歷史紀錄面板拉長 */
+        /* 歷史紀錄面板 */
         .history-box {
             background: rgba(0,0,0,0.4);
             border: 1px solid var(--gold);
@@ -125,7 +125,7 @@
             font-size: 0.7rem;
         }
 
-        /* 截圖專用大容器 (#capture-area)：包含座位區與右側直接內建下拉選單的幹部面板 */
+        /* 截圖專用大容器 (#capture-area) */
         .capture-wrapper {
             display: flex;
             gap: 20px;
@@ -205,7 +205,7 @@
             transform: scale(1.03);
         }
 
-        /* 右側內建下拉選單的幹部面板（完美對齊） */
+        /* 右側幹部面板 */
         .export-staff-panel {
             width: 320px;
             background: rgba(44, 29, 17, 0.95);
@@ -251,31 +251,61 @@
         .staff-row-item {
             background: var(--parchment);
             color: #2c1d11;
-            padding: 2px 4px;
+            padding: 3px 6px;
             border-radius: 3px;
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
             font-weight: bold;
-            height: 22px;
+            height: 24px;
+            box-sizing: border-box;
         }
 
         .staff-row-item .title {
             color: #8b5a2b;
-            font-size: 0.65rem;
+            font-size: 0.7rem;
             width: 45%;
         }
 
+        /* 下拉選單樣式 */
         .staff-row-item select {
             width: 55%;
             background: #fff;
             color: #2c1d11;
             border: 1px solid var(--gold);
             border-radius: 2px;
-            font-size: 0.65rem;
+            font-size: 0.7rem;
             padding: 1px;
             font-weight: bold;
+        }
+
+        /* 截圖專用純文字樣式 (平時隱藏，下載圖片時自動切換顯示，確保名字絕對不會被卡掉) */
+        .staff-row-text {
+            background: var(--parchment);
+            color: #2c1d11;
+            padding: 3px 6px;
+            border-radius: 3px;
+            font-size: 0.75rem;
+            display: none; /* 平時不顯示 */
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            height: 24px;
+            box-sizing: border-box;
+        }
+
+        .staff-row-text .title {
+            color: #8b5a2b;
+            font-size: 0.7rem;
+            width: 45%;
+        }
+
+        .staff-row-text .name {
+            color: #2c1d11;
+            font-size: 0.75rem;
+            width: 55%;
+            text-align: right;
         }
 
         /* 左側候補學生卡片 */
@@ -338,7 +368,7 @@
             margin-top: 2px;
         }
 
-        /* 控制按鈕列：放在大框框下方，獨立於截圖範圍外 */
+        /* 控制按鈕列 */
         .control-bar {
             display: flex;
             justify-content: center;
@@ -395,7 +425,7 @@
     <div class="subtitle">「目標是成為海賊王！找到屬於你的黃金座位！」</div>
 
     <div class="main-container">
-        <!-- 左側：候補船員名單與拉長後的歷史紀錄 -->
+        <!-- 左側：候補船員名單與歷史紀錄 -->
         <div class="sidebar-left">
             <h3>📜 候補船員名單</h3>
             <div id="unassigned-list" ondragover="allowDrop(event)" ondragleave="removeDropStyle(event)" ondrop="dropToUnassigned(event)">
@@ -414,7 +444,7 @@
 
         <!-- 右側主區域 -->
         <div style="display: flex; flex-direction: column; align-items: center; width: 980px;">
-            <!-- 截圖範圍 (包含座位區與內建下拉選單的幹部名單) -->
+            <!-- 截圖範圍 -->
             <div class="capture-wrapper" id="capture-area" style="width: 100%; box-sizing: border-box;">
                 <!-- 中間：教室座位區 -->
                 <div class="classroom-area">
@@ -427,7 +457,7 @@
                     <div id="podium-bottom" class="podium" style="display: none;">🌟 偉大的航道 (講台 / 黑板) 🌟</div>
                 </div>
 
-                <!-- 右側內建下拉選單的幹部面板 -->
+                <!-- 右側幹部與小老師面板 -->
                 <div class="export-staff-panel">
                     <h3>👑 幹部與小老師名單</h3>
                     <div class="staff-table-container">
@@ -474,11 +504,10 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    // 帶有密碼保護的雲端儲存功能（單一帳號權限防護）
     window.saveDataToFirebaseWithAuth = function() {
         let password = prompt("🔐 請輸入管理員密碼以同步至雲端：");
-        if (password === null) return; // 按取消
-        if (password !== "804804") { // 設定預設密碼為 804804，老師您也可以自行修改
+        if (password === null) return;
+        if (password !== "804804") {
             alert("❌ 密碼錯誤，無法儲存至雲端！");
             return;
         }
@@ -493,7 +522,6 @@
             });
     };
 
-    // 背景直接儲存（用於歷史紀錄刪除等自動更新）
     window.saveDataToFirebaseSilent = function() {
         const data = { seatMap, unassignedStudents, staffAssignments, examHistory };
         set(ref(db, 'class_804/seat_data'), data).catch((error) => {
@@ -657,7 +685,7 @@
         return card;
     }
 
-    // 渲染右側整合面板 (內建完美對齊的下拉式選單)
+    // 渲染右側面板：同時建立下拉選單（平時操作）與純文字（截圖專用）
     function renderExportStaffTable() {
         const leadersContainer = document.getElementById("export-leaders-list");
         const teachersContainer = document.getElementById("export-teachers-list");
@@ -677,8 +705,12 @@
     }
 
     function createStaffRow(title) {
+        const container = document.createElement("div");
+
+        // 1. 平時操作用的下拉選單列
         const item = document.createElement("div");
         item.className = "staff-row-item";
+        item.id = `staff-select-row-${title}`;
 
         const titleSpan = document.createElement("span");
         titleSpan.className = "title";
@@ -711,7 +743,26 @@
 
         item.appendChild(titleSpan);
         item.appendChild(select);
-        return item;
+
+        // 2. 截圖專用的純文字列 (平時隱藏，截圖時顯示以防跑版)
+        const textItem = document.createElement("div");
+        textItem.className = "staff-row-text";
+        textItem.id = `staff-text-row-${title}`;
+
+        const textTitleSpan = document.createElement("span");
+        textTitleSpan.className = "title";
+        textTitleSpan.innerText = title;
+
+        const textNameSpan = document.createElement("span");
+        textNameSpan.className = "name";
+        textNameSpan.innerText = staffAssignments[title] || "未指派";
+
+        textItem.appendChild(textTitleSpan);
+        textItem.appendChild(textNameSpan);
+
+        container.appendChild(item);
+        container.appendChild(textItem);
+        return container;
     }
 
     let draggedStudentId = null;
@@ -894,8 +945,28 @@
             renderGrid();
         }
 
+        // 1. 截圖前：隱藏下拉選單列，顯示乾淨的純文字名字列，確保絕對不被卡掉
+        staffList.forEach(title => {
+            const selectRow = document.getElementById(`staff-select-row-${title}`);
+            const textRow = document.getElementById(`staff-text-row-${title}`);
+            if (selectRow) selectRow.style.display = "none";
+            if (textRow) {
+                const nameSpan = textRow.querySelector(".name");
+                if (nameSpan) nameSpan.innerText = staffAssignments[title] || "未指派";
+                textRow.style.display = "flex";
+            }
+        });
+
         const captureElement = document.getElementById("capture-area");
         html2canvas(captureElement, { backgroundColor: "#140c06", scale: 2 }).then(canvas => {
+            // 2. 截圖完成後：立刻恢復顯示下拉選單列，隱藏純文字列
+            staffList.forEach(title => {
+                const selectRow = document.getElementById(`staff-select-row-${title}`);
+                const textRow = document.getElementById(`staff-text-row-${title}`);
+                if (selectRow) selectRow.style.display = "flex";
+                if (textRow) textRow.style.display = "none";
+            });
+
             const link = document.createElement("a");
             link.download = "804班級座位表_海賊王風.png";
             link.href = canvas.toDataURL("image/png");
