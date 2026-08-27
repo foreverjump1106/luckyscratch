@@ -174,11 +174,11 @@
         <div class="card p-4 text-center shadow-lg" style="max-width: 380px; width: 90%;">
             <div class="pirate-banner mb-2">🏴‍☠️ 導師身分驗證 ⚓</div>
             <h4 class="mb-2 text-warning" style="font-size: 1.1rem;">804 偉大航道通行授權</h4>
-            <p class="text-muted small text-light mb-3" style="font-size: 0.9rem;">請輸入導師專屬信箱與密碼登入</p>
+            <p class="text-muted small text-light mb-3" style="font-size: 0.9rem;">請輸入後台設定的導師信箱與密碼登入</p>
             <form id="loginForm">
                 <div class="mb-3 text-start">
                     <label for="loginEmail" class="form-label text-warning small">電子信箱</label>
-                    <input type="email" class="form-control py-2" id="loginEmail" placeholder="teacher@example.com" required>
+                    <input type="email" class="form-control py-2" id="loginEmail" placeholder="foreverjump@tmail.ilc.edu.tw" required>
                 </div>
                 <div class="mb-3 text-start">
                     <label for="loginPassword" class="form-label text-warning small">密碼</label>
@@ -424,14 +424,14 @@
         </div>
     </div>
 
-    <!-- Firebase SDK -->
+    <!-- Firebase SDK 完整引入 (App, Database, Auth) -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
 
     <script>
         // ==========================================
-        // 請在此處填入你從 Firebase 控制台取得的設定
+        // 1. Firebase 核心設定與初始化
         // ==========================================
         const contactBookFirebaseConfig = {
             apiKey: "AIzaSyBvzuDSKlNJUprlmnak5yV1hg1nlanP0yA",
@@ -447,7 +447,9 @@
         const contactBookDb = firebase.database();
         const auth = firebase.auth();
 
-        // 🔐 Firebase Email/Password 登入驗證
+        // ==========================================
+        // 2. 🔐 Firebase 帳號密碼登入驗證
+        // ==========================================
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const email = document.getElementById('loginEmail').value;
@@ -455,13 +457,13 @@
 
             auth.signInWithEmailAndPassword(email, password)
                 .then((userCredential) => {
-                    // 登入成功
+                    // 登入成功，隱藏登入框並解鎖主系統
                     document.getElementById('loginOverlay').style.display = 'none';
                     document.getElementById('mainSystemContainer').style.display = 'block';
                     loadAllData();
                 })
                 .catch((error) => {
-                    alert("登入失敗，請檢查您的信箱或密碼是否正確！\n(提示：請先至 Firebase Console 的 Authentication 建立一組帳號密碼)\n錯誤代碼：" + error.message);
+                    alert("登入失敗！請確認後台是否有建立此帳號密碼。\n錯誤訊息：" + error.message);
                 });
         });
 
