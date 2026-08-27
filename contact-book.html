@@ -429,7 +429,7 @@
     <!-- Firebase 雲端驗證與資料庫模組化腳本 -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        import { getDatabase, ref, set, get, child, push, remove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
         import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
         const firebaseConfig = {
@@ -489,8 +489,13 @@
             }
         };
 
-        // 將 contactBookDb 放到全域讓下方程式碼存取
+        // 將資料庫方法掛載到全域供底下邏輯使用
         window.contactBookDb = contactBookDb;
+        window.dbRef = ref;
+        window.dbGet = get;
+        window.dbChild = child;
+        window.dbPush = push;
+        window.dbRemove = remove;
     </script>
 
     <script>
@@ -521,7 +526,7 @@
             1: "王禹涵", 2: "江育緹", 3: "呂思儀", 4: "李詠祺", 
             5: "林子歆", 6: "林禹萱", 7: "張馨勻", 8: "陳昕樂", 
             9: "陳梓安", 10: "陳筠蓁", 11: "陳苙絜", 12: "楊錚諭", 
-            13: "趙安諭", 14: "魏語潔", 15: "江靚恩", 16: "王洋振", 
+            13: "趙安瑜", 14: "魏語潔", 15: "江靚恩", 16: "王洋振", 
             17: "吳昊丞", 18: "李祐誠", 19: "林宸陞", 20: "林維辰", 
             21: "林鈺棟", 22: "洪楷祥", 23: "陳兆楷", 24: "陳沂璟", 
             25: "黑肚・尤明", 26: "賴震宇", 27: "戴震龍", 28: "謝宇哲"
@@ -586,7 +591,7 @@
         }
 
         // 監聽表單送出
-        document.getElementById('contactBookForm').addEventListener('submit', function(e) {
+        document.getElementById('contactBookForm').addEventListener('submit', async function(e) {
             e.preventDefault();
 
             const studentNoVal = document.getElementById('contactBookStudentNo').value;
@@ -599,16 +604,18 @@
             const studentNoNum = Number(studentNoVal);
             const studentName = contactBookStudents[studentNoVal];
 
-            // 導入資料庫模組的方法 (使用 window.contactBookDb)
-            const { ref, get, child, push } = window.FirebaseDatabaseAPI || {}; // 透過全域或直接呼叫firebase資料庫
-            
-            // 檢查當天是否已經輸入過該座號的防呆機制
-            window.contactBookDb.ref('contact_book_records').orderByChild('date').equalTo(currentDate).once('value', (snapshot) => {
+            try {
+                const recordsRef = window.dbRef(window.contactBookDb, 'contact_book_records');
+                const snapshot = await window.dbGet(recordsRef);
+                
                 let alreadyExists = false;
+                let existingRecords = [];
                 if (snapshot.exists()) {
                     snapshot.forEach((childSnapshot) => {
                         let rec = childSnapshot.val();
-                        if (rec.studentNo === studentNoNum) {
+                        rec.id = childSnapshot.key;
+                        existingRecords.push(rec);
+                        if (rec.date === currentDate && rec.studentNo === studentNoNum) {
                             alreadyExists = true;
                         }
                     });
@@ -624,83 +631,73 @@
                 const parentSignVal = getSelectedRadioValue('contactBookParentSign');
                 const currentSubmissionStatus = isNotSubmittedMode ? "未繳交" : "已繳交";
 
-                window.contactBookDb.ref('contact_book_records').orderByChild('timestamp').once('value', (allSnap) => {
-                    let existingRecords = [];
-                    if (allSnap.exists()) {
-                        allSnap.forEach((childSnapshot) => {
-                            existingRecords.push(childSnapshot.val());
-                        });
-                    }
+                let previousSignStreak = 0;
+                let studentPastRecords = existingRecords
+                    .filter(r => r.studentNo === studentNoNum)
+                    .sort((a, b) => new Date(b.date) - new Date(a.date));
 
-                    let previousSignStreak = 0;
-                    let studentPastRecords = existingRecords
-                        .filter(r => r.studentNo === studentNoNum)
-                        .sort((a, b) => new Date(b.date) - new Date(a.date));
-
-                    if (parentSignVal === '未簽名') {
-                        for (let r of studentPastRecords) {
-                            if (r.parentSign === '未簽名') {
-                                previousSignStreak = r.unsignedStreak || 1;
-                                break;
-                            } else if (r.parentSign === '已簽名') {
-                                break;
-                            }
+                if (parentSignVal === '未簽名') {
+                    for (let r of studentPastRecords) {
+                        if (r.parentSign === '未簽名') {
+                            previousSignStreak = r.unsignedStreak || 1;
+                            break;
+                        } else if (r.parentSign === '已簽名') {
+                            break;
                         }
-                        previousSignStreak += 1;
-                    } else {
-                        previousSignStreak = 0;
                     }
+                    previousSignStreak += 1;
+                } else {
+                    previousSignStreak = 0;
+                }
 
-                    let previousSubStreak = 0;
-                    if (currentSubmissionStatus === "未繳交") {
-                        for (let r of studentPastRecords) {
-                            if (r.submissionStatus === '未繳交') {
-                                previousSubStreak = r.subStreak || 1;
-                                break;
-                            } else if (r.submissionStatus === '已繳交' || !r.submissionStatus) {
-                                break;
-                            }
+                let previousSubStreak = 0;
+                if (currentSubmissionStatus === "未繳交") {
+                    for (let r of studentPastRecords) {
+                        if (r.submissionStatus === '未繳交') {
+                            previousSubStreak = r.subStreak || 1;
+                            break;
+                        } else if (r.submissionStatus === '已繳交' || !r.submissionStatus) {
+                            break;
                         }
-                        previousSubStreak += 1;
-                    } else {
-                        previousSubStreak = 0;
                     }
+                    previousSubStreak += 1;
+                } else {
+                    previousSubStreak = 0;
+                }
 
-                    const contactBookRecordData = {
-                        date: currentDate,
-                        studentNo: studentNoNum,
-                        studentName: studentName,
-                        submissionStatus: currentSubmissionStatus, 
-                        subStreak: previousSubStreak, 
-                        dateCheck: getSelectedRadioValue('contactBookDateCheck'),
-                        examHw: getSelectedRadioValue('contactBookExamHw'),
-                        englishCopy: getSelectedRadioValue('contactBookEnglishCopy'),
-                        articleSummary: getSelectedRadioValue('contactBookArticleSummary'),
-                        timeRecord: getSelectedRadioValue('contactBookTimeRecord'),
-                        lifeNote: getSelectedRadioValue('contactBookLifeNote'),
-                        parentSign: parentSignVal,
-                        unsignedStreak: previousSignStreak,
-                        timestamp: Date.now()
-                    };
+                const contactBookRecordData = {
+                    date: currentDate,
+                    studentNo: studentNoNum,
+                    studentName: studentName,
+                    submissionStatus: currentSubmissionStatus, 
+                    subStreak: previousSubStreak, 
+                    dateCheck: getSelectedRadioValue('contactBookDateCheck'),
+                    examHw: getSelectedRadioValue('contactBookExamHw'),
+                    englishCopy: getSelectedRadioValue('contactBookEnglishCopy'),
+                    articleSummary: getSelectedRadioValue('contactBookArticleSummary'),
+                    timeRecord: getSelectedRadioValue('contactBookTimeRecord'),
+                    lifeNote: getSelectedRadioValue('contactBookLifeNote'),
+                    parentSign: parentSignVal,
+                    unsignedStreak: previousSignStreak,
+                    timestamp: Date.now()
+                };
 
-                    window.contactBookDb.ref('contact_book_records').push(contactBookRecordData, function(error) {
-                        if (error) {
-                            alert("儲存失敗：" + error.message);
-                        } else {
-                            loadAllData();
-                            resetFormToCheckDefaults();
-                            document.getElementById('contactBookStudentNo').focus();
-                            alert("紀錄儲存成功！");
-                        }
-                    });
-                });
-            });
+                await window.dbPush(recordsRef, contactBookRecordData);
+                loadAllData();
+                resetFormToCheckDefaults();
+                document.getElementById('contactBookStudentNo').focus();
+                alert("紀錄儲存成功！");
+            } catch (error) {
+                alert("儲存失敗：" + error.message);
+            }
         });
 
         // 核心資料載入與重新整理函式
-        function loadAllData() {
+        async function loadAllData() {
             if (!window.contactBookDb) return;
-            window.contactBookDb.ref('contact_book_records').orderByChild('timestamp').once('value', (snapshot) => {
+            try {
+                const recordsRef = window.dbRef(window.contactBookDb, 'contact_book_records');
+                const snapshot = await window.dbGet(recordsRef);
                 let records = [];
                 if (snapshot.exists()) {
                     snapshot.forEach((childSnapshot) => {
@@ -711,7 +708,9 @@
                 }
                 renderDailyTable(records);
                 setupWeeklyReport(records);
-            });
+            } catch (error) {
+                console.error("讀取資料失敗", error);
+            }
         }
 
         // 渲染每日關注清單
@@ -823,7 +822,8 @@
             if (confirm(confirmMsg)) {
                 let secondConfirm = prompt(`為防止誤觸，請輸入「804」以確認永久刪除後端資料：`);
                 if (secondConfirm === "804") {
-                    window.contactBookDb.ref('contact_book_records/' + id).remove().then(() => {
+                    const recordRef = window.dbRef(window.contactBookDb, 'contact_book_records/' + id);
+                    window.dbRemove(recordRef).then(() => {
                         alert("已成功從 Firebase 後端永久刪除該筆資料！");
                         loadAllData();
                     }).catch((error) => {
