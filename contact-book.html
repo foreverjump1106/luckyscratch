@@ -433,17 +433,17 @@
         // ==========================================
         // 1. Firebase 核心設定與初始化
         // ==========================================
-        const contactBookFirebaseConfig = {
-            apiKey: "AIzaSyBvzuDSKlNJUprlmnak5yV1hg1nlanP0yA",
-            authDomain: "contactbook-543b0.firebaseapp.com",
-            databaseURL: "https://contactbook-543b0-default-rtdb.asia-southeast1.firebasedatabase.app/",
-            projectId: "contactbook-543b0",
-            storageBucket: "contactbook-543b0.appspot.com",
-            messagingSenderId: "882240051516",
-            appId: "1:882240051516:web:aefdaa20a8f4a3a8be6639"
-        };
+apiKey: "AIzaSyBvzuDSKlNJUprlmnaK5yV1hg1nlaNp0yA",
+  authDomain: "contactbook-543b0.firebaseapp.com",
+  databaseURL: "https://contactbook-543b0-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "contactbook-543b0",
+  storageBucket: "contactbook-543b0.firebasestorage.app",
+  messagingSenderId: "882240051516",
+  appId: "1:882240051516:web:aefdaa20a8f4a3a8be6639"
+};
 
-        firebase.initializeApp(contactBookFirebaseConfig);
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
         const contactBookDb = firebase.database();
         const auth = firebase.auth();
 
