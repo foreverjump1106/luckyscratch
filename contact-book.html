@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>聯絡簿航海日誌</title>
-    <!-- 設定瀏覽器分頁圖示為海賊旗 -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏴‍☠️</text></svg>">
+    <!-- 設定瀏覽器分頁圖示為「聯」字 -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.8em%22 x=%22.1em%22 font-size=%2280%22 font-weight=%22bold%22 fill=%22%23f4d06f%22>聯</text></svg>">
     <!-- 引入 Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- 引入 Google 字型 -->
@@ -169,17 +169,23 @@
     </style>
 </head>
 <body>
-    <!-- 🔐 導師專屬密碼登入驗證畫面 -->
+    <!-- 🔐 雲端信箱與密碼登入驗證畫面 -->
     <div id="loginOverlay">
         <div class="card p-4 text-center shadow-lg" style="max-width: 380px; width: 90%;">
-            <div class="pirate-banner mb-2">🏴‍☠️ 導師身分驗證 ⚓</div>
-            <h4 class="mb-2 text-warning" style="font-size: 1.1rem;">804 偉大航道通行密碼</h4>
-            <p class="text-muted small text-light mb-3" style="font-size: 0.9rem;">請輸入導師專屬密碼以解鎖系統</p>
+            <div class="pirate-banner mb-2">🏴‍☠️ 船長登入驗證 ⚓</div>
+            <h4 class="mb-2 text-warning" style="font-size: 1.1rem;">804 偉大航道通行授權</h4>
+            <p class="text-muted small text-light mb-3" style="font-size: 0.9rem;">請輸入管理員信箱與密碼登入</p>
             <form id="loginForm">
-                <div class="mb-3">
-                    <input type="password" class="form-control text-center py-2" id="teacherPasswordInput" placeholder="請輸入密碼" required style="letter-spacing: 3px;">
+                <div class="mb-3 text-start">
+                    <label for="loginEmail" class="form-label text-warning small">管理員 ID 或 Email</label>
+                    <input type="text" class="form-control py-2" id="loginEmail" placeholder="請輸入帳號或 Email" required>
                 </div>
-                <button type="submit" class="btn btn-gold w-100 py-2 fw-bold">解鎖航海日誌 🚀</button>
+                <div class="mb-3 text-start">
+                    <label for="loginPassword" class="form-label text-warning small">密碼</label>
+                    <input type="password" class="form-control py-2" id="loginPassword" placeholder="請輸入密碼" required>
+                </div>
+                <button type="submit" class="btn btn-gold w-100 py-2 fw-bold">登入系統 🚀</button>
+                <div id="auth-error" style="color: #ff6b6b; font-size: 0.75rem; margin-top: 8px;"></div>
             </form>
         </div>
     </div>
@@ -189,9 +195,10 @@
         <div class="text-center mb-3">
             <div class="pirate-banner">🏴‍☠️ ONE PIECE • 804 偉大航道日誌 ⚓</div>
             <h2 class="fw-bold mt-1 pirate-main-title">✨ 804 班聯絡簿航海冒險系統</h2>
-            <!-- 航海王經典金句提示區 -->
-            <div class="quote-box mt-2 text-center" id="pirateQuote">
-                🌊 「我是要成為航海王的男人！」—— 帶領 804 夥伴們突破每一天的挑戰！
+            <!-- 航海王經典金句提示區與登出按鈕 -->
+            <div class="quote-box mt-2 text-center d-flex justify-content-between align-items-center" style="padding: 6px 12px;">
+                <span id="pirateQuote" style="text-align: left; flex-grow: 1;">🌊 「我是要成為航海王的男人！」—— 帶領 804 夥伴們突破每一天的挑戰！</span>
+                <span id="user-display" style="font-size: 0.75rem; color: #f4d06f; cursor: pointer; white-space: nowrap; margin-left: 10px;" onclick="handleLogout()" title="點擊登出"></span>
             </div>
         </div>
 
@@ -419,30 +426,74 @@
         </div>
     </div>
 
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <!-- Firebase 雲端驗證與資料庫模組化腳本 -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-    <script>
-        // ==========================================
-        // 🔐 導師登入密碼設定（可自行修改密碼）
-        // ==========================================
-        const TEACHER_PASSWORD = "804"; 
+        const firebaseConfig = {
+            apiKey: "AIzaSyB2qXsbab4fh15C9YbCDWK208eJLLHgsKk",
+            authDomain: "seatweb-ccd44.firebaseapp.com",
+            databaseURL: "https://seatweb-ccd44-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "seatweb-ccd44",
+            storageBucket: "seatweb-ccd44.firebasestorage.app",
+            messagingSenderId: "607947077023",
+            appId: "1:607947077023:web:1a0ec5832414cf376fb9aa"
+        };
 
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const inputVal = document.getElementById('teacherPasswordInput').value;
-            if (inputVal === TEACHER_PASSWORD) {
-                document.getElementById('loginOverlay').style.display = 'none';
-                document.getElementById('mainSystemContainer').style.display = 'block';
-                loadAllData(); // 通過驗證後才載入系統資料
+        const app = initializeApp(firebaseConfig);
+        const contactBookDb = getDatabase(app);
+        const auth = getAuth(app);
+
+        // 監聽登入狀態
+        onAuthStateChanged(auth, (user) => {
+            const overlay = document.getElementById("loginOverlay");
+            const mainContainer = document.getElementById("mainSystemContainer");
+            const userDisplay = document.getElementById("user-display");
+            if (user) {
+                overlay.style.display = "none";
+                mainContainer.style.display = "block";
+                userDisplay.innerText = `👤 ${user.email} (登出)`;
+                loadAllData();
             } else {
-                alert("密碼錯誤！請重新輸入。");
-                document.getElementById('teacherPasswordInput').value = '';
-                document.getElementById('teacherPasswordInput').focus();
+                overlay.style.display = "flex";
+                mainContainer.style.display = "none";
+                userDisplay.innerText = "";
             }
         });
 
+        // 登入按鈕事件
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            let inputId = document.getElementById("loginEmail").value.trim();
+            const password = document.getElementById("loginPassword").value;
+            const errBox = document.getElementById("auth-error");
+
+            let loginEmail = inputId.includes("@") ? inputId : `${inputId}@seat804.com`;
+
+            signInWithEmailAndPassword(auth, loginEmail, password)
+                .then(() => {
+                    errBox.innerText = "";
+                })
+                .catch((error) => {
+                    errBox.innerText = "❌ 登入失敗：帳號或密碼錯誤";
+                });
+        });
+
+        window.handleLogout = function() {
+            if (confirm("確定要登出系統嗎？")) {
+                signOut(auth).then(() => {
+                    location.reload();
+                });
+            }
+        };
+
+        // 將 contactBookDb 放到全域讓下方程式碼存取
+        window.contactBookDb = contactBookDb;
+    </script>
+
+    <script>
         // 隨機航海王金句輪播
         const quotes = [
             "🌊 「我是要成為航海王的男人！」—— 帶領 804 夥伴們突破每一天的挑戰！",
@@ -484,22 +535,6 @@
             option.textContent = `${i} 號 - ${contactBookStudents[i]}`;
             contactBookStudentSelect.appendChild(option);
         }
-
-        // ==========================================
-        // 請在此處填入你從 Firebase 控制台取得的設定
-        // ==========================================
-        const contactBookFirebaseConfig = {
-            apiKey: "AIzaSyBvzuDSKlNJUprlmnak5yV1hg1nlanP0yA",
-            authDomain: "contactbook-543b0.firebaseapp.com",
-            databaseURL: "https://contactbook-543b0-default-rtdb.asia-southeast1.firebasedatabase.app/",
-            projectId: "contactbook-543b0",
-            storageBucket: "contactbook-543b0.appspot.com",
-            messagingSenderId: "882240051516",
-            appId: "1:882240051516:web:aefdaa20a8f4a3a8be6639"
-        };
-
-        firebase.initializeApp(contactBookFirebaseConfig);
-        const contactBookDb = firebase.database();
 
         // 精準抓取裝置當地當天日期
         const dateInput = document.getElementById('contactBookDate');
@@ -564,8 +599,11 @@
             const studentNoNum = Number(studentNoVal);
             const studentName = contactBookStudents[studentNoVal];
 
+            // 導入資料庫模組的方法 (使用 window.contactBookDb)
+            const { ref, get, child, push } = window.FirebaseDatabaseAPI || {}; // 透過全域或直接呼叫firebase資料庫
+            
             // 檢查當天是否已經輸入過該座號的防呆機制
-            contactBookDb.ref('contact_book_records').orderByChild('date').equalTo(currentDate).once('value', (snapshot) => {
+            window.contactBookDb.ref('contact_book_records').orderByChild('date').equalTo(currentDate).once('value', (snapshot) => {
                 let alreadyExists = false;
                 if (snapshot.exists()) {
                     snapshot.forEach((childSnapshot) => {
@@ -586,7 +624,7 @@
                 const parentSignVal = getSelectedRadioValue('contactBookParentSign');
                 const currentSubmissionStatus = isNotSubmittedMode ? "未繳交" : "已繳交";
 
-                contactBookDb.ref('contact_book_records').orderByChild('timestamp').once('value', (allSnap) => {
+                window.contactBookDb.ref('contact_book_records').orderByChild('timestamp').once('value', (allSnap) => {
                     let existingRecords = [];
                     if (allSnap.exists()) {
                         allSnap.forEach((childSnapshot) => {
@@ -645,7 +683,7 @@
                         timestamp: Date.now()
                     };
 
-                    contactBookDb.ref('contact_book_records').push(contactBookRecordData, function(error) {
+                    window.contactBookDb.ref('contact_book_records').push(contactBookRecordData, function(error) {
                         if (error) {
                             alert("儲存失敗：" + error.message);
                         } else {
@@ -661,7 +699,8 @@
 
         // 核心資料載入與重新整理函式
         function loadAllData() {
-            contactBookDb.ref('contact_book_records').orderByChild('timestamp').once('value', (snapshot) => {
+            if (!window.contactBookDb) return;
+            window.contactBookDb.ref('contact_book_records').orderByChild('timestamp').once('value', (snapshot) => {
                 let records = [];
                 if (snapshot.exists()) {
                     snapshot.forEach((childSnapshot) => {
@@ -784,7 +823,7 @@
             if (confirm(confirmMsg)) {
                 let secondConfirm = prompt(`為防止誤觸，請輸入「804」以確認永久刪除後端資料：`);
                 if (secondConfirm === "804") {
-                    contactBookDb.ref('contact_book_records/' + id).remove().then(() => {
+                    window.contactBookDb.ref('contact_book_records/' + id).remove().then(() => {
                         alert("已成功從 Firebase 後端永久刪除該筆資料！");
                         loadAllData();
                     }).catch((error) => {
