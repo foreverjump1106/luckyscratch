@@ -734,7 +734,9 @@
         students.forEach(s => {
             const opt = document.createElement("option");
             opt.value = s.name;
-            opt.innerText = `${s.id}.${s.name}`;
+            // 修正座號：1~9 補 0 變成 01~09
+            let formattedId = s.id < 10 ? `0${s.id}` : s.id;
+            opt.innerText = `${formattedId}.${s.name}`;
             if (staffAssignments[title] === s.name) {
                 opt.selected = true;
             }
@@ -832,9 +834,7 @@
         }
     }
 
-    // 隨機排位：保留已在格子內的名字不動，剩餘空白格子隨機排位
     function randomAssign() {
-        // 1. 收集目前已經在格子裡的學生 ID
         let assignedStudentIds = [];
         for (let i = 0; i < 30; i++) {
             let cellId = `cell-${i}`;
@@ -843,11 +843,9 @@
             }
         }
 
-        // 2. 找出尚未入座的學生作為隨機池
         let availablePool = students.filter(s => !assignedStudentIds.includes(s.id));
         availablePool.sort(() => Math.random() - 0.5);
 
-        // 3. 填入所有未被佔用的空白格子
         let poolIndex = 0;
         for (let i = 0; i < 30; i++) {
             let cellId = `cell-${i}`;
@@ -860,7 +858,6 @@
             }
         }
 
-        // 4. 更新候補名單（留在候補區的應該是都沒有被排入格子的）
         let allAssignedIds = [];
         for (let i = 0; i < 30; i++) {
             let cellId = `cell-${i}`;
