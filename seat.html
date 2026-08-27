@@ -120,14 +120,20 @@
             font-size: 0.7rem;
         }
 
+        /* 截圖專用的大外框容器 (包含中間座位與右側幹部小老師表格) */
+        .capture-wrapper {
+            display: flex;
+            gap: 15px;
+            background: rgba(20, 12, 6, 0.9);
+            padding: 15px;
+            border-radius: 15px;
+            border: 4px solid var(--gold);
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8), 0 8px 16px rgba(0,0,0,0.6);
+        }
+
         /* 中間：教室座位區 */
         .classroom-area {
             width: 680px;
-            background: rgba(20, 12, 6, 0.9);
-            border: 4px solid var(--gold);
-            border-radius: 15px;
-            padding: 15px;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.8), 0 8px 16px rgba(0,0,0,0.6);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -193,7 +199,7 @@
             transform: scale(1.03);
         }
 
-        /* 右側：幹部與小老師區 */
+        /* 右側：網頁上的幹部與小老師操作區 */
         .sidebar-right {
             width: 260px;
             background: rgba(44, 29, 17, 0.95);
@@ -236,6 +242,66 @@
             color: #2c1d11;
             font-size: 0.85rem;
             font-weight: bold;
+        }
+
+        /* 下載圖片專用的幹部/小老師左右表格面板 */
+        .export-staff-panel {
+            width: 320px;
+            background: rgba(44, 29, 17, 0.95);
+            border: 2px solid var(--gold);
+            border-radius: 10px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+        }
+
+        .export-staff-panel h3 {
+            color: var(--gold);
+            text-align: center;
+            margin: 0 0 8px 0;
+            font-size: 0.95rem;
+            border-bottom: 2px solid var(--gold);
+            padding-bottom: 4px;
+        }
+
+        .staff-table-container {
+            display: flex;
+            gap: 8px;
+            flex-grow: 1;
+        }
+
+        .staff-column {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .staff-column h4 {
+            color: var(--gold);
+            font-size: 0.8rem;
+            text-align: center;
+            margin: 0 0 2px 0;
+            border-bottom: 1px dashed var(--gold);
+            padding-bottom: 2px;
+        }
+
+        .staff-row-item {
+            background: var(--parchment);
+            color: #2c1d11;
+            padding: 3px 5px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+        }
+
+        .staff-row-item .title {
+            color: #8b5a2b;
+            font-size: 0.7rem;
         }
 
         /* 學生卡片樣式 */
@@ -329,7 +395,7 @@
 <body>
 
     <h1>🏴‍☠️ 偉大的航道：804班級座位編排 ⚓</h1>
-    <div class="subtitle">「目標是成為海賊王！找到屬於你的黃金座位！」</div>
+    <div class="subtitle"><span>「目標是成為海賊王！找到屬於你的黃金座位！」</span></div>
 
     <div class="main-container">
         <!-- 左側：未入座學生區與歷史紀錄區 -->
@@ -349,16 +415,39 @@
             </div>
         </div>
 
-        <!-- 中間：教室座位區 -->
-        <div class="classroom-area" id="capture-area">
-            <div id="podium-top" class="podium">🌟 偉大的航道 (講台 / 黑板) 🌟</div>
-            
-            <div class="grid-6x5 student-view" id="seat-grid">
-                <!-- 動態生成 30 格 (6x5) -->
+        <!-- 中間與右側合併：截圖專用大容器 (#capture-area) -->
+        <div style="display: flex; flex-direction: column; align-items: center;">
+            <div class="capture-wrapper" id="capture-area">
+                <!-- 中間：教室座位區 -->
+                <div class="classroom-area">
+                    <div id="podium-top" class="podium">🌟 偉大的航道 (講台 / 黑板) 🌟</div>
+                    
+                    <div class="grid-6x5 student-view" id="seat-grid">
+                        <!-- 動態生成 30 格 (6x5) -->
+                    </div>
+
+                    <div id="podium-bottom" class="podium" style="display: none;">🌟 偉大的航道 (講台 / 黑板) 🌟</div>
+                </div>
+
+                <!-- 截圖專用：左右分欄的幹部與小老師表格面板 -->
+                <div class="export-staff-panel">
+                    <h3>👑 幹部與小老師名單</h3>
+                    <div class="staff-table-container">
+                        <!-- 左側：幹部欄 -->
+                        <div class="staff-column">
+                            <h4>班級幹部</h4>
+                            <div id="export-leaders-list" style="display: flex; flex-direction: column; gap: 3px;"></div>
+                        </div>
+                        <!-- 右側：小老師欄 -->
+                        <div class="staff-column">
+                            <h4>各科小老師</h4>
+                            <div id="export-teachers-list" style="display: flex; flex-direction: column; gap: 3px;"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div id="podium-bottom" class="podium" style="display: none;">🌟 偉大的航道 (講台 / 黑板) 🌟</div>
-
+            <!-- 控制按鈕列（放在截圖範圍外，保持畫面乾淨） -->
             <div class="control-bar">
                 <button class="pirate-btn active-mode" id="btn-student-view" onclick="setMode('student')">👨‍🎓 學生觀看</button>
                 <button class="pirate-btn" id="btn-teacher-view" onclick="setMode('teacher')">👩‍🏫 老師觀看</button>
@@ -370,7 +459,7 @@
             </div>
         </div>
 
-        <!-- 右側：幹部與小老師下拉選單 -->
+        <!-- 右側：平時操作用的幹部與小老師下拉選單 -->
         <div class="sidebar-right">
             <h3>👑 幹部與小老師</h3>
             <div id="staff-container">
@@ -424,6 +513,7 @@
                 renderGrid();
                 renderStaff();
                 renderHistory();
+                renderExportStaffTable();
                 console.log("已成功從 804 雲端載入座位資料！");
             } else {
                 console.log("雲端尚無 804 資料，使用預設值。");
@@ -451,14 +541,19 @@
         { id: 25, name: "黑肚·尤明" }, { id: 26, name: "賴震宇" }, { id: 27, name: "戴震龍" }, { id: 28, name: "謝宇哲" }
     ];
 
-    const staffList = [
+    const leaderList = [
         "班長", "副班長", "風紀股長", "學藝股長", "衛生股長", "副衛生股長", 
-        "康樂股長", "保健股長", "食勤股長", "事務股長", "輔導股長",
+        "康樂股長", "保健股長", "食勤股長", "事務股長", "輔導股長"
+    ];
+
+    const subjectTeacherList = [
         "國文小老師", "英文小老師", "數學小老師", "歷史小老師", "地理小老師", 
         "公民小老師", "自然小老師", "表藝小老師", "視藝小老師", "聽藝小老師", 
         "童軍小老師", "家政小老師", "輔導小老師", "本土語小老師", "資訊小老師", 
         "情繫小老師", "圖書志工(一)", "圖書志工(二)"
     ];
+
+    const staffList = [...leaderList, ...subjectTeacherList];
 
     let seatMap = {}; 
     let unassignedStudents = [...students];
@@ -470,6 +565,7 @@
     function init() {
         renderUnassigned();
         renderStaff();
+        renderExportStaffTable();
     }
 
     function setMode(mode) {
@@ -584,6 +680,7 @@
             const select = document.createElement("select");
             select.onchange = (e) => {
                 staffAssignments[title] = e.target.value;
+                renderExportStaffTable();
             };
 
             const defaultOpt = document.createElement("option");
@@ -604,6 +701,33 @@
             group.appendChild(label);
             group.appendChild(select);
             container.appendChild(group);
+        });
+    }
+
+    // 渲染截圖專用的左右表格面板
+    function renderExportStaffTable() {
+        const leadersContainer = document.getElementById("export-leaders-list");
+        const teachersContainer = document.getElementById("export-teachers-list");
+        
+        if (!leadersContainer || !teachersContainer) return;
+
+        leadersContainer.innerHTML = "";
+        teachersContainer.innerHTML = "";
+
+        leaderList.forEach(title => {
+            const name = staffAssignments[title] || "未指派";
+            const item = document.createElement("div");
+            item.className = "staff-row-item";
+            item.innerHTML = `<span class="title">${title}</span><span>${name}</span>`;
+            leadersContainer.appendChild(item);
+        });
+
+        subjectTeacherList.forEach(title => {
+            const name = staffAssignments[title] || "未指派";
+            const item = document.createElement("div");
+            item.className = "staff-row-item";
+            item.innerHTML = `<span class="title">${title}</span><span>${name}</span>`;
+            teachersContainer.appendChild(item);
         });
     }
 
@@ -699,7 +823,7 @@
         renderGrid();
     }
 
-    // 座位復位功能：將所有學生清回未入座名單
+    // 座位復位功能
     function resetSeats() {
         if (confirm("確定要將所有座位清空，重新開始排位嗎？")) {
             seatMap = {};
@@ -759,7 +883,7 @@
         const record = examHistory.find(h => h.id === id);
         if (record) {
             if (confirm(`確定要載入「${record.title}」的座位嗎？這會覆蓋目前的排位。`)) {
-                seatMap = {...record.seatMap};
+                seatMap = {...record.recordSeatMap || record.seatMap};
                 staffAssignments = {...record.staffAssignments};
                 
                 let assignedIds = Object.values(seatMap).map(s => s.id);
@@ -768,6 +892,7 @@
                 renderUnassigned();
                 renderGrid();
                 renderStaff();
+                renderExportStaffTable();
                 alert(`已成功切換至「${record.title}」！`);
             }
         }
@@ -790,7 +915,7 @@
         }
 
         const captureElement = document.getElementById("capture-area");
-        html2canvas(captureElement, { backgroundColor: "#140c06" }).then(canvas => {
+        html2canvas(captureElement, { backgroundColor: "#140c06", scale: 2 }).then(canvas => {
             const link = document.createElement("a");
             link.download = "804班級座位表_海賊王風.png";
             link.href = canvas.toDataURL("image/png");
