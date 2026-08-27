@@ -199,7 +199,7 @@
             transform: scale(1.03);
         }
 
-        /* 右側：網頁上的幹部與小老師操作區 (無下拉選單，改為點選指定) */
+        /* 右側：網頁上的幹部與小老師操作區 */
         .sidebar-right {
             width: 260px;
             background: rgba(44, 29, 17, 0.95);
@@ -220,31 +220,27 @@
             padding-bottom: 5px;
         }
 
-        .staff-item-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: var(--parchment);
-            color: #2c1d11;
-            padding: 4px 6px;
-            margin-bottom: 5px;
-            border-radius: 4px;
+        .staff-group {
+            margin-bottom: 10px;
+        }
+
+        .staff-group label {
+            display: block;
             font-size: 0.8rem;
+            color: var(--gold);
+            margin-bottom: 2px;
             font-weight: bold;
         }
 
-        .staff-item-row span {
-            color: #8b5a2b;
-        }
-
-        .staff-item-row button {
-            background: #d4af37;
+        .staff-group select {
+            width: 100%;
+            padding: 4px;
+            background: var(--parchment);
+            border: 1px solid var(--gold);
+            border-radius: 4px;
+            font-family: inherit;
             color: #2c1d11;
-            border: 1px solid #5c3a21;
-            padding: 2px 6px;
-            border-radius: 3px;
-            cursor: pointer;
-            font-size: 0.75rem;
+            font-size: 0.85rem;
             font-weight: bold;
         }
 
@@ -465,11 +461,11 @@
             </div>
         </div>
 
-        <!-- 右側：幹部與小老師點選指定區 -->
+        <!-- 右側：平時操作用的幹部與小老師下拉選單 -->
         <div class="sidebar-right">
             <h3>👑 幹部與小老師</h3>
             <div id="staff-container">
-                <!-- 動態生成 -->
+                <!-- 動態生成選單 -->
             </div>
         </div>
     </div>
@@ -492,17 +488,19 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
+    // 儲存至 Firebase 雲端
     window.saveDataToFirebase = function() {
         const data = { seatMap, unassignedStudents, staffAssignments, examHistory };
         set(ref(db, 'class_804/seat_data'), data)
             .then(() => {
-                alert("🏴‍☠️ 雲端航海日誌同步成功！");
+                alert("🏴‍☠️ 雲端航海日誌同步成功！不管換哪台電腦都找得到 804 的資料了！");
             })
             .catch((error) => {
                 alert("❌ 儲存失敗：" + error.message);
             });
     };
 
+    // 從 Firebase 雲端載入
     window.loadDataFromFirebase = function() {
         const dbRef = ref(db);
         get(child(dbRef, 'class_804/seat_data')).then((snapshot) => {
@@ -515,17 +513,19 @@
                 
                 renderUnassigned();
                 renderGrid();
-                renderStaff();
+                updateStaffUI();
                 renderHistory();
                 renderExportStaffTable();
+                console.log("已成功從 804 雲端載入座位資料！");
             } else {
-                renderUnassigned();
+                console.log("雲端尚無 804 資料，使用預設值。");
             }
         }).catch((error) => {
             console.error("讀取雲端資料失敗", error);
         });
     };
 
+    // 頁面載入時初始化並同步雲端
     window.onload = function() {
         init();
         loadDataFromFirebase();
@@ -574,7 +574,9 @@
         currentMode = mode;
         if (currentMode === 'flip') {
             for (let i = 0; i < 30; i++) {
-                if (seatMap[`cell-${i}`]) flippedStatus[`cell-${i}`] = false;
+                if (seatMap[`cell-${i}`]) {
+                    flippedStatus[`cell-${i}`] = false;
+                }
             }
         }
         updateViewModeUI();
@@ -597,7 +599,11 @@
         } else {
             podiumTop.style.display = "block";
             podiumBottom.style.display = "none";
-            grid.className = "grid-6x5 student-view";
+            if (currentMode === 'student' || currentMode === 'flip') {
+                grid.className = "grid-6x5 student-view";
+            } else {
+                grid.className = "grid-6x5";
+            }
         }
     }
 
@@ -638,8 +644,11 @@
             cell.onclick = () => {
                 if (currentMode === 'flip' && seatMap[cellId]) {
                     flippedStatus[cellId] = !flippedStatus[cellId];
-                    if (flippedStatus[cellId]) cell.classList.remove("flipped");
-                    else cell.classList.add("flipped");
+                    if (flippedStatus[cellId]) {
+                        cell.classList.remove("flipped");
+                    } else {
+                        cell.classList.add("flipped");
+                    }
                 }
             };
 
@@ -660,49 +669,54 @@
         return card;
     }
 
-    // 渲染右側無下拉選單的點選指定介面
     function renderStaff() {
         const container = document.getElementById("staff-container");
         container.innerHTML = "";
         staffList.forEach(title => {
-            const row = document.createElement("div");
-            row.className = "staff-item-row";
+            const group = document.createElement("div");
+            group.className = "staff-group";
             
-            const currentAssignName = staffAssignments[title] || "未指派";
+            const label = document.createElement("label");
+            label.innerText = title;
 
-            row.innerHTML = `
-                <div>
-                    <div style="font-size:0.75rem; color:#8b5a2b;">${title}</div>
-                    <div style="font-size:0.85rem; color:#2c1d11;">${currentAssignName}</div>
-                </div>
-                <button onclick="assignStaffPrompt('${title}')">指派</button>
-            `;
-            container.appendChild(row);
+            const select = document.createElement("select");
+            select.id = `staff-select-${title}`;
+            select.onchange = (e) => {
+                staffAssignments[title] = e.target.value;
+                renderExportStaffTable();
+            };
+
+            const defaultOpt = document.createElement("option");
+            defaultOpt.value = "";
+            defaultOpt.innerText = "-- 請選擇 --";
+            select.appendChild(defaultOpt);
+
+            students.forEach(s => {
+                const opt = document.createElement("option");
+                opt.value = s.name;
+                opt.innerText = `${s.id} 號 - ${s.name}`;
+                if (staffAssignments[title] === s.name) {
+                    opt.selected = true;
+                }
+                select.appendChild(opt);
+            });
+
+            group.appendChild(label);
+            group.appendChild(select);
+            container.appendChild(group);
         });
     }
 
-    window.assignStaffPrompt = function(title) {
-        let promptText = `請輸入要擔任「${title}」的學生座號 (1-28) 或姓名：`;
-        let input = prompt(promptText);
-        if (input !== null) {
-            input = input.trim();
-            if (input === "") {
-                delete staffAssignments[title];
-            } else {
-                let found = students.find(s => s.id == input || s.name === input);
-                if (found) {
-                    staffAssignments[title] = found.name;
-                } else {
-                    alert("找不到該學生，請確認座號或姓名是否正確！");
-                    return;
-                }
+    function updateStaffUI() {
+        staffList.forEach(title => {
+            const select = document.getElementById(`staff-select-${title}`);
+            if (select) {
+                select.value = staffAssignments[title] || "";
             }
-            renderStaff();
-            renderExportStaffTable();
-            saveDataToFirebase();
-        }
+        });
     }
 
+    // 渲染截圖專用的左右表格面板
     function renderExportStaffTable() {
         const leadersContainer = document.getElementById("export-leaders-list");
         const teachersContainer = document.getElementById("export-teachers-list");
@@ -735,7 +749,11 @@
     function drag(event) {
         draggedStudentId = parseInt(event.target.dataset.id);
         const parentCell = event.target.closest(".seat-cell");
-        sourceLocation = parentCell ? parentCell.id : "unassigned";
+        if (parentCell) {
+            sourceLocation = parentCell.id;
+        } else {
+            sourceLocation = "unassigned";
+        }
         event.dataTransfer.setData("text/plain", draggedStudentId);
     }
 
@@ -771,7 +789,9 @@
 
         if (studentObj) {
             seatMap[targetCellId] = studentObj;
-            if (currentMode === 'flip') flippedStatus[targetCellId] = false;
+            if (currentMode === 'flip') {
+                flippedStatus[targetCellId] = false;
+            }
         }
 
         renderUnassigned();
@@ -815,6 +835,7 @@
         renderGrid();
     }
 
+    // 座位復位功能
     function resetSeats() {
         if (confirm("確定要將所有座位清空，重新開始排位嗎？")) {
             seatMap = {};
@@ -830,7 +851,7 @@
         const nameInput = document.getElementById("history-name");
         const title = nameInput.value.trim();
         if (!title) {
-            alert("請輸入紀錄名稱！");
+            alert("請輸入紀錄名稱（例如：第一次段考）！");
             return;
         }
 
@@ -882,7 +903,7 @@
                 
                 renderUnassigned();
                 renderGrid();
-                renderStaff();
+                updateStaffUI();
                 renderExportStaffTable();
                 alert(`已成功切換至「${record.title}」！`);
             }
