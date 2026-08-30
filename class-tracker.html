@@ -4,6 +4,8 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>班級收繳航海日誌</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%23f4dfad%27/%3E%3Crect x=%273%27 y=%273%27 width=%2758%27 height=%2758%27 rx=%2712%27 fill=%27none%27 stroke=%27%237d241f%27 stroke-width=%276%27/%3E%3Ctext x=%2732%27 y=%2744%27 text-anchor=%27middle%27 font-size=%2738%27 font-weight=%27900%27 font-family=%27sans-serif%27 fill=%27%237d241f%27%3E%E8%B3%87%3C/text%3E%3C/svg%3E">
+<meta name="theme-color" content="#7d241f" />
 <style>
   :root{
     --ink:#2d241b;
@@ -500,7 +502,7 @@ async function saveCurrentCloud(showSuccess=true){
   }catch(err){
     console.error(err);
     setSync("error","⚠️ 同步失敗");
-    showToast("Firebase 儲存失敗，請檢查網路或 Security Rules");
+    showToast(`Firebase 儲存失敗：${err.code || err.message || "未知錯誤"}`);
     return false;
   }
 }
@@ -514,12 +516,13 @@ async function saveRecord(){
     setSync("saving","☁️ 儲存中…");
     const isNew=!currentId;
     if(isNew) currentId=doc(recordsCollection()).id;
-    await setDoc(recordRef(currentId),{
+    const payload={
       ...meta,
       students:studentState,
-      createdAt:isNew?serverTimestamp():undefined,
       updatedAt:serverTimestamp()
-    },{merge:true});
+    };
+    if(isNew) payload.createdAt=serverTimestamp();
+    await setDoc(recordRef(currentId),payload,{merge:true});
     setSync("ok","☁️ 已同步");
     await refreshHistory(false);
     $("historySelect").value=currentId;
@@ -527,7 +530,7 @@ async function saveRecord(){
   }catch(err){
     console.error(err);
     setSync("error","⚠️ 同步失敗");
-    showToast("無法儲存，請檢查 Firestore 規則");
+    showToast(`無法儲存：${err.code || err.message || "未知錯誤"}`);
   }
 }
 
@@ -559,7 +562,7 @@ async function refreshHistory(showMessage=false){
   }catch(err){
     console.error(err);
     setSync("error","⚠️ 同步失敗");
-    showToast("讀取 Firestore 失敗，請檢查 Security Rules");
+    showToast(`讀取 Firestore 失敗：${err.code || err.message || "未知錯誤"}`);
   }
 }
 
@@ -592,7 +595,7 @@ async function deleteRecord(){
     newRecord();
     showToast("雲端紀錄已刪除");
   }catch(err){
-    console.error(err);setSync("error","⚠️ 刪除失敗");showToast("刪除失敗");
+    console.error(err);setSync("error","⚠️ 刪除失敗");showToast(`刪除失敗：${err.code || err.message || "未知錯誤"}`);
   }
 }
 
