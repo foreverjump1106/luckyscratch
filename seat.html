@@ -690,6 +690,10 @@
             <div class="s-name">${student.name}</div>
         `;
         card.ondragstart = drag;
+        card.addEventListener("touchstart", touchDragStart, { passive: true });
+        card.addEventListener("touchmove", touchDragMove, { passive: false });
+        card.addEventListener("touchend", touchDragEnd, { passive: false });
+        card.addEventListener("touchcancel", touchDragCancel, { passive: true });
         return card;
     }
 
@@ -779,6 +783,122 @@
         const parentCell = event.target.closest(".seat-cell");
         sourceLocation = parentCell ? parentCell.id : "unassigned";
         event.dataTransfer.setData("text/plain", draggedStudentId);
+    }
+
+    // 手機觸控拖曳支援：保留原本桌機 drag/drop，不改動既有操作
+    let touchDragState = null;
+
+    function touchDragStart(event) {
+        if (event.touches.length !== 1) return;
+
+        const card = event.currentTarget;
+        const touch = event.touches[0];
+        const parentCell = card.closest(".seat-cell");
+
+        draggedStudentId = parseInt(card.dataset.id);
+        sourceLocation = parentCell ? parentCell.id : "unassigned";
+
+        touchDragState = {
+            card: card,
+            startX: touch.clientX,
+            startY: touch.clientY,
+            moved: false,
+            ghost: null,
+            hoverTarget: null
+        };
+    }
+
+    function touchDragMove(event) {
+        if (!touchDragState || event.touches.length !== 1) return;
+
+        const touch = event.touches[0];
+        const dx = touch.clientX - touchDragState.startX;
+        const dy = touch.clientY - touchDragState.startY;
+
+        // 手指只是點一下時仍保留原本點擊功能；真正移動後才進入拖曳
+        if (!touchDragState.moved && Math.hypot(dx, dy) < 6) return;
+
+        touchDragState.moved = true;
+        event.preventDefault();
+
+        if (!touchDragState.ghost) {
+            const rect = touchDragState.card.getBoundingClientRect();
+            const ghost = touchDragState.card.cloneNode(true);
+            ghost.style.position = "fixed";
+            ghost.style.zIndex = "10000";
+            ghost.style.pointerEvents = "none";
+            ghost.style.width = rect.width + "px";
+            ghost.style.height = rect.height + "px";
+            ghost.style.opacity = "0.9";
+            ghost.style.transform = "scale(1.05)";
+            ghost.style.boxShadow = "0 6px 16px rgba(0,0,0,0.45)";
+            ghost.style.margin = "0";
+            document.body.appendChild(ghost);
+            touchDragState.ghost = ghost;
+        }
+
+        const ghost = touchDragState.ghost;
+        ghost.style.left = (touch.clientX - ghost.offsetWidth / 2) + "px";
+        ghost.style.top = (touch.clientY - ghost.offsetHeight / 2) + "px";
+
+        const elementUnderFinger = document.elementFromPoint(touch.clientX, touch.clientY);
+        const target = elementUnderFinger ? elementUnderFinger.closest(".seat-cell, #unassigned-list") : null;
+
+        if (touchDragState.hoverTarget && touchDragState.hoverTarget !== target) {
+            touchDragState.hoverTarget.classList.remove("drag-over");
+        }
+        if (target) target.classList.add("drag-over");
+        touchDragState.hoverTarget = target;
+    }
+
+    function touchDragEnd(event) {
+        if (!touchDragState) return;
+
+        if (!touchDragState.moved) {
+            touchDragState = null;
+            return;
+        }
+
+        event.preventDefault();
+
+        const touch = event.changedTouches && event.changedTouches[0];
+        let target = null;
+        if (touch) {
+            const elementUnderFinger = document.elementFromPoint(touch.clientX, touch.clientY);
+            target = elementUnderFinger ? elementUnderFinger.closest(".seat-cell, #unassigned-list") : null;
+        }
+
+        cleanupTouchDragVisuals();
+
+        if (target) {
+            const fakeEvent = {
+                preventDefault: function() {},
+                currentTarget: target
+            };
+
+            if (target.id === "unassigned-list") {
+                dropToUnassigned(fakeEvent);
+            } else if (target.classList.contains("seat-cell")) {
+                dropToCell(fakeEvent);
+            }
+        }
+
+        touchDragState = null;
+    }
+
+    function touchDragCancel() {
+        cleanupTouchDragVisuals();
+        touchDragState = null;
+    }
+
+    function cleanupTouchDragVisuals() {
+        if (!touchDragState) return;
+        if (touchDragState.hoverTarget) {
+            touchDragState.hoverTarget.classList.remove("drag-over");
+        }
+        if (touchDragState.ghost && touchDragState.ghost.parentNode) {
+            touchDragState.ghost.parentNode.removeChild(touchDragState.ghost);
+        }
     }
 
     function allowDrop(event) {
