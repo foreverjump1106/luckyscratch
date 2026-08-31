@@ -39,7 +39,7 @@ h1{margin:0;font-size:clamp(28px,5vw,48px);letter-spacing:2px;color:#7d241f;text
 
 .class-switch-panel{margin-top:18px;padding:16px;border-radius:18px;background:rgba(255,249,225,.82);border:3px dashed #795426}
 .class-switch-title{text-align:center;color:#6e2b22;font-size:18px;font-weight:900;margin-bottom:12px}
-.class-switch{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.class-switch{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
 .class-btn{padding:13px 14px;border-radius:14px;background:#fff7df;color:#493721;border:2px solid #9e7742;font-size:18px;font-weight:900;box-shadow:0 4px 0 #7c5b32}
 .class-btn.active{background:var(--blue);color:#fff;border-color:#10394d;box-shadow:0 4px 0 #10394d}
 .class-btn.active::before{content:"⚓";margin-right:6px}
@@ -129,7 +129,7 @@ tbody tr:hover td{background:#fff4cd} tbody tr.overdue td{background:#fff0e6} tb
       <div class="emblem">☠</div>
       <div>
         <h1>任課班收繳航海日誌</h1>
-        <p class="subtitle">904・906・802，三個班級獨立管理、快速切換！</p>
+        <p class="subtitle">904・906・802・804，四個班級獨立管理、快速切換！</p>
       </div>
     </div>
 
@@ -225,7 +225,7 @@ tbody tr:hover td{background:#fff4cd} tbody tr.overdue td{background:#fff0e6} tb
     </div>
   </section>
 
-  <div class="footer-note">☁️ 904、906、802 的收繳資料使用 Firebase Firestore 雲端獨立儲存。</div>
+  <div class="footer-note">☁️ 904、906、802、804 的收繳資料使用 Firebase Firestore 雲端獨立儲存。</div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -294,6 +294,18 @@ const CLASS_CONFIG={
       {seat:20,name:"張立揚"},{seat:21,name:"許宇曜"},{seat:22,name:"陳宥禾"},
       {seat:23,name:"陳昭瑒"},{seat:24,name:"游育瑋"},{seat:25,name:"游翔"},
       {seat:26,name:"黃宇辰"},{seat:27,name:"簡翊展"},{seat:28,name:"羅泓棣"}
+    ]
+  },
+  "804":{
+    name:"804",
+    students:[
+      {seat:1,name:"王禹涵"},{seat:2,name:"江育緹"},{seat:3,name:"呂思儀"},{seat:4,name:"李詠騏"},
+      {seat:5,name:"林子歆"},{seat:6,name:"林禹萱"},{seat:7,name:"張馨勻"},{seat:8,name:"陳昕樂"},
+      {seat:9,name:"陳梓安"},{seat:10,name:"陳筠蓁"},{seat:11,name:"陳苙絜"},{seat:12,name:"楊錚諭"},
+      {seat:13,name:"趙安瑜"},{seat:14,name:"魏語潔"},{seat:15,name:"江靚恩"},{seat:16,name:"王洋振"},
+      {seat:17,name:"吳昊丞"},{seat:18,name:"李祐誠"},{seat:19,name:"林宸陞"},{seat:20,name:"林維辰"},
+      {seat:21,name:"林鈺棟"},{seat:22,name:"洪楷祥"},{seat:23,name:"陳兆楷"},{seat:24,name:"陳沂璟"},
+      {seat:25,name:"黑肚·尤明"},{seat:26,name:"賴震宇"},{seat:27,name:"戴震龍"},{seat:28,name:"謝宇哲"}
     ]
   }
 };
