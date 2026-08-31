@@ -1,0 +1,2312 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>段考成績管理系統</title>
+
+  <link
+    rel="icon"
+    href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="20" fill="%230f766e"/><text x="50" y="68" text-anchor="middle" font-size="60" fill="white">管</text></svg>'
+  />
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family:
+        "Noto Sans TC",
+        "Microsoft JhengHei",
+        sans-serif;
+      color: #0f172a;
+      background:
+        linear-gradient(
+          135deg,
+          #ecfeff 0%,
+          #f0fdfa 45%,
+          #f8fafc 100%
+        );
+      min-height: 100vh;
+    }
+
+    button,
+    input,
+    textarea {
+      font-family: inherit;
+    }
+
+    .page {
+      width: 100%;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 30px 16px 60px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 26px;
+    }
+
+    .logo {
+      width: 78px;
+      height: 78px;
+      margin: 0 auto 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 22px;
+      color: white;
+      font-size: 42px;
+      font-weight: 900;
+      background:
+        linear-gradient(
+          135deg,
+          #0f766e,
+          #115e59
+        );
+      box-shadow:
+        0 12px 28px
+        rgba(15, 118, 110, 0.22);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 30px;
+    }
+
+    .subtitle {
+      color: #64748b;
+      margin-top: 8px;
+      font-size: 15px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.96);
+      border: 1px solid #e2e8f0;
+      border-radius: 22px;
+      padding: 26px;
+      box-shadow:
+        0 16px 40px
+        rgba(15, 23, 42, 0.08);
+      margin-bottom: 20px;
+    }
+
+    .login-card {
+      width: 100%;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      font-size: 21px;
+      font-weight: 900;
+      margin-bottom: 18px;
+    }
+
+    .field {
+      margin-bottom: 17px;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 800;
+      margin-bottom: 7px;
+    }
+
+    input,
+    textarea {
+      width: 100%;
+      border: 1px solid #cbd5e1;
+      border-radius: 13px;
+      background: white;
+      color: #0f172a;
+      outline: none;
+      transition: 0.18s;
+    }
+
+    input {
+      height: 50px;
+      padding: 0 14px;
+      font-size: 16px;
+    }
+
+    textarea {
+      min-height: 260px;
+      resize: vertical;
+      padding: 14px;
+      font-size: 15px;
+      line-height: 1.6;
+      white-space: pre;
+      overflow: auto;
+    }
+
+    input:focus,
+    textarea:focus {
+      border-color: #0f766e;
+      box-shadow:
+        0 0 0 4px
+        rgba(15, 118, 110, 0.10);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .btn {
+      min-height: 50px;
+      border: 0;
+      border-radius: 13px;
+      padding: 0 18px;
+      font-size: 16px;
+      font-weight: 900;
+      cursor: pointer;
+      color: white;
+      background:
+        linear-gradient(
+          135deg,
+          #0f766e,
+          #115e59
+        );
+    }
+
+    .btn:hover {
+      filter: brightness(1.03);
+    }
+
+    .btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.55;
+    }
+
+    .btn-secondary {
+      background: #475569;
+    }
+
+    .btn-danger {
+      background: #b91c1c;
+    }
+
+    .btn-full {
+      width: 100%;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .actions .btn {
+      flex: 1 1 180px;
+    }
+
+    .message {
+      display: none;
+      border-radius: 12px;
+      padding: 13px 15px;
+      margin-top: 15px;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    .message.error {
+      display: block;
+      color: #991b1b;
+      background: #fee2e2;
+    }
+
+    .message.success {
+      display: block;
+      color: #166534;
+      background: #dcfce7;
+    }
+
+    .message.info {
+      display: block;
+      color: #1e3a8a;
+      background: #dbeafe;
+    }
+
+    .admin-area {
+      display: none;
+    }
+
+    .admin-area.show {
+      display: block;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+      margin-bottom: 20px;
+      padding: 16px 18px;
+      border-radius: 16px;
+      background: white;
+      border: 1px solid #e2e8f0;
+    }
+
+    .teacher-info {
+      min-width: 0;
+    }
+
+    .teacher-label {
+      color: #64748b;
+      font-size: 13px;
+    }
+
+    .teacher-email {
+      font-weight: 900;
+      overflow-wrap: anywhere;
+      margin-top: 3px;
+    }
+
+    .logout-btn {
+      width: auto;
+      min-width: 110px;
+      flex-shrink: 0;
+    }
+
+    .format-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 15px;
+      margin-bottom: 15px;
+      color: #475569;
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    .format-line {
+      overflow-x: auto;
+      white-space: nowrap;
+      padding-top: 7px;
+      color: #0f172a;
+      font-weight: 800;
+    }
+
+    .preview-area {
+      display: none;
+    }
+
+    .preview-area.show {
+      display: block;
+    }
+
+    .preview-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .badge {
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      border-radius: 999px;
+      padding: 7px 12px;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+    }
+
+    table {
+      width: 100%;
+      min-width: 900px;
+      border-collapse: collapse;
+      background: white;
+    }
+
+    th,
+    td {
+      padding: 11px 10px;
+      border-bottom: 1px solid #e2e8f0;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    th {
+      background: #f8fafc;
+      font-weight: 900;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    tbody tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .invalid-row {
+      background: #fff1f2;
+    }
+
+    .valid-text {
+      color: #15803d;
+      font-weight: 900;
+    }
+
+    .invalid-text {
+      color: #b91c1c;
+      font-weight: 900;
+    }
+
+    .warning {
+      border-radius: 14px;
+      padding: 14px 16px;
+      color: #92400e;
+      background: #fef3c7;
+      font-size: 14px;
+      line-height: 1.7;
+      margin-bottom: 18px;
+    }
+
+    .progress-box {
+      display: none;
+      margin-top: 16px;
+    }
+
+    .progress-box.show {
+      display: block;
+    }
+
+    .progress-bar {
+      height: 12px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      width: 0%;
+      height: 100%;
+      background: #0f766e;
+      transition: width 0.2s ease;
+    }
+
+    .progress-text {
+      margin-top: 8px;
+      color: #475569;
+      font-size: 14px;
+      text-align: center;
+    }
+
+    @media (max-width: 700px) {
+      .page {
+        padding: 20px 12px 40px;
+      }
+
+      .card {
+        padding: 20px 16px;
+      }
+
+      h1 {
+        font-size: 25px;
+      }
+
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .logout-btn {
+        width: 100%;
+      }
+
+      textarea {
+        min-height: 320px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="page">
+
+  <div class="header">
+
+    <div class="logo">
+      管
+    </div>
+
+    <h1>
+      段考成績管理系統
+    </h1>
+
+    <div class="subtitle">
+      教師專用後台
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       教師登入
+  ========================== -->
+
+  <div
+    id="loginArea"
+    class="card login-card"
+  >
+
+    <div class="section-title">
+      教師登入
+    </div>
+
+    <div class="field">
+
+      <label for="email">
+        Firebase 教師帳號
+      </label>
+
+      <input
+        id="email"
+        type="email"
+        autocomplete="username"
+        placeholder="請輸入 Email"
+      />
+
+    </div>
+
+
+    <div class="field">
+
+      <label for="password">
+        密碼
+      </label>
+
+      <input
+        id="password"
+        type="password"
+        autocomplete="current-password"
+        placeholder="請輸入密碼"
+      />
+
+    </div>
+
+
+    <button
+      id="loginBtn"
+      class="btn btn-full"
+    >
+      登入管理系統
+    </button>
+
+
+    <div
+      id="loginMessage"
+      class="message"
+    ></div>
+
+  </div>
+
+
+  <!-- =========================
+       後台
+  ========================== -->
+
+  <div
+    id="adminArea"
+    class="admin-area"
+  >
+
+    <div class="topbar">
+
+      <div class="teacher-info">
+
+        <div class="teacher-label">
+          已登入教師帳號
+        </div>
+
+        <div
+          id="teacherEmail"
+          class="teacher-email"
+        ></div>
+
+      </div>
+
+      <button
+        id="logoutBtn"
+        class="btn btn-secondary logout-btn"
+      >
+        登出
+      </button>
+
+    </div>
+
+
+    <div class="warning">
+
+      <strong>目前建議先使用假資料測試。</strong>
+      現階段家長端仍採直接 Firestore 查詢，
+      正式學生個資上線前還要再處理資料安全設定。
+
+    </div>
+
+
+    <!-- =========================
+         基本設定
+    ========================== -->
+
+    <div class="card">
+
+      <div class="section-title">
+        ① 段考基本設定
+      </div>
+
+
+      <div class="grid-2">
+
+        <div class="field">
+
+          <label for="classCode">
+            班級
+          </label>
+
+          <input
+            id="classCode"
+            type="text"
+            maxlength="6"
+            value="704"
+            placeholder="例如：704"
+          />
+
+        </div>
+
+
+        <div class="field">
+
+          <label for="examName">
+            考試名稱
+          </label>
+
+          <input
+            id="examName"
+            type="text"
+            value="第一次段考"
+            placeholder="例如：第一次段考"
+          />
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- =========================
+         貼資料
+    ========================== -->
+
+    <div class="card">
+
+      <div class="section-title">
+        ② 貼上 Excel 成績
+      </div>
+
+
+      <div class="format-box">
+
+        請在 Excel 依照以下順序排列欄位，
+        選取學生資料後直接複製，再貼到下面。
+
+        <div class="format-line">
+          座號　姓名　出生月日　身分證後五碼　國文　英文　數學　自然　社會
+        </div>
+
+        <div style="margin-top:8px;">
+          例如：
+          <br>
+          1　王小明　0815　12345　86　92　95　88　90
+        </div>
+
+      </div>
+
+
+      <div class="field">
+
+        <label for="excelData">
+          Excel 資料
+        </label>
+
+        <textarea
+          id="excelData"
+          placeholder="請直接從 Excel 複製後貼在這裡
+
+例如：
+1	王小明	0815	12345	86	92	95	88	90
+2	李小美	1207	67890	91	84	88	93	87
+3	陳大華	0123	24680	72	80	85	77	81"
+        ></textarea>
+
+      </div>
+
+
+      <div class="actions">
+
+        <button
+          id="previewBtn"
+          class="btn"
+        >
+          解析並預覽
+        </button>
+
+        <button
+          id="clearBtn"
+          class="btn btn-secondary"
+        >
+          清除
+        </button>
+
+      </div>
+
+
+      <div
+        id="parseMessage"
+        class="message"
+      ></div>
+
+    </div>
+
+
+    <!-- =========================
+         預覽
+    ========================== -->
+
+    <div
+      id="previewArea"
+      class="card preview-area"
+    >
+
+      <div class="section-title">
+        ③ 匯入前預覽
+      </div>
+
+
+      <div class="preview-meta">
+
+        <div
+          id="totalBadge"
+          class="badge"
+        ></div>
+
+        <div
+          id="validBadge"
+          class="badge"
+        ></div>
+
+        <div
+          id="invalidBadge"
+          class="badge"
+        ></div>
+
+      </div>
+
+
+      <div class="table-wrap">
+
+        <table>
+
+          <thead>
+
+            <tr>
+              <th>學生代號</th>
+              <th>座號</th>
+              <th>姓名</th>
+              <th>出生月日</th>
+              <th>後五碼</th>
+              <th>國文</th>
+              <th>英文</th>
+              <th>數學</th>
+              <th>自然</th>
+              <th>社會</th>
+              <th>狀態</th>
+            </tr>
+
+          </thead>
+
+          <tbody id="previewBody">
+          </tbody>
+
+        </table>
+
+      </div>
+
+
+      <div class="actions">
+
+        <button
+          id="importBtn"
+          class="btn"
+        >
+          確認匯入 Firebase
+        </button>
+
+      </div>
+
+
+      <div
+        id="importMessage"
+        class="message"
+      ></div>
+
+
+      <div
+        id="progressBox"
+        class="progress-box"
+      >
+
+        <div class="progress-bar">
+
+          <div
+            id="progressFill"
+            class="progress-fill"
+          ></div>
+
+        </div>
+
+        <div
+          id="progressText"
+          class="progress-text"
+        ></div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<script type="module">
+
+  /*
+  ========================================
+  Firebase
+  ========================================
+  */
+
+  import {
+    initializeApp
+  } from
+  "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+
+
+  import {
+    getAuth,
+    signInWithEmailAndPassword,
+    signOut,
+    onAuthStateChanged
+  } from
+  "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+
+
+  import {
+    getFirestore,
+    doc,
+    writeBatch
+  } from
+  "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+
+  const firebaseConfig = {
+
+    apiKey:
+      "AIzaSyC7hXtxLARv3LsoPcaViptdoWMZMLibtiY",
+
+    authDomain:
+      "exam-score-system.firebaseapp.com",
+
+    projectId:
+      "exam-score-system",
+
+    storageBucket:
+      "exam-score-system.firebasestorage.app",
+
+    messagingSenderId:
+      "334811583790",
+
+    appId:
+      "1:334811583790:web:a6207215915c163c8656bf"
+
+  };
+
+
+  /*
+  ========================================
+  老師 UID
+  ========================================
+  */
+
+  const ADMIN_UID =
+    "2e5K4CSfV7h7qryYfrNDw6r0zY13";
+
+
+  const app =
+    initializeApp(firebaseConfig);
+
+
+  const auth =
+    getAuth(app);
+
+
+  const db =
+    getFirestore(app);
+
+
+
+  /*
+  ========================================
+  DOM
+  ========================================
+  */
+
+  const loginArea =
+    document.getElementById(
+      "loginArea"
+    );
+
+
+  const adminArea =
+    document.getElementById(
+      "adminArea"
+    );
+
+
+  const emailInput =
+    document.getElementById(
+      "email"
+    );
+
+
+  const passwordInput =
+    document.getElementById(
+      "password"
+    );
+
+
+  const loginBtn =
+    document.getElementById(
+      "loginBtn"
+    );
+
+
+  const logoutBtn =
+    document.getElementById(
+      "logoutBtn"
+    );
+
+
+  const loginMessage =
+    document.getElementById(
+      "loginMessage"
+    );
+
+
+  const teacherEmail =
+    document.getElementById(
+      "teacherEmail"
+    );
+
+
+  const classCodeInput =
+    document.getElementById(
+      "classCode"
+    );
+
+
+  const examNameInput =
+    document.getElementById(
+      "examName"
+    );
+
+
+  const excelData =
+    document.getElementById(
+      "excelData"
+    );
+
+
+  const previewBtn =
+    document.getElementById(
+      "previewBtn"
+    );
+
+
+  const clearBtn =
+    document.getElementById(
+      "clearBtn"
+    );
+
+
+  const previewArea =
+    document.getElementById(
+      "previewArea"
+    );
+
+
+  const previewBody =
+    document.getElementById(
+      "previewBody"
+    );
+
+
+  const parseMessage =
+    document.getElementById(
+      "parseMessage"
+    );
+
+
+  const importBtn =
+    document.getElementById(
+      "importBtn"
+    );
+
+
+  const importMessage =
+    document.getElementById(
+      "importMessage"
+    );
+
+
+  const totalBadge =
+    document.getElementById(
+      "totalBadge"
+    );
+
+
+  const validBadge =
+    document.getElementById(
+      "validBadge"
+    );
+
+
+  const invalidBadge =
+    document.getElementById(
+      "invalidBadge"
+    );
+
+
+  const progressBox =
+    document.getElementById(
+      "progressBox"
+    );
+
+
+  const progressFill =
+    document.getElementById(
+      "progressFill"
+    );
+
+
+  const progressText =
+    document.getElementById(
+      "progressText"
+    );
+
+
+  let parsedStudents = [];
+
+
+
+  /*
+  ========================================
+  訊息
+  ========================================
+  */
+
+  function showMessage(
+    element,
+    text,
+    type
+  ) {
+
+    element.textContent =
+      text;
+
+
+    element.className =
+      "message " + type;
+
+  }
+
+
+  function clearMessage(
+    element
+  ) {
+
+    element.textContent =
+      "";
+
+
+    element.className =
+      "message";
+
+  }
+
+
+
+  /*
+  ========================================
+  登入
+  ========================================
+  */
+
+  loginBtn.addEventListener(
+    "click",
+    async () => {
+
+      clearMessage(
+        loginMessage
+      );
+
+
+      const email =
+        emailInput.value.trim();
+
+
+      const password =
+        passwordInput.value;
+
+
+      if (
+        !email ||
+        !password
+      ) {
+
+        showMessage(
+          loginMessage,
+          "請輸入教師 Email 與密碼。",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      loginBtn.disabled =
+        true;
+
+
+      loginBtn.textContent =
+        "登入中...";
+
+
+      try {
+
+        const credential =
+          await signInWithEmailAndPassword(
+            auth,
+            email,
+            password
+          );
+
+
+        if (
+          credential.user.uid !==
+          ADMIN_UID
+        ) {
+
+          await signOut(auth);
+
+
+          showMessage(
+            loginMessage,
+            "此帳號沒有成績管理權限。",
+            "error"
+          );
+
+        }
+
+
+      } catch (error) {
+
+        console.error(error);
+
+
+        showMessage(
+          loginMessage,
+          "登入失敗，請確認帳號與密碼是否正確。",
+          "error"
+        );
+
+      } finally {
+
+        loginBtn.disabled =
+          false;
+
+
+        loginBtn.textContent =
+          "登入管理系統";
+
+      }
+
+    }
+  );
+
+
+  passwordInput.addEventListener(
+    "keydown",
+    event => {
+
+      if (
+        event.key === "Enter"
+      ) {
+
+        loginBtn.click();
+
+      }
+
+    }
+  );
+
+
+
+  /*
+  ========================================
+  登出
+  ========================================
+  */
+
+  logoutBtn.addEventListener(
+    "click",
+    async () => {
+
+      await signOut(auth);
+
+    }
+  );
+
+
+
+  /*
+  ========================================
+  登入狀態監控
+  ========================================
+  */
+
+  onAuthStateChanged(
+    auth,
+    async user => {
+
+      if (
+        user &&
+        user.uid === ADMIN_UID
+      ) {
+
+        loginArea.style.display =
+          "none";
+
+
+        adminArea.classList.add(
+          "show"
+        );
+
+
+        teacherEmail.textContent =
+          user.email || "教師帳號";
+
+
+      } else {
+
+        adminArea.classList.remove(
+          "show"
+        );
+
+
+        loginArea.style.display =
+          "block";
+
+
+        teacherEmail.textContent =
+          "";
+
+      }
+
+    }
+  );
+
+
+
+  /*
+  ========================================
+  出生日期 MMDD 驗證
+  ========================================
+  */
+
+  function isValidMMDD(
+    value
+  ) {
+
+    if (
+      !/^\d{4}$/.test(value)
+    ) {
+
+      return false;
+
+    }
+
+
+    const month =
+      Number(
+        value.slice(0, 2)
+      );
+
+
+    const day =
+      Number(
+        value.slice(2, 4)
+      );
+
+
+    const daysInMonth = [
+      31,
+      29,
+      31,
+      30,
+      31,
+      30,
+      31,
+      31,
+      30,
+      31,
+      30,
+      31
+    ];
+
+
+    if (
+      month < 1 ||
+      month > 12
+    ) {
+
+      return false;
+
+    }
+
+
+    return (
+      day >= 1 &&
+      day <=
+      daysInMonth[
+        month - 1
+      ]
+    );
+
+  }
+
+
+
+  /*
+  ========================================
+  成績驗證
+  ========================================
+  */
+
+  function isValidScore(
+    value
+  ) {
+
+    if (
+      value === ""
+    ) {
+
+      return false;
+
+    }
+
+
+    const number =
+      Number(value);
+
+
+    return (
+      Number.isFinite(number) &&
+      number >= 0 &&
+      number <= 100
+    );
+
+  }
+
+
+
+  /*
+  ========================================
+  座號格式
+  ========================================
+  */
+
+  function formatSeat(
+    seat
+  ) {
+
+    return String(
+      Number(seat)
+    ).padStart(
+      2,
+      "0"
+    );
+
+  }
+
+
+
+  /*
+  ========================================
+  解析 Excel
+  ========================================
+  */
+
+  function parseExcelData() {
+
+    clearMessage(
+      parseMessage
+    );
+
+
+    clearMessage(
+      importMessage
+    );
+
+
+    const classCode =
+      classCodeInput.value
+        .trim()
+        .replace(/\s+/g, "");
+
+
+    const examName =
+      examNameInput.value.trim();
+
+
+    const raw =
+      excelData.value.trim();
+
+
+    if (!classCode) {
+
+      showMessage(
+        parseMessage,
+        "請先輸入班級，例如 704。",
+        "error"
+      );
+
+      return;
+
+    }
+
+
+    if (!examName) {
+
+      showMessage(
+        parseMessage,
+        "請輸入考試名稱。",
+        "error"
+      );
+
+      return;
+
+    }
+
+
+    if (!raw) {
+
+      showMessage(
+        parseMessage,
+        "請先貼上 Excel 資料。",
+        "error"
+      );
+
+      return;
+
+    }
+
+
+    const lines =
+      raw
+        .split(/\r?\n/)
+        .map(
+          line =>
+            line.trim()
+        )
+        .filter(Boolean);
+
+
+    const result = [];
+
+
+    lines.forEach(
+      (line, index) => {
+
+        /*
+        Excel 複製通常是 TAB 分隔。
+        若不是 TAB，
+        再嘗試逗號。
+        */
+
+        let columns =
+          line.split("\t");
+
+
+        if (
+          columns.length < 9
+        ) {
+
+          columns =
+            line.split(",");
+        }
+
+
+        columns =
+          columns.map(
+            item =>
+              item.trim()
+          );
+
+
+        /*
+        如果第一列是標題，
+        自動跳過。
+        */
+
+        const first =
+          columns[0] || "";
+
+
+        if (
+          index === 0 &&
+          (
+            first.includes("座號") ||
+            first.toLowerCase() ===
+              "seat"
+          )
+        ) {
+
+          return;
+
+        }
+
+
+        const [
+          seatRaw,
+          name,
+          birthMMDD,
+          idLast5,
+          chinese,
+          english,
+          math,
+          science,
+          social
+        ] = columns;
+
+
+        const errors = [];
+
+
+        const seatNumber =
+          Number(seatRaw);
+
+
+        if (
+          !Number.isInteger(
+            seatNumber
+          ) ||
+          seatNumber <= 0 ||
+          seatNumber > 99
+        ) {
+
+          errors.push(
+            "座號錯誤"
+          );
+
+        }
+
+
+        if (!name) {
+
+          errors.push(
+            "姓名空白"
+          );
+
+        }
+
+
+        if (
+          !isValidMMDD(
+            birthMMDD || ""
+          )
+        ) {
+
+          errors.push(
+            "出生月日錯誤"
+          );
+
+        }
+
+
+        if (
+          !/^\d{5}$/.test(
+            idLast5 || ""
+          )
+        ) {
+
+          errors.push(
+            "後五碼錯誤"
+          );
+
+        }
+
+
+        const subjectValues = {
+          chinese,
+          english,
+          math,
+          science,
+          social
+        };
+
+
+        Object.entries(
+          subjectValues
+        ).forEach(
+          ([key, value]) => {
+
+            if (
+              !isValidScore(
+                value
+              )
+            ) {
+
+              const names = {
+                chinese: "國文",
+                english: "英文",
+                math: "數學",
+                science: "自然",
+                social: "社會"
+              };
+
+
+              errors.push(
+                names[key] +
+                "成績錯誤"
+              );
+
+            }
+
+          }
+        );
+
+
+        const seat =
+          Number.isInteger(
+            seatNumber
+          )
+            ? formatSeat(
+                seatNumber
+              )
+            : String(
+                seatRaw || ""
+              );
+
+
+        const studentKey =
+          classCode +
+          seat;
+
+
+        result.push({
+
+          studentKey,
+
+          classCode,
+
+          seat,
+
+          name,
+
+          birthMMDD,
+
+          idLast5,
+
+          chinese:
+            Number(chinese),
+
+          english:
+            Number(english),
+
+          math:
+            Number(math),
+
+          science:
+            Number(science),
+
+          social:
+            Number(social),
+
+          examName,
+
+          errors,
+
+          valid:
+            errors.length === 0
+
+        });
+
+      }
+    );
+
+
+    /*
+    檢查重複座號
+    */
+
+    const keyCount = {};
+
+
+    result.forEach(
+      row => {
+
+        keyCount[
+          row.studentKey
+        ] =
+          (
+            keyCount[
+              row.studentKey
+            ] || 0
+          ) + 1;
+
+      }
+    );
+
+
+    result.forEach(
+      row => {
+
+        if (
+          keyCount[
+            row.studentKey
+          ] > 1
+        ) {
+
+          row.errors.push(
+            "座號重複"
+          );
+
+
+          row.valid =
+            false;
+
+        }
+
+      }
+    );
+
+
+    parsedStudents =
+      result;
+
+
+    renderPreview();
+
+  }
+
+
+
+  /*
+  ========================================
+  顯示預覽
+  ========================================
+  */
+
+  function renderPreview() {
+
+    previewBody.innerHTML =
+      "";
+
+
+    const validCount =
+      parsedStudents.filter(
+        row =>
+          row.valid
+      ).length;
+
+
+    const invalidCount =
+      parsedStudents.length -
+      validCount;
+
+
+    totalBadge.textContent =
+      `總筆數：${parsedStudents.length}`;
+
+
+    validBadge.textContent =
+      `可匯入：${validCount}`;
+
+
+    invalidBadge.textContent =
+      `錯誤：${invalidCount}`;
+
+
+    parsedStudents.forEach(
+      row => {
+
+        const tr =
+          document.createElement(
+            "tr"
+          );
+
+
+        if (!row.valid) {
+
+          tr.classList.add(
+            "invalid-row"
+          );
+
+        }
+
+
+        const status =
+          row.valid
+            ? `<span class="valid-text">正常</span>`
+            : `<span class="invalid-text">${escapeHtml(
+                row.errors.join("、")
+              )}</span>`;
+
+
+        tr.innerHTML = `
+
+          <td>
+            ${escapeHtml(row.studentKey)}
+          </td>
+
+          <td>
+            ${escapeHtml(row.seat)}
+          </td>
+
+          <td>
+            ${escapeHtml(row.name)}
+          </td>
+
+          <td>
+            ${escapeHtml(row.birthMMDD)}
+          </td>
+
+          <td>
+            ${escapeHtml(row.idLast5)}
+          </td>
+
+          <td>
+            ${displayScore(row.chinese)}
+          </td>
+
+          <td>
+            ${displayScore(row.english)}
+          </td>
+
+          <td>
+            ${displayScore(row.math)}
+          </td>
+
+          <td>
+            ${displayScore(row.science)}
+          </td>
+
+          <td>
+            ${displayScore(row.social)}
+          </td>
+
+          <td>
+            ${status}
+          </td>
+
+        `;
+
+
+        previewBody.appendChild(
+          tr
+        );
+
+      }
+    );
+
+
+    previewArea.classList.add(
+      "show"
+    );
+
+
+    if (
+      parsedStudents.length === 0
+    ) {
+
+      showMessage(
+        parseMessage,
+        "沒有解析到學生資料。",
+        "error"
+      );
+
+
+      importBtn.disabled =
+        true;
+
+
+      return;
+
+    }
+
+
+    if (
+      invalidCount > 0
+    ) {
+
+      showMessage(
+        parseMessage,
+        `已解析 ${parsedStudents.length} 筆，但有 ${invalidCount} 筆資料需要修正。`,
+        "error"
+      );
+
+
+      importBtn.disabled =
+        true;
+
+    } else {
+
+      showMessage(
+        parseMessage,
+        `資料檢查完成，共 ${validCount} 位學生，可以匯入。`,
+        "success"
+      );
+
+
+      importBtn.disabled =
+        false;
+
+    }
+
+  }
+
+
+
+  /*
+  ========================================
+  防 HTML
+  ========================================
+  */
+
+  function escapeHtml(
+    value
+  ) {
+
+    return String(
+      value ?? ""
+    )
+      .replace(
+        /&/g,
+        "&amp;"
+      )
+      .replace(
+        /</g,
+        "&lt;"
+      )
+      .replace(
+        />/g,
+        "&gt;"
+      )
+      .replace(
+        /"/g,
+        "&quot;"
+      )
+      .replace(
+        /'/g,
+        "&#039;"
+      );
+
+  }
+
+
+  function displayScore(
+    value
+  ) {
+
+    return Number.isFinite(
+      value
+    )
+      ? value
+      : "";
+
+  }
+
+
+
+  /*
+  ========================================
+  預覽按鈕
+  ========================================
+  */
+
+  previewBtn.addEventListener(
+    "click",
+    parseExcelData
+  );
+
+
+
+  /*
+  ========================================
+  清除
+  ========================================
+  */
+
+  clearBtn.addEventListener(
+    "click",
+    () => {
+
+      excelData.value =
+        "";
+
+
+      parsedStudents =
+        [];
+
+
+      previewBody.innerHTML =
+        "";
+
+
+      previewArea.classList.remove(
+        "show"
+      );
+
+
+      clearMessage(
+        parseMessage
+      );
+
+
+      clearMessage(
+        importMessage
+      );
+
+
+      progressBox.classList.remove(
+        "show"
+      );
+
+    }
+  );
+
+
+
+  /*
+  ========================================
+  匯入 Firebase
+  ========================================
+  */
+
+  importBtn.addEventListener(
+    "click",
+    async () => {
+
+      clearMessage(
+        importMessage
+      );
+
+
+      const user =
+        auth.currentUser;
+
+
+      if (
+        !user ||
+        user.uid !== ADMIN_UID
+      ) {
+
+        showMessage(
+          importMessage,
+          "教師登入狀態已失效，請重新登入。",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      const validRows =
+        parsedStudents.filter(
+          row =>
+            row.valid
+        );
+
+
+      if (
+        validRows.length === 0
+      ) {
+
+        showMessage(
+          importMessage,
+          "目前沒有可以匯入的資料。",
+          "error"
+        );
+
+        return;
+
+      }
+
+
+      const confirmText =
+        `確定要匯入 ${validRows.length} 位學生嗎？\n\n已存在的學生資料與成績將更新。`;
+
+
+      if (
+        !window.confirm(
+          confirmText
+        )
+      ) {
+
+        return;
+
+      }
+
+
+      importBtn.disabled =
+        true;
+
+
+      previewBtn.disabled =
+        true;
+
+
+      clearBtn.disabled =
+        true;
+
+
+      progressBox.classList.add(
+        "show"
+      );
+
+
+      progressFill.style.width =
+        "10%";
+
+
+      progressText.textContent =
+        "正在準備資料...";
+
+
+      try {
+
+        /*
+        一位學生寫入兩個 document：
+
+        students/70401
+        scores/70401
+
+        28 位只有 56 次寫入，
+        遠低於 batch 上限。
+        */
+
+        const batch =
+          writeBatch(db);
+
+
+        validRows.forEach(
+          row => {
+
+            /*
+            students
+            */
+
+            const studentRef =
+              doc(
+                db,
+                "students",
+                row.studentKey
+              );
+
+
+            batch.set(
+              studentRef,
+              {
+
+                classCode:
+                  row.classCode,
+
+                seat:
+                  row.seat,
+
+                name:
+                  row.name,
+
+                birthMMDD:
+                  row.birthMMDD,
+
+                idLast5:
+                  row.idLast5,
+
+                updatedAt:
+                  new Date()
+
+              },
+              {
+                merge: true
+              }
+            );
+
+
+            /*
+            scores
+            */
+
+            const scoreRef =
+              doc(
+                db,
+                "scores",
+                row.studentKey
+              );
+
+
+            batch.set(
+              scoreRef,
+              {
+
+                examName:
+                  row.examName,
+
+                chinese:
+                  row.chinese,
+
+                english:
+                  row.english,
+
+                math:
+                  row.math,
+
+                science:
+                  row.science,
+
+                social:
+                  row.social,
+
+                updatedAt:
+                  new Date()
+
+              },
+              {
+                merge: true
+              }
+            );
+
+          }
+        );
+
+
+        progressFill.style.width =
+          "55%";
+
+
+        progressText.textContent =
+          "正在寫入 Firebase...";
+
+
+        await batch.commit();
+
+
+        progressFill.style.width =
+          "100%";
+
+
+        progressText.textContent =
+          "匯入完成";
+
+
+        showMessage(
+          importMessage,
+          `成功匯入 ${validRows.length} 位學生的基本資料與段考成績。`,
+          "success"
+        );
+
+
+      } catch (error) {
+
+        console.error(
+          error
+        );
+
+
+        progressFill.style.width =
+          "0%";
+
+
+        progressText.textContent =
+          "匯入失敗";
+
+
+        if (
+          error.code ===
+          "permission-denied"
+        ) {
+
+          showMessage(
+            importMessage,
+            "Firebase 拒絕寫入。請確認教師帳號 UID 與 Firestore Rules 是否正確。",
+            "error"
+          );
+
+        } else {
+
+          showMessage(
+            importMessage,
+            "匯入失敗，請稍後再試。",
+            "error"
+          );
+
+        }
+
+
+      } finally {
+
+        importBtn.disabled =
+          false;
+
+
+        previewBtn.disabled =
+          false;
+
+
+        clearBtn.disabled =
+          false;
+
+      }
+
+    }
+  );
+
+</script>
+
+</body>
+</html>
