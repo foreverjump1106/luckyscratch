@@ -444,6 +444,8 @@
   import {
     getFirestore,
     collection,
+    query,
+    where,
     getDocs,
     doc,
     getDoc
@@ -570,49 +572,44 @@
 
     try {
 
-      const studentsSnapshot =
-        await getDocs(
+      /*
+        直接向 Firestore 查詢符合：
+
+        birthday == 家長輸入生日
+        idLast5 == 家長輸入後五碼
+
+        不再下載整個 students 集合。
+      */
+
+      const studentQuery =
+        query(
           collection(
             db,
             "students"
+          ),
+
+          where(
+            "birthday",
+            "==",
+            birthday
+          ),
+
+          where(
+            "idLast5",
+            "==",
+            idLast5
           )
         );
 
 
-      let matchedStudent =
-        null;
-
-      let studentKey =
-        null;
-
-
-      studentsSnapshot.forEach(
-        (documentSnapshot) => {
-
-          const data =
-            documentSnapshot.data();
-
-
-          if (
-            String(data.birthday || "") === birthday &&
-            String(data.idLast5 || "") === idLast5
-          ) {
-
-            matchedStudent =
-              data;
-
-            studentKey =
-              documentSnapshot.id;
-
-          }
-
-        }
-      );
+      const studentsSnapshot =
+        await getDocs(
+          studentQuery
+        );
 
 
       if (
-        !matchedStudent ||
-        !studentKey
+        studentsSnapshot.empty
       ) {
 
         showMessage(
@@ -623,6 +620,27 @@
 
       }
 
+
+      /*
+        正常情況只會找到一位學生。
+      */
+
+      const studentDoc =
+        studentsSnapshot.docs[0];
+
+
+      const matchedStudent =
+        studentDoc.data();
+
+
+      const studentKey =
+        studentDoc.id;
+
+
+      /*
+        利用同一個 studentKey
+        取得該名學生的成績。
+      */
 
       const scoreReference =
         doc(
@@ -655,15 +673,25 @@
 
       const scores = [
 
-        Number(score.chinese),
+        Number(
+          score.chinese
+        ),
 
-        Number(score.english),
+        Number(
+          score.english
+        ),
 
-        Number(score.math),
+        Number(
+          score.math
+        ),
 
-        Number(score.science),
+        Number(
+          score.science
+        ),
 
-        Number(score.social)
+        Number(
+          score.social
+        )
 
       ];
 
@@ -695,13 +723,15 @@
       document.getElementById(
         "studentName"
       ).textContent =
-        matchedStudent.name || "學生";
+        matchedStudent.name ||
+        "學生";
 
 
       document.getElementById(
         "examName"
       ).textContent =
-        score.examName || "段考成績";
+        score.examName ||
+        "段考成績";
 
 
       document.getElementById(
@@ -743,6 +773,7 @@
       loginArea.style.display =
         "none";
 
+
       result.classList.add(
         "show"
       );
@@ -750,15 +781,48 @@
 
     } catch (error) {
 
-      console.error(error);
-
-      showMessage(
-        "查詢失敗，請稍後再試。"
+      console.error(
+        "Firestore 查詢錯誤：",
+        error
       );
+
+
+      /*
+        如果 Firestore 要求建立複合索引，
+        通常會進到這裡。
+      */
+
+      if (
+        error.code ===
+        "failed-precondition"
+      ) {
+
+        showMessage(
+          "目前需要建立 Firestore 查詢索引。請查看瀏覽器 Console 的錯誤訊息。"
+        );
+
+      } else if (
+        error.code ===
+        "permission-denied"
+      ) {
+
+        showMessage(
+          "資料庫權限不足，請檢查 Firestore Rules。"
+        );
+
+      } else {
+
+        showMessage(
+          "查詢失敗，請稍後再試。"
+        );
+
+      }
 
     } finally {
 
-      searchBtn.disabled = false;
+      searchBtn.disabled =
+        false;
+
 
       searchBtn.textContent =
         "查詢成績";
@@ -768,11 +832,20 @@
   }
 
 
+  /*
+    點擊查詢
+  */
+
   searchBtn.addEventListener(
     "click",
     searchStudent
   );
 
+
+  /*
+    後五碼欄位按 Enter
+    也可以直接查詢。
+  */
 
   idLast5Input.addEventListener(
     "keydown",
@@ -790,6 +863,10 @@
   );
 
 
+  /*
+    返回登入畫面
+  */
+
   logoutBtn.addEventListener(
     "click",
     () => {
@@ -798,14 +875,23 @@
         "show"
       );
 
+
       loginArea.style.display =
         "block";
 
-      birthdayInput.value = "";
 
-      idLast5Input.value = "";
+      birthdayInput.value =
+        "";
+
+
+      idLast5Input.value =
+        "";
+
 
       clearMessage();
+
+
+      birthdayInput.focus();
 
     }
   );
