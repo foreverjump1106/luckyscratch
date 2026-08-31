@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>學生段考成績查詢</title>
+
+  <link
+    rel="icon"
+    href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="20" fill="%231d4ed8"/><text x="50" y="68" text-anchor="middle" font-size="60" fill="white">績</text></svg>'
+  />
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family:
+        "Noto Sans TC",
+        "Microsoft JhengHei",
+        sans-serif;
+      background:
+        linear-gradient(
+          135deg,
+          #dbeafe 0%,
+          #eff6ff 45%,
+          #f8fafc 100%
+        );
+      color: #1e293b;
+    }
+
+    .page {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 32px 16px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 720px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .logo {
+      width: 78px;
+      height: 78px;
+      margin: 0 auto 14px;
+      border-radius: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 42px;
+      font-weight: 900;
+      color: white;
+      background: linear-gradient(
+        135deg,
+        #2563eb,
+        #1d4ed8
+      );
+      box-shadow: 0 12px 28px rgba(37, 99, 235, 0.22);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 30px;
+      color: #0f172a;
+    }
+
+    .subtitle {
+      margin-top: 8px;
+      color: #64748b;
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: 0 20px 50px rgba(15, 23, 42, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+    }
+
+    .field {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    input {
+      width: 100%;
+      height: 52px;
+      border: 1px solid #cbd5e1;
+      border-radius: 14px;
+      padding: 0 15px;
+      font-size: 17px;
+      outline: none;
+      background: #fff;
+      transition: 0.2s;
+    }
+
+    input:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+    }
+
+    button {
+      width: 100%;
+      height: 54px;
+      border: 0;
+      border-radius: 14px;
+      font-size: 18px;
+      font-weight: 800;
+      color: white;
+      cursor: pointer;
+      background: linear-gradient(
+        135deg,
+        #2563eb,
+        #1d4ed8
+      );
+      transition:
+        transform 0.15s,
+        opacity 0.15s;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .message {
+      margin-top: 16px;
+      padding: 13px 14px;
+      border-radius: 12px;
+      font-size: 14px;
+      line-height: 1.6;
+      display: none;
+    }
+
+    .message.error {
+      display: block;
+      color: #991b1b;
+      background: #fee2e2;
+    }
+
+    .message.info {
+      display: block;
+      color: #1e3a8a;
+      background: #dbeafe;
+    }
+
+    .result {
+      display: none;
+      margin-top: 24px;
+    }
+
+    .result.show {
+      display: block;
+    }
+
+    .student-box {
+      text-align: center;
+      margin-bottom: 22px;
+    }
+
+    .student-name {
+      font-size: 28px;
+      font-weight: 900;
+      color: #0f172a;
+    }
+
+    .exam-name {
+      margin-top: 5px;
+      color: #64748b;
+      font-size: 16px;
+    }
+
+    .score-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .score-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      padding: 15px 17px;
+      border-radius: 14px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+    }
+
+    .subject {
+      font-weight: 700;
+    }
+
+    .score {
+      font-size: 22px;
+      font-weight: 900;
+      color: #1d4ed8;
+    }
+
+    .average-box {
+      margin-top: 18px;
+      border-radius: 16px;
+      padding: 18px;
+      text-align: center;
+      background:
+        linear-gradient(
+          135deg,
+          #eff6ff,
+          #dbeafe
+        );
+    }
+
+    .average-label {
+      color: #475569;
+      font-size: 14px;
+    }
+
+    .average-value {
+      margin-top: 4px;
+      font-size: 34px;
+      font-weight: 900;
+      color: #1d4ed8;
+    }
+
+    .logout {
+      margin-top: 18px;
+      background: #475569;
+    }
+
+    .notice {
+      margin-top: 18px;
+      color: #64748b;
+      font-size: 13px;
+      line-height: 1.7;
+      text-align: center;
+    }
+
+    @media (max-width: 560px) {
+      .page {
+        padding: 20px 12px;
+      }
+
+      .card {
+        padding: 22px 18px;
+        border-radius: 20px;
+      }
+
+      h1 {
+        font-size: 25px;
+      }
+
+      .logo {
+        width: 68px;
+        height: 68px;
+        font-size: 37px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="page">
+
+  <div class="container">
+
+    <div class="header">
+
+      <div class="logo">績</div>
+
+      <h1>學生段考成績查詢</h1>
+
+      <div class="subtitle">
+        請輸入學生生日與身分證號後五碼
+      </div>
+
+    </div>
+
+    <div class="card">
+
+      <div id="loginArea">
+
+        <div class="field">
+          <label for="birthday">
+            學生生日
+          </label>
+
+          <input
+            type="date"
+            id="birthday"
+          />
+        </div>
+
+        <div class="field">
+          <label for="idLast5">
+            身分證號後五碼
+          </label>
+
+          <input
+            type="password"
+            id="idLast5"
+            maxlength="5"
+            inputmode="numeric"
+            placeholder="請輸入後五碼"
+          />
+        </div>
+
+        <button id="searchBtn">
+          查詢成績
+        </button>
+
+        <div
+          id="message"
+          class="message"
+        ></div>
+
+      </div>
+
+      <div
+        id="result"
+        class="result"
+      >
+
+        <div class="student-box">
+
+          <div
+            id="studentName"
+            class="student-name"
+          ></div>
+
+          <div
+            id="examName"
+            class="exam-name"
+          ></div>
+
+        </div>
+
+        <div class="score-list">
+
+          <div class="score-row">
+            <div class="subject">國文</div>
+            <div
+              id="chinese"
+              class="score"
+            ></div>
+          </div>
+
+          <div class="score-row">
+            <div class="subject">英文</div>
+            <div
+              id="english"
+              class="score"
+            ></div>
+          </div>
+
+          <div class="score-row">
+            <div class="subject">數學</div>
+            <div
+              id="math"
+              class="score"
+            ></div>
+          </div>
+
+          <div class="score-row">
+            <div class="subject">自然</div>
+            <div
+              id="science"
+              class="score"
+            ></div>
+          </div>
+
+          <div class="score-row">
+            <div class="subject">社會</div>
+            <div
+              id="social"
+              class="score"
+            ></div>
+          </div>
+
+        </div>
+
+        <div class="average-box">
+
+          <div class="average-label">
+            五科平均
+          </div>
+
+          <div
+            id="average"
+            class="average-value"
+          ></div>
+
+        </div>
+
+        <button
+          id="logoutBtn"
+          class="logout"
+        >
+          返回查詢
+        </button>
+
+      </div>
+
+      <div class="notice">
+        成績資料僅供家長查詢與了解學生學習狀況。
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<script type="module">
+
+  import {
+    initializeApp
+  } from
+  "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+
+
+  import {
+    getFirestore,
+    collection,
+    getDocs,
+    doc,
+    getDoc
+  } from
+  "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+
+  const firebaseConfig = {
+
+    apiKey:
+      "AIzaSyC7hXtxLARv3LsoPcaViptdoWMZMLibtiY",
+
+    authDomain:
+      "exam-score-system.firebaseapp.com",
+
+    projectId:
+      "exam-score-system",
+
+    storageBucket:
+      "exam-score-system.firebasestorage.app",
+
+    messagingSenderId:
+      "334811583790",
+
+    appId:
+      "1:334811583790:web:a6207215915c163c8656bf"
+
+  };
+
+
+  const app =
+    initializeApp(firebaseConfig);
+
+  const db =
+    getFirestore(app);
+
+
+  const birthdayInput =
+    document.getElementById("birthday");
+
+  const idLast5Input =
+    document.getElementById("idLast5");
+
+  const searchBtn =
+    document.getElementById("searchBtn");
+
+  const logoutBtn =
+    document.getElementById("logoutBtn");
+
+  const loginArea =
+    document.getElementById("loginArea");
+
+  const result =
+    document.getElementById("result");
+
+  const message =
+    document.getElementById("message");
+
+
+  function showMessage(
+    text,
+    type = "error"
+  ) {
+
+    message.textContent = text;
+
+    message.className =
+      "message " + type;
+
+  }
+
+
+  function clearMessage() {
+
+    message.textContent = "";
+
+    message.className =
+      "message";
+
+  }
+
+
+  async function searchStudent() {
+
+    clearMessage();
+
+    result.classList.remove("show");
+
+
+    const birthday =
+      birthdayInput.value.trim();
+
+    const idLast5 =
+      idLast5Input.value.trim();
+
+
+    if (!birthday) {
+
+      showMessage(
+        "請選擇學生生日。"
+      );
+
+      return;
+
+    }
+
+
+    if (!/^\d{5}$/.test(idLast5)) {
+
+      showMessage(
+        "身分證號後五碼必須為 5 位數字。"
+      );
+
+      return;
+
+    }
+
+
+    searchBtn.disabled = true;
+
+    searchBtn.textContent =
+      "查詢中...";
+
+
+    try {
+
+      const studentsSnapshot =
+        await getDocs(
+          collection(
+            db,
+            "students"
+          )
+        );
+
+
+      let matchedStudent =
+        null;
+
+      let studentKey =
+        null;
+
+
+      studentsSnapshot.forEach(
+        (documentSnapshot) => {
+
+          const data =
+            documentSnapshot.data();
+
+
+          if (
+            String(data.birthday || "") === birthday &&
+            String(data.idLast5 || "") === idLast5
+          ) {
+
+            matchedStudent =
+              data;
+
+            studentKey =
+              documentSnapshot.id;
+
+          }
+
+        }
+      );
+
+
+      if (
+        !matchedStudent ||
+        !studentKey
+      ) {
+
+        showMessage(
+          "查無符合的學生資料，請確認生日與身分證號後五碼是否正確。"
+        );
+
+        return;
+
+      }
+
+
+      const scoreReference =
+        doc(
+          db,
+          "scores",
+          studentKey
+        );
+
+
+      const scoreSnapshot =
+        await getDoc(
+          scoreReference
+        );
+
+
+      if (!scoreSnapshot.exists()) {
+
+        showMessage(
+          "已找到學生資料，但目前尚未建立這次段考成績。"
+        );
+
+        return;
+
+      }
+
+
+      const score =
+        scoreSnapshot.data();
+
+
+      const scores = [
+
+        Number(score.chinese),
+
+        Number(score.english),
+
+        Number(score.math),
+
+        Number(score.science),
+
+        Number(score.social)
+
+      ];
+
+
+      if (
+        scores.some(
+          value =>
+            Number.isNaN(value)
+        )
+      ) {
+
+        showMessage(
+          "成績資料格式有誤，請聯絡老師。"
+        );
+
+        return;
+
+      }
+
+
+      const average =
+        scores.reduce(
+          (sum, value) =>
+            sum + value,
+          0
+        ) / scores.length;
+
+
+      document.getElementById(
+        "studentName"
+      ).textContent =
+        matchedStudent.name || "學生";
+
+
+      document.getElementById(
+        "examName"
+      ).textContent =
+        score.examName || "段考成績";
+
+
+      document.getElementById(
+        "chinese"
+      ).textContent =
+        score.chinese;
+
+
+      document.getElementById(
+        "english"
+      ).textContent =
+        score.english;
+
+
+      document.getElementById(
+        "math"
+      ).textContent =
+        score.math;
+
+
+      document.getElementById(
+        "science"
+      ).textContent =
+        score.science;
+
+
+      document.getElementById(
+        "social"
+      ).textContent =
+        score.social;
+
+
+      document.getElementById(
+        "average"
+      ).textContent =
+        average.toFixed(1);
+
+
+      loginArea.style.display =
+        "none";
+
+      result.classList.add(
+        "show"
+      );
+
+
+    } catch (error) {
+
+      console.error(error);
+
+      showMessage(
+        "查詢失敗，請稍後再試。"
+      );
+
+    } finally {
+
+      searchBtn.disabled = false;
+
+      searchBtn.textContent =
+        "查詢成績";
+
+    }
+
+  }
+
+
+  searchBtn.addEventListener(
+    "click",
+    searchStudent
+  );
+
+
+  idLast5Input.addEventListener(
+    "keydown",
+    event => {
+
+      if (
+        event.key === "Enter"
+      ) {
+
+        searchStudent();
+
+      }
+
+    }
+  );
+
+
+  logoutBtn.addEventListener(
+    "click",
+    () => {
+
+      result.classList.remove(
+        "show"
+      );
+
+      loginArea.style.display =
+        "block";
+
+      birthdayInput.value = "";
+
+      idLast5Input.value = "";
+
+      clearMessage();
+
+    }
+  );
+
+</script>
+
+</body>
+</html>
