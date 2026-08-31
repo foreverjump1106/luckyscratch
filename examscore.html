@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>學生段考成績查詢</title>
+  <title>804學生段考成績查詢</title>
 
   <link
     rel="icon"
@@ -65,7 +65,8 @@
         #2563eb,
         #1d4ed8
       );
-      box-shadow: 0 12px 28px rgba(37, 99, 235, 0.22);
+      box-shadow:
+        0 12px 28px rgba(37, 99, 235, 0.22);
     }
 
     h1 {
@@ -85,8 +86,10 @@
       background: rgba(255, 255, 255, 0.95);
       border-radius: 24px;
       padding: 28px;
-      box-shadow: 0 20px 50px rgba(15, 23, 42, 0.12);
-      border: 1px solid rgba(255, 255, 255, 0.9);
+      box-shadow:
+        0 20px 50px rgba(15, 23, 42, 0.12);
+      border:
+        1px solid rgba(255, 255, 255, 0.9);
     }
 
     .field {
@@ -98,6 +101,13 @@
       margin-bottom: 8px;
       font-weight: 700;
       font-size: 15px;
+    }
+
+    .hint {
+      margin-top: 7px;
+      font-size: 13px;
+      color: #64748b;
+      line-height: 1.5;
     }
 
     input {
@@ -114,7 +124,8 @@
 
     input:focus {
       border-color: #2563eb;
-      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+      box-shadow:
+        0 0 0 4px rgba(37, 99, 235, 0.1);
     }
 
     button {
@@ -292,7 +303,7 @@
       <h1>學生段考成績查詢</h1>
 
       <div class="subtitle">
-        請輸入學生生日與身分證號後五碼
+        請輸入學生出生月日與身分證號後五碼
       </div>
 
     </div>
@@ -302,17 +313,29 @@
       <div id="loginArea">
 
         <div class="field">
-          <label for="birthday">
-            學生生日
+
+          <label for="birthMMDD">
+            出生月日
           </label>
 
           <input
-            type="date"
-            id="birthday"
+            type="text"
+            id="birthMMDD"
+            maxlength="4"
+            inputmode="numeric"
+            autocomplete="off"
+            placeholder="例如：0815"
           />
+
+          <div class="hint">
+            請輸入 4 碼，例如 8 月 15 日請輸入 0815。
+          </div>
+
         </div>
 
+
         <div class="field">
+
           <label for="idLast5">
             身分證號後五碼
           </label>
@@ -322,13 +345,17 @@
             id="idLast5"
             maxlength="5"
             inputmode="numeric"
+            autocomplete="off"
             placeholder="請輸入後五碼"
           />
+
         </div>
+
 
         <button id="searchBtn">
           查詢成績
         </button>
+
 
         <div
           id="message"
@@ -336,6 +363,7 @@
         ></div>
 
       </div>
+
 
       <div
         id="result"
@@ -356,49 +384,80 @@
 
         </div>
 
+
         <div class="score-list">
 
           <div class="score-row">
-            <div class="subject">國文</div>
+
+            <div class="subject">
+              國文
+            </div>
+
             <div
               id="chinese"
               class="score"
             ></div>
+
           </div>
 
+
           <div class="score-row">
-            <div class="subject">英文</div>
+
+            <div class="subject">
+              英文
+            </div>
+
             <div
               id="english"
               class="score"
             ></div>
+
           </div>
 
+
           <div class="score-row">
-            <div class="subject">數學</div>
+
+            <div class="subject">
+              數學
+            </div>
+
             <div
               id="math"
               class="score"
             ></div>
+
           </div>
 
+
           <div class="score-row">
-            <div class="subject">自然</div>
+
+            <div class="subject">
+              自然
+            </div>
+
             <div
               id="science"
               class="score"
             ></div>
+
           </div>
 
+
           <div class="score-row">
-            <div class="subject">社會</div>
+
+            <div class="subject">
+              社會
+            </div>
+
             <div
               id="social"
               class="score"
             ></div>
+
           </div>
 
         </div>
+
 
         <div class="average-box">
 
@@ -413,6 +472,7 @@
 
         </div>
 
+
         <button
           id="logoutBtn"
           class="logout"
@@ -421,6 +481,7 @@
         </button>
 
       </div>
+
 
       <div class="notice">
         成績資料僅供家長查詢與了解學生學習狀況。
@@ -479,38 +540,65 @@
   const app =
     initializeApp(firebaseConfig);
 
+
   const db =
     getFirestore(app);
 
 
-  const birthdayInput =
-    document.getElementById("birthday");
+  const birthMMDDInput =
+    document.getElementById(
+      "birthMMDD"
+    );
+
 
   const idLast5Input =
-    document.getElementById("idLast5");
+    document.getElementById(
+      "idLast5"
+    );
+
 
   const searchBtn =
-    document.getElementById("searchBtn");
+    document.getElementById(
+      "searchBtn"
+    );
+
 
   const logoutBtn =
-    document.getElementById("logoutBtn");
+    document.getElementById(
+      "logoutBtn"
+    );
+
 
   const loginArea =
-    document.getElementById("loginArea");
+    document.getElementById(
+      "loginArea"
+    );
+
 
   const result =
-    document.getElementById("result");
+    document.getElementById(
+      "result"
+    );
+
 
   const message =
-    document.getElementById("message");
+    document.getElementById(
+      "message"
+    );
 
+
+  /*
+    顯示訊息
+  */
 
   function showMessage(
     text,
     type = "error"
   ) {
 
-    message.textContent = text;
+    message.textContent =
+      text;
+
 
     message.className =
       "message " + type;
@@ -518,9 +606,15 @@
   }
 
 
+  /*
+    清除訊息
+  */
+
   function clearMessage() {
 
-    message.textContent = "";
+    message.textContent =
+      "";
+
 
     message.className =
       "message";
@@ -528,43 +622,195 @@
   }
 
 
+  /*
+    驗證出生月日格式
+
+    例如：
+
+    0815
+    1207
+    0123
+
+    都是合法格式。
+  */
+
+  function isValidMMDD(
+    value
+  ) {
+
+    if (
+      !/^\d{4}$/.test(value)
+    ) {
+
+      return false;
+
+    }
+
+
+    const month =
+      Number(
+        value.slice(0, 2)
+      );
+
+
+    const day =
+      Number(
+        value.slice(2, 4)
+      );
+
+
+    const daysInMonth = [
+
+      31,
+
+      29,
+
+      31,
+
+      30,
+
+      31,
+
+      30,
+
+      31,
+
+      31,
+
+      30,
+
+      31,
+
+      30,
+
+      31
+
+    ];
+
+
+    if (
+      month < 1 ||
+      month > 12
+    ) {
+
+      return false;
+
+    }
+
+
+    if (
+      day < 1 ||
+      day >
+      daysInMonth[
+        month - 1
+      ]
+    ) {
+
+      return false;
+
+    }
+
+
+    return true;
+
+  }
+
+
+  /*
+    自動限制只能輸入數字
+  */
+
+  birthMMDDInput.addEventListener(
+    "input",
+    () => {
+
+      birthMMDDInput.value =
+        birthMMDDInput.value
+          .replace(/\D/g, "")
+          .slice(0, 4);
+
+    }
+  );
+
+
+  idLast5Input.addEventListener(
+    "input",
+    () => {
+
+      idLast5Input.value =
+        idLast5Input.value
+          .replace(/\D/g, "")
+          .slice(0, 5);
+
+    }
+  );
+
+
+  /*
+    查詢學生
+  */
+
   async function searchStudent() {
 
     clearMessage();
 
-    result.classList.remove("show");
+
+    result.classList.remove(
+      "show"
+    );
 
 
-    const birthday =
-      birthdayInput.value.trim();
+    const birthMMDD =
+      birthMMDDInput.value.trim();
+
 
     const idLast5 =
       idLast5Input.value.trim();
 
 
-    if (!birthday) {
+    /*
+      檢查出生月日
+    */
+
+    if (
+      !isValidMMDD(
+        birthMMDD
+      )
+    ) {
 
       showMessage(
-        "請選擇學生生日。"
+        "出生月日格式錯誤，請輸入 4 碼，例如 8 月 15 日請輸入 0815。"
       );
+
 
       return;
 
     }
 
 
-    if (!/^\d{5}$/.test(idLast5)) {
+    /*
+      檢查後五碼
+    */
+
+    if (
+      !/^\d{5}$/.test(
+        idLast5
+      )
+    ) {
 
       showMessage(
         "身分證號後五碼必須為 5 位數字。"
       );
 
+
       return;
 
     }
 
 
-    searchBtn.disabled = true;
+    searchBtn.disabled =
+      true;
+
 
     searchBtn.textContent =
       "查詢中...";
@@ -573,25 +819,29 @@
     try {
 
       /*
-        直接向 Firestore 查詢符合：
+        直接查詢：
 
-        birthday == 家長輸入生日
-        idLast5 == 家長輸入後五碼
+        birthMMDD ==
+        家長輸入出生月日
 
-        不再下載整個 students 集合。
+        AND
+
+        idLast5 ==
+        家長輸入後五碼
       */
 
       const studentQuery =
         query(
+
           collection(
             db,
             "students"
           ),
 
           where(
-            "birthday",
+            "birthMMDD",
             "==",
-            birthday
+            birthMMDD
           ),
 
           where(
@@ -599,6 +849,7 @@
             "==",
             idLast5
           )
+
         );
 
 
@@ -608,13 +859,18 @@
         );
 
 
+      /*
+        沒找到學生
+      */
+
       if (
         studentsSnapshot.empty
       ) {
 
         showMessage(
-          "查無符合的學生資料，請確認生日與身分證號後五碼是否正確。"
+          "查無符合的學生資料，請確認出生月日與身分證號後五碼是否正確。"
         );
+
 
         return;
 
@@ -622,7 +878,7 @@
 
 
       /*
-        正常情況只會找到一位學生。
+        取得第一筆符合的學生
       */
 
       const studentDoc =
@@ -638,8 +894,15 @@
 
 
       /*
-        利用同一個 studentKey
-        取得該名學生的成績。
+        使用 studentKey
+
+        例如：
+
+        70401
+
+        查詢：
+
+        scores/70401
       */
 
       const scoreReference =
@@ -656,11 +919,19 @@
         );
 
 
-      if (!scoreSnapshot.exists()) {
+      /*
+        學生存在
+        但還沒輸入成績
+      */
+
+      if (
+        !scoreSnapshot.exists()
+      ) {
 
         showMessage(
           "已找到學生資料，但目前尚未建立這次段考成績。"
         );
+
 
         return;
 
@@ -670,6 +941,10 @@
       const score =
         scoreSnapshot.data();
 
+
+      /*
+        五科成績
+      */
 
       const scores = [
 
@@ -696,6 +971,10 @@
       ];
 
 
+      /*
+        檢查成績資料
+      */
+
       if (
         scores.some(
           value =>
@@ -707,32 +986,55 @@
           "成績資料格式有誤，請聯絡老師。"
         );
 
+
         return;
 
       }
 
 
+      /*
+        計算平均
+      */
+
       const average =
         scores.reduce(
-          (sum, value) =>
+          (
+            sum,
+            value
+          ) =>
             sum + value,
           0
-        ) / scores.length;
+        ) /
+        scores.length;
 
+
+      /*
+        顯示學生姓名
+      */
 
       document.getElementById(
         "studentName"
       ).textContent =
+
         matchedStudent.name ||
         "學生";
 
 
+      /*
+        顯示考試名稱
+      */
+
       document.getElementById(
         "examName"
       ).textContent =
+
         score.examName ||
         "段考成績";
 
+
+      /*
+        顯示各科成績
+      */
 
       document.getElementById(
         "chinese"
@@ -764,22 +1066,36 @@
         score.social;
 
 
+      /*
+        顯示平均
+      */
+
       document.getElementById(
         "average"
       ).textContent =
         average.toFixed(1);
 
 
+      /*
+        隱藏登入區
+      */
+
       loginArea.style.display =
         "none";
 
+
+      /*
+        顯示成績
+      */
 
       result.classList.add(
         "show"
       );
 
 
-    } catch (error) {
+    } catch (
+      error
+    ) {
 
       console.error(
         "Firestore 查詢錯誤：",
@@ -788,8 +1104,7 @@
 
 
       /*
-        如果 Firestore 要求建立複合索引，
-        通常會進到這裡。
+        Firestore 要求索引
       */
 
       if (
@@ -798,8 +1113,9 @@
       ) {
 
         showMessage(
-          "目前需要建立 Firestore 查詢索引。請查看瀏覽器 Console 的錯誤訊息。"
+          "目前需要建立 Firestore 查詢索引，請查看瀏覽器 Console 的錯誤訊息。"
         );
+
 
       } else if (
         error.code ===
@@ -810,6 +1126,7 @@
           "資料庫權限不足，請檢查 Firestore Rules。"
         );
 
+
       } else {
 
         showMessage(
@@ -817,6 +1134,7 @@
         );
 
       }
+
 
     } finally {
 
@@ -833,7 +1151,7 @@
 
 
   /*
-    點擊查詢
+    按查詢按鈕
   */
 
   searchBtn.addEventListener(
@@ -843,8 +1161,8 @@
 
 
   /*
-    後五碼欄位按 Enter
-    也可以直接查詢。
+    按 Enter
+    也可以查詢
   */
 
   idLast5Input.addEventListener(
@@ -852,7 +1170,8 @@
     event => {
 
       if (
-        event.key === "Enter"
+        event.key ===
+        "Enter"
       ) {
 
         searchStudent();
@@ -864,7 +1183,7 @@
 
 
   /*
-    返回登入畫面
+    返回查詢畫面
   */
 
   logoutBtn.addEventListener(
@@ -880,7 +1199,7 @@
         "block";
 
 
-      birthdayInput.value =
+      birthMMDDInput.value =
         "";
 
 
@@ -891,7 +1210,7 @@
       clearMessage();
 
 
-      birthdayInput.focus();
+      birthMMDDInput.focus();
 
     }
   );
