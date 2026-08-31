@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>804學生段考成績查詢</title>
 
   <link
@@ -11,24 +12,13 @@
   />
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
       min-height: 100vh;
-      font-family:
-        "Noto Sans TC",
-        "Microsoft JhengHei",
-        sans-serif;
-      background:
-        linear-gradient(
-          135deg,
-          #dbeafe 0%,
-          #eff6ff 45%,
-          #f8fafc 100%
-        );
+      font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      background: linear-gradient(135deg, #dbeafe, #eff6ff, #f8fafc);
       color: #1e293b;
     }
 
@@ -55,41 +45,31 @@
       margin: 0 auto 14px;
       border-radius: 22px;
       display: flex;
-      align-items: center;
       justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      color: white;
       font-size: 42px;
       font-weight: 900;
-      color: white;
-      background: linear-gradient(
-        135deg,
-        #2563eb,
-        #1d4ed8
-      );
-      box-shadow:
-        0 12px 28px rgba(37, 99, 235, 0.22);
     }
 
     h1 {
       margin: 0;
       font-size: 30px;
-      color: #0f172a;
     }
 
     .subtitle {
       margin-top: 8px;
       color: #64748b;
       font-size: 15px;
-      line-height: 1.7;
     }
 
     .card {
-      background: rgba(255, 255, 255, 0.95);
+      background: rgba(255,255,255,.96);
       border-radius: 24px;
       padding: 28px;
-      box-shadow:
-        0 20px 50px rgba(15, 23, 42, 0.12);
-      border:
-        1px solid rgba(255, 255, 255, 0.9);
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 20px 50px rgba(15,23,42,.10);
     }
 
     .field {
@@ -99,83 +79,54 @@
     label {
       display: block;
       margin-bottom: 8px;
-      font-weight: 700;
-      font-size: 15px;
+      font-weight: 800;
     }
 
-    .hint {
-      margin-top: 7px;
-      font-size: 13px;
-      color: #64748b;
-      line-height: 1.5;
-    }
-
-    input {
+    input, select {
       width: 100%;
       height: 52px;
       border: 1px solid #cbd5e1;
       border-radius: 14px;
       padding: 0 15px;
       font-size: 17px;
-      outline: none;
-      background: #fff;
-      transition: 0.2s;
+      background: white;
     }
 
-    input:focus {
-      border-color: #2563eb;
-      box-shadow:
-        0 0 0 4px rgba(37, 99, 235, 0.1);
+    .hint {
+      margin-top: 7px;
+      font-size: 13px;
+      color: #64748b;
     }
 
     button {
       width: 100%;
-      height: 54px;
-      border: 0;
+      min-height: 54px;
+      border: none;
       border-radius: 14px;
       font-size: 18px;
-      font-weight: 800;
+      font-weight: 900;
       color: white;
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
       cursor: pointer;
-      background: linear-gradient(
-        135deg,
-        #2563eb,
-        #1d4ed8
-      );
-      transition:
-        transform 0.15s,
-        opacity 0.15s;
-    }
-
-    button:hover {
-      transform: translateY(-1px);
     }
 
     button:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-      transform: none;
+      opacity: .55;
     }
 
     .message {
+      display: none;
       margin-top: 16px;
       padding: 13px 14px;
       border-radius: 12px;
       font-size: 14px;
       line-height: 1.6;
-      display: none;
     }
 
     .message.error {
       display: block;
-      color: #991b1b;
       background: #fee2e2;
-    }
-
-    .message.info {
-      display: block;
-      color: #1e3a8a;
-      background: #dbeafe;
+      color: #991b1b;
     }
 
     .result {
@@ -195,13 +146,15 @@
     .student-name {
       font-size: 28px;
       font-weight: 900;
-      color: #0f172a;
     }
 
-    .exam-name {
+    .student-sub {
       margin-top: 5px;
       color: #64748b;
-      font-size: 16px;
+    }
+
+    .exam-selector {
+      margin-bottom: 20px;
     }
 
     .score-list {
@@ -220,7 +173,7 @@
     }
 
     .subject {
-      font-weight: 700;
+      font-weight: 800;
     }
 
     .score {
@@ -234,17 +187,7 @@
       border-radius: 16px;
       padding: 18px;
       text-align: center;
-      background:
-        linear-gradient(
-          135deg,
-          #eff6ff,
-          #dbeafe
-        );
-    }
-
-    .average-label {
-      color: #475569;
-      font-size: 14px;
+      background: linear-gradient(135deg, #eff6ff, #dbeafe);
     }
 
     .average-value {
@@ -259,14 +202,6 @@
       background: #475569;
     }
 
-    .notice {
-      margin-top: 18px;
-      color: #64748b;
-      font-size: 13px;
-      line-height: 1.7;
-      text-align: center;
-    }
-
     @media (max-width: 560px) {
       .page {
         padding: 20px 12px;
@@ -274,17 +209,6 @@
 
       .card {
         padding: 22px 18px;
-        border-radius: 20px;
-      }
-
-      h1 {
-        font-size: 25px;
-      }
-
-      .logo {
-        width: 68px;
-        height: 68px;
-        font-size: 37px;
       }
     }
   </style>
@@ -297,15 +221,11 @@
   <div class="container">
 
     <div class="header">
-
       <div class="logo">績</div>
-
       <h1>學生段考成績查詢</h1>
-
       <div class="subtitle">
         請輸入學生出生月日與身分證號後五碼
       </div>
-
     </div>
 
     <div class="card">
@@ -313,907 +233,369 @@
       <div id="loginArea">
 
         <div class="field">
-
-          <label for="birthMMDD">
-            出生月日
-          </label>
+          <label for="birthMMDD">出生月日</label>
 
           <input
-            type="text"
             id="birthMMDD"
             maxlength="4"
             inputmode="numeric"
-            autocomplete="off"
             placeholder="例如：0815"
-          />
+          >
 
           <div class="hint">
-            請輸入 4 碼，例如 8 月 15 日請輸入 0815。
+            8 月 15 日請輸入 0815
           </div>
-
         </div>
-
 
         <div class="field">
-
-          <label for="idLast5">
-            身分證號後五碼
-          </label>
+          <label for="idLast5">身分證號後五碼</label>
 
           <input
-            type="password"
             id="idLast5"
+            type="password"
             maxlength="5"
             inputmode="numeric"
-            autocomplete="off"
-            placeholder="請輸入後五碼"
-          />
-
+          >
         </div>
 
+        <button id="searchBtn">查詢成績</button>
 
-        <button id="searchBtn">
-          查詢成績
-        </button>
-
-
-        <div
-          id="message"
-          class="message"
-        ></div>
-
+        <div id="message" class="message"></div>
       </div>
 
 
-      <div
-        id="result"
-        class="result"
-      >
+      <div id="result" class="result">
 
         <div class="student-box">
-
-          <div
-            id="studentName"
-            class="student-name"
-          ></div>
-
-          <div
-            id="examName"
-            class="exam-name"
-          ></div>
-
+          <div id="studentName" class="student-name"></div>
+          <div id="studentSub" class="student-sub"></div>
         </div>
 
+        <div class="exam-selector">
+
+          <label for="examSelect">
+            選擇段考
+          </label>
+
+          <select id="examSelect"></select>
+
+        </div>
 
         <div class="score-list">
 
           <div class="score-row">
-
-            <div class="subject">
-              國文
-            </div>
-
-            <div
-              id="chinese"
-              class="score"
-            ></div>
-
+            <div class="subject">國文</div>
+            <div id="chinese" class="score"></div>
           </div>
 
-
           <div class="score-row">
-
-            <div class="subject">
-              英文
-            </div>
-
-            <div
-              id="english"
-              class="score"
-            ></div>
-
+            <div class="subject">英文</div>
+            <div id="english" class="score"></div>
           </div>
 
-
           <div class="score-row">
-
-            <div class="subject">
-              數學
-            </div>
-
-            <div
-              id="math"
-              class="score"
-            ></div>
-
+            <div class="subject">數學</div>
+            <div id="math" class="score"></div>
           </div>
 
-
           <div class="score-row">
-
-            <div class="subject">
-              自然
-            </div>
-
-            <div
-              id="science"
-              class="score"
-            ></div>
-
+            <div class="subject">自然</div>
+            <div id="science" class="score"></div>
           </div>
 
-
           <div class="score-row">
-
-            <div class="subject">
-              社會
-            </div>
-
-            <div
-              id="social"
-              class="score"
-            ></div>
-
+            <div class="subject">社會</div>
+            <div id="social" class="score"></div>
           </div>
 
         </div>
-
 
         <div class="average-box">
-
-          <div class="average-label">
-            五科平均
-          </div>
-
-          <div
-            id="average"
-            class="average-value"
-          ></div>
-
+          <div>五科平均</div>
+          <div id="average" class="average-value"></div>
         </div>
 
-
-        <button
-          id="logoutBtn"
-          class="logout"
-        >
+        <button id="logoutBtn" class="logout">
           返回查詢
         </button>
 
       </div>
 
-
-      <div class="notice">
-        成績資料僅供家長查詢與了解學生學習狀況。
-      </div>
-
     </div>
 
   </div>
-
 </div>
 
 
 <script type="module">
 
-  import {
-    initializeApp
-  } from
-  "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+import {
+  initializeApp
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+
+import {
+  getFirestore,
+  collection,
+  query,
+  where,
+  getDocs
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 
-  import {
-    getFirestore,
-    collection,
-    query,
-    where,
-    getDocs,
-    doc,
-    getDoc
-  } from
-  "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyC7hXtxLARv3LsoPcaViptdoWMZMLibtiY",
+  authDomain: "exam-score-system.firebaseapp.com",
+  projectId: "exam-score-system",
+  storageBucket: "exam-score-system.firebasestorage.app",
+  messagingSenderId: "334811583790",
+  appId: "1:334811583790:web:a6207215915c163c8656bf"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const birthInput = document.getElementById("birthMMDD");
+const idInput = document.getElementById("idLast5");
+
+const searchBtn = document.getElementById("searchBtn");
+const logoutBtn = document.getElementById("logoutBtn");
+
+const loginArea = document.getElementById("loginArea");
+const result = document.getElementById("result");
+const message = document.getElementById("message");
+
+const examSelect = document.getElementById("examSelect");
+
+let exams = [];
 
 
-  const firebaseConfig = {
+function showMessage(text) {
+  message.textContent = text;
+  message.className = "message error";
+}
 
-    apiKey:
-      "AIzaSyC7hXtxLARv3LsoPcaViptdoWMZMLibtiY",
-
-    authDomain:
-      "exam-score-system.firebaseapp.com",
-
-    projectId:
-      "exam-score-system",
-
-    storageBucket:
-      "exam-score-system.firebasestorage.app",
-
-    messagingSenderId:
-      "334811583790",
-
-    appId:
-      "1:334811583790:web:a6207215915c163c8656bf"
-
-  };
+function clearMessage() {
+  message.textContent = "";
+  message.className = "message";
+}
 
 
-  const app =
-    initializeApp(firebaseConfig);
+function isValidMMDD(value) {
+
+  if (!/^\d{4}$/.test(value)) return false;
+
+  const month = Number(value.slice(0,2));
+  const day = Number(value.slice(2,4));
+
+  const days = [
+    31,29,31,30,31,30,
+    31,31,30,31,30,31
+  ];
+
+  if (month < 1 || month > 12) return false;
+
+  return day >= 1 && day <= days[month - 1];
+}
 
 
-  const db =
-    getFirestore(app);
+birthInput.addEventListener("input", () => {
+  birthInput.value = birthInput.value
+    .replace(/\D/g, "")
+    .slice(0,4);
+});
+
+idInput.addEventListener("input", () => {
+  idInput.value = idInput.value
+    .replace(/\D/g, "")
+    .slice(0,5);
+});
 
 
-  const birthMMDDInput =
-    document.getElementById(
-      "birthMMDD"
+function displayExam(index) {
+
+  const exam = exams[index];
+
+  if (!exam) return;
+
+  document.getElementById("chinese").textContent = exam.chinese;
+  document.getElementById("english").textContent = exam.english;
+  document.getElementById("math").textContent = exam.math;
+  document.getElementById("science").textContent = exam.science;
+  document.getElementById("social").textContent = exam.social;
+
+  const values = [
+    Number(exam.chinese),
+    Number(exam.english),
+    Number(exam.math),
+    Number(exam.science),
+    Number(exam.social)
+  ];
+
+  const avg =
+    values.reduce((a,b) => a + b, 0)
+    / values.length;
+
+  document.getElementById("average").textContent =
+    avg.toFixed(1);
+}
+
+
+examSelect.addEventListener("change", () => {
+  displayExam(Number(examSelect.value));
+});
+
+
+searchBtn.addEventListener("click", async () => {
+
+  clearMessage();
+
+  const birthMMDD = birthInput.value.trim();
+  const idLast5 = idInput.value.trim();
+
+  if (!isValidMMDD(birthMMDD)) {
+    showMessage(
+      "出生月日格式錯誤，例如 8 月 15 日請輸入 0815。"
     );
-
-
-  const idLast5Input =
-    document.getElementById(
-      "idLast5"
-    );
-
-
-  const searchBtn =
-    document.getElementById(
-      "searchBtn"
-    );
-
-
-  const logoutBtn =
-    document.getElementById(
-      "logoutBtn"
-    );
-
-
-  const loginArea =
-    document.getElementById(
-      "loginArea"
-    );
-
-
-  const result =
-    document.getElementById(
-      "result"
-    );
-
-
-  const message =
-    document.getElementById(
-      "message"
-    );
-
-
-  /*
-    顯示訊息
-  */
-
-  function showMessage(
-    text,
-    type = "error"
-  ) {
-
-    message.textContent =
-      text;
-
-
-    message.className =
-      "message " + type;
-
+    return;
   }
 
-
-  /*
-    清除訊息
-  */
-
-  function clearMessage() {
-
-    message.textContent =
-      "";
-
-
-    message.className =
-      "message";
-
+  if (!/^\d{5}$/.test(idLast5)) {
+    showMessage("身分證後五碼必須為 5 位數。");
+    return;
   }
 
+  searchBtn.disabled = true;
+  searchBtn.textContent = "查詢中...";
 
-  /*
-    驗證出生月日格式
+  try {
 
-    例如：
+    /*
+      先找學生
+    */
 
-    0815
-    1207
-    0123
-
-    都是合法格式。
-  */
-
-  function isValidMMDD(
-    value
-  ) {
-
-    if (
-      !/^\d{4}$/.test(value)
-    ) {
-
-      return false;
-
-    }
-
-
-    const month =
-      Number(
-        value.slice(0, 2)
-      );
-
-
-    const day =
-      Number(
-        value.slice(2, 4)
-      );
-
-
-    const daysInMonth = [
-
-      31,
-
-      29,
-
-      31,
-
-      30,
-
-      31,
-
-      30,
-
-      31,
-
-      31,
-
-      30,
-
-      31,
-
-      30,
-
-      31
-
-    ];
-
-
-    if (
-      month < 1 ||
-      month > 12
-    ) {
-
-      return false;
-
-    }
-
-
-    if (
-      day < 1 ||
-      day >
-      daysInMonth[
-        month - 1
-      ]
-    ) {
-
-      return false;
-
-    }
-
-
-    return true;
-
-  }
-
-
-  /*
-    自動限制只能輸入數字
-  */
-
-  birthMMDDInput.addEventListener(
-    "input",
-    () => {
-
-      birthMMDDInput.value =
-        birthMMDDInput.value
-          .replace(/\D/g, "")
-          .slice(0, 4);
-
-    }
-  );
-
-
-  idLast5Input.addEventListener(
-    "input",
-    () => {
-
-      idLast5Input.value =
-        idLast5Input.value
-          .replace(/\D/g, "")
-          .slice(0, 5);
-
-    }
-  );
-
-
-  /*
-    查詢學生
-  */
-
-  async function searchStudent() {
-
-    clearMessage();
-
-
-    result.classList.remove(
-      "show"
+    const studentQuery = query(
+      collection(db, "students"),
+      where("birthMMDD", "==", birthMMDD),
+      where("idLast5", "==", idLast5)
     );
 
+    const studentSnapshot = await getDocs(studentQuery);
 
-    const birthMMDD =
-      birthMMDDInput.value.trim();
+    if (studentSnapshot.empty) {
+      showMessage("查無符合的學生資料。");
+      return;
+    }
 
+    const studentDoc = studentSnapshot.docs[0];
 
-    const idLast5 =
-      idLast5Input.value.trim();
+    const student = studentDoc.data();
+    const studentKey = studentDoc.id;
 
 
     /*
-      檢查出生月日
+      再讀這位學生所有考試
     */
 
-    if (
-      !isValidMMDD(
-        birthMMDD
+    const examSnapshot = await getDocs(
+      collection(
+        db,
+        "scores",
+        studentKey,
+        "exams"
       )
-    ) {
+    );
 
-      showMessage(
-        "出生月日格式錯誤，請輸入 4 碼，例如 8 月 15 日請輸入 0815。"
-      );
-
-
+    if (examSnapshot.empty) {
+      showMessage("目前尚無段考成績。");
       return;
-
     }
+
+    exams = examSnapshot.docs.map(docSnap => ({
+      id: docSnap.id,
+      ...docSnap.data()
+    }));
 
 
     /*
-      檢查後五碼
+      依考試代碼排序
+      例如：
+      114-2-exam3
+      115-1-exam1
     */
 
-    if (
-      !/^\d{5}$/.test(
-        idLast5
-      )
-    ) {
-
-      showMessage(
-        "身分證號後五碼必須為 5 位數字。"
-      );
-
-
-      return;
-
-    }
-
-
-    searchBtn.disabled =
-      true;
-
-
-    searchBtn.textContent =
-      "查詢中...";
-
-
-    try {
-
-      /*
-        直接查詢：
-
-        birthMMDD ==
-        家長輸入出生月日
-
-        AND
-
-        idLast5 ==
-        家長輸入後五碼
-      */
-
-      const studentQuery =
-        query(
-
-          collection(
-            db,
-            "students"
-          ),
-
-          where(
-            "birthMMDD",
-            "==",
-            birthMMDD
-          ),
-
-          where(
-            "idLast5",
-            "==",
-            idLast5
-          )
-
-        );
-
-
-      const studentsSnapshot =
-        await getDocs(
-          studentQuery
-        );
-
-
-      /*
-        沒找到學生
-      */
-
-      if (
-        studentsSnapshot.empty
-      ) {
-
-        showMessage(
-          "查無符合的學生資料，請確認出生月日與身分證號後五碼是否正確。"
-        );
-
-
-        return;
-
-      }
-
-
-      /*
-        取得第一筆符合的學生
-      */
-
-      const studentDoc =
-        studentsSnapshot.docs[0];
-
-
-      const matchedStudent =
-        studentDoc.data();
-
-
-      const studentKey =
-        studentDoc.id;
-
-
-      /*
-        使用 studentKey
-
-        例如：
-
-        70401
-
-        查詢：
-
-        scores/70401
-      */
-
-      const scoreReference =
-        doc(
-          db,
-          "scores",
-          studentKey
-        );
-
-
-      const scoreSnapshot =
-        await getDoc(
-          scoreReference
-        );
-
-
-      /*
-        學生存在
-        但還沒輸入成績
-      */
-
-      if (
-        !scoreSnapshot.exists()
-      ) {
-
-        showMessage(
-          "已找到學生資料，但目前尚未建立這次段考成績。"
-        );
-
-
-        return;
-
-      }
-
-
-      const score =
-        scoreSnapshot.data();
-
-
-      /*
-        五科成績
-      */
-
-      const scores = [
-
-        Number(
-          score.chinese
-        ),
-
-        Number(
-          score.english
-        ),
-
-        Number(
-          score.math
-        ),
-
-        Number(
-          score.science
-        ),
-
-        Number(
-          score.social
+    exams.sort((a,b) =>
+      String(b.examCode || b.id)
+        .localeCompare(
+          String(a.examCode || a.id),
+          "zh-Hant",
+          {
+            numeric: true
+          }
         )
-
-      ];
-
-
-      /*
-        檢查成績資料
-      */
-
-      if (
-        scores.some(
-          value =>
-            Number.isNaN(value)
-        )
-      ) {
-
-        showMessage(
-          "成績資料格式有誤，請聯絡老師。"
-        );
+    );
 
 
-        return;
+    examSelect.innerHTML = "";
 
-      }
+    exams.forEach((exam, index) => {
 
+      const option = document.createElement("option");
 
-      /*
-        計算平均
-      */
+      option.value = index;
 
-      const average =
-        scores.reduce(
-          (
-            sum,
-            value
-          ) =>
-            sum + value,
-          0
-        ) /
-        scores.length;
+      option.textContent =
+        exam.examName ||
+        exam.examCode ||
+        exam.id;
+
+      examSelect.appendChild(option);
+
+    });
 
 
-      /*
-        顯示學生姓名
-      */
+    document.getElementById("studentName").textContent =
+      student.name || "學生";
 
-      document.getElementById(
-        "studentName"
-      ).textContent =
-
-        matchedStudent.name ||
-        "學生";
+    document.getElementById("studentSub").textContent =
+      student.classCode
+      ? `${student.classCode} 班　${student.seat || ""} 號`
+      : "";
 
 
-      /*
-        顯示考試名稱
-      */
+    loginArea.style.display = "none";
+    result.classList.add("show");
 
-      document.getElementById(
-        "examName"
-      ).textContent =
+    displayExam(0);
 
-        score.examName ||
-        "段考成績";
+  } catch (error) {
 
+    console.error(error);
 
-      /*
-        顯示各科成績
-      */
+    showMessage("查詢失敗，請稍後再試。");
 
-      document.getElementById(
-        "chinese"
-      ).textContent =
-        score.chinese;
+  } finally {
 
-
-      document.getElementById(
-        "english"
-      ).textContent =
-        score.english;
-
-
-      document.getElementById(
-        "math"
-      ).textContent =
-        score.math;
-
-
-      document.getElementById(
-        "science"
-      ).textContent =
-        score.science;
-
-
-      document.getElementById(
-        "social"
-      ).textContent =
-        score.social;
-
-
-      /*
-        顯示平均
-      */
-
-      document.getElementById(
-        "average"
-      ).textContent =
-        average.toFixed(1);
-
-
-      /*
-        隱藏登入區
-      */
-
-      loginArea.style.display =
-        "none";
-
-
-      /*
-        顯示成績
-      */
-
-      result.classList.add(
-        "show"
-      );
-
-
-    } catch (
-      error
-    ) {
-
-      console.error(
-        "Firestore 查詢錯誤：",
-        error
-      );
-
-
-      /*
-        Firestore 要求索引
-      */
-
-      if (
-        error.code ===
-        "failed-precondition"
-      ) {
-
-        showMessage(
-          "目前需要建立 Firestore 查詢索引，請查看瀏覽器 Console 的錯誤訊息。"
-        );
-
-
-      } else if (
-        error.code ===
-        "permission-denied"
-      ) {
-
-        showMessage(
-          "資料庫權限不足，請檢查 Firestore Rules。"
-        );
-
-
-      } else {
-
-        showMessage(
-          "查詢失敗，請稍後再試。"
-        );
-
-      }
-
-
-    } finally {
-
-      searchBtn.disabled =
-        false;
-
-
-      searchBtn.textContent =
-        "查詢成績";
-
-    }
-
+    searchBtn.disabled = false;
+    searchBtn.textContent = "查詢成績";
   }
 
-
-  /*
-    按查詢按鈕
-  */
-
-  searchBtn.addEventListener(
-    "click",
-    searchStudent
-  );
+});
 
 
-  /*
-    按 Enter
-    也可以查詢
-  */
+logoutBtn.addEventListener("click", () => {
 
-  idLast5Input.addEventListener(
-    "keydown",
-    event => {
+  result.classList.remove("show");
+  loginArea.style.display = "block";
 
-      if (
-        event.key ===
-        "Enter"
-      ) {
+  birthInput.value = "";
+  idInput.value = "";
 
-        searchStudent();
+  exams = [];
+  examSelect.innerHTML = "";
 
-      }
+  clearMessage();
 
-    }
-  );
-
-
-  /*
-    返回查詢畫面
-  */
-
-  logoutBtn.addEventListener(
-    "click",
-    () => {
-
-      result.classList.remove(
-        "show"
-      );
-
-
-      loginArea.style.display =
-        "block";
-
-
-      birthMMDDInput.value =
-        "";
-
-
-      idLast5Input.value =
-        "";
-
-
-      clearMessage();
-
-
-      birthMMDDInput.focus();
-
-    }
-  );
+});
 
 </script>
 
