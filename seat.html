@@ -547,7 +547,13 @@
             if (snapshot.exists()) {
                 const data = snapshot.val();
                 seatMap = data.seatMap || {};
-                unassignedStudents = data.unassignedStudents || [...students];
+                // 候補名單一律依目前座位重新計算，避免 Firebase 空陣列讀回時造成學生重複
+                const assignedIds = new Set(
+                    Object.values(seatMap)
+                        .filter(Boolean)
+                        .map(student => Number(student.id))
+                );
+                unassignedStudents = students.filter(student => !assignedIds.has(student.id));
                 staffAssignments = data.staffAssignments || {};
                 examHistory = data.examHistory || [];
                 
