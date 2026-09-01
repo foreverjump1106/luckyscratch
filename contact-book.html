@@ -387,6 +387,33 @@
             </div>
         </div>
 
+
+        <!-- 每日未登記學生審查區塊 -->
+        <div class="card p-3 p-md-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="mb-0">🔍 今日未登記學生審查</h4>
+                <button class="btn btn-outline-light btn-sm" id="missingRecordsRefreshBtn">重新檢查</button>
+            </div>
+            <div class="quote-box mb-3" style="color: #ffffff;">
+                系統會依照上方「航行日期選擇」自動比對 804 班 1～28 號；若某位學生當天完全沒有任何聯絡簿紀錄，就會列在下方，方便批閱完成後確認是否為「未繳交」或「尚未登記」。
+            </div>
+            <div id="missingRecordsSummary" class="mb-3"></div>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th style="width: 20%;">座號</th>
+                            <th class="text-start">夥伴姓名</th>
+                            <th style="width: 35%;">狀態</th>
+                        </tr>
+                    </thead>
+                    <tbody id="missingRecordsTableBody">
+                        <tr><td colspan="3" class="text-center text-muted text-light">檢查中...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
         <!-- 每週航行統計報告區塊 (預設隱藏) -->
         <div class="text-end mb-3">
             <button class="btn btn-gold btn-sm fw-bold shadow-sm" id="toggleWeeklyBtn" type="button">📊 展開每週航行統計報告</button>
@@ -555,6 +582,11 @@
             }
         });
 
+        // 日期切換時，同步重新審查該日完全沒有紀錄的學生
+        dateInput.addEventListener('change', function() {
+            renderMissingRecords(currentLoadedContactBookRecords);
+        });
+
         // 「尚未繳交聯絡簿」按鈕切換互動狀態
         let isNotSubmittedMode = false;
         const notSubmittedBtn = document.getElementById('notSubmittedBtn');
@@ -692,6 +724,70 @@
             }
         });
 
+        // 儲存目前已載入的全部紀錄，供「今日未登記學生審查」使用
+        let currentLoadedContactBookRecords = [];
+
+        // 渲染指定日期中「完全沒有任何紀錄」的學生
+        function renderMissingRecords(records) {
+            const selectedDate = document.getElementById('contactBookDate').value;
+            const tbody = document.getElementById('missingRecordsTableBody');
+            const summary = document.getElementById('missingRecordsSummary');
+
+            if (!selectedDate) {
+                summary.innerHTML = `<span class="text-warning fw-bold">請先選擇要審查的日期。</span>`;
+                tbody.innerHTML = `<tr><td colspan="3" class="text-center text-muted">尚未選擇日期</td></tr>`;
+                return;
+            }
+
+            const recordedStudentNos = new Set(
+                records
+                    .filter(r => r.date === selectedDate)
+                    .map(r => Number(r.studentNo))
+                    .filter(no => no >= 1 && no <= 28)
+            );
+
+            const missingStudents = [];
+            for (let i = 1; i <= 28; i++) {
+                if (!recordedStudentNos.has(i)) {
+                    missingStudents.push({
+                        studentNo: i,
+                        studentName: contactBookStudents[i]
+                    });
+                }
+            }
+
+            if (missingStudents.length === 0) {
+                summary.innerHTML = `
+                    <div class="alert alert-success mb-0 py-2">
+                        ✅ <strong>${selectedDate}</strong> 全班 28 位夥伴都有聯絡簿紀錄，沒有任何漏登記學生。
+                    </div>`;
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="3" class="text-center text-success fw-bold">
+                            🌟 今日全員皆已建立紀錄
+                        </td>
+                    </tr>`;
+                return;
+            }
+
+            summary.innerHTML = `
+                <div class="alert alert-warning mb-0 py-2">
+                    ⚠️ <strong>${selectedDate}</strong> 共有 <strong>${missingStudents.length}</strong> 位夥伴完全沒有聯絡簿紀錄，
+                    請確認是否為「未繳交」或尚未完成登記。
+                </div>`;
+
+            tbody.innerHTML = '';
+            missingStudents.forEach(student => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${student.studentNo}</strong></td>
+                    <td class="text-start"><strong>${student.studentName}</strong></td>
+                    <td><span class="badge bg-danger">❌ 當日完全無紀錄</span></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
         // 核心資料載入與重新整理函式
         async function loadAllData() {
             if (!window.contactBookDb) return;
@@ -706,7 +802,9 @@
                         records.push(item);
                     });
                 }
+                currentLoadedContactBookRecords = records;
                 renderDailyTable(records);
+                renderMissingRecords(records);
                 setupWeeklyReport(records);
             } catch (error) {
                 console.error("讀取資料失敗", error);
@@ -954,6 +1052,7 @@
         }
 
         document.getElementById('contactBookRefreshBtn').addEventListener('click', loadAllData);
+        document.getElementById('missingRecordsRefreshBtn').addEventListener('click', loadAllData);
     </script>
 </body>
 </html>
