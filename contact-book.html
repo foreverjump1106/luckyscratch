@@ -263,10 +263,10 @@
                                 </div>
                             </div>
 
-                            <!-- 3. 中英文佳句抄寫 -->
+                            <!-- 3. 英文佳句抄寫 -->
                             <div class="col-md-4">
                                 <div class="check-group">
-                                    <label class="form-label fw-bold mb-2">3. 中英文佳句抄寫</label>
+                                    <label class="form-label fw-bold mb-2">3. 英文佳句抄寫</label>
                                     <div class="d-flex gap-4">
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="contactBookEnglishCopy" id="engYes" value="已完成" checked>
@@ -388,6 +388,33 @@
         </div>
 
 
+        <!-- 今日已審查紀錄（預設收合） -->
+        <div class="text-end mb-3">
+            <button class="btn btn-outline-success btn-sm fw-bold shadow-sm" id="toggleReviewedBtn" type="button">✅ 顯示今日已審查紀錄</button>
+        </div>
+
+        <div class="card p-3 p-md-4" id="reviewedRecordsCard" style="display: none;">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="mb-0">✅ 今日已審查紀錄</h4>
+                <span class="small text-light" id="reviewedRecordsDateLabel"></span>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>日期</th>
+                            <th>座號/姓名</th>
+                            <th>原始異常內容</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="reviewedRecordsTableBody">
+                        <tr><td colspan="4" class="text-center text-muted text-light">尚無已審查紀錄</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
         <!-- 每日未登記學生審查區塊 -->
         <div class="card p-3 p-md-4">
             <div class="d-flex justify-content-between align-items-center mb-3">
@@ -456,7 +483,7 @@
     <!-- Firebase 雲端驗證與資料庫模組化腳本 -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getDatabase, ref, set, get, child, push, remove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+        import { getDatabase, ref, set, get, child, push, remove, update } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
         import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
         const firebaseConfig = {
@@ -523,6 +550,7 @@
         window.dbChild = child;
         window.dbPush = push;
         window.dbRemove = remove;
+        window.dbUpdate = update;
     </script>
 
     <script>
@@ -545,6 +573,19 @@
             } else {
                 weeklyReportCard.style.display = 'none';
                 toggleWeeklyBtn.textContent = '📊 展開每週航行統計報告';
+            }
+        });
+
+        // 「今日已審查紀錄」展開/隱藏切換按鈕
+        const toggleReviewedBtn = document.getElementById('toggleReviewedBtn');
+        const reviewedRecordsCard = document.getElementById('reviewedRecordsCard');
+        toggleReviewedBtn.addEventListener('click', function() {
+            if (reviewedRecordsCard.style.display === 'none') {
+                reviewedRecordsCard.style.display = 'block';
+                toggleReviewedBtn.textContent = '✅ 收起今日已審查紀錄';
+            } else {
+                reviewedRecordsCard.style.display = 'none';
+                toggleReviewedBtn.textContent = '✅ 顯示今日已審查紀錄';
             }
         });
 
@@ -582,9 +623,10 @@
             }
         });
 
-        // 日期切換時，同步重新審查該日完全沒有紀錄的學生
+        // 日期切換時，同步更新該日的未登記學生與已審查紀錄
         dateInput.addEventListener('change', function() {
             renderMissingRecords(currentLoadedContactBookRecords);
+            renderReviewedRecords(currentLoadedContactBookRecords);
         });
 
         // 「尚未繳交聯絡簿」按鈕切換互動狀態
@@ -788,6 +830,56 @@
             });
         }
 
+        // 渲染目前選擇日期中「已審查」的紀錄
+        function renderReviewedRecords(records) {
+            const selectedDate = document.getElementById('contactBookDate').value;
+            const tbody = document.getElementById('reviewedRecordsTableBody');
+            const dateLabel = document.getElementById('reviewedRecordsDateLabel');
+            dateLabel.textContent = selectedDate ? `📅 ${selectedDate}` : '';
+
+            if (!selectedDate) {
+                tbody.innerHTML = `<tr><td colspan="4" class="text-center text-muted">尚未選擇日期</td></tr>`;
+                return;
+            }
+
+            const reviewedRecords = records
+                .filter(item => item.date === selectedDate && item.reviewed === true)
+                .sort((a, b) => Number(a.studentNo) - Number(b.studentNo));
+
+            if (reviewedRecords.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="text-center text-muted">${selectedDate} 尚無已審查紀錄</td></tr>`;
+                return;
+            }
+
+            function getIssueSummary(item) {
+                const issues = [];
+                if (item.submissionStatus === '未繳交') issues.push('聯絡簿未繳交');
+                if (item.dateCheck && item.dateCheck.includes('未')) issues.push('日期未完成');
+                if (item.examHw && (item.examHw.includes('未') || item.examHw.includes('異常'))) issues.push('作業/考試未完成');
+                if (item.englishCopy && item.englishCopy.includes('未')) issues.push('英文抄寫未完成');
+                if (item.articleSummary && item.articleSummary.includes('未')) issues.push('文章摘要未完成');
+                if (item.timeRecord && item.timeRecord.includes('異常')) issues.push('時間異常/遲到/請假');
+                if (item.lifeNote && item.lifeNote.includes('未')) issues.push('生活札記未寫');
+                if (item.parentSign === '未簽名') issues.push('家長未簽名');
+                return issues.length ? issues.join('、') : '已審查';
+            }
+
+            tbody.innerHTML = '';
+            reviewedRecords.forEach(item => {
+                const name = contactBookStudents[item.studentNo] || item.studentName || '';
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${item.date}</td>
+                    <td><strong>${item.studentNo} 號<br>${name}</strong></td>
+                    <td class="text-start"><span class="text-warning fw-bold">${getIssueSummary(item)}</span></td>
+                    <td>
+                        <button class="btn btn-outline-light btn-sm" onclick="restoreReviewedRecord('${item.id}', '${item.date}', '${name}')">↩️ 恢復關注</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
         // 核心資料載入與重新整理函式
         async function loadAllData() {
             if (!window.contactBookDb) return;
@@ -804,6 +896,7 @@
                 }
                 currentLoadedContactBookRecords = records;
                 renderDailyTable(records);
+                renderReviewedRecords(records);
                 renderMissingRecords(records);
                 setupWeeklyReport(records);
             } catch (error) {
@@ -823,6 +916,9 @@
 
             let revRecords = [...records].reverse();
             let filteredRecords = revRecords.filter(item => {
+                // 已審查的異常紀錄保留在 Firebase 與每週統計中，但不再顯示於每日關注清單
+                if (item.reviewed === true) return false;
+
                 let isSubmitted = (item.submissionStatus !== "未繳交");
                 let isAllComplete = 
                     isSubmitted &&
@@ -896,7 +992,7 @@
                     <td>${signDisplay}</td>
                     <td>
                         <div class="d-flex flex-column gap-1">
-                            <button class="btn btn-outline-warning btn-sm py-0" style="font-size: 0.8rem;" onclick="hideFrontendRecord(this)">🧹 移除關注</button>
+                            <button class="btn btn-outline-success btn-sm py-0" style="font-size: 0.8rem;" onclick="markRecordReviewed('${item.id}', '${item.date}', '${name}')">✅ 已審查</button>
                             <button class="btn btn-outline-danger btn-sm py-0" style="font-size: 0.8rem;" onclick="deleteBackendRecord('${item.id}', '${item.date}', '${name}')">🗑️ 刪除後端</button>
                         </div>
                     </td>
@@ -905,13 +1001,37 @@
             });
         }
 
-        // 前端直接隱藏該列，不重新整理頁面
-        window.hideFrontendRecord = function(btn) {
-            let row = btn.closest('tr');
-            if (row) {
-                row.style.transition = 'opacity 0.3s ease';
-                row.style.opacity = '0';
-                setTimeout(() => row.remove(), 300);
+        // 將異常紀錄標記為「已審查」：資料仍保留於 Firebase，且每週統計照常計算
+        window.markRecordReviewed = async function(id, dateStr, studentName) {
+            const confirmMsg = `✅ 【標記已審查】\n\n確定「${dateStr} - ${studentName}」這筆異常已經確認處理完成嗎？\n\n標記後會從「需要關注的夥伴清單」移除，但原始資料與每週統計都會完整保留。`;
+            if (!confirm(confirmMsg)) return;
+
+            try {
+                const recordRef = window.dbRef(window.contactBookDb, 'contact_book_records/' + id);
+                await window.dbUpdate(recordRef, {
+                    reviewed: true,
+                    reviewedAt: Date.now()
+                });
+                await loadAllData();
+            } catch (error) {
+                alert('標記已審查失敗：' + error.message);
+            }
+        }
+
+        // 若誤按「已審查」，可從今日已審查紀錄中恢復到需要關注清單
+        window.restoreReviewedRecord = async function(id, dateStr, studentName) {
+            const confirmMsg = `↩️ 【恢復關注】\n\n確定要將「${dateStr} - ${studentName}」恢復到需要關注清單嗎？`;
+            if (!confirm(confirmMsg)) return;
+
+            try {
+                const recordRef = window.dbRef(window.contactBookDb, 'contact_book_records/' + id);
+                await window.dbUpdate(recordRef, {
+                    reviewed: false,
+                    reviewedAt: null
+                });
+                await loadAllData();
+            } catch (error) {
+                alert('恢復關注失敗：' + error.message);
             }
         }
 
