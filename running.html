@@ -1,0 +1,2580 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+
+  <title>跑｜班級跑步圈數系統</title>
+
+  <link
+    rel="icon"
+    href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="22" fill="%23111827"/><text x="50" y="68" font-size="58" text-anchor="middle" fill="%23ffffff" font-family="sans-serif">跑</text></svg>'
+  />
+
+  <style>
+    :root{
+      --bg:#08111f;
+      --bg2:#101b2e;
+      --card:#142136;
+      --line:rgba(255,255,255,.10);
+      --text:#f8fafc;
+      --muted:#9fb0c7;
+      --green:#34d399;
+      --green2:#10b981;
+      --yellow:#fbbf24;
+      --orange:#fb923c;
+      --red:#fb7185;
+      --blue:#60a5fa;
+      --shadow:0 14px 40px rgba(0,0,0,.28);
+    }
+
+    *{
+      box-sizing:border-box;
+    }
+
+    html{
+      scroll-behavior:smooth;
+    }
+
+    body{
+      margin:0;
+      min-height:100vh;
+      color:var(--text);
+      font-family:
+        "Noto Sans TC",
+        "Microsoft JhengHei",
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        sans-serif;
+
+      background:
+        radial-gradient(circle at top left, rgba(52,211,153,.12), transparent 28%),
+        radial-gradient(circle at top right, rgba(96,165,250,.12), transparent 30%),
+        linear-gradient(160deg,var(--bg),var(--bg2));
+    }
+
+    button,
+    input{
+      font:inherit;
+    }
+
+    button{
+      -webkit-tap-highlight-color:transparent;
+    }
+
+    .app{
+      width:min(1180px,100%);
+      margin:auto;
+      padding:18px 16px 110px;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      padding:18px 20px;
+      border:1px solid var(--line);
+      border-radius:24px;
+      background:rgba(15,26,44,.78);
+      backdrop-filter:blur(14px);
+      box-shadow:var(--shadow);
+      position:sticky;
+      top:10px;
+      z-index:20;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      min-width:0;
+    }
+
+    .brand-icon{
+      width:52px;
+      height:52px;
+      border-radius:16px;
+      display:grid;
+      place-items:center;
+      font-size:28px;
+      background:linear-gradient(135deg,var(--green),var(--blue));
+      flex:0 0 auto;
+    }
+
+    .brand h1{
+      margin:0;
+      font-size:clamp(20px,3vw,30px);
+    }
+
+    .brand p{
+      margin:5px 0 0;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .sync-badge{
+      flex:0 0 auto;
+      padding:9px 13px;
+      border-radius:999px;
+      background:rgba(52,211,153,.12);
+      border:1px solid rgba(52,211,153,.25);
+      color:#b7f7dc;
+      font-size:13px;
+      font-weight:700;
+      white-space:nowrap;
+    }
+
+    .hero{
+      margin-top:18px;
+      border:1px solid var(--line);
+      border-radius:26px;
+      overflow:hidden;
+      background:
+        linear-gradient(120deg,rgba(16,185,129,.16),rgba(96,165,250,.08)),
+        rgba(17,29,48,.85);
+      box-shadow:var(--shadow);
+    }
+
+    .hero-inner{
+      padding:26px;
+    }
+
+    .hero-kicker{
+      color:#9ff3cf;
+      font-weight:900;
+      letter-spacing:.08em;
+      font-size:13px;
+    }
+
+    .hero-title{
+      margin:8px 0;
+      font-size:clamp(30px,6vw,54px);
+      font-weight:1000;
+    }
+
+    .hero-sub{
+      color:var(--muted);
+      font-size:15px;
+    }
+
+    .goal-block{
+      margin-top:22px;
+      background:rgba(0,0,0,.18);
+      padding:18px;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.07);
+    }
+
+    .goal-row{
+      display:flex;
+      justify-content:space-between;
+      align-items:end;
+      gap:10px;
+      margin-bottom:10px;
+    }
+
+    .goal-title{
+      font-weight:900;
+    }
+
+    .goal-number{
+      font-size:26px;
+      font-weight:1000;
+    }
+
+    .progress-shell{
+      height:20px;
+      border-radius:999px;
+      background:#0a1320;
+      border:1px solid rgba(255,255,255,.08);
+      overflow:hidden;
+    }
+
+    .progress-bar{
+      width:0%;
+      height:100%;
+      border-radius:inherit;
+      background:linear-gradient(90deg,var(--green2),var(--green),var(--yellow));
+      transition:width .4s ease;
+    }
+
+    .progress-caption{
+      margin-top:10px;
+      text-align:right;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:14px;
+      margin-top:18px;
+    }
+
+    .stat-card{
+      background:rgba(20,33,54,.86);
+      border:1px solid var(--line);
+      border-radius:20px;
+      padding:18px;
+      box-shadow:var(--shadow);
+    }
+
+    .stat-icon{
+      font-size:25px;
+    }
+
+    .stat-label{
+      margin-top:10px;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .stat-value{
+      margin-top:4px;
+      font-size:28px;
+      font-weight:1000;
+    }
+
+    .tabs{
+      display:flex;
+      gap:10px;
+      overflow-x:auto;
+      margin:20px 0 14px;
+      padding-bottom:4px;
+    }
+
+    .tab-btn{
+      flex:0 0 auto;
+      border:none;
+      padding:12px 18px;
+      border-radius:999px;
+      background:#17263d;
+      color:#c6d4e5;
+      font-weight:900;
+      cursor:pointer;
+    }
+
+    .tab-btn.active{
+      color:#07131f;
+      background:linear-gradient(135deg,#6ee7b7,#5eead4);
+    }
+
+    .panel{
+      display:none;
+    }
+
+    .panel.active{
+      display:block;
+    }
+
+    .section{
+      border:1px solid var(--line);
+      background:rgba(20,33,54,.86);
+      border-radius:22px;
+      padding:20px;
+      box-shadow:var(--shadow);
+      margin-bottom:16px;
+    }
+
+    .section-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-bottom:16px;
+    }
+
+    .section-title{
+      margin:0;
+      font-size:20px;
+      font-weight:1000;
+    }
+
+    .section-sub{
+      margin:5px 0 0;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .quick-tools{
+      display:grid;
+      grid-template-columns:1fr auto auto;
+      gap:10px;
+    }
+
+    .input{
+      width:100%;
+      border:1px solid rgba(255,255,255,.1);
+      background:#0f1a2a;
+      color:var(--text);
+      padding:13px 14px;
+      border-radius:14px;
+      outline:none;
+    }
+
+    .btn{
+      border:none;
+      border-radius:14px;
+      padding:13px 16px;
+      font-weight:900;
+      cursor:pointer;
+      color:white;
+      background:#223654;
+      min-height:46px;
+    }
+
+    .btn-blue{
+      background:linear-gradient(135deg,#2563eb,#3b82f6);
+    }
+
+    .btn-warn{
+      background:linear-gradient(135deg,#c2410c,#f97316);
+    }
+
+    .btn-danger{
+      background:linear-gradient(135deg,#be123c,#f43f5e);
+    }
+
+    .student-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:12px;
+    }
+
+    .student-card{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) auto;
+      gap:12px;
+      align-items:center;
+      padding:15px;
+      border:1px solid var(--line);
+      background:linear-gradient(135deg,#15243a,#122033);
+      border-radius:18px;
+    }
+
+    .student-card.done{
+      border-color:rgba(52,211,153,.34);
+      background:
+        linear-gradient(135deg,rgba(16,185,129,.10),rgba(21,36,58,.95));
+    }
+
+    .student-name{
+      font-weight:1000;
+      font-size:17px;
+    }
+
+    .student-meta{
+      margin-top:5px;
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    .counter{
+      display:grid;
+      grid-template-columns:46px 70px 46px;
+      gap:6px;
+      align-items:center;
+    }
+
+    .counter-btn{
+      width:46px;
+      height:46px;
+      border:none;
+      border-radius:14px;
+      font-size:25px;
+      font-weight:1000;
+      cursor:pointer;
+      color:white;
+      background:#253a58;
+    }
+
+    .counter-btn.plus{
+      background:linear-gradient(135deg,#059669,#10b981);
+    }
+
+    .circle-input{
+      width:70px;
+      height:46px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.1);
+      background:#0e1929;
+      color:white;
+      text-align:center;
+      font-size:20px;
+      font-weight:1000;
+      outline:none;
+    }
+
+    .save-bar{
+      position:fixed;
+      left:50%;
+      transform:translateX(-50%);
+      bottom:14px;
+      width:min(700px,calc(100% - 24px));
+      padding:10px;
+      border-radius:20px;
+      background:rgba(8,17,31,.90);
+      border:1px solid rgba(255,255,255,.12);
+      backdrop-filter:blur(16px);
+      box-shadow:0 16px 40px rgba(0,0,0,.38);
+      z-index:30;
+    }
+
+    .save-btn{
+      width:100%;
+      min-height:54px;
+      border:none;
+      border-radius:15px;
+      color:#06110c;
+      background:linear-gradient(135deg,#6ee7b7,#34d399);
+      font-weight:1000;
+      font-size:17px;
+      cursor:pointer;
+    }
+
+    .not-run-grid{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+
+    .not-run-chip{
+      padding:9px 12px;
+      border-radius:999px;
+      background:rgba(251,146,60,.14);
+      border:1px solid rgba(251,146,60,.30);
+      color:#ffd3ae;
+      font-weight:800;
+      font-size:13px;
+    }
+
+    .all-done{
+      color:#9ff3cf;
+      font-weight:900;
+    }
+
+    .rank-list{
+      display:grid;
+      gap:10px;
+    }
+
+    .rank-item{
+      display:grid;
+      grid-template-columns:48px minmax(0,1fr) auto;
+      gap:12px;
+      align-items:center;
+      padding:14px;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:#132238;
+    }
+
+    .rank-no{
+      width:42px;
+      height:42px;
+      display:grid;
+      place-items:center;
+      border-radius:14px;
+      font-weight:1000;
+      background:#223653;
+    }
+
+    .rank-no.gold{
+      background:linear-gradient(135deg,#f59e0b,#fcd34d);
+      color:#4b3200;
+    }
+
+    .rank-no.silver{
+      background:linear-gradient(135deg,#94a3b8,#e2e8f0);
+      color:#263244;
+    }
+
+    .rank-no.bronze{
+      background:linear-gradient(135deg,#b45309,#fb923c);
+      color:#3b1800;
+    }
+
+    .rank-name{
+      font-weight:1000;
+    }
+
+    .rank-meta{
+      margin-top:4px;
+      font-size:12px;
+      color:var(--muted);
+    }
+
+    .rank-score{
+      font-size:22px;
+      font-weight:1000;
+    }
+
+    .student-stats-list{
+      display:grid;
+      gap:10px;
+    }
+
+    .student-total-row{
+      display:grid;
+      grid-template-columns:52px minmax(0,1fr) auto auto;
+      gap:12px;
+      align-items:center;
+      padding:13px 14px;
+      border-radius:16px;
+      border:1px solid var(--line);
+      background:#132238;
+    }
+
+    .seat{
+      color:#84caff;
+      font-weight:1000;
+    }
+
+    .total-name{
+      font-weight:900;
+    }
+
+    .mini-stat{
+      text-align:right;
+      font-size:13px;
+      color:var(--muted);
+    }
+
+    .mini-stat strong{
+      display:block;
+      color:white;
+      font-size:17px;
+    }
+
+    .history-list{
+      display:grid;
+      gap:10px;
+    }
+
+    .history-item{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) auto auto auto;
+      gap:12px;
+      align-items:center;
+      padding:14px;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:#132238;
+    }
+
+    .history-date{
+      font-weight:1000;
+    }
+
+    .history-meta{
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    .history-number{
+      font-size:18px;
+      font-weight:1000;
+    }
+
+    .month-controls{
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+
+    .month-label{
+      min-width:105px;
+      text-align:center;
+      font-weight:1000;
+    }
+
+    .empty{
+      padding:24px;
+      text-align:center;
+      color:var(--muted);
+      border:1px dashed rgba(255,255,255,.12);
+      border-radius:16px;
+    }
+
+    .achievement-grid{
+      display:grid;
+      grid-template-columns:repeat(5,1fr);
+      gap:10px;
+    }
+
+    .achievement{
+      text-align:center;
+      padding:14px 8px;
+      border-radius:16px;
+      background:#132238;
+      border:1px solid var(--line);
+    }
+
+    .achievement span{
+      display:block;
+      font-size:25px;
+      margin-bottom:5px;
+    }
+
+    .achievement small{
+      color:var(--muted);
+    }
+
+    .toast{
+      position:fixed;
+      top:90px;
+      left:50%;
+      transform:translateX(-50%) translateY(-12px);
+      z-index:50;
+      padding:12px 18px;
+      border-radius:999px;
+      background:#0d1a2b;
+      border:1px solid rgba(255,255,255,.12);
+      color:white;
+      box-shadow:var(--shadow);
+      opacity:0;
+      pointer-events:none;
+      transition:.25s;
+      font-weight:800;
+    }
+
+    .toast.show{
+      opacity:1;
+      transform:translateX(-50%) translateY(0);
+    }
+
+    footer{
+      text-align:center;
+      color:#718198;
+      font-size:12px;
+      margin-top:24px;
+      padding:14px;
+    }
+
+    @media (max-width:850px){
+      .stats{
+        grid-template-columns:repeat(2,1fr);
+      }
+
+      .student-grid{
+        grid-template-columns:1fr;
+      }
+
+      .achievement-grid{
+        grid-template-columns:repeat(3,1fr);
+      }
+    }
+
+    @media (max-width:600px){
+      .app{
+        padding:10px 10px 105px;
+      }
+
+      .topbar{
+        border-radius:18px;
+        padding:13px;
+      }
+
+      .brand-icon{
+        width:44px;
+        height:44px;
+      }
+
+      .brand p{
+        display:none;
+      }
+
+      .sync-badge{
+        font-size:11px;
+      }
+
+      .hero-inner{
+        padding:20px;
+      }
+
+      .stats{
+        gap:9px;
+      }
+
+      .stat-card{
+        padding:14px;
+      }
+
+      .section{
+        padding:14px;
+      }
+
+      .quick-tools{
+        grid-template-columns:1fr 1fr;
+      }
+
+      .quick-tools .input{
+        grid-column:1 / -1;
+      }
+
+      .student-card{
+        grid-template-columns:1fr;
+      }
+
+      .counter{
+        width:100%;
+        grid-template-columns:1fr 86px 1fr;
+      }
+
+      .counter-btn{
+        width:100%;
+        height:52px;
+      }
+
+      .circle-input{
+        width:86px;
+        height:52px;
+      }
+
+      .student-total-row{
+        grid-template-columns:42px minmax(0,1fr) auto;
+      }
+
+      .student-total-row .mini-stat.month{
+        display:none;
+      }
+
+      .history-item{
+        grid-template-columns:1fr auto;
+      }
+
+      .history-item .history-meta{
+        grid-column:1 / -1;
+      }
+
+      .achievement-grid{
+        grid-template-columns:repeat(2,1fr);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="app">
+
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-icon">🏃</div>
+        <div>
+          <h1>班級跑步圈數系統</h1>
+          <p>RUNNING CHALLENGE</p>
+        </div>
+      </div>
+
+      <div class="sync-badge" id="syncBadge">
+        ● 尚未連線
+      </div>
+    </header>
+
+
+    <section class="hero">
+      <div class="hero-inner">
+
+        <div class="hero-kicker">
+          🏁 CLASS RUNNING CHALLENGE
+        </div>
+
+        <div class="hero-title">
+          全班挑戰 800 圈
+        </div>
+
+        <div class="hero-sub" id="todayLabel">
+          載入日期中...
+        </div>
+
+        <div class="goal-block">
+
+          <div class="goal-row">
+            <div class="goal-title">
+              🏃 全班累積進度
+            </div>
+
+            <div class="goal-number">
+              <span id="allTotal">0</span>
+              /
+              <span id="goalText">800</span>
+            </div>
+          </div>
+
+          <div class="progress-shell">
+            <div class="progress-bar" id="goalBar"></div>
+          </div>
+
+          <div class="progress-caption" id="goalCaption">
+            目前完成 0%
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+
+    <section class="stats">
+
+      <div class="stat-card">
+        <div class="stat-icon">✅</div>
+        <div class="stat-label">今日完成人數</div>
+        <div class="stat-value" id="todayDone">0 / 28</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">⭕</div>
+        <div class="stat-label">今日總圈數</div>
+        <div class="stat-value" id="todayTotal">0</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">📅</div>
+        <div class="stat-label">本月總圈數</div>
+        <div class="stat-value" id="monthTotal">0</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">🏆</div>
+        <div class="stat-label">今日最高</div>
+        <div class="stat-value" id="todayMax">0</div>
+      </div>
+
+    </section>
+
+
+    <nav class="tabs">
+
+      <button class="tab-btn active" data-tab="today">
+        🏃 今日登記
+      </button>
+
+      <button class="tab-btn" data-tab="ranking">
+        🏆 排行榜
+      </button>
+
+      <button class="tab-btn" data-tab="students">
+        👤 個人累積
+      </button>
+
+      <button class="tab-btn" data-tab="history">
+        📊 歷史紀錄
+      </button>
+
+    </nav>
+
+
+    <section class="panel active" id="panel-today">
+
+      <div class="section">
+
+        <div class="section-head">
+          <div>
+            <h2 class="section-title">
+              ⚡ 快速設定
+            </h2>
+
+            <p class="section-sub">
+              可先替全班填入相同圈數，再個別調整
+            </p>
+          </div>
+        </div>
+
+        <div class="quick-tools">
+
+          <input
+            type="number"
+            min="0"
+            inputmode="numeric"
+            id="quickCircleInput"
+            class="input"
+            placeholder="例如：全班先設定 3 圈"
+          />
+
+          <button class="btn btn-blue" id="applyAllBtn">
+            全班套用
+          </button>
+
+          <button class="btn btn-warn" id="clearLocalBtn">
+            全部歸零
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <div class="section">
+
+        <div class="section-head">
+          <div>
+            <h2 class="section-title">
+              ⚠️ 今天還沒跑
+            </h2>
+
+            <p class="section-sub" id="notRunCount">
+              尚未跑 28 人
+            </p>
+          </div>
+        </div>
+
+        <div class="not-run-grid" id="notRunList"></div>
+
+      </div>
+
+
+      <div class="section">
+
+        <div class="section-head">
+
+          <div>
+            <h2 class="section-title">
+              🏃 今日圈數登記
+            </h2>
+
+            <p class="section-sub">
+              可按 ＋／－，也可以直接輸入圈數
+            </p>
+          </div>
+
+          <input
+            id="studentSearch"
+            class="input"
+            style="max-width:210px"
+            placeholder="搜尋姓名或座號"
+          />
+
+        </div>
+
+        <div class="student-grid" id="studentGrid"></div>
+
+      </div>
+
+    </section>
+
+
+    <section class="panel" id="panel-ranking">
+
+      <div class="section">
+
+        <div class="section-head">
+
+          <div>
+            <h2 class="section-title">
+              🏆 每月 TOP 5
+            </h2>
+
+            <p class="section-sub">
+              當月累積圈數最多的五位同學
+            </p>
+          </div>
+
+          <div class="month-controls">
+
+            <button class="btn" id="prevMonthBtn">
+              ‹
+            </button>
+
+            <div class="month-label" id="rankingMonthLabel"></div>
+
+            <button class="btn" id="nextMonthBtn">
+              ›
+            </button>
+
+          </div>
+
+        </div>
+
+        <div class="rank-list" id="monthlyRanking"></div>
+
+      </div>
+
+
+      <div class="section">
+
+        <div class="section-head">
+          <div>
+            <h2 class="section-title">
+              ⚡ 今日跑步王
+            </h2>
+          </div>
+        </div>
+
+        <div class="rank-list" id="todayRanking"></div>
+
+      </div>
+
+
+      <div class="section">
+
+        <div class="section-head">
+          <div>
+            <h2 class="section-title">
+              🥇 總累積 TOP 5
+            </h2>
+          </div>
+        </div>
+
+        <div class="rank-list" id="allRanking"></div>
+
+      </div>
+
+    </section>
+
+
+    <section class="panel" id="panel-students">
+
+      <div class="section">
+
+        <div class="section-head">
+          <div>
+            <h2 class="section-title">
+              👤 每位學生累積
+            </h2>
+
+            <p class="section-sub">
+              顯示本月圈數與總累積圈數
+            </p>
+          </div>
+        </div>
+
+        <div class="student-stats-list" id="studentStatsList"></div>
+
+      </div>
+
+
+      <div class="section">
+
+        <div class="section-head">
+          <div>
+            <h2 class="section-title">
+              🎖️ 圈數成就
+            </h2>
+          </div>
+        </div>
+
+        <div class="achievement-grid">
+
+          <div class="achievement">
+            <span>🌱</span>
+            <strong>10圈</strong>
+            <small>起步</small>
+          </div>
+
+          <div class="achievement">
+            <span>🥉</span>
+            <strong>25圈</strong>
+            <small>持續前進</small>
+          </div>
+
+          <div class="achievement">
+            <span>🥈</span>
+            <strong>50圈</strong>
+            <small>跑步健將</small>
+          </div>
+
+          <div class="achievement">
+            <span>🥇</span>
+            <strong>100圈</strong>
+            <small>百圈達成</small>
+          </div>
+
+          <div class="achievement">
+            <span>🔥</span>
+            <strong>200圈</strong>
+            <small>超級跑者</small>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <section class="panel" id="panel-history">
+
+      <div class="section">
+
+        <div class="section-head">
+          <div>
+            <h2 class="section-title">
+              📊 每日班級紀錄
+            </h2>
+
+            <p class="section-sub">
+              查看各日期的參與人數與總圈數
+            </p>
+          </div>
+        </div>
+
+        <div class="history-list" id="historyList"></div>
+
+      </div>
+
+    </section>
+
+
+    <footer>
+      班級跑步圈數累計系統｜RUNNING CHALLENGE
+    </footer>
+
+  </div>
+
+
+  <div class="save-bar" id="saveBar">
+    <button class="save-btn" id="saveTodayBtn">
+      💾 儲存今日跑步紀錄
+    </button>
+  </div>
+
+
+  <div class="toast" id="toast"></div>
+
+
+  <script type="module">
+
+    import {
+      initializeApp
+    } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+
+    import {
+      getFirestore,
+      doc,
+      setDoc,
+      getDocs,
+      collection,
+      deleteDoc
+    } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+
+    // =========================================================
+    // Firebase 設定
+    // 請換成你這個跑步系統專案自己的 Firebase Config
+    // =========================================================
+
+    const firebaseConfig = {
+
+      apiKey: "請填入你的API_KEY",
+
+      authDomain: "請填入你的AUTH_DOMAIN",
+
+      projectId: "請填入你的PROJECT_ID",
+
+      storageBucket: "請填入你的STORAGE_BUCKET",
+
+      messagingSenderId: "請填入你的MESSAGING_SENDER_ID",
+
+      appId: "請填入你的APP_ID"
+
+    };
+
+
+    // =========================================================
+    // 正式學生名單
+    // =========================================================
+
+    const STUDENTS = [
+
+      { no: 1, name: "王禹涵" },
+      { no: 2, name: "江育緹" },
+      { no: 3, name: "呂思儀" },
+      { no: 4, name: "李詠騏" },
+
+      { no: 5, name: "林子歆" },
+      { no: 6, name: "林禹萱" },
+      { no: 7, name: "張馨勻" },
+      { no: 8, name: "陳昕樂" },
+
+      { no: 9, name: "陳梓安" },
+      { no: 10, name: "陳筠蓁" },
+      { no: 11, name: "陳苙絜" },
+      { no: 12, name: "楊錚諭" },
+
+      { no: 13, name: "趙安褕" },
+      { no: 14, name: "魏語潔" },
+      { no: 15, name: "江靚恩" },
+      { no: 16, name: "王洋振" },
+
+      { no: 17, name: "吳昊丞" },
+      { no: 18, name: "李祐誠" },
+      { no: 19, name: "林宸陞" },
+      { no: 20, name: "林維辰" },
+
+      { no: 21, name: "林鈺棟" },
+      { no: 22, name: "洪楷祥" },
+      { no: 23, name: "陳兆楷" },
+      { no: 24, name: "陳沂璟" },
+
+      { no: 25, name: "黑肚·尤明" },
+      { no: 26, name: "賴震宇" },
+      { no: 27, name: "戴震龍" },
+      { no: 28, name: "謝宇哲" }
+
+    ];
+
+
+    const CLASS_GOAL = 800;
+
+
+    let db = null;
+    let firebaseReady = false;
+
+    try {
+
+      const app = initializeApp(firebaseConfig);
+
+      db = getFirestore(app);
+
+      firebaseReady =
+        firebaseConfig.apiKey &&
+        !firebaseConfig.apiKey.includes("請填入");
+
+    } catch (error) {
+
+      console.error(error);
+
+    }
+
+
+    const today = new Date();
+
+    const currentDateKey =
+      formatDateKey(today);
+
+    let selectedRankingDate =
+      new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        1
+      );
+
+    let todayValues = {};
+    let allRecords = {};
+
+
+    STUDENTS.forEach(student => {
+      todayValues[student.no] = 0;
+    });
+
+
+    const todayLabel =
+      document.getElementById("todayLabel");
+
+    const syncBadge =
+      document.getElementById("syncBadge");
+
+    const studentGrid =
+      document.getElementById("studentGrid");
+
+    const notRunList =
+      document.getElementById("notRunList");
+
+    const notRunCount =
+      document.getElementById("notRunCount");
+
+    const todayDone =
+      document.getElementById("todayDone");
+
+    const todayTotal =
+      document.getElementById("todayTotal");
+
+    const monthTotal =
+      document.getElementById("monthTotal");
+
+    const allTotal =
+      document.getElementById("allTotal");
+
+    const todayMax =
+      document.getElementById("todayMax");
+
+    const goalText =
+      document.getElementById("goalText");
+
+    const goalBar =
+      document.getElementById("goalBar");
+
+    const goalCaption =
+      document.getElementById("goalCaption");
+
+    const monthlyRanking =
+      document.getElementById("monthlyRanking");
+
+    const todayRanking =
+      document.getElementById("todayRanking");
+
+    const allRanking =
+      document.getElementById("allRanking");
+
+    const studentStatsList =
+      document.getElementById("studentStatsList");
+
+    const historyList =
+      document.getElementById("historyList");
+
+    const rankingMonthLabel =
+      document.getElementById("rankingMonthLabel");
+
+    const toast =
+      document.getElementById("toast");
+
+
+    function formatDateKey(date){
+
+      const y = date.getFullYear();
+
+      const m =
+        String(date.getMonth() + 1)
+          .padStart(2,"0");
+
+      const d =
+        String(date.getDate())
+          .padStart(2,"0");
+
+      return `${y}-${m}-${d}`;
+
+    }
+
+
+    function formatTaiwanDate(date){
+
+      const weekdays =
+        ["日","一","二","三","四","五","六"];
+
+      return (
+        `${date.getFullYear()} / ` +
+        `${String(date.getMonth()+1).padStart(2,"0")} / ` +
+        `${String(date.getDate()).padStart(2,"0")} ` +
+        `星期${weekdays[date.getDay()]}`
+      );
+
+    }
+
+
+    todayLabel.textContent =
+      `📅 ${formatTaiwanDate(today)}`;
+
+    goalText.textContent =
+      CLASS_GOAL;
+
+
+    function updateSyncBadge(text,type="normal"){
+
+      syncBadge.textContent = text;
+
+      if(type === "success"){
+
+        syncBadge.style.background =
+          "rgba(52,211,153,.12)";
+
+        syncBadge.style.color =
+          "#b7f7dc";
+
+      }
+
+      if(type === "error"){
+
+        syncBadge.style.background =
+          "rgba(251,113,133,.12)";
+
+        syncBadge.style.color =
+          "#fecdd3";
+
+      }
+
+      if(type === "loading"){
+
+        syncBadge.style.background =
+          "rgba(96,165,250,.12)";
+
+        syncBadge.style.color =
+          "#bfdbfe";
+
+      }
+
+    }
+
+
+    let toastTimer = null;
+
+    function showToast(message){
+
+      toast.textContent = message;
+
+      toast.classList.add("show");
+
+      clearTimeout(toastTimer);
+
+      toastTimer =
+        setTimeout(()=>{
+          toast.classList.remove("show");
+        },2200);
+
+    }
+
+
+    function renderStudentInputs(){
+
+      const keyword =
+        document
+          .getElementById("studentSearch")
+          .value
+          .trim()
+          .toLowerCase();
+
+      const filtered =
+        STUDENTS.filter(student=>{
+
+          return (
+            student.name
+              .toLowerCase()
+              .includes(keyword)
+            ||
+            String(student.no)
+              .includes(keyword)
+          );
+
+        });
+
+      studentGrid.innerHTML =
+        filtered.map(student=>{
+
+          const value =
+            Number(todayValues[student.no] || 0);
+
+          return `
+
+            <div
+              class="student-card ${value > 0 ? "done" : ""}"
+            >
+
+              <div>
+
+                <div class="student-name">
+                  ${String(student.no).padStart(2,"0")}
+                  ${student.name}
+                </div>
+
+                <div class="student-meta">
+
+                  ${
+                    value > 0
+                    ? `今日已跑 ${value} 圈`
+                    : "今日尚未跑"
+                  }
+
+                </div>
+
+              </div>
+
+              <div class="counter">
+
+                <button
+                  class="counter-btn"
+                  data-action="minus"
+                  data-no="${student.no}"
+                >
+                  −
+                </button>
+
+                <input
+                  class="circle-input"
+                  type="number"
+                  min="0"
+                  inputmode="numeric"
+                  value="${value}"
+                  data-no="${student.no}"
+                />
+
+                <button
+                  class="counter-btn plus"
+                  data-action="plus"
+                  data-no="${student.no}"
+                >
+                  ＋
+                </button>
+
+              </div>
+
+            </div>
+
+          `;
+
+        }).join("");
+
+    }
+
+
+    function updateTodaySummary(){
+
+      const values =
+        STUDENTS.map(student =>
+          Number(todayValues[student.no] || 0)
+        );
+
+      const total =
+        values.reduce(
+          (a,b)=>a+b,
+          0
+        );
+
+      const done =
+        values.filter(v=>v>0).length;
+
+      const max =
+        values.length
+        ? Math.max(...values)
+        : 0;
+
+      todayTotal.textContent =
+        total.toLocaleString();
+
+      todayDone.textContent =
+        `${done} / ${STUDENTS.length}`;
+
+      todayMax.textContent =
+        max;
+
+      renderNotRun();
+
+      renderTodayRanking();
+
+    }
+
+
+    function renderNotRun(){
+
+      const notRun =
+        STUDENTS.filter(student =>
+          Number(todayValues[student.no] || 0) === 0
+        );
+
+      notRunCount.textContent =
+        `尚未跑 ${notRun.length} 人`;
+
+      if(notRun.length === 0){
+
+        notRunList.innerHTML =
+          `<div class="all-done">
+            🎉 今天全班都完成跑步了！
+          </div>`;
+
+        return;
+
+      }
+
+      notRunList.innerHTML =
+        notRun.map(student=>`
+
+          <div class="not-run-chip">
+            ${String(student.no).padStart(2,"0")}
+            ${student.name}
+          </div>
+
+        `).join("");
+
+    }
+
+
+    function getStudentAllTotal(studentNo){
+
+      let sum = 0;
+
+      Object.values(allRecords)
+        .forEach(record=>{
+
+          sum +=
+            Number(
+              record.records?.[studentNo] || 0
+            );
+
+        });
+
+      return sum;
+
+    }
+
+
+    function getStudentMonthTotal(
+      studentNo,
+      year,
+      month
+    ){
+
+      const prefix =
+        `${year}-${String(month).padStart(2,"0")}`;
+
+      let sum = 0;
+
+      Object.entries(allRecords)
+        .forEach(([dateKey,record])=>{
+
+          if(dateKey.startsWith(prefix)){
+
+            sum +=
+              Number(
+                record.records?.[studentNo] || 0
+              );
+
+          }
+
+        });
+
+      return sum;
+
+    }
+
+
+    function getMonthClassTotal(year,month){
+
+      const prefix =
+        `${year}-${String(month).padStart(2,"0")}`;
+
+      let sum = 0;
+
+      Object.entries(allRecords)
+        .forEach(([dateKey,record])=>{
+
+          if(dateKey.startsWith(prefix)){
+
+            sum +=
+              Object.values(record.records || {})
+                .reduce(
+                  (a,b)=>
+                    a + Number(b || 0),
+                  0
+                );
+
+          }
+
+        });
+
+      return sum;
+
+    }
+
+
+    function getClassAllTotal(){
+
+      let sum = 0;
+
+      Object.values(allRecords)
+        .forEach(record=>{
+
+          sum +=
+            Object.values(record.records || {})
+              .reduce(
+                (a,b)=>
+                  a + Number(b || 0),
+                0
+              );
+
+        });
+
+      return sum;
+
+    }
+
+
+    function renderTodayRanking(){
+
+      const ranking =
+        STUDENTS
+          .map(student=>({
+
+            ...student,
+
+            score:
+              Number(
+                todayValues[student.no] || 0
+              )
+
+          }))
+          .filter(item=>item.score>0)
+          .sort(
+            (a,b)=>
+              b.score-a.score ||
+              a.no-b.no
+          )
+          .slice(0,5);
+
+      renderRanking(
+        todayRanking,
+        ranking,
+        "今日"
+      );
+
+    }
+
+
+    function renderMonthlyRanking(){
+
+      const year =
+        selectedRankingDate.getFullYear();
+
+      const month =
+        selectedRankingDate.getMonth()+1;
+
+      rankingMonthLabel.textContent =
+        `${year} / ${String(month).padStart(2,"0")}`;
+
+      const ranking =
+        STUDENTS
+          .map(student=>({
+
+            ...student,
+
+            score:
+              getStudentMonthTotal(
+                student.no,
+                year,
+                month
+              )
+
+          }))
+          .sort(
+            (a,b)=>
+              b.score-a.score ||
+              a.no-b.no
+          )
+          .slice(0,5);
+
+      renderRanking(
+        monthlyRanking,
+        ranking,
+        `${month}月`
+      );
+
+    }
+
+
+    function renderAllRanking(){
+
+      const ranking =
+        STUDENTS
+          .map(student=>({
+
+            ...student,
+
+            score:
+              getStudentAllTotal(student.no)
+
+          }))
+          .sort(
+            (a,b)=>
+              b.score-a.score ||
+              a.no-b.no
+          )
+          .slice(0,5);
+
+      renderRanking(
+        allRanking,
+        ranking,
+        "總累積"
+      );
+
+    }
+
+
+    function renderRanking(
+      container,
+      ranking,
+      label
+    ){
+
+      if(
+        ranking.length === 0 ||
+        ranking.every(x=>x.score===0)
+      ){
+
+        container.innerHTML =
+          `<div class="empty">
+            目前還沒有跑步紀錄
+          </div>`;
+
+        return;
+
+      }
+
+      const medals =
+        ["🥇","🥈","🥉","4","5"];
+
+      const medalClasses =
+        ["gold","silver","bronze","",""];
+
+      container.innerHTML =
+        ranking.map((item,index)=>`
+
+          <div class="rank-item">
+
+            <div
+              class="rank-no ${medalClasses[index]}"
+            >
+              ${medals[index]}
+            </div>
+
+            <div>
+
+              <div class="rank-name">
+                ${String(item.no).padStart(2,"0")}
+                ${item.name}
+              </div>
+
+              <div class="rank-meta">
+                ${label}排名第 ${index+1} 名
+              </div>
+
+            </div>
+
+            <div class="rank-score">
+              ${item.score} 圈
+            </div>
+
+          </div>
+
+        `).join("");
+
+    }
+
+
+    function renderStudentStats(){
+
+      const year =
+        today.getFullYear();
+
+      const month =
+        today.getMonth()+1;
+
+      const data =
+        STUDENTS
+          .map(student=>({
+
+            ...student,
+
+            month:
+              getStudentMonthTotal(
+                student.no,
+                year,
+                month
+              ),
+
+            all:
+              getStudentAllTotal(student.no)
+
+          }))
+          .sort((a,b)=>a.no-b.no);
+
+      studentStatsList.innerHTML =
+        data.map(student=>`
+
+          <div class="student-total-row">
+
+            <div class="seat">
+              ${String(student.no).padStart(2,"0")}
+            </div>
+
+            <div class="total-name">
+              ${student.name}
+            </div>
+
+            <div class="mini-stat month">
+              本月
+              <strong>
+                ${student.month} 圈
+              </strong>
+            </div>
+
+            <div class="mini-stat">
+              總累積
+              <strong>
+                ${student.all} 圈
+              </strong>
+            </div>
+
+          </div>
+
+        `).join("");
+
+    }
+
+
+    function renderHistory(){
+
+      const items =
+        Object.entries(allRecords)
+          .sort(
+            (a,b)=>
+              b[0].localeCompare(a[0])
+          );
+
+      if(items.length === 0){
+
+        historyList.innerHTML =
+          `<div class="empty">
+            尚無歷史跑步資料
+          </div>`;
+
+        return;
+
+      }
+
+      historyList.innerHTML =
+        items.map(([dateKey,record])=>{
+
+          const records =
+            record.records || {};
+
+          const values =
+            Object.values(records)
+              .map(v=>Number(v || 0));
+
+          const total =
+            values.reduce(
+              (a,b)=>a+b,
+              0
+            );
+
+          const done =
+            values.filter(v=>v>0).length;
+
+          return `
+
+            <div class="history-item">
+
+              <div>
+
+                <div class="history-date">
+                  📅 ${dateKey}
+                </div>
+
+                <div class="history-meta">
+                  ${done} 人完成
+                </div>
+
+              </div>
+
+              <div class="history-number">
+                ${total} 圈
+              </div>
+
+              <button
+                class="btn btn-blue"
+                data-history-load="${dateKey}"
+              >
+                查看
+              </button>
+
+              <button
+                class="btn btn-danger"
+                data-history-delete="${dateKey}"
+              >
+                刪除
+              </button>
+
+            </div>
+
+          `;
+
+        }).join("");
+
+    }
+
+
+    function renderAllStats(){
+
+      const total =
+        getClassAllTotal();
+
+      const currentMonthTotal =
+        getMonthClassTotal(
+          today.getFullYear(),
+          today.getMonth()+1
+        );
+
+      allTotal.textContent =
+        total.toLocaleString();
+
+      monthTotal.textContent =
+        currentMonthTotal.toLocaleString();
+
+      const percent =
+        CLASS_GOAL > 0
+          ? total / CLASS_GOAL * 100
+          : 0;
+
+      goalBar.style.width =
+        `${Math.min(percent,100)}%`;
+
+      if(total >= CLASS_GOAL){
+
+        goalCaption.textContent =
+          `🎉 目標達成！目前已累積 ${total} 圈`;
+
+      }else{
+
+        goalCaption.textContent =
+          `目前完成 ${percent.toFixed(1)}%，還差 ${CLASS_GOAL-total} 圈`;
+
+      }
+
+      renderMonthlyRanking();
+      renderAllRanking();
+      renderStudentStats();
+      renderHistory();
+
+    }
+
+
+    async function saveToday(){
+
+      if(!firebaseReady){
+
+        showToast(
+          "請先填入 Firebase 設定資料"
+        );
+
+        return;
+
+      }
+
+      updateSyncBadge(
+        "● 儲存中",
+        "loading"
+      );
+
+      try{
+
+        const cleanedRecords = {};
+
+        STUDENTS.forEach(student=>{
+
+          cleanedRecords[student.no] =
+            Math.max(
+              0,
+              Number(todayValues[student.no] || 0)
+            );
+
+        });
+
+        const payload = {
+
+          date: currentDateKey,
+
+          updatedAt:
+            new Date().toISOString(),
+
+          records:
+            cleanedRecords
+
+        };
+
+        await setDoc(
+          doc(
+            db,
+            "runningRecords",
+            currentDateKey
+          ),
+          payload
+        );
+
+        allRecords[currentDateKey] =
+          payload;
+
+        updateSyncBadge(
+          "● 已同步",
+          "success"
+        );
+
+        showToast(
+          "✅ 今日跑步紀錄已儲存"
+        );
+
+        renderAllStats();
+
+      }catch(error){
+
+        console.error(error);
+
+        updateSyncBadge(
+          "● 同步失敗",
+          "error"
+        );
+
+        showToast(
+          "❌ 儲存失敗，請檢查 Firebase"
+        );
+
+      }
+
+    }
+
+
+    async function loadAllRecords(){
+
+      if(!firebaseReady){
+
+        updateSyncBadge(
+          "● 尚未設定 Firebase",
+          "error"
+        );
+
+        renderStudentInputs();
+        updateTodaySummary();
+        renderAllStats();
+
+        return;
+
+      }
+
+      updateSyncBadge(
+        "● 同步中",
+        "loading"
+      );
+
+      try{
+
+        const snap =
+          await getDocs(
+            collection(
+              db,
+              "runningRecords"
+            )
+          );
+
+        allRecords = {};
+
+        snap.forEach(item=>{
+
+          allRecords[item.id] =
+            item.data();
+
+        });
+
+        const todayRecord =
+          allRecords[currentDateKey];
+
+        if(todayRecord?.records){
+
+          STUDENTS.forEach(student=>{
+
+            todayValues[student.no] =
+              Number(
+                todayRecord
+                  .records?.[student.no] || 0
+              );
+
+          });
+
+        }
+
+        updateSyncBadge(
+          "● 已同步",
+          "success"
+        );
+
+      }catch(error){
+
+        console.error(error);
+
+        updateSyncBadge(
+          "● 同步失敗",
+          "error"
+        );
+
+        showToast(
+          "Firebase 讀取失敗"
+        );
+
+      }
+
+      renderStudentInputs();
+      updateTodaySummary();
+      renderAllStats();
+
+    }
+
+
+    async function deleteHistoryDate(dateKey){
+
+      if(
+        !confirm(
+          `確定要刪除 ${dateKey} 的全部跑步紀錄嗎？`
+        )
+      ){
+        return;
+      }
+
+      if(!firebaseReady){
+        return;
+      }
+
+      try{
+
+        await deleteDoc(
+          doc(
+            db,
+            "runningRecords",
+            dateKey
+          )
+        );
+
+        delete allRecords[dateKey];
+
+        if(dateKey === currentDateKey){
+
+          STUDENTS.forEach(student=>{
+
+            todayValues[student.no] = 0;
+
+          });
+
+          renderStudentInputs();
+          updateTodaySummary();
+
+        }
+
+        renderAllStats();
+
+        showToast(
+          `已刪除 ${dateKey}`
+        );
+
+      }catch(error){
+
+        console.error(error);
+
+        showToast(
+          "刪除失敗"
+        );
+
+      }
+
+    }
+
+
+    function viewHistoryDate(dateKey){
+
+      const record =
+        allRecords[dateKey];
+
+      if(!record){
+        return;
+      }
+
+      const lines =
+        STUDENTS.map(student=>{
+
+          const value =
+            Number(
+              record.records?.[student.no] || 0
+            );
+
+          return (
+            `${String(student.no).padStart(2,"0")} ` +
+            `${student.name}：${value} 圈`
+          );
+
+        }).join("\n");
+
+      alert(
+        `${dateKey} 跑步紀錄\n\n${lines}`
+      );
+
+    }
+
+
+    studentGrid.addEventListener(
+      "click",
+      event=>{
+
+        const btn =
+          event.target.closest(
+            "[data-action]"
+          );
+
+        if(!btn){
+          return;
+        }
+
+        const studentNo =
+          Number(btn.dataset.no);
+
+        const action =
+          btn.dataset.action;
+
+        let current =
+          Number(
+            todayValues[studentNo] || 0
+          );
+
+        if(action === "plus"){
+          current++;
+        }
+
+        if(action === "minus"){
+          current = Math.max(0,current-1);
+        }
+
+        todayValues[studentNo] =
+          current;
+
+        renderStudentInputs();
+        updateTodaySummary();
+
+      }
+    );
+
+
+    studentGrid.addEventListener(
+      "change",
+      event=>{
+
+        if(
+          !event.target
+            .classList
+            .contains("circle-input")
+        ){
+          return;
+        }
+
+        const studentNo =
+          Number(
+            event.target.dataset.no
+          );
+
+        const value =
+          Math.max(
+            0,
+            Number(event.target.value || 0)
+          );
+
+        todayValues[studentNo] =
+          value;
+
+        renderStudentInputs();
+        updateTodaySummary();
+
+      }
+    );
+
+
+    document
+      .getElementById("studentSearch")
+      .addEventListener(
+        "input",
+        renderStudentInputs
+      );
+
+
+    document
+      .getElementById("applyAllBtn")
+      .addEventListener(
+        "click",
+        ()=>{
+
+          const value =
+            Math.max(
+              0,
+              Number(
+                document
+                  .getElementById("quickCircleInput")
+                  .value || 0
+              )
+            );
+
+          if(
+            !confirm(
+              `確定要將全班今日圈數設定為 ${value} 圈嗎？`
+            )
+          ){
+            return;
+          }
+
+          STUDENTS.forEach(student=>{
+
+            todayValues[student.no] =
+              value;
+
+          });
+
+          renderStudentInputs();
+          updateTodaySummary();
+
+          showToast(
+            `全班已設定為 ${value} 圈`
+          );
+
+        }
+      );
+
+
+    document
+      .getElementById("clearLocalBtn")
+      .addEventListener(
+        "click",
+        ()=>{
+
+          if(
+            !confirm(
+              "確定要將目前畫面的所有學生圈數歸零嗎？"
+            )
+          ){
+            return;
+          }
+
+          STUDENTS.forEach(student=>{
+
+            todayValues[student.no] = 0;
+
+          });
+
+          renderStudentInputs();
+          updateTodaySummary();
+
+          showToast(
+            "目前輸入已全部歸零"
+          );
+
+        }
+      );
+
+
+    document
+      .getElementById("saveTodayBtn")
+      .addEventListener(
+        "click",
+        saveToday
+      );
+
+
+    document
+      .getElementById("prevMonthBtn")
+      .addEventListener(
+        "click",
+        ()=>{
+
+          selectedRankingDate =
+            new Date(
+              selectedRankingDate.getFullYear(),
+              selectedRankingDate.getMonth()-1,
+              1
+            );
+
+          renderMonthlyRanking();
+
+        }
+      );
+
+
+    document
+      .getElementById("nextMonthBtn")
+      .addEventListener(
+        "click",
+        ()=>{
+
+          selectedRankingDate =
+            new Date(
+              selectedRankingDate.getFullYear(),
+              selectedRankingDate.getMonth()+1,
+              1
+            );
+
+          renderMonthlyRanking();
+
+        }
+      );
+
+
+    historyList.addEventListener(
+      "click",
+      event=>{
+
+        const viewBtn =
+          event.target.closest(
+            "[data-history-load]"
+          );
+
+        if(viewBtn){
+
+          viewHistoryDate(
+            viewBtn.dataset.historyLoad
+          );
+
+          return;
+
+        }
+
+        const deleteBtn =
+          event.target.closest(
+            "[data-history-delete]"
+          );
+
+        if(deleteBtn){
+
+          deleteHistoryDate(
+            deleteBtn.dataset.historyDelete
+          );
+
+        }
+
+      }
+    );
+
+
+    document
+      .querySelectorAll(".tab-btn")
+      .forEach(button=>{
+
+        button.addEventListener(
+          "click",
+          ()=>{
+
+            document
+              .querySelectorAll(".tab-btn")
+              .forEach(btn=>
+                btn.classList.remove("active")
+              );
+
+            document
+              .querySelectorAll(".panel")
+              .forEach(panel=>
+                panel.classList.remove("active")
+              );
+
+            button.classList.add("active");
+
+            document
+              .getElementById(
+                `panel-${button.dataset.tab}`
+              )
+              .classList.add("active");
+
+            document
+              .getElementById("saveBar")
+              .style.display =
+                button.dataset.tab === "today"
+                ? "block"
+                : "none";
+
+          }
+        );
+
+      });
+
+
+    renderStudentInputs();
+
+    updateTodaySummary();
+
+    renderAllStats();
+
+    loadAllRecords();
+
+  </script>
+
+</body>
+</html>
