@@ -4,175 +4,1942 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>班級成績分析｜學生段考成績管理系統</title>
-<link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="20" fill="%230f766e"/><text x="50" y="68" text-anchor="middle" font-size="58" fill="white">績</text></svg>'>
-<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+<rect width="100" height="100" rx="20" fill="%230f766e"/>
+<text x="50" y="68" text-anchor="middle" font-size="58" fill="white">績</text>
+</svg>'>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js">
+</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js">
+</script>
 <style>
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-height:100vh;font-family:"Microsoft JhengHei","Noto Sans TC",sans-serif;color:#394150;background:radial-gradient(circle at 10% 10%,rgba(255,224,178,.55) 0 85px,transparent 86px),radial-gradient(circle at 93% 14%,rgba(255,205,210,.48) 0 105px,transparent 106px),radial-gradient(circle at 8% 85%,rgba(187,222,251,.45) 0 115px,transparent 116px),radial-gradient(circle at 92% 82%,rgba(220,237,200,.55) 0 100px,transparent 101px),linear-gradient(135deg,#fff8e7 0%,#fff4e8 35%,#f8fbec 68%,#eef8f5 100%);background-attachment:fixed}body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.18;background-image:radial-gradient(#f2b663 1.4px,transparent 1.4px),radial-gradient(#77b6a3 1.4px,transparent 1.4px);background-size:34px 34px,46px 46px;background-position:0 0,18px 18px;z-index:-1}button,input,select{font-family:inherit}.page{width:100%;max-width:1420px;margin:auto;padding:26px 16px 70px}.header{text-align:center;margin-bottom:25px}.brand-bubble{display:inline-flex;align-items:center;justify-content:center;padding:16px 30px;border-radius:30px;background:linear-gradient(135deg,#fff0b8,#ffdca8);border:3px solid rgba(255,255,255,.9);box-shadow:0 10px 24px rgba(136,102,58,.15);margin-bottom:12px}.brand-title{margin:0;color:#4b5563;font-size:34px;font-weight:900;letter-spacing:2px}.subtitle{display:inline-block;margin-top:7px;padding:7px 18px;border-radius:999px;color:#64748b;background:rgba(255,255,255,.72);font-size:14px}.card{background:rgba(255,255,255,.94);border:2px solid rgba(255,255,255,.95);border-radius:24px;padding:24px;margin-bottom:20px;box-shadow:0 12px 28px rgba(74,85,104,.09)}.login-card{max-width:520px;margin:0 auto}.section-title{display:flex;align-items:center;gap:8px;margin-bottom:17px;color:#475569;font-size:21px;font-weight:900}.field{min-width:0;margin-bottom:16px}label{display:block;margin-bottom:7px;font-size:14px;font-weight:800}input,select{width:100%;min-height:49px;padding:0 14px;border:1px solid #d4d9df;border-radius:14px;background:#fff;font-size:16px;outline:none}input:focus,select:focus{border-color:#e5a94b;box-shadow:0 0 0 4px rgba(229,169,75,.14)}.btn{min-height:48px;border:0;border-radius:14px;padding:0 18px;color:#fff;background:#d89038;font-size:16px;font-weight:900;cursor:pointer;box-shadow:0 5px 12px rgba(175,117,47,.16)}.btn:hover{filter:brightness(1.04)}.btn:disabled{opacity:.5;cursor:not-allowed}.btn-blue{background:#5798c6}.btn-secondary{background:#66758a}.btn-full{width:100%}.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}.actions .btn{flex:1 1 180px}.message{display:none;margin-top:14px;padding:13px 15px;border-radius:13px;line-height:1.7;font-size:14px}.message.success{display:block;background:#e5f5df;color:#376b37}.message.error{display:block;background:#fde7e4;color:#974b46}.message.info{display:block;background:#e8f3fb;color:#376f95}.admin-area{display:none}.admin-area.show{display:block}.topbar{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:16px 19px;margin-bottom:19px;border-radius:19px;border:2px solid rgba(255,255,255,.9);background:rgba(255,255,255,.86);box-shadow:0 8px 18px rgba(74,85,104,.07)}.tabs{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:21px}.tab{min-height:45px;padding:0 18px;border:1px solid #ddd7ce;border-radius:15px;background:rgba(255,255,255,.91);color:#525d6c;font-weight:900;cursor:pointer}.tab.active{color:#fff;background:#df9340;border-color:#df9340;box-shadow:0 5px 12px rgba(192,126,55,.17)}.tab-page{display:none}.tab-page.active{display:block}.settings-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.help{padding:14px 16px;border-radius:14px;border:1px solid #e7e2da;background:#fffaf2;color:#666;font-size:14px;line-height:1.8}.file-box{padding:24px;border:2px dashed #d6b88b;border-radius:17px;background:#fffaf2;text-align:center}.sheet-list{display:grid;gap:12px;margin-top:18px}.sheet-card{padding:15px;border:1px solid #e6e0d7;border-radius:15px;background:#fff}.sheet-title{font-weight:900}.sheet-info{margin-top:7px;color:#64748b;font-size:14px;line-height:1.7}.sheet-ok{color:#4a8745;font-weight:900}.sheet-error{color:#b7504d;font-weight:900}.controls{display:grid;grid-template-columns:minmax(0,2fr) minmax(180px,1fr);gap:12px}.summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:16px}.summary-card{padding:15px;border:1px solid #ebe2d5;border-radius:16px;background:linear-gradient(145deg,#fffdf8,#fff7ea);text-align:center}.summary-label{color:#77808c;font-size:13px}.summary-value{margin-top:5px;color:#4b5563;font-size:23px;font-weight:900}.positive{color:#4a8745!important}.negative{color:#be5b56!important}.neutral{color:#657080!important}.table-tip{margin-bottom:10px;padding:10px 13px;border-radius:12px;background:#fff7e7;color:#70675d;font-size:13px;line-height:1.7}.table-wrap{position:relative;width:100%;max-height:560px;overflow:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;border:1px solid #ddd9d3;border-radius:15px;background:#fff}.table-wrap::-webkit-scrollbar{width:12px;height:12px}.table-wrap::-webkit-scrollbar-track{background:#f4f1ed}.table-wrap::-webkit-scrollbar-thumb{background:#b8afa4;border:3px solid #f4f1ed;border-radius:999px}table{width:100%;min-width:1050px;border-collapse:separate;border-spacing:0}th,td{height:46px;padding:10px;border-right:1px solid #eee9e3;border-bottom:1px solid #eee9e3;background:#fff;text-align:center;white-space:nowrap;font-size:14px}thead th{position:sticky;top:0;z-index:30;background:#f4eadb;color:#514d49;border-bottom:2px solid #d8c6aa;font-weight:900;cursor:pointer;box-shadow:0 2px 5px rgba(80,70,60,.08)}thead th[data-sort]::after{content:" ↕";color:#8e8479;font-size:11px}thead th.sort-asc::after{content:" ▲";color:#c97e30}thead th.sort-desc::after{content:" ▼";color:#c97e30}thead th:nth-child(1),tbody td:nth-child(1){position:sticky;left:0;min-width:66px;width:66px;z-index:10;background:#fffaf2}thead th:nth-child(1){z-index:50;background:#eadbc5}thead th:nth-child(2),tbody td:nth-child(2){position:sticky;left:66px;min-width:115px;width:115px;z-index:9;background:#fff;border-right:2px solid #dac9b0}thead th:nth-child(2){z-index:49;background:#eadbc5}tbody tr:nth-child(even) td{background:#fffdf9}tbody tr:nth-child(even) td:nth-child(1),tbody tr:nth-child(even) td:nth-child(2){background:#fff8ed}tbody tr:hover td{background:#fff4d9}tbody tr:hover td:nth-child(1),tbody tr:hover td:nth-child(2){background:#ffebc3}.history-mean{background:#eef7e8!important;font-weight:900}.student-header{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:18px;padding:18px 20px;border:2px solid rgba(255,255,255,.95);border-radius:21px;background:linear-gradient(135deg,#fff2c9,#eaf6df);box-shadow:0 8px 18px rgba(100,90,70,.08)}.student-name{font-size:28px;font-weight:900}.student-meta{margin-top:5px;color:#687381}.next-stage-card{padding:20px;margin-bottom:20px;border-radius:20px;background:linear-gradient(135deg,#ffe7b8,#fff5d8);border:2px solid #f7d38d}.next-stage-label{color:#9b6624;font-size:14px;font-weight:900}.next-stage-title{margin-top:5px;color:#674c2d;font-size:25px;font-weight:900}.next-stage-text{margin-top:8px;color:#6b6258;line-height:1.8}.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:18px}.chart-card{padding:17px;border:1px solid #e8e1d9;border-radius:18px;background:rgba(255,255,255,.94)}.chart-title{margin-bottom:10px;font-weight:900}.chart-box{position:relative;min-height:300px}.subject-analysis-list{display:grid;gap:18px}.subject-analysis-card{overflow:hidden;border:1px solid #e8e1d9;border-radius:20px;background:rgba(255,255,255,.96);box-shadow:0 7px 16px rgba(85,80,70,.06)}.subject-analysis-head{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 18px;background:linear-gradient(135deg,#fff5df,#f9f5ec);border-bottom:1px solid #eee5d8}.subject-analysis-name{font-size:21px;font-weight:900}.subject-status{padding:5px 11px;border-radius:999px;background:#fff;color:#73675b;font-size:13px;font-weight:900}.subject-analysis-body{padding:18px}.subject-data-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:16px}.subject-data-item{padding:11px;border-radius:13px;background:#faf8f5;text-align:center}.subject-data-label{color:#8a8178;font-size:12px}.subject-data-value{margin-top:4px;font-size:18px;font-weight:900}.teacher-box,.action-box,.week-box{margin-top:12px;padding:14px 16px;border-radius:14px;line-height:1.85}.teacher-box{background:#eef5fb;border-left:5px solid #72a9ce}.action-box{background:#fff5dc;border-left:5px solid #e0a64b}.week-box{background:#edf6e7;border-left:5px solid #83ad68}.box-title{margin-bottom:5px;font-weight:900}.action-list{margin:7px 0 0;padding-left:22px}.action-list li{margin:5px 0}.priority-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}.priority-card{padding:16px;border-radius:16px;border:1px solid #e5dfd5;background:#fffdf8}.priority-number{display:inline-flex;width:32px;height:32px;align-items:center;justify-content:center;border-radius:50%;background:#e6a04a;color:#fff;font-weight:900;margin-bottom:9px}.priority-title{font-weight:900;font-size:17px;margin-bottom:6px}.priority-text{color:#6b7280;line-height:1.75;font-size:14px}.overview-badge{display:inline-block;padding:5px 9px;border-radius:999px;background:#fff4d8;font-weight:800;font-size:12px}.overview-priority{font-weight:900;color:#b85d35}.class-subject-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}.subject-card{padding:15px;border:1px solid #e6dfd6;border-radius:15px;background:#fffaf3}.subject-title{font-size:18px;font-weight:900}.subject-main{margin-top:4px;font-size:24px;font-weight:900}.subject-detail{margin-top:6px;color:#737a83;font-size:13px;line-height:1.6}.ranking-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.ranking-box{overflow:hidden;border:1px solid #e4ded5;border-radius:15px}.ranking-title{padding:12px;background:#f7efe4;font-weight:900}.rank-item{display:flex;justify-content:space-between;gap:10px;padding:11px 13px;border-top:1px solid #eee8e0}.class-observation{display:grid;gap:12px}.observation-item{padding:15px 17px;border-radius:14px;border-left:5px solid #dca04e;background:#fffaf2;line-height:1.8}.student-history-table thead th:nth-child(1),.student-history-table tbody td:nth-child(1){left:0;min-width:90px;width:90px}.student-history-table thead th:nth-child(2),.student-history-table tbody td:nth-child(2){position:static;left:auto;min-width:90px;width:auto;border-right:1px solid #eee9e3}@media(max-width:1000px){.subject-data-grid{grid-template-columns:repeat(2,1fr)}.priority-grid{grid-template-columns:1fr}.class-subject-grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:760px){.page{padding:18px 9px 45px}.brand-title{font-size:27px}.brand-bubble{padding:13px 23px}.card{padding:18px 12px}.settings-grid,.controls,.summary,.chart-grid,.class-subject-grid,.ranking-grid{grid-template-columns:1fr}.tabs{display:grid;grid-template-columns:1fr 1fr}.tab{width:100%;padding:0 5px;font-size:13px}.topbar,.student-header{flex-direction:column;align-items:stretch}.table-wrap{max-height:500px}table{min-width:940px}th,td{font-size:13px}thead th:nth-child(1),tbody td:nth-child(1){min-width:54px;width:54px}thead th:nth-child(2),tbody td:nth-child(2){left:54px;min-width:92px;width:92px}.subject-data-grid{grid-template-columns:1fr 1fr}}
+* {
+  box-sizing:border-box
+}
+html {
+  scroll-behavior:smooth
+}
+body {
+  margin:0;
+  min-height:100vh;
+  font-family:"Microsoft JhengHei","Noto Sans TC",sans-serif;
+  color:#394150;
+  background:radial-gradient(circle at 10% 10%,rgba(255,224,178,.55) 0 85px,transparent 86px),radial-gradient(circle at 93% 14%,rgba(255,205,210,.48) 0 105px,transparent 106px),radial-gradient(circle at 8% 85%,rgba(187,222,251,.45) 0 115px,transparent 116px),radial-gradient(circle at 92% 82%,rgba(220,237,200,.55) 0 100px,transparent 101px),linear-gradient(135deg,#fff8e7 0%,#fff4e8 35%,#f8fbec 68%,#eef8f5 100%);
+  background-attachment:fixed
+}
+body:before {
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  opacity:.18;
+  background-image:radial-gradient(#f2b663 1.4px,transparent 1.4px),radial-gradient(#77b6a3 1.4px,transparent 1.4px);
+  background-size:34px 34px,46px 46px;
+  background-position:0 0,18px 18px;
+  z-index:-1
+}
+button,input,select {
+  font-family:inherit
+}
+.page {
+  width:100%;
+  max-width:1420px;
+  margin:auto;
+  padding:26px 16px 70px
+}
+.header {
+  text-align:center;
+  margin-bottom:25px
+}
+.brand-bubble {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:16px 30px;
+  border-radius:30px;
+  background:linear-gradient(135deg,#fff0b8,#ffdca8);
+  border:3px solid rgba(255,255,255,.9);
+  box-shadow:0 10px 24px rgba(136,102,58,.15);
+  margin-bottom:12px
+}
+.brand-title {
+  margin:0;
+  color:#4b5563;
+  font-size:34px;
+  font-weight:900;
+  letter-spacing:2px
+}
+.subtitle {
+  display:inline-block;
+  margin-top:7px;
+  padding:7px 18px;
+  border-radius:999px;
+  color:#64748b;
+  background:rgba(255,255,255,.72);
+  font-size:14px
+}
+.card {
+  background:rgba(255,255,255,.94);
+  border:2px solid rgba(255,255,255,.95);
+  border-radius:24px;
+  padding:24px;
+  margin-bottom:20px;
+  box-shadow:0 12px 28px rgba(74,85,104,.09)
+}
+.login-card {
+  max-width:520px;
+  margin:0 auto
+}
+.section-title {
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-bottom:17px;
+  color:#475569;
+  font-size:21px;
+  font-weight:900
+}
+.field {
+  min-width:0;
+  margin-bottom:16px
+}
+label {
+  display:block;
+  margin-bottom:7px;
+  font-size:14px;
+  font-weight:800
+}
+input,select {
+  width:100%;
+  min-height:49px;
+  padding:0 14px;
+  border:1px solid #d4d9df;
+  border-radius:14px;
+  background:#fff;
+  font-size:16px;
+  outline:none
+}
+input:focus,select:focus {
+  border-color:#e5a94b;
+  box-shadow:0 0 0 4px rgba(229,169,75,.14)
+}
+.btn {
+  min-height:48px;
+  border:0;
+  border-radius:14px;
+  padding:0 18px;
+  color:#fff;
+  background:#d89038;
+  font-size:16px;
+  font-weight:900;
+  cursor:pointer;
+  box-shadow:0 5px 12px rgba(175,117,47,.16)
+}
+.btn:hover {
+  filter:brightness(1.04)
+}
+.btn:disabled {
+  opacity:.5;
+  cursor:not-allowed
+}
+.btn-blue {
+  background:#5798c6
+}
+.btn-secondary {
+  background:#66758a
+}
+.btn-full {
+  width:100%
+}
+.actions {
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:16px
+}
+.actions .btn {
+  flex:1 1 180px
+}
+.message {
+  display:none;
+  margin-top:14px;
+  padding:13px 15px;
+  border-radius:13px;
+  line-height:1.7;
+  font-size:14px
+}
+.message.success {
+  display:block;
+  background:#e5f5df;
+  color:#376b37
+}
+.message.error {
+  display:block;
+  background:#fde7e4;
+  color:#974b46
+}
+.message.info {
+  display:block;
+  background:#e8f3fb;
+  color:#376f95
+}
+.admin-area {
+  display:none
+}
+.admin-area.show {
+  display:block
+}
+.topbar {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  padding:16px 19px;
+  margin-bottom:19px;
+  border-radius:19px;
+  border:2px solid rgba(255,255,255,.9);
+  background:rgba(255,255,255,.86);
+  box-shadow:0 8px 18px rgba(74,85,104,.07)
+}
+.tabs {
+  display:flex;
+  flex-wrap:wrap;
+  gap:9px;
+  margin-bottom:21px
+}
+.tab {
+  min-height:45px;
+  padding:0 18px;
+  border:1px solid #ddd7ce;
+  border-radius:15px;
+  background:rgba(255,255,255,.91);
+  color:#525d6c;
+  font-weight:900;
+  cursor:pointer
+}
+.tab.active {
+  color:#fff;
+  background:#df9340;
+  border-color:#df9340;
+  box-shadow:0 5px 12px rgba(192,126,55,.17)
+}
+.tab-page {
+  display:none
+}
+.tab-page.active {
+  display:block
+}
+.settings-grid {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px
+}
+.help {
+  padding:14px 16px;
+  border-radius:14px;
+  border:1px solid #e7e2da;
+  background:#fffaf2;
+  color:#666;
+  font-size:14px;
+  line-height:1.8
+}
+.file-box {
+  padding:24px;
+  border:2px dashed #d6b88b;
+  border-radius:17px;
+  background:#fffaf2;
+  text-align:center
+}
+.sheet-list {
+  display:grid;
+  gap:12px;
+  margin-top:18px
+}
+.sheet-card {
+  padding:15px;
+  border:1px solid #e6e0d7;
+  border-radius:15px;
+  background:#fff
+}
+.sheet-title {
+  font-weight:900
+}
+.sheet-info {
+  margin-top:7px;
+  color:#64748b;
+  font-size:14px;
+  line-height:1.7
+}
+.sheet-ok {
+  color:#4a8745;
+  font-weight:900
+}
+.sheet-error {
+  color:#b7504d;
+  font-weight:900
+}
+.controls {
+  display:grid;
+  grid-template-columns:minmax(0,2fr) minmax(180px,1fr);
+  gap:12px
+}
+.summary {
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:12px;
+  margin-bottom:16px
+}
+.summary-card {
+  padding:15px;
+  border:1px solid #ebe2d5;
+  border-radius:16px;
+  background:linear-gradient(145deg,#fffdf8,#fff7ea);
+  text-align:center
+}
+.summary-label {
+  color:#77808c;
+  font-size:13px
+}
+.summary-value {
+  margin-top:5px;
+  color:#4b5563;
+  font-size:23px;
+  font-weight:900
+}
+.positive {
+  color:#4a8745!important
+}
+.negative {
+  color:#be5b56!important
+}
+.neutral {
+  color:#657080!important
+}
+.table-tip {
+  margin-bottom:10px;
+  padding:10px 13px;
+  border-radius:12px;
+  background:#fff7e7;
+  color:#70675d;
+  font-size:13px;
+  line-height:1.7
+}
+.table-wrap {
+  position:relative;
+  width:100%;
+  max-height:560px;
+  overflow:auto;
+  overscroll-behavior:contain;
+  -webkit-overflow-scrolling:touch;
+  border:1px solid #ddd9d3;
+  border-radius:15px;
+  background:#fff
+}
+.table-wrap::-webkit-scrollbar {
+  width:12px;
+  height:12px
+}
+.table-wrap::-webkit-scrollbar-track {
+  background:#f4f1ed
+}
+.table-wrap::-webkit-scrollbar-thumb {
+  background:#b8afa4;
+  border:3px solid #f4f1ed;
+  border-radius:999px
+}
+table {
+  width:100%;
+  min-width:1050px;
+  border-collapse:separate;
+  border-spacing:0
+}
+th,td {
+  height:46px;
+  padding:10px;
+  border-right:1px solid #eee9e3;
+  border-bottom:1px solid #eee9e3;
+  background:#fff;
+  text-align:center;
+  white-space:nowrap;
+  font-size:14px
+}
+thead th {
+  position:sticky;
+  top:0;
+  z-index:30;
+  background:#f4eadb;
+  color:#514d49;
+  border-bottom:2px solid #d8c6aa;
+  font-weight:900;
+  cursor:pointer;
+  box-shadow:0 2px 5px rgba(80,70,60,.08)
+}
+thead th[data-sort]::after {
+  content:" ↕";
+  color:#8e8479;
+  font-size:11px
+}
+thead th.sort-asc::after {
+  content:" ▲";
+  color:#c97e30
+}
+thead th.sort-desc::after {
+  content:" ▼";
+  color:#c97e30
+}
+thead th:nth-child(1),tbody td:nth-child(1) {
+  position:sticky;
+  left:0;
+  min-width:66px;
+  width:66px;
+  z-index:10;
+  background:#fffaf2
+}
+thead th:nth-child(1) {
+  z-index:50;
+  background:#eadbc5
+}
+thead th:nth-child(2),tbody td:nth-child(2) {
+  position:sticky;
+  left:66px;
+  min-width:115px;
+  width:115px;
+  z-index:9;
+  background:#fff;
+  border-right:2px solid #dac9b0
+}
+thead th:nth-child(2) {
+  z-index:49;
+  background:#eadbc5
+}
+tbody tr:nth-child(even) td {
+  background:#fffdf9
+}
+tbody tr:nth-child(even) td:nth-child(1),tbody tr:nth-child(even) td:nth-child(2) {
+  background:#fff8ed
+}
+tbody tr:hover td {
+  background:#fff4d9
+}
+tbody tr:hover td:nth-child(1),tbody tr:hover td:nth-child(2) {
+  background:#ffebc3
+}
+.history-mean {
+  background:#eef7e8!important;
+  font-weight:900
+}
+.student-header {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:16px;
+  margin-bottom:18px;
+  padding:18px 20px;
+  border:2px solid rgba(255,255,255,.95);
+  border-radius:21px;
+  background:linear-gradient(135deg,#fff2c9,#eaf6df);
+  box-shadow:0 8px 18px rgba(100,90,70,.08)
+}
+.student-name {
+  font-size:28px;
+  font-weight:900
+}
+.student-meta {
+  margin-top:5px;
+  color:#687381
+}
+.next-stage-card {
+  padding:20px;
+  margin-bottom:20px;
+  border-radius:20px;
+  background:linear-gradient(135deg,#ffe7b8,#fff5d8);
+  border:2px solid #f7d38d
+}
+.next-stage-label {
+  color:#9b6624;
+  font-size:14px;
+  font-weight:900
+}
+.next-stage-title {
+  margin-top:5px;
+  color:#674c2d;
+  font-size:25px;
+  font-weight:900
+}
+.next-stage-text {
+  margin-top:8px;
+  color:#6b6258;
+  line-height:1.8
+}
+.chart-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+  margin-bottom:18px
+}
+.chart-card {
+  padding:17px;
+  border:1px solid #e8e1d9;
+  border-radius:18px;
+  background:rgba(255,255,255,.94)
+}
+.chart-title {
+  margin-bottom:10px;
+  font-weight:900
+}
+.chart-box {
+  position:relative;
+  min-height:300px
+}
+.subject-analysis-list {
+  display:grid;
+  gap:18px
+}
+.subject-analysis-card {
+  overflow:hidden;
+  border:1px solid #e8e1d9;
+  border-radius:20px;
+  background:rgba(255,255,255,.96);
+  box-shadow:0 7px 16px rgba(85,80,70,.06)
+}
+.subject-analysis-head {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:15px 18px;
+  background:linear-gradient(135deg,#fff5df,#f9f5ec);
+  border-bottom:1px solid #eee5d8
+}
+.subject-analysis-name {
+  font-size:21px;
+  font-weight:900
+}
+.subject-status {
+  padding:5px 11px;
+  border-radius:999px;
+  background:#fff;
+  color:#73675b;
+  font-size:13px;
+  font-weight:900
+}
+.subject-analysis-body {
+  padding:18px
+}
+.subject-data-grid {
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:10px;
+  margin-bottom:16px
+}
+.subject-data-item {
+  padding:11px;
+  border-radius:13px;
+  background:#faf8f5;
+  text-align:center
+}
+.subject-data-label {
+  color:#8a8178;
+  font-size:12px
+}
+.subject-data-value {
+  margin-top:4px;
+  font-size:18px;
+  font-weight:900
+}
+.teacher-box,.action-box,.week-box {
+  margin-top:12px;
+  padding:14px 16px;
+  border-radius:14px;
+  line-height:1.85
+}
+.teacher-box {
+  background:#eef5fb;
+  border-left:5px solid #72a9ce
+}
+.action-box {
+  background:#fff5dc;
+  border-left:5px solid #e0a64b
+}
+.week-box {
+  background:#edf6e7;
+  border-left:5px solid #83ad68
+}
+.box-title {
+  margin-bottom:5px;
+  font-weight:900
+}
+.action-list {
+  margin:7px 0 0;
+  padding-left:22px
+}
+.action-list li {
+  margin:5px 0
+}
+.priority-grid {
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:13px
+}
+.priority-card {
+  padding:16px;
+  border-radius:16px;
+  border:1px solid #e5dfd5;
+  background:#fffdf8
+}
+.priority-number {
+  display:inline-flex;
+  width:32px;
+  height:32px;
+  align-items:center;
+  justify-content:center;
+  border-radius:50%;
+  background:#e6a04a;
+  color:#fff;
+  font-weight:900;
+  margin-bottom:9px
+}
+.priority-title {
+  font-weight:900;
+  font-size:17px;
+  margin-bottom:6px
+}
+.priority-text {
+  color:#6b7280;
+  line-height:1.75;
+  font-size:14px
+}
+.overview-badge {
+  display:inline-block;
+  padding:5px 9px;
+  border-radius:999px;
+  background:#fff4d8;
+  font-weight:800;
+  font-size:12px
+}
+.overview-priority {
+  font-weight:900;
+  color:#b85d35
+}
+.class-subject-grid {
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:12px
+}
+.subject-card {
+  padding:15px;
+  border:1px solid #e6dfd6;
+  border-radius:15px;
+  background:#fffaf3
+}
+.subject-title {
+  font-size:18px;
+  font-weight:900
+}
+.subject-main {
+  margin-top:4px;
+  font-size:24px;
+  font-weight:900
+}
+.subject-detail {
+  margin-top:6px;
+  color:#737a83;
+  font-size:13px;
+  line-height:1.6
+}
+.ranking-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px
+}
+.ranking-box {
+  overflow:hidden;
+  border:1px solid #e4ded5;
+  border-radius:15px
+}
+.ranking-title {
+  padding:12px;
+  background:#f7efe4;
+  font-weight:900
+}
+.rank-item {
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  padding:11px 13px;
+  border-top:1px solid #eee8e0
+}
+.class-observation {
+  display:grid;
+  gap:12px
+}
+.observation-item {
+  padding:15px 17px;
+  border-radius:14px;
+  border-left:5px solid #dca04e;
+  background:#fffaf2;
+  line-height:1.8
+}
+.student-history-table thead th:nth-child(1),.student-history-table tbody td:nth-child(1) {
+  left:0;
+  min-width:90px;
+  width:90px
+}
+.student-history-table thead th:nth-child(2),.student-history-table tbody td:nth-child(2) {
+  position:static;
+  left:auto;
+  min-width:90px;
+  width:auto;
+  border-right:1px solid #eee9e3
+}
+@media(max-width:1000px) {
+  .subject-data-grid {
+    grid-template-columns:repeat(2,1fr)
+  }
+  .priority-grid {
+    grid-template-columns:1fr
+  }
+  .class-subject-grid {
+    grid-template-columns:repeat(2,1fr)
+  }
+}
+@media(max-width:760px) {
+  .page {
+    padding:18px 9px 45px
+  }
+  .brand-title {
+    font-size:27px
+  }
+  .brand-bubble {
+    padding:13px 23px
+  }
+  .card {
+    padding:18px 12px
+  }
+  .settings-grid,.controls,.summary,.chart-grid,.class-subject-grid,.ranking-grid {
+    grid-template-columns:1fr
+  }
+  .tabs {
+    display:grid;
+    grid-template-columns:1fr 1fr
+  }
+  .tab {
+    width:100%;
+    padding:0 5px;
+    font-size:13px
+  }
+  .topbar,.student-header {
+    flex-direction:column;
+    align-items:stretch
+  }
+  .table-wrap {
+    max-height:500px
+  }
+  table {
+    min-width:940px
+  }
+  th,td {
+    font-size:13px
+  }
+  thead th:nth-child(1),tbody td:nth-child(1) {
+    min-width:54px;
+    width:54px
+  }
+  thead th:nth-child(2),tbody td:nth-child(2) {
+    left:54px;
+    min-width:92px;
+    width:92px
+  }
+  .subject-data-grid {
+    grid-template-columns:1fr 1fr
+  }
+}
 </style>
 </head>
 <body>
 <div class="page">
-  <div class="header"><div class="brand-bubble"><h1 class="brand-title">班級成績分析</h1></div><br><div class="subtitle">學生段考成績管理系統｜教師專用後台</div></div>
-  <div id="loginArea" class="card login-card">
-    <div class="section-title">🔐 教師登入</div>
-    <div class="field"><label>教師 Email</label><input id="email" type="email" autocomplete="username"></div>
-    <div class="field"><label>密碼</label><input id="password" type="password" autocomplete="current-password"></div>
-    <button id="loginBtn" class="btn btn-full">登入管理系統</button>
-    <div id="loginMessage" class="message"></div>
-  </div>
-
-  <div id="adminArea" class="admin-area">
-    <div class="topbar"><div><div style="font-size:13px;color:#7b8491">已登入教師</div><strong id="teacherEmail"></strong></div><button id="logoutBtn" class="btn btn-secondary">登出</button></div>
-    <div class="tabs">
-      <button class="tab active" data-page="syncPage">Excel 同步</button>
-      <button class="tab" data-page="examPage">段考總表</button>
-      <button class="tab" data-page="historyPage">歷次總表</button>
-      <button class="tab" data-page="studentPage">學生歷程</button>
-      <button class="tab" data-page="overviewPage">處方總覽</button>
-      <button class="tab" data-page="classPage">班級分析</button>
-    </div>
-
-    <section id="syncPage" class="tab-page active">
-      <div class="card">
-        <div class="section-title">① 基本設定</div>
-        <div class="settings-grid">
-          <div class="field"><label>七年級學年度</label><input id="baseYear" type="number" value="114"></div>
-          <div class="field"><label>七年級年級數字</label><input id="baseGrade" type="number" value="7"></div>
-          <div class="field"><label>班級尾碼</label><input id="classSuffix" value="04"></div>
-        </div>
-        <div class="help">114學年度＝704；115學年度＝804；116學年度＝904。未來只要在同一個 Excel 增加新的段考工作表即可。</div>
-      </div>
-      <div class="card">
-        <div class="section-title">② 選擇歷年段考 Excel</div>
-        <div class="file-box"><input id="excelFile" type="file" accept=".xlsx,.xls"></div>
-        <div class="actions"><button id="parseBtn" class="btn btn-blue">解析 Excel</button><button id="importBtn" class="btn" disabled>同步到 Firebase</button></div>
-        <div id="excelMessage" class="message"></div><div id="sheetList" class="sheet-list"></div>
-      </div>
-    </section>
-
-    <section id="examPage" class="tab-page">
-      <div class="card">
-        <div class="section-title">📋 段考總表</div>
-        <div class="controls"><div class="field"><label>選擇段考</label><select id="examSelect"></select></div><div class="field"><label>操作</label><button id="loadExamBtn" class="btn btn-blue btn-full">載入總表</button></div></div>
-        <div id="examSummary" class="summary"></div>
-        <div class="table-tip">表頭固定於上方，座號與姓名固定於左側；點選欄位可以排序。</div>
-        <div id="examTableWrap" class="table-wrap"><table><thead><tr>
-          <th data-sort="seat">座號</th><th data-sort="name">姓名</th><th data-sort="chinese">國文</th><th data-sort="english">英文</th><th data-sort="math">數學</th><th data-sort="science">自然</th><th data-sort="social">社會</th><th data-sort="total">總分</th><th data-sort="average">平均</th><th data-sort="rank">班排</th>
-        </tr></thead><tbody id="examTableBody"></tbody></table></div><div id="examMessage" class="message"></div>
-      </div>
-    </section>
-
-    <section id="historyPage" class="tab-page">
-      <div class="card">
-        <div class="section-title">📚 歷次段考總表</div>
-        <div class="controls"><div class="field"><label>顯示項目</label><select id="historyMetric"><option value="average">五科平均</option><option value="rank">班級排名</option><option value="total">總分</option><option value="chinese">國文</option><option value="english">英文</option><option value="math">數學</option><option value="science">自然</option><option value="social">社會</option></select></div><div class="field"><label>操作</label><button id="loadHistoryBtn" class="btn btn-blue btn-full">載入歷次總表</button></div></div>
-        <div class="table-tip">表頭固定在上方；座號與姓名固定在左側。</div>
-        <div id="historyTableWrap" class="table-wrap"><table><thead><tr id="historyTableHeader"></tr></thead><tbody id="historyTableBody"></tbody></table></div><div id="historyMessage" class="message"></div>
-      </div>
-    </section>
-
-    <section id="studentPage" class="tab-page">
-      <div class="card"><div class="section-title">👦👧 學生歷程分析</div><div class="controls"><div class="field"><label>選擇學生</label><select id="studentSelect"></select></div><div class="field"><label>操作</label><button id="loadStudentBtn" class="btn btn-blue btn-full">載入學生歷程</button></div></div><div id="studentMessage" class="message"></div></div>
-      <div id="studentResultArea" style="display:none">
-        <div class="student-header"><div><div id="studentName" class="student-name"></div><div id="studentMeta" class="student-meta"></div></div><div id="studentExamCount" style="font-weight:900;color:#c37d32"></div></div>
-        <div class="next-stage-card"><div class="next-stage-label">🎯 下一階段學習目標</div><div id="nextStageTitle" class="next-stage-title"></div><div id="nextStageText" class="next-stage-text"></div></div>
-        <div class="card"><div class="section-title">📊 學習歷程摘要</div><div id="studentSummary" class="summary"></div></div>
-        <div class="chart-grid"><div class="chart-card"><div class="chart-title">歷次平均變化</div><div class="chart-box"><canvas id="studentAverageChart"></canvas></div></div><div class="chart-card"><div class="chart-title">歷次班級排名</div><div class="chart-box"><canvas id="studentRankChart"></canvas></div></div></div>
-        <div class="card"><div class="section-title">📖 五科歷次成績</div><div class="table-tip">科目固定在左側，表頭固定在上方。</div><div class="table-wrap"><table class="student-history-table"><thead><tr id="studentHistoryHeader"></tr></thead><tbody id="studentHistoryBody"></tbody></table></div></div>
-        <div class="card"><div class="section-title">🧑‍🏫 五科下一階段學習分析</div><div id="subjectAnalysisList" class="subject-analysis-list"></div></div>
-        <div class="card"><div class="section-title">✅ 下一次段考前最優先的三件事</div><div id="priorityGrid" class="priority-grid"></div></div>
-      </div>
-    </section>
-
-    <section id="overviewPage" class="tab-page">
-      <div class="card">
-        <div class="section-title">🧭 全班學生學習處方總覽</div>
-        <div class="help">一次檢視全班每位學生五科的學習類型與第一優先科目。此頁使用與「學生歷程」完全相同的分析邏輯。</div>
-        <div class="controls"><div class="field"><label>排序方式</label><select id="overviewSort"><option value="seat">依座號</option><option value="priority">依需介入程度</option><option value="name">依姓名</option></select></div><div class="field"><label>操作</label><button id="loadOverviewBtn" class="btn btn-blue btn-full">載入處方總覽</button></div></div>
-        <div id="overviewSummary" class="summary"></div>
-        <div class="table-tip">表頭、座號與姓名固定。每科顯示該學生目前的學習類型，最後一欄是系統建議的第一優先科目。</div>
-        <div id="overviewTableWrap" class="table-wrap"><table><thead><tr><th>座號</th><th>姓名</th><th>國文</th><th>英文</th><th>數學</th><th>自然</th><th>社會</th><th>第一優先</th><th>介入程度</th></tr></thead><tbody id="overviewTableBody"></tbody></table></div>
-        <div id="overviewMessage" class="message"></div>
-      </div>
-    </section>
-
-    <section id="classPage" class="tab-page">
-      <div class="card"><div class="section-title">🏫 班級整體分析</div><div class="help">系統會比較目前最新一次段考與前一次段考，並結合歷次成績觀察班級整體變化。</div><br><button id="loadClassBtn" class="btn btn-blue">載入班級分析</button><div id="classMessage" class="message"></div></div>
-      <div id="classResultArea" style="display:none">
-        <div class="card"><div class="section-title">最新一次整體狀況</div><div id="classSummary" class="summary"></div></div>
-        <div class="card"><div class="section-title">五科班平均</div><div id="classSubjectGrid" class="class-subject-grid"></div></div>
-        <div class="chart-grid"><div class="chart-card"><div class="chart-title">五科歷次班平均</div><div class="chart-box"><canvas id="classSubjectChart"></canvas></div></div><div class="chart-card"><div class="chart-title">全班五科平均趨勢</div><div class="chart-box"><canvas id="classAverageChart"></canvas></div></div></div>
-        <div class="card"><div class="section-title">最新一次學生變化</div><div class="ranking-grid"><div class="ranking-box"><div class="ranking-title">📈 進步較多</div><div id="classImprovers"></div></div><div class="ranking-box"><div class="ranking-title">📉 下降較多</div><div id="classDecliners"></div></div></div></div>
-        <div class="card"><div class="section-title">班級觀察</div><div id="classObservation" class="class-observation"></div></div>
-      </div>
-    </section>
-  </div>
+<div class="header">
+<div class="brand-bubble">
+<h1 class="brand-title">班級成績分析</h1>
+</div>
+<br>
+<div class="subtitle">學生段考成績管理系統｜教師專用後台</div>
+</div>
+<div id="loginArea" class="card login-card">
+<div class="section-title">🔐 教師登入</div>
+<div class="field">
+<label>教師 Email</label>
+<input id="email" type="email" autocomplete="username">
+</div>
+<div class="field">
+<label>密碼</label>
+<input id="password" type="password" autocomplete="current-password">
+</div>
+<button id="loginBtn" class="btn btn-full">登入管理系統</button>
+<div id="loginMessage" class="message">
+</div>
+</div>
+<div id="adminArea" class="admin-area">
+<div class="topbar">
+<div>
+<div style="font-size:13px;color:#7b8491">已登入教師</div>
+<strong id="teacherEmail">
+</strong>
+</div>
+<button id="logoutBtn" class="btn btn-secondary">登出</button>
+</div>
+<div class="tabs">
+<button class="tab active" data-page="syncPage">Excel 同步</button>
+<button class="tab" data-page="examPage">段考總表</button>
+<button class="tab" data-page="historyPage">歷次總表</button>
+<button class="tab" data-page="studentPage">學生歷程</button>
+<button class="tab" data-page="overviewPage">處方總覽</button>
+<button class="tab" data-page="classPage">班級分析</button>
+</div>
+<section id="syncPage" class="tab-page active">
+<div class="card">
+<div class="section-title">① 基本設定</div>
+<div class="settings-grid">
+<div class="field">
+<label>七年級學年度</label>
+<input id="baseYear" type="number" value="114">
+</div>
+<div class="field">
+<label>七年級年級數字</label>
+<input id="baseGrade" type="number" value="7">
+</div>
+<div class="field">
+<label>班級尾碼</label>
+<input id="classSuffix" value="04">
+</div>
+</div>
+<div class="help">114學年度＝704；115學年度＝804；116學年度＝904。未來只要在同一個 Excel 增加新的段考工作表即可。</div>
+</div>
+<div class="card">
+<div class="section-title">② 選擇歷年段考 Excel</div>
+<div class="file-box">
+<input id="excelFile" type="file" accept=".xlsx,.xls">
+</div>
+<div class="actions">
+<button id="parseBtn" class="btn btn-blue">解析 Excel</button>
+<button id="importBtn" class="btn" disabled>同步到 Firebase</button>
+</div>
+<div id="excelMessage" class="message">
+</div>
+<div id="sheetList" class="sheet-list">
+</div>
+</div>
+</section>
+<section id="examPage" class="tab-page">
+<div class="card">
+<div class="section-title">📋 段考總表</div>
+<div class="controls">
+<div class="field">
+<label>選擇段考</label>
+<select id="examSelect">
+</select>
+</div>
+<div class="field">
+<label>操作</label>
+<button id="loadExamBtn" class="btn btn-blue btn-full">載入總表</button>
+</div>
+</div>
+<div id="examSummary" class="summary">
+</div>
+<div class="table-tip">表頭固定於上方，座號與姓名固定於左側；點選欄位可以排序。</div>
+<div id="examTableWrap" class="table-wrap">
+<table>
+<thead>
+<tr>
+<th data-sort="seat">座號</th>
+<th data-sort="name">姓名</th>
+<th data-sort="chinese">國文</th>
+<th data-sort="english">英文</th>
+<th data-sort="math">數學</th>
+<th data-sort="science">自然</th>
+<th data-sort="social">社會</th>
+<th data-sort="total">總分</th>
+<th data-sort="average">平均</th>
+<th data-sort="rank">班排</th>
+</tr>
+</thead>
+<tbody id="examTableBody">
+</tbody>
+</table>
+</div>
+<div id="examMessage" class="message">
+</div>
+</div>
+</section>
+<section id="historyPage" class="tab-page">
+<div class="card">
+<div class="section-title">📚 歷次段考總表</div>
+<div class="controls">
+<div class="field">
+<label>顯示項目</label>
+<select id="historyMetric">
+<option value="average">五科平均</option>
+<option value="rank">班級排名</option>
+<option value="total">總分</option>
+<option value="chinese">國文</option>
+<option value="english">英文</option>
+<option value="math">數學</option>
+<option value="science">自然</option>
+<option value="social">社會</option>
+</select>
+</div>
+<div class="field">
+<label>操作</label>
+<button id="loadHistoryBtn" class="btn btn-blue btn-full">載入歷次總表</button>
+</div>
+</div>
+<div class="table-tip">表頭固定在上方；座號與姓名固定在左側。</div>
+<div id="historyTableWrap" class="table-wrap">
+<table>
+<thead>
+<tr id="historyTableHeader">
+</tr>
+</thead>
+<tbody id="historyTableBody">
+</tbody>
+</table>
+</div>
+<div id="historyMessage" class="message">
+</div>
+</div>
+</section>
+<section id="studentPage" class="tab-page">
+<div class="card">
+<div class="section-title">👦👧 學生歷程分析</div>
+<div class="controls">
+<div class="field">
+<label>選擇學生</label>
+<select id="studentSelect">
+</select>
+</div>
+<div class="field">
+<label>操作</label>
+<button id="loadStudentBtn" class="btn btn-blue btn-full">載入學生歷程</button>
+</div>
+</div>
+<div id="studentMessage" class="message">
+</div>
+</div>
+<div id="studentResultArea" style="display:none">
+<div class="student-header">
+<div>
+<div id="studentName" class="student-name">
+</div>
+<div id="studentMeta" class="student-meta">
+</div>
+</div>
+<div id="studentExamCount" style="font-weight:900;color:#c37d32">
+</div>
+</div>
+<div class="next-stage-card">
+<div class="next-stage-label">🎯 下一階段學習目標</div>
+<div id="nextStageTitle" class="next-stage-title">
+</div>
+<div id="nextStageText" class="next-stage-text">
+</div>
+</div>
+<div class="card">
+<div class="section-title">📊 學習歷程摘要</div>
+<div id="studentSummary" class="summary">
+</div>
+</div>
+<div class="chart-grid">
+<div class="chart-card">
+<div class="chart-title">歷次平均變化</div>
+<div class="chart-box">
+<canvas id="studentAverageChart">
+</canvas>
+</div>
+</div>
+<div class="chart-card">
+<div class="chart-title">歷次班級排名</div>
+<div class="chart-box">
+<canvas id="studentRankChart">
+</canvas>
+</div>
+</div>
+</div>
+<div class="card">
+<div class="section-title">📖 五科歷次成績</div>
+<div class="table-tip">科目固定在左側，表頭固定在上方。</div>
+<div class="table-wrap">
+<table class="student-history-table">
+<thead>
+<tr id="studentHistoryHeader">
+</tr>
+</thead>
+<tbody id="studentHistoryBody">
+</tbody>
+</table>
+</div>
+</div>
+<div class="card">
+<div class="section-title">🧑‍🏫 五科下一階段學習分析</div>
+<div id="subjectAnalysisList" class="subject-analysis-list">
+</div>
+</div>
+<div class="card">
+<div class="section-title">✅ 下一次段考前最優先的三件事</div>
+<div id="priorityGrid" class="priority-grid">
+</div>
+</div>
+</div>
+</section>
+<section id="overviewPage" class="tab-page">
+<div class="card">
+<div class="section-title">🧭 全班學生學習處方總覽</div>
+<div class="help">一次檢視全班每位學生五科的學習類型與第一優先科目。此頁使用與「學生歷程」完全相同的分析邏輯。</div>
+<div class="controls">
+<div class="field">
+<label>排序方式</label>
+<select id="overviewSort">
+<option value="seat">依座號</option>
+<option value="priority">依需介入程度</option>
+<option value="name">依姓名</option>
+</select>
+</div>
+<div class="field">
+<label>操作</label>
+<button id="loadOverviewBtn" class="btn btn-blue btn-full">載入處方總覽</button>
+</div>
+</div>
+<div id="overviewSummary" class="summary">
+</div>
+<div class="table-tip">表頭、座號與姓名固定。每科顯示該學生目前的學習類型，最後一欄是系統建議的第一優先科目。</div>
+<div id="overviewTableWrap" class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>座號</th>
+<th>姓名</th>
+<th>國文</th>
+<th>英文</th>
+<th>數學</th>
+<th>自然</th>
+<th>社會</th>
+<th>第一優先</th>
+<th>介入程度</th>
+</tr>
+</thead>
+<tbody id="overviewTableBody">
+</tbody>
+</table>
+</div>
+<div id="overviewMessage" class="message">
+</div>
+</div>
+</section>
+<section id="classPage" class="tab-page">
+<div class="card">
+<div class="section-title">🏫 班級整體分析</div>
+<div class="help">系統會比較目前最新一次段考與前一次段考，並結合歷次成績觀察班級整體變化。</div>
+<br>
+<button id="loadClassBtn" class="btn btn-blue">載入班級分析</button>
+<div id="classMessage" class="message">
+</div>
+</div>
+<div id="classResultArea" style="display:none">
+<div class="card">
+<div class="section-title">最新一次整體狀況</div>
+<div id="classSummary" class="summary">
+</div>
+</div>
+<div class="card">
+<div class="section-title">五科班平均</div>
+<div id="classSubjectGrid" class="class-subject-grid">
+</div>
+</div>
+<div class="chart-grid">
+<div class="chart-card">
+<div class="chart-title">五科歷次班平均</div>
+<div class="chart-box">
+<canvas id="classSubjectChart">
+</canvas>
+</div>
+</div>
+<div class="chart-card">
+<div class="chart-title">全班五科平均趨勢</div>
+<div class="chart-box">
+<canvas id="classAverageChart">
+</canvas>
+</div>
+</div>
+</div>
+<div class="card">
+<div class="section-title">最新一次學生變化</div>
+<div class="ranking-grid">
+<div class="ranking-box">
+<div class="ranking-title">📈 進步較多</div>
+<div id="classImprovers">
+</div>
+</div>
+<div class="ranking-box">
+<div class="ranking-title">📉 下降較多</div>
+<div id="classDecliners">
+</div>
+</div>
+</div>
+</div>
+<div class="card">
+<div class="section-title">班級觀察</div>
+<div id="classObservation" class="class-observation">
+</div>
+</div>
+</div>
+</section>
+</div>
 </div>
 
 <script type="module">
-import {initializeApp} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-import {getAuth,signInWithEmailAndPassword,signOut,onAuthStateChanged} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
-import {getFirestore,collection,doc,getDoc,getDocs,writeBatch,serverTimestamp} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
-const firebaseConfig={apiKey:"AIzaSyC7hXtxLARv3LsoPcaViptdoWMZMLibtiY",authDomain:"exam-score-system.firebaseapp.com",projectId:"exam-score-system",storageBucket:"exam-score-system.firebasestorage.app",messagingSenderId:"334811583790",appId:"1:334811583790:web:a6207215915c163c8656bf"};
+import {
+  initializeApp
+}
+ from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+import {
+  getAuth,signInWithEmailAndPassword,signOut,onAuthStateChanged
+}
+ from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+import {
+  getFirestore,collection,doc,getDoc,getDocs,writeBatch,serverTimestamp
+}
+ from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+const firebaseConfig={
+  apiKey:"AIzaSyC7hXtxLARv3LsoPcaViptdoWMZMLibtiY",authDomain:"exam-score-system.firebaseapp.com",projectId:"exam-score-system",storageBucket:"exam-score-system.firebasestorage.app",messagingSenderId:"334811583790",appId:"1:334811583790:web:a6207215915c163c8656bf"
+};
 const ADMIN_UID="2e5K4CSfV7h7qryYfrNDw6r0zY13";
 const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app),$=id=>document.getElementById(id);
-let parsedExams=[],currentExamRows=[],currentExamSort={key:"seat",asc:true},historyRows=[],historyExams=[],historySort={key:"seat",asc:true},studentDirectory=new Map(),studentAverageChart=null,studentRankChart=null,classSubjectChart=null,classAverageChart=null;
-const SUBJECTS=[{key:"chinese",avgKey:"chineseAvg",name:"國文",icon:"📖"},{key:"english",avgKey:"englishAvg",name:"英文",icon:"🔤"},{key:"math",avgKey:"mathAvg",name:"數學",icon:"➗"},{key:"science",avgKey:"scienceAvg",name:"自然",icon:"🔬"},{key:"social",avgKey:"socialAvg",name:"社會",icon:"🌏"}];
-function showMessage(el,text,type="info"){el.textContent=text;el.className="message "+type}function clearMessage(el){el.textContent="";el.className="message"}function escapeHtml(v){return String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}function formatScore(v){const n=Number(v);if(!Number.isFinite(n))return"—";return Number.isInteger(n)?String(n):n.toFixed(2).replace(/\.?0+$/,'')}function mean(v){const a=v.map(Number).filter(Number.isFinite);return a.length?a.reduce((s,x)=>s+x,0)/a.length:null}function sd(v){const a=v.map(Number).filter(Number.isFinite);if(a.length<2)return 0;const m=mean(a);return Math.sqrt(a.reduce((s,x)=>s+(x-m)**2,0)/a.length)}function signed(v){const n=Number(v);if(!Number.isFinite(n))return"—";return n>0?"+"+formatScore(n):formatScore(n)}function normalizeSeat(v){const n=Number(v);return Number.isFinite(n)&&n>0?String(Math.trunc(n)).padStart(2,"0"):""}
-function padMMDD(v){return v===null||v===undefined||v===""?"":String(v).replace(/\D/g,"").padStart(4,"0").slice(-4)}function padLast5(v){return v===null||v===undefined||v===""?"":String(v).replace(/\D/g,"").padStart(5,"0").slice(-5)}function numberValue(v){if(v===null||v===undefined||v==="")return null;const n=Number(v);return Number.isFinite(n)?n:null}function isValidMMDD(v){if(!/^\d{4}$/.test(v))return false;const m=+v.slice(0,2),d=+v.slice(2,4),days=[31,29,31,30,31,30,31,31,30,31,30,31];return m>=1&&m<=12&&d>=1&&d<=days[m-1]}
-async function createStudentKey(mmdd,last5){const data=new TextEncoder().encode(`exam-score-v1|${mmdd}|${last5}`);const hash=await crypto.subtle.digest("SHA-256",data);return Array.from(new Uint8Array(hash)).map(b=>b.toString(16).padStart(2,"0")).join("")}
-function chineseNumberToInt(v){return ({一:1,二:2,三:3}[v]||Number(v)||null)}function chineseExamNo(n){return ({1:"一",2:"二",3:"三"}[n]||n)}function parseSheetName(name){const m=name.match(/^(\d{3})(上|下)第([一二三123])次段考$/);if(!m)return null;const schoolYear=+m[1],semester=m[2]==="上"?1:2,examNo=chineseNumberToInt(m[3]);return {schoolYear,semester,examNo,examCode:`${schoolYear}-${semester}-exam${examNo}`,examName:`${schoolYear}學年度${semester===1?"上":"下"}學期第${chineseExamNo(examNo)}次段考`}}function shortExamName(e){return `${e.schoolYear}${e.semester===1?"上":"下"}${e.examNo}`}function getClassCode(y){const grade=+$('baseGrade').value+(+y-+$('baseYear').value);return `${grade}${$('classSuffix').value.trim().padStart(2,'0')}`}function getGradeNumber(y){return +$('baseGrade').value+(+y-+$('baseYear').value)}function gradeChinese(g){return ({7:"七",8:"八",9:"九"}[g]||g)}function determineNextExam(exams){if(!exams.length)return null;let {schoolYear,semester,examNo}=exams[exams.length-1];schoolYear=+schoolYear;semester=+semester;examNo=+examNo;if(examNo<3)examNo++;else{examNo=1;if(semester===1)semester=2;else{semester=1;schoolYear++}}const grade=getGradeNumber(schoolYear);return {schoolYear,semester,examNo,grade,title:`${schoolYear}學年度${semester===1?"上":"下"}學期第${chineseExamNo(examNo)}次段考`,shortTitle:`${gradeChinese(grade)}年級第${chineseExamNo(examNo)}次段考`}}
+let parsedExams=[],currentExamRows=[],currentExamSort={
+  key:"seat",asc:true
+},historyRows=[],historyExams=[],historySort={
+  key:"seat",asc:true
+},studentDirectory=new Map(),studentAverageChart=null,studentRankChart=null,classSubjectChart=null,classAverageChart=null;
+const SUBJECTS=[{
+  key:"chinese",avgKey:"chineseAvg",name:"國文",icon:"📖"
+},{
+  key:"english",avgKey:"englishAvg",name:"英文",icon:"🔤"
+},{
+  key:"math",avgKey:"mathAvg",name:"數學",icon:"➗"
+},{
+  key:"science",avgKey:"scienceAvg",name:"自然",icon:"🔬"
+},{
+  key:"social",avgKey:"socialAvg",name:"社會",icon:"🌏"
+}];
+function showMessage(el,text,type="info"){
+  el.textContent=text;
+  el.className="message "+type
+}
+function clearMessage(el){
+  el.textContent="";
+  el.className="message"
+}
+function escapeHtml(v){
+  return String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")
+}
+function formatScore(v){
+  const n=Number(v);
+  if(!Number.isFinite(n))return"—";
+  return Number.isInteger(n)?String(n):n.toFixed(2).replace(/\.?0+$/,'')
+}
+function mean(v){
+  const a=v.map(Number).filter(Number.isFinite);
+  return a.length?a.reduce((s,x)=>s+x,0)/a.length:null
+}
+function sd(v){
+  const a=v.map(Number).filter(Number.isFinite);
+  if(a.length<2)return 0;
+  const m=mean(a);
+  return Math.sqrt(a.reduce((s,x)=>s+(x-m)**2,0)/a.length)
+}
+function signed(v){
+  const n=Number(v);
+  if(!Number.isFinite(n))return"—";
+  return n>0?"+"+formatScore(n):formatScore(n)
+}
+function normalizeSeat(v){
+  const n=Number(v);
+  return Number.isFinite(n)&&n>0?String(Math.trunc(n)).padStart(2,"0"):""
+}
+function padMMDD(v){
+  return v===null||v===undefined||v===""?"":String(v).replace(/\D/g,"").padStart(4,"0").slice(-4)
+}
+function padLast5(v){
+  return v===null||v===undefined||v===""?"":String(v).replace(/\D/g,"").padStart(5,"0").slice(-5)
+}
+function numberValue(v){
+  if(v===null||v===undefined||v==="")return null;
+  const n=Number(v);
+  return Number.isFinite(n)?n:null
+}
+function isValidMMDD(v){
+  if(!/^\d{4}$/.test(v))return false;
+  const m=+v.slice(0,2),d=+v.slice(2,4),days=[31,29,31,30,31,30,31,31,30,31,30,31];
+  return m>=1&&m<=12&&d>=1&&d<=days[m-1]
+}
+async function createStudentKey(mmdd,last5){
+  const data=new TextEncoder().encode(`exam-score-v1|${mmdd}|${last5}`);
+  const hash=await crypto.subtle.digest("SHA-256",data);
+  return Array.from(new Uint8Array(hash)).map(b=>b.toString(16).padStart(2,"0")).join("")
+}
+function chineseNumberToInt(v){
+  return ({
+    一:1,二:2,三:3
+  }
+  [v]||Number(v)||null)
+}
+function chineseExamNo(n){
+  return ({
+    1:"一",2:"二",3:"三"
+  }
+  [n]||n)
+}
+function parseSheetName(name){
+  const m=name.match(/^(\d{3})(上|下)第([一二三123])次段考$/);
+  if(!m)return null;
+  const schoolYear=+m[1],semester=m[2]==="上"?1:2,examNo=chineseNumberToInt(m[3]);
+  return {
+    schoolYear,semester,examNo,examCode:`${schoolYear}-${semester}-exam${examNo}`,examName:`${schoolYear}學年度${semester===1?"上":"下"}學期第${chineseExamNo(examNo)}次段考`
+  }
+}
+function shortExamName(e){
+  return `${e.schoolYear}${e.semester===1?"上":"下"}${e.examNo}`
+}
+function getClassCode(y){
+  const grade=+$('baseGrade').value+(+y-+$('baseYear').value);
+  return `${grade}${$('classSuffix').value.trim().padStart(2,'0')}`
+}
+function getGradeNumber(y){
+  return +$('baseGrade').value+(+y-+$('baseYear').value)
+}
+function gradeChinese(g){
+  return ({
+    7:"七",8:"八",9:"九"
+  }
+  [g]||g)
+}
+function determineNextExam(exams){
+  if(!exams.length)return null;
+  let {
+    schoolYear,semester,examNo
+  }
+  =exams[exams.length-1];
+  schoolYear=+schoolYear;
+  semester=+semester;
+  examNo=+examNo;
+  if(examNo<3)examNo++;
+  else{
+    examNo=1;
+    if(semester===1)semester=2;
+    else{
+      semester=1;
+      schoolYear++
+    }
+  }
+  const grade=getGradeNumber(schoolYear);
+  return {
+    schoolYear,semester,examNo,grade,title:`${schoolYear}學年度${semester===1?"上":"下"}學期第${chineseExamNo(examNo)}次段考`,shortTitle:`${gradeChinese(grade)}年級第${chineseExamNo(examNo)}次段考`
+  }
+}
+$('loginBtn').onclick=async()=>{
+  clearMessage($('loginMessage'));
+  if(location.protocol==='file:'){
+    showMessage($('loginMessage'),'目前是直接開啟電腦中的 HTML 檔案。請將 examscore-admin.html 上傳 GitHub，並從 GitHub Pages 網址開啟後再登入。','error');
+    return
+  }
+  const email=$('email').value.trim(),password=$('password').value;
+  if(!email||!password){
+    showMessage($('loginMessage'),'請輸入教師帳號與密碼。','error');
+    return
+  }
+  $('loginBtn').disabled=true;
+  $('loginBtn').textContent='登入中...';
+  try{
+    const r=await signInWithEmailAndPassword(auth,email,password);
+    if(r.user.uid!==ADMIN_UID){
+      await signOut(auth);
+      showMessage($('loginMessage'),'Firebase 登入成功，但這個帳號不是本系統授權的教師帳號。','error')
+    }
+  }catch(e){
+    console.error('Firebase 登入錯誤：',e);
+    let msg='登入失敗。';
+    switch(e.code){
+      case 'auth/invalid-credential':case 'auth/wrong-password':case 'auth/user-not-found':msg='帳號或密碼不正確。';
+      break;
+      case 'auth/unauthorized-domain':msg='目前網域尚未加入 Firebase 授權網域。請到 Firebase Authentication → Settings → Authorized domains，確認已加入 junteachlife.github.io。';
+      break;
+      case 'auth/operation-not-allowed':msg='Firebase 尚未開啟 Email/Password 登入。請到 Authentication → Sign-in method → Email/Password 啟用。';
+      break;
+      case 'auth/network-request-failed':msg='目前無法連線到 Firebase，請確認網路後重新整理。';
+      break;
+      case 'auth/too-many-requests':msg='短時間登入失敗次數太多，Firebase 暫時限制登入，請稍後再試。';
+      break;
+      default:msg=`登入失敗：${e.code||'未知錯誤'} ${e.message||''}`
+    }
+    showMessage($('loginMessage'),msg,'error')
+  }finally{
+    $('loginBtn').disabled=false;
+    $('loginBtn').textContent='登入管理系統'
+  }
+};
+$('password').addEventListener('keydown',e=>{
+  if(e.key==='Enter')$('loginBtn').click()
+});
+$('logoutBtn').onclick=()=>signOut(auth);
+onAuthStateChanged(auth,async user=>{
+  if(user&&user.uid===ADMIN_UID){
+    $('loginArea').style.display='none';
+    $('adminArea').classList.add('show');
+    $('teacherEmail').textContent=user.email||'教師';
+    await loadExamList();
+    await loadStudentList()
+  }else{
+    $('loginArea').style.display='block';
+    $('adminArea').classList.remove('show')
+  }
+});
+document.querySelectorAll('.tab').forEach(btn=>btn.onclick=async()=>{
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.tab-page').forEach(x=>x.classList.remove('active'));
+  btn.classList.add('active');
+  $(btn.dataset.page).classList.add('active');
+  if(btn.dataset.page==='examPage')await loadExamList();
+  if(btn.dataset.page==='studentPage'||btn.dataset.page==='overviewPage')await loadStudentList()
+});
+$('parseBtn').onclick=async()=>{
+  clearMessage($('excelMessage'));
+  $('sheetList').innerHTML='';
+  $('importBtn').disabled=true;
+  const file=$('excelFile').files[0];
+  if(!file){
+    showMessage($('excelMessage'),'請先選擇 Excel 檔案。','error');
+    return
+  }
+  try{
+    const wb=XLSX.read(await file.arrayBuffer(),{
+      type:'array',cellDates:false
+    });
+    const exams=[];
+    for(const sheetName of wb.SheetNames){
+      const info=parseSheetName(sheetName);
+      if(!info){
+        exams.push({
+          sheetName,valid:false,errors:['工作表名稱無法辨識']
+        });
+        continue
+      }
+      const rows=XLSX.utils.sheet_to_json(wb.Sheets[sheetName],{
+        header:1,raw:true,defval:null
+      });
+      const classCode=getClassCode(info.schoolYear),students=[];
+      let averageRow=null;
+      for(let i=1;
+      i<rows.length;
+      i++){
+        const row=rows[i];
+        if(!row)continue;
+        const first=String(row[0]??'').trim();
+        if(first==='各科平均'){
+          averageRow=row;
+          continue
+        }
+        const seat=Number(row[0]);
+        if(!Number.isInteger(seat)||seat<=0)continue;
+        const mmdd=padMMDD(row[2]),last5=padLast5(row[3]),studentKey=await createStudentKey(mmdd,last5),errors=[];
+        if(!row[1])errors.push('姓名空白');
+        if(!isValidMMDD(mmdd))errors.push('出生月日錯誤');
+        if(!/^\d{5}$/.test(last5))errors.push('末五碼錯誤');
+        students.push({
+          studentKey,classCode,seat:normalizeSeat(seat),name:String(row[1]??'').trim(),chinese:numberValue(row[4]),english:numberValue(row[5]),math:numberValue(row[6]),science:numberValue(row[7]),social:numberValue(row[8]),total:numberValue(row[9]),average:numberValue(row[10]),rank:numberValue(row[11]),errors
+        })
+      }
+      const errors=[];
+      if(!students.length)errors.push('沒有學生資料');
+      if(!averageRow)errors.push('找不到各科平均');
+      exams.push({
+        ...info,sheetName,classCode,students,stats:averageRow?{
+          chineseAvg:numberValue(averageRow[4]),englishAvg:numberValue(averageRow[5]),mathAvg:numberValue(averageRow[6]),scienceAvg:numberValue(averageRow[7]),socialAvg:numberValue(averageRow[8]),totalAvg:numberValue(averageRow[9]),averageAvg:numberValue(averageRow[10])
+        }
+        :null,errors,valid:errors.length===0&&students.every(s=>s.errors.length===0)
+      })
+    }
+    parsedExams=exams;
+    renderParsedSheets();
+    const invalid=exams.filter(e=>!e.valid).length;
+    if(invalid)showMessage($('excelMessage'),`解析完成，但有 ${invalid} 個工作表需要檢查。`,'error');
+    else{
+      $('importBtn').disabled=false;
+      showMessage($('excelMessage'),`成功解析 ${exams.length} 次段考，可以同步。`,'success')
+    }
+  }catch(e){
+    console.error(e);
+    showMessage($('excelMessage'),'Excel 解析失敗。','error')
+  }
+};
+function renderParsedSheets(){
+  $('sheetList').innerHTML='';
+  parsedExams.forEach(exam=>{
+    const d=document.createElement('div');
+    d.className='sheet-card';
+    d.innerHTML=`<div class="sheet-title">${escapeHtml(exam.examName||exam.sheetName)}</div><div class="sheet-info"><span class="${exam.valid?'sheet-ok':'sheet-error'}">${exam.valid?'✓ 資料正常':'✕ 無法匯入'}</span>${exam.valid?`<br>班級：${
+      escapeHtml(exam.classCode)
+    }
+    <br>有效學生：${
+      exam.students.length
+    }
+     人<br>班平均：${
+      formatScore(exam.stats.averageAvg)
+    }
+    `:''}</div>`;
+    $('sheetList').appendChild(d)
+  })
+}
+$('importBtn').onclick=async()=>{
+  const exams=parsedExams.filter(e=>e.valid);
+  if(!exams.length)return;
+  if(!confirm(`確定同步 ${exams.length} 次段考到 Firebase？`))return;
+  try{
+    $('importBtn').disabled=true;
+    showMessage($('excelMessage'),'正在同步 Firebase……','info');
+    const latestStudents=new Map();
+    exams.forEach(exam=>exam.students.forEach(student=>{
+      const order=exam.schoolYear*100+exam.semester*10+exam.examNo,old=latestStudents.get(student.studentKey);
+      if(!old||order>old.order)latestStudents.set(student.studentKey,{
+        student,order
+      })
+    }));
+    const ops=[];
+    latestStudents.forEach(({
+      student
+    })=>ops.push({
+      ref:doc(db,'students',student.studentKey),data:{
+        name:student.name,currentClass:student.classCode,currentSeat:student.seat,updatedAt:serverTimestamp()
+      }
+    }));
+    exams.forEach(exam=>{
+      ops.push({
+        ref:doc(db,'examStats',exam.examCode),data:{
+          examCode:exam.examCode,examName:exam.examName,schoolYear:exam.schoolYear,semester:exam.semester,examNo:exam.examNo,classCode:exam.classCode,studentCount:exam.students.length,...exam.stats,updatedAt:serverTimestamp()
+        }
+      });
+      exam.students.forEach(student=>ops.push({
+        ref:doc(db,'examResults',exam.examCode,'students',student.studentKey),data:{
+          studentKey:student.studentKey,examCode:exam.examCode,examName:exam.examName,schoolYear:exam.schoolYear,semester:exam.semester,examNo:exam.examNo,classCode:exam.classCode,seat:student.seat,name:student.name,chinese:student.chinese,english:student.english,math:student.math,science:student.science,social:student.social,total:student.total,average:student.average,rank:student.rank,updatedAt:serverTimestamp()
+        }
+      }))
+    });
+    for(let i=0;
+    i<ops.length;
+    i+=400){
+      const batch=writeBatch(db);
+      ops.slice(i,i+400).forEach(op=>batch.set(op.ref,op.data,{
+        merge:true
+      }));
+      await batch.commit()
+    }
+    showMessage($('excelMessage'),'Firebase 同步完成。','success');
+    await loadExamList();
+    await loadStudentList()
+  }catch(e){
+    console.error(e);
+    showMessage($('excelMessage'),'同步失敗：'+e.message,'error')
+  }finally{
+    $('importBtn').disabled=false
+  }
+};
+async function getExamList(){
+  const s=await getDocs(collection(db,'examStats')),map=new Map();
+  s.docs.forEach(item=>{
+    const exam={
+      id:item.id,...item.data()
+    };
+    map.set(exam.examCode||exam.id,exam)
+  });
+  const exams=Array.from(map.values());
+  exams.sort((a,b)=>Number(a.schoolYear)-Number(b.schoolYear)||Number(a.semester)-Number(b.semester)||Number(a.examNo)-Number(b.examNo));
+  return exams
+}
+async function loadExamList(){
+  const exams=await getExamList();
+  $('examSelect').replaceChildren();
+  [...exams].reverse().forEach(exam=>{
+    const o=document.createElement('option');
+    o.value=exam.examCode||exam.id;
+    o.textContent=exam.examName||exam.id;
+    $('examSelect').appendChild(o)
+  })
+}
+async function loadStudentList(){
+  const exams=await getExamList(),snaps=await Promise.all(exams.map(exam=>getDocs(collection(db,'examResults',exam.examCode||exam.id,'students')))),map=new Map();
+  exams.forEach((exam,index)=>snaps[index].docs.forEach(item=>{
+    const r=item.data(),key=r.studentKey||item.id;
+    if(!key||!r.name)return;
+    const old=map.get(key);
+    if(!old||index>=old.latestIndex)map.set(key,{
+      studentKey:key,name:r.name,seat:normalizeSeat(r.seat),classCode:r.classCode||'',latestIndex:index
+    })
+  }));
+  studentDirectory=map;
+  const students=Array.from(map.values()).sort((a,b)=>Number(a.seat)-Number(b.seat)||a.name.localeCompare(b.name,'zh-Hant'));
+  $('studentSelect').replaceChildren();
+  students.forEach(s=>{
+    const o=document.createElement('option');
+    o.value=s.studentKey;
+    o.textContent=s.seat?`${s.seat}號 ${s.name}`:s.name;
+    $('studentSelect').appendChild(o)
+  })
+}
+$('loadExamBtn').onclick=async()=>{
+  clearMessage($('examMessage'));
+  const code=$('examSelect').value;
+  if(!code)return;
+  try{
+    const s=await getDocs(collection(db,'examResults',code,'students'));
+    currentExamRows=s.docs.map(d=>d.data());
+    currentExamSort={
+      key:'seat',asc:true
+    };
+    renderExamTable();
+    const st=await getDoc(doc(db,'examStats',code));
+    renderSummary(st.exists()?st.data():null,currentExamRows);
+    $('examTableWrap').scrollTop=0;
+    $('examTableWrap').scrollLeft=0
+  }catch(e){
+    console.error(e);
+    showMessage($('examMessage'),'總表載入失敗。','error')
+  }
+};
+function renderExamTable(){
+  const rows=[...currentExamRows].sort((a,b)=>compareValues(a[currentExamSort.key],b[currentExamSort.key],currentExamSort.key,currentExamSort.asc));
+  $('examTableBody').innerHTML=rows.map(r=>`<tr><td>${escapeHtml(normalizeSeat(r.seat))}</td><td>${escapeHtml(r.name)}</td><td>${formatScore(r.chinese)}</td><td>${formatScore(r.english)}</td><td>${formatScore(r.math)}</td><td>${formatScore(r.science)}</td><td>${formatScore(r.social)}</td><td>${formatScore(r.total)}</td><td>${formatScore(r.average)}</td><td>${formatScore(r.rank)}</td></tr>`).join('');
+  updateExamSort()
+}
+document.querySelectorAll('#examPage th[data-sort]').forEach(th=>th.onclick=()=>{
+  const key=th.dataset.sort;
+  if(currentExamSort.key===key)currentExamSort.asc=!currentExamSort.asc;
+  else{
+    currentExamSort.key=key;
+    currentExamSort.asc=['seat','name','rank'].includes(key)
+  }
+  renderExamTable()
+});
+function updateExamSort(){
+  document.querySelectorAll('#examPage th[data-sort]').forEach(th=>{
+    th.classList.remove('sort-asc','sort-desc');
+    if(th.dataset.sort===currentExamSort.key)th.classList.add(currentExamSort.asc?'sort-asc':'sort-desc')
+  })
+}
+function renderSummary(stats,rows){
+  $('examSummary').innerHTML=stats?`<div class="summary-card"><div class="summary-label">班級</div><div class="summary-value">${escapeHtml(stats.classCode||'')}</div></div><div class="summary-card"><div class="summary-label">有效人數</div><div class="summary-value">${rows.length}</div></div><div class="summary-card"><div class="summary-label">全班總分平均</div><div class="summary-value">${formatScore(stats.totalAvg)}</div></div><div class="summary-card"><div class="summary-label">五科平均</div><div class="summary-value">${formatScore(stats.averageAvg)}</div></div>`:''
+}
+$('loadHistoryBtn').onclick=loadHistoryTable;
+$('historyMetric').onchange=()=>{
+  if(historyRows.length){
+    buildHistoryRows();
+    renderHistoryTable()
+  }
+};
+async function loadHistoryTable(){
+  clearMessage($('historyMessage'));
+  try{
+    historyExams=await getExamList();
+    const snaps=await Promise.all(historyExams.map(exam=>getDocs(collection(db,'examResults',exam.examCode||exam.id,'students')))),map=new Map();
+    historyExams.forEach((exam,index)=>snaps[index].docs.forEach(item=>{
+      const r=item.data(),key=r.studentKey||item.id;
+      if(!map.has(key))map.set(key,{
+        studentKey:key,name:r.name||'',latestSeat:normalizeSeat(r.seat),latestOrder:-1,results:{
+        }
+      });
+      const s=map.get(key);
+      if(index>=s.latestOrder){
+        s.latestOrder=index;
+        s.name=r.name||s.name;
+        s.latestSeat=normalizeSeat(r.seat)||s.latestSeat
+      }
+      s.results[exam.examCode||exam.id]=r
+    }));
+    historyRows=Array.from(map.values());
+    historySort={
+      key:'seat',asc:true
+    };
+    buildHistoryRows();
+    renderHistoryTable()
+  }catch(e){
+    console.error(e);
+    showMessage($('historyMessage'),'歷次總表載入失敗。','error')
+  }
+}
+function buildHistoryRows(){
+  const metric=$('historyMetric').value;
+  historyRows.forEach(s=>{
+    s.metricValues=historyExams.map(exam=>{
+      const r=s.results[exam.examCode||exam.id];
+      if(!r)return null;
+      const v=Number(r[metric]);
+      return Number.isFinite(v)?v:null
+    });
+    s.metricMean=mean(s.metricValues)
+  })
+}
+function renderHistoryTable(){
+  const metric=$('historyMetric').value,labelMap={
+    average:'五科平均',rank:'班排平均',total:'總分平均',chinese:'國文平均',english:'英文平均',math:'數學平均',science:'自然平均',social:'社會平均'
+  };
+  $('historyTableHeader').innerHTML=`<th data-sort="seat">座號</th><th data-sort="name">姓名</th>${historyExams.map((e,i)=>`<th data-sort="exam-${i}">${
+    escapeHtml(shortExamName(e))
+  }
+  </th>`).join('')}<th data-sort="mean">${labelMap[metric]}</th>`;
+  document.querySelectorAll('#historyPage th[data-sort]').forEach(th=>th.onclick=()=>{
+    const k=th.dataset.sort;
+    if(historySort.key===k)historySort.asc=!historySort.asc;
+    else{
+      historySort.key=k;
+      historySort.asc=k==='seat'||k==='name'||metric==='rank'
+    }
+    renderHistoryTable()
+  });
+  const rows=[...historyRows].sort((a,b)=>{
+    if(historySort.key==='seat')return compareValues(a.latestSeat,b.latestSeat,'seat',historySort.asc);
+    if(historySort.key==='name')return compareValues(a.name,b.name,'name',historySort.asc);
+    if(historySort.key==='mean')return compareNullable(a.metricMean,b.metricMean,historySort.asc);
+    if(historySort.key.startsWith('exam-')){
+      const i=+historySort.key.split('-')[1];
+      return compareNullable(a.metricValues[i],b.metricValues[i],historySort.asc)
+    }
+    return 0
+  });
+  $('historyTableBody').innerHTML=rows.map(s=>`<tr><td>${escapeHtml(s.latestSeat)}</td><td>${escapeHtml(s.name)}</td>${s.metricValues.map(v=>`<td>${
+    v===null?'—':formatScore(v)
+  }
+  </td>`).join('')}<td class="history-mean">${formatScore(s.metricMean)}</td></tr>`).join('');
+  document.querySelectorAll('#historyPage th[data-sort]').forEach(th=>{
+    th.classList.remove('sort-asc','sort-desc');
+    if(th.dataset.sort===historySort.key)th.classList.add(historySort.asc?'sort-asc':'sort-desc')
+  })
+}
+function getSequentialTrend(values){
+  const v=values.map(Number).filter(Number.isFinite).slice(-3);
+  if(v.length<3)return'insufficient';
+  if(v[0]<v[1]&&v[1]<v[2])return'up';
+  if(v[0]>v[1]&&v[1]>v[2])return'down';
+  return'mixed'
+}
+function classifyLearningProfile(d){
+  const {
+    historicalAverage,recentTrend,classDiff,volatility,latestVsSelf,sequentialTrend
+  }
+  =d;
+  if(historicalAverage<60&&classDiff<-6&&recentTrend<=2)return{
+    id:'priority_support',name:'需要優先介入型',priority:100,description:'歷次表現、班級相對位置與近期趨勢都顯示基礎能力需要重新整理。'
+  };
+  if(historicalAverage<70)return{
+    id:'foundation',name:'基礎補強型',priority:85,description:'最重要的是先把基本知識、基本題與常見錯誤補穩。'
+  };
+  if(sequentialTrend==='down'||recentTrend<=-8)return{
+    id:'declining',name:'近期下降型',priority:90,description:'近期已形成較明顯下降趨勢，需要先診斷原因。'
+  };
+  if(volatility>=10)return{
+    id:'volatile',name:'波動調整型',priority:72,description:'能力未必不足，但表現不夠穩定，需要固定複習節奏。'
+  };
+  if(sequentialTrend==='up'||recentTrend>=8)return{
+    id:'improving',name:'穩定進步型',priority:48,description:'近期持續往上，代表目前的學習方式正在產生效果。'
+  };
+  if(historicalAverage>=85&&classDiff>=5)return{
+    id:'advanced',name:'高分精進型',priority:25,description:'基本能力完整，下一階段應提升整合、速度與高層次應用。'
+  };
+  if(classDiff>=8)return{
+    id:'class_strength',name:'班級優勢型',priority:30,description:'長期相較班級平均具有優勢，維持即可。'
+  };
+  if(latestVsSelf<=-8)return{
+    id:'recent_drop',name:'單次失常觀察型',priority:68,description:'最近一次明顯低於自己的正常水準，需要確認失常原因。'
+  };
+  return{
+    id:'stable',name:'穩定發展型',priority:45,description:'歷次表現相對穩定，下一階段逐步提高弱點題型正確率。'
+  }
+}
+function buildAnalyses(records,nextExam){
+  return SUBJECTS.map(subject=>{
+    const scores=[],classDiffs=[];
+    records.forEach(record=>{
+      const score=Number(record.result[subject.key]),ca=Number(record.exam[subject.avgKey]);
+      if(Number.isFinite(score))scores.push(score);
+      if(Number.isFinite(score)&&Number.isFinite(ca))classDiffs.push(score-ca)
+    });
+    const latest=scores.at(-1),previous=scores.length>=2?scores.at(-2):latest,average=mean(scores)??0,recent=scores.slice(-3),recentTrend=recent.length>=2?recent.at(-1)-recent[0]:0,latestChange=Number.isFinite(latest)&&Number.isFinite(previous)?latest-previous:0,classDiff=mean(classDiffs)??0,volatility=sd(scores),latestVsSelf=Number.isFinite(latest)?latest-average:0,sequentialTrend=getSequentialTrend(scores),profile=classifyLearningProfile({
+      latest,historicalAverage:average,recentTrend,latestChange,classDiff,volatility,latestVsSelf,sequentialTrend
+    });
+    return{
+      ...subject,scores,latest,previous,average,recentTrend,latestChange,classDiff,volatility,latestVsSelf,sequentialTrend,profile,nextExam
+    }
+  })
+}
+function teacherDiagnosis(a){
+  const p=[`目前判定為「${a.profile.name}」。`,a.profile.description,`最近一次 ${formatScore(a.latest)} 分，歷次平均 ${formatScore(a.average)} 分。`];
+  if(a.recentTrend>=5)p.push(`近三次增加約 ${formatScore(a.recentTrend)} 分。`);
+  else if(a.recentTrend<=-5)p.push(`近三次下降約 ${formatScore(Math.abs(a.recentTrend))} 分。`);
+  else p.push('近三次變化不大，重點放在穩定度與固定失分。');
+  if(a.classDiff>=5)p.push(`歷次平均約高於班平均 ${formatScore(a.classDiff)} 分。`);
+  else if(a.classDiff<=-5)p.push(`歷次平均約低於班平均 ${formatScore(Math.abs(a.classDiff))} 分。`);
+  return p.join('')
+}
+function practiceRatio(a){
+  switch(a.profile.id){
+    case'priority_support':return{
+      foundation:55,correction:30,challenge:15
+    };
+    case'foundation':return{
+      foundation:50,correction:30,challenge:20
+    };
+    case'declining':return{
+      foundation:30,correction:45,challenge:25
+    };
+    case'volatile':return{
+      foundation:30,correction:40,challenge:30
+    };
+    case'improving':return{
+      foundation:30,correction:25,challenge:45
+    };
+    case'advanced':case'class_strength':return{
+      foundation:15,correction:20,challenge:65
+    };
+    case'recent_drop':return{
+      foundation:25,correction:50,challenge:25
+    };
+    default:return{
+      foundation:30,correction:30,challenge:40
+    }
+  }
+}
+function subjectPrescription(a){
+  const p=a.profile.id;
+  switch(a.key){
+    case'chinese':return (p==='foundation'||p==='priority_support')?["先用舊考卷分類字詞、課文、語文常識、閱讀理解，找出錯最多的一類。","課內內容採少量多次複習，每次只處理一課。","每週至少兩篇短篇閱讀，每題都回文中找答案依據。"]:["每課整理主旨、重要字詞、注釋、寫作特色。","閱讀題作答後一定回文章標記答案依據。","錯題依字詞／課文／語文常識／閱讀分類。"];
+    case'english':return (p==='foundation'||p==='priority_support')?["把英文拆成單字、片語、文法、閱讀四部分。","每天 10～15 分鐘單字，隔天先回測昨天內容。","每個文法句型至少自己造 3 句。","每週至少兩篇短篇閱讀。"]:["每天維持少量單字回測。","每週選兩個文法重點自己造句。","每週完成兩篇閱讀。","錯題標記是單字、文法或閱讀造成。"];
+    case'math':return (p==='foundation'||p==='priority_support')?["先檢核七年級正負數與分數、代數式、方程式、比例、文字題。","某類基本題若連錯 3 題以上，先回課本例題與基本題。","錯題標記觀念、計算、題意、步驟。","每週至少三次，每次 25～30 分鐘。"]:(p==='declining'?["先把最近兩次錯題按單元分類，找出下降集中在哪個概念。","不要直接增加刷題量，先確認是運算、概念還是題意問題。","每週一次只做最近錯題，直到能不看解答完成。"]:["每週三次：新觀念／變化題／錯題各一次。","逐步增加文字題與變化題。","段考前一週完成一份限時混合題。"]);
+    case'science':return (p==='foundation'||p==='priority_support')?["每個概念都回答：是什麼、為什麼、條件改變會怎樣。","實驗題整理目的、變因、結果與結論。","計算題固定寫已知量→公式→代入→單位。","圖表題先讀軸、單位、趨勢再作答。"]:["每週整理核心概念。","每週至少重新看一次實驗。","計算題維持完整步驟。","圖表題先看軸與單位再作答。"];
+    case'social':return (p==='foundation'||p==='priority_support')?["先確認失分主要在歷史、地理還是公民。","歷史用時間軸整理事件、原因、結果與影響。","地理每章整理地圖、位置、氣候或統計圖。","公民把易混概念做兩欄比較表。"]:["歷史做時間軸。","地理做圖表與地圖判讀。","公民做概念比較。","每週完成一次混合題。"]
+  }
+  return[]
+}
+function fourWeekPlan(a,nextExam){
+  const r=practiceRatio(a);
+  switch(a.profile.id){
+    case'priority_support':case'foundation':return['第1週：用舊考卷找出最常錯的 2～3 類能力。',`第2週：基礎 ${r.foundation}%、錯題 ${r.correction}%、變化題 ${r.challenge}%。`,'第3週：基本題穩定後加入本階段新課與變化題。','第4週：完成一次限時練習，只整理仍會重複的錯誤。'];
+    case'declining':return['第1週：比較最近兩次考卷，找出下降開始的單元與題型。',`第2週：錯題與薄弱題約占 ${r.correction+r.foundation}% 的時間。`,'第3週：加入新課，確認補舊內容沒有影響新單元。','第4週：用混合題確認下降問題是否改善。'];
+    case'improving':return['第1週：保留目前有效的讀書方式。',`第2週：將變化題比例提高到約 ${r.challenge}%。`,'第3週：加入限時練習。','第4週：只精修仍會錯的題目。'];
+    default:return['第1週：整理目前弱點與最近錯題。','第2週：維持新課同步並改善最常出現的失分。','第3週：增加變化題與整合題。',`第4週：完成一次 ${nextExam?nextExam.shortTitle:'下一次段考'} 前的限時檢核。']}}
+    function priorityScore(a){let s=a.profile.priority;if(a.recentTrend<=-8)s+=20;else if(a.recentTrend<=-4)s+=10;if(a.classDiff<=-8)s+=15;if(a.latestVsSelf<=-8)s+=10;return s}
 
-$('loginBtn').onclick=async()=>{clearMessage($('loginMessage'));try{const r=await signInWithEmailAndPassword(auth,$('email').value.trim(),$('password').value);if(r.user.uid!==ADMIN_UID){await signOut(auth);showMessage($('loginMessage'),'此帳號沒有管理權限。','error')}}catch(e){console.error(e);showMessage($('loginMessage'),'登入失敗，請確認帳號與密碼。','error')}};$('password').addEventListener('keydown',e=>{if(e.key==='Enter')$('loginBtn').click()});$('logoutBtn').onclick=()=>signOut(auth);
-onAuthStateChanged(auth,async user=>{if(user&&user.uid===ADMIN_UID){$('loginArea').style.display='none';$('adminArea').classList.add('show');$('teacherEmail').textContent=user.email||'教師';await loadExamList();await loadStudentList()}else{$('loginArea').style.display='block';$('adminArea').classList.remove('show')}});
-document.querySelectorAll('.tab').forEach(btn=>btn.onclick=async()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.tab-page').forEach(x=>x.classList.remove('active'));btn.classList.add('active');$(btn.dataset.page).classList.add('active');if(btn.dataset.page==='examPage')await loadExamList();if(btn.dataset.page==='studentPage'||btn.dataset.page==='overviewPage')await loadStudentList()});
+    $('loadStudentBtn').onclick=async()=>{clearMessage($('studentMessage'));const key=$('studentSelect').value;if(!key)return;try{const student=studentDirectory.get(key),exams=await getExamList(),records=[];for(const exam of exams){const d=await getDoc(doc(db,'examResults',exam.examCode||exam.id,'students',key));if(d.exists())records.push({exam,result:d.data()})}if(!records.length){showMessage($('studentMessage'),'此學生目前沒有段考資料。','error');return}renderStudentHistory(student,records,exams)}catch(e){console.error(e);showMessage($('studentMessage'),'學生歷程載入失敗。','error')}};
+    function renderStudentHistory(student,records,allExams){$('studentResultArea').style.display='block';const latest=records.at(-1).result;$('studentName').textContent=student.name;$('studentMeta').textContent=`${
+      latest.classCode||''
+    }
+     班　${
+      normalizeSeat(latest.seat)
+    }
+     號`;$('studentExamCount').textContent=`已有 ${
+      records.length
+    }
+     次段考資料`;const nextExam=determineNextExam(allExams);$('nextStageTitle').textContent=nextExam?nextExam.title:'尚無法判斷下一階段';$('nextStageText').textContent=nextExam?`目前已完成到「${
+      records.at(-1).exam.examName
+    }
+    」。以下分析以準備「${
+      nextExam.shortTitle
+    }
+    」為目標。`:'';const avgs=records.map(x=>+x.result.average).filter(Number.isFinite),ranks=records.map(x=>+x.result.rank).filter(Number.isFinite);$('studentSummary').innerHTML=`<div class="summary-card"><div class="summary-label">歷次最高平均</div><div class="summary-value">${
+      avgs.length?formatScore(Math.max(...avgs)):'—'
+    }
+    </div></div><div class="summary-card"><div class="summary-label">歷次最低平均</div><div class="summary-value">${
+      avgs.length?formatScore(Math.min(...avgs)):'—'
+    }
+    </div></div><div class="summary-card"><div class="summary-label">最佳班排</div><div class="summary-value">${
+      ranks.length?formatScore(Math.min(...ranks)):'—'
+    }
+    </div></div><div class="summary-card"><div class="summary-label">歷次平均</div><div class="summary-value">${
+      formatScore(mean(avgs))
+    }
+    </div></div>`;renderStudentCharts(records);renderStudentSubjectTable(records);const analyses=buildAnalyses(records,nextExam);renderSubjectAnalyses(analyses,nextExam);renderPriorities(analyses)}
+    function renderStudentCharts(records){const labels=records.map(x=>shortExamName(x.exam));if(studentAverageChart)studentAverageChart.destroy();if(studentRankChart)studentRankChart.destroy();studentAverageChart=new Chart($('studentAverageChart'),{type:'line',data:{labels,datasets:[{label:'五科平均',data:records.map(x=>+x.result.average),tension:.28}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{suggestedMin:0,suggestedMax:100}}}});studentRankChart=new Chart($('studentRankChart'),{type:'line',data:{labels,datasets:[{label:'班級排名',data:records.map(x=>+x.result.rank),tension:.28}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{reverse:true,suggestedMin:1,ticks:{precision:0}}}}})}
+    function renderStudentSubjectTable(records){$('studentHistoryHeader').innerHTML=`<th>科目</th>${
+      records.map(x=>`<th>${escapeHtml(shortExamName(x.exam))}</th>`).join('')
+    }
+    <th>歷次平均</th>`;$('studentHistoryBody').innerHTML=SUBJECTS.map(s=>{const vals=records.map(x=>+x.result[s.key]);return `<tr><td>${
+      s.name
+    }
+    </td>${
+      vals.map(v=>`<td>${formatScore(v)}</td>`).join('')
+    }
+    <td class="history-mean">${
+      formatScore(mean(vals))
+    }
+    </td></tr>`}).join('')}
+    function renderSubjectAnalyses(analyses,nextExam){$('subjectAnalysisList').innerHTML=analyses.map(a=>{const rx=subjectPrescription(a),plan=fourWeekPlan(a,nextExam),ratio=practiceRatio(a);return `<div class="subject-analysis-card"><div class="subject-analysis-head"><div class="subject-analysis-name">${
+      a.icon
+    }
+     ${
+      a.name
+    }
+    </div><div class="subject-status">${
+      escapeHtml(a.profile.name)
+    }
+    </div></div><div class="subject-analysis-body"><div class="subject-data-grid"><div class="subject-data-item"><div class="subject-data-label">最近一次</div><div class="subject-data-value">${
+      formatScore(a.latest)
+    }
+    </div></div><div class="subject-data-item"><div class="subject-data-label">歷次平均</div><div class="subject-data-value">${
+      formatScore(a.average)
+    }
+    </div></div><div class="subject-data-item"><div class="subject-data-label">近三次變化</div><div class="subject-data-value ${a.recentTrend>0?'positive':a.recentTrend<0?'negative':''}">${
+      signed(a.recentTrend)
+    }
+    </div></div><div class="subject-data-item"><div class="subject-data-label">相較班平均</div><div class="subject-data-value ${a.classDiff>0?'positive':a.classDiff<0?'negative':''}">${
+      signed(a.classDiff)
+    }
+    </div></div></div><div class="teacher-box"><div class="box-title">🧑‍🏫 ${
+      a.name
+    }
+    老師的判讀</div>${
+      escapeHtml(teacherDiagnosis(a))
+    }
+    </div><div class="action-box"><div class="box-title">🎯 個人化學習處方</div><div style="font-weight:800;margin-bottom:8px">建議練習比例：基礎 ${
+      ratio.foundation
+    }
+    % ／ 錯題修正 ${
+      ratio.correction
+    }
+    % ／ 變化進階 ${
+      ratio.challenge
+    }
+    %</div><ol class="action-list">${
+      rx.map(x=>`<li>${escapeHtml(x)}</li>`).join('')
+    }
+    </ol></div><div class="week-box"><div class="box-title">📅 ${
+      nextExam?nextExam.shortTitle:'下一次段考'
+    }
+    前四週計畫</div><ol class="action-list">${
+      plan.map((x,i)=>`<li><strong>第 ${i+1} 週：</strong>${escapeHtml(x.replace(/^第\d週：/,''))}</li>`).join('')
+    }
+    </ol></div></div></div>`}).join('')}
+    function renderPriorities(analyses){const ranked=[...analyses].map(a=>({...a,finalPriority:priorityScore(a)})).sort((a,b)=>b.finalPriority-a.finalPriority),first=ranked[0],second=ranked[1],strongest=[...analyses].sort((a,b)=>b.average-a.average)[0],items=[];if(first)items.push({title:`第一優先：${
+      first.name
+    }
+    `,text:`${
+      first.name
+    }
+    目前屬於「${
+      first.profile.name
+    }
+    」，下一階段先執行該科處方前兩項。`});if(second)items.push({title:`第二優先：${
+      second.name
+    }
+    `,text:`${
+      second.name
+    }
+    是第二需要投入時間的科目，建議固定每週時段。`});if(strongest)items.push({title:`${
+      strongest.name
+    }
+    維持即可`,text:`${
+      strongest.name
+    }
+    目前相對較穩定，維持正常複習，把額外時間留給前兩科。`});$('priorityGrid').innerHTML=items.slice(0,3).map((x,i)=>`<div class="priority-card"><div class="priority-number">${
+      i+1
+    }
+    </div><div class="priority-title">${
+      escapeHtml(x.title)
+    }
+    </div><div class="priority-text">${
+      escapeHtml(x.text)
+    }
+    </div></div>`).join('')}
 
-$('parseBtn').onclick=async()=>{clearMessage($('excelMessage'));$('sheetList').innerHTML='';$('importBtn').disabled=true;const file=$('excelFile').files[0];if(!file){showMessage($('excelMessage'),'請先選擇 Excel 檔案。','error');return}try{const wb=XLSX.read(await file.arrayBuffer(),{type:'array',cellDates:false});const exams=[];for(const sheetName of wb.SheetNames){const info=parseSheetName(sheetName);if(!info){exams.push({sheetName,valid:false,errors:['工作表名稱無法辨識']});continue}const rows=XLSX.utils.sheet_to_json(wb.Sheets[sheetName],{header:1,raw:true,defval:null});const classCode=getClassCode(info.schoolYear),students=[];let averageRow=null;for(let i=1;i<rows.length;i++){const row=rows[i];if(!row)continue;const first=String(row[0]??'').trim();if(first==='各科平均'){averageRow=row;continue}const seat=Number(row[0]);if(!Number.isInteger(seat)||seat<=0)continue;const mmdd=padMMDD(row[2]),last5=padLast5(row[3]),studentKey=await createStudentKey(mmdd,last5),errors=[];if(!row[1])errors.push('姓名空白');if(!isValidMMDD(mmdd))errors.push('出生月日錯誤');if(!/^\d{5}$/.test(last5))errors.push('末五碼錯誤');students.push({studentKey,classCode,seat:normalizeSeat(seat),name:String(row[1]??'').trim(),chinese:numberValue(row[4]),english:numberValue(row[5]),math:numberValue(row[6]),science:numberValue(row[7]),social:numberValue(row[8]),total:numberValue(row[9]),average:numberValue(row[10]),rank:numberValue(row[11]),errors})}const errors=[];if(!students.length)errors.push('沒有學生資料');if(!averageRow)errors.push('找不到各科平均');exams.push({...info,sheetName,classCode,students,stats:averageRow?{chineseAvg:numberValue(averageRow[4]),englishAvg:numberValue(averageRow[5]),mathAvg:numberValue(averageRow[6]),scienceAvg:numberValue(averageRow[7]),socialAvg:numberValue(averageRow[8]),totalAvg:numberValue(averageRow[9]),averageAvg:numberValue(averageRow[10])}:null,errors,valid:errors.length===0&&students.every(s=>s.errors.length===0)})}parsedExams=exams;renderParsedSheets();const invalid=exams.filter(e=>!e.valid).length;if(invalid)showMessage($('excelMessage'),`解析完成，但有 ${invalid} 個工作表需要檢查。`,'error');else{$('importBtn').disabled=false;showMessage($('excelMessage'),`成功解析 ${exams.length} 次段考，可以同步。`,'success')}}catch(e){console.error(e);showMessage($('excelMessage'),'Excel 解析失敗。','error')}};
-function renderParsedSheets(){$('sheetList').innerHTML='';parsedExams.forEach(exam=>{const d=document.createElement('div');d.className='sheet-card';d.innerHTML=`<div class="sheet-title">${escapeHtml(exam.examName||exam.sheetName)}</div><div class="sheet-info"><span class="${exam.valid?'sheet-ok':'sheet-error'}">${exam.valid?'✓ 資料正常':'✕ 無法匯入'}</span>${exam.valid?`<br>班級：${escapeHtml(exam.classCode)}<br>有效學生：${exam.students.length} 人<br>班平均：${formatScore(exam.stats.averageAvg)}`:''}</div>`;$('sheetList').appendChild(d)})}
-$('importBtn').onclick=async()=>{const exams=parsedExams.filter(e=>e.valid);if(!exams.length)return;if(!confirm(`確定同步 ${exams.length} 次段考到 Firebase？`))return;try{$('importBtn').disabled=true;showMessage($('excelMessage'),'正在同步 Firebase……','info');const latestStudents=new Map();exams.forEach(exam=>exam.students.forEach(student=>{const order=exam.schoolYear*100+exam.semester*10+exam.examNo,old=latestStudents.get(student.studentKey);if(!old||order>old.order)latestStudents.set(student.studentKey,{student,order})}));const ops=[];latestStudents.forEach(({student})=>ops.push({ref:doc(db,'students',student.studentKey),data:{name:student.name,currentClass:student.classCode,currentSeat:student.seat,updatedAt:serverTimestamp()}}));exams.forEach(exam=>{ops.push({ref:doc(db,'examStats',exam.examCode),data:{examCode:exam.examCode,examName:exam.examName,schoolYear:exam.schoolYear,semester:exam.semester,examNo:exam.examNo,classCode:exam.classCode,studentCount:exam.students.length,...exam.stats,updatedAt:serverTimestamp()}});exam.students.forEach(student=>ops.push({ref:doc(db,'examResults',exam.examCode,'students',student.studentKey),data:{studentKey:student.studentKey,examCode:exam.examCode,examName:exam.examName,schoolYear:exam.schoolYear,semester:exam.semester,examNo:exam.examNo,classCode:exam.classCode,seat:student.seat,name:student.name,chinese:student.chinese,english:student.english,math:student.math,science:student.science,social:student.social,total:student.total,average:student.average,rank:student.rank,updatedAt:serverTimestamp()}}))});for(let i=0;i<ops.length;i+=400){const batch=writeBatch(db);ops.slice(i,i+400).forEach(op=>batch.set(op.ref,op.data,{merge:true}));await batch.commit()}showMessage($('excelMessage'),'Firebase 同步完成。','success');await loadExamList();await loadStudentList()}catch(e){console.error(e);showMessage($('excelMessage'),'同步失敗：'+e.message,'error')}finally{$('importBtn').disabled=false}};
+    $('loadOverviewBtn').onclick=loadOverview;$('overviewSort').onchange=()=>{if($('overviewTableBody').dataset.loaded==='1')loadOverview()};
+    async function loadOverview(){clearMessage($('overviewMessage'));$('loadOverviewBtn').disabled=true;$('loadOverviewBtn').textContent='分析中...';try{const exams=await getExamList();if(!exams.length){showMessage($('overviewMessage'),'目前沒有段考資料。','error');return}const snaps=await Promise.all(exams.map(exam=>getDocs(collection(db,'examResults',exam.examCode||exam.id,'students')))),studentMap=new Map();exams.forEach((exam,i)=>snaps[i].docs.forEach(item=>{const r=item.data(),key=r.studentKey||item.id;if(!studentMap.has(key))studentMap.set(key,{studentKey:key,name:r.name||'',seat:normalizeSeat(r.seat),records:[]});const s=studentMap.get(key);s.name=r.name||s.name;s.seat=normalizeSeat(r.seat)||s.seat;s.records.push({exam,result:r})}));const rows=[];for(const s of studentMap.values()){const nextExam=determineNextExam(exams),analyses=buildAnalyses(s.records,nextExam),ranked=[...analyses].map(a=>({...a,finalPriority:priorityScore(a)})).sort((a,b)=>b.finalPriority-a.finalPriority);rows.push({...s,analyses,first:ranked[0],overallPriority:ranked[0]?.finalPriority||0})}const sort=$('overviewSort').value;rows.sort((a,b)=>sort==='priority'?b.overallPriority-a.overallPriority:sort==='name'?a.name.localeCompare(b.name,'zh-Hant'):Number(a.seat)-Number(b.seat));const counts={priority_support:0,foundation:0,declining:0,volatile:0};rows.forEach(r=>r.analyses.forEach(a=>{if(counts[a.profile.id]!==undefined)counts[a.profile.id]++}));$('overviewSummary').innerHTML=`<div class="summary-card"><div class="summary-label">學生人數</div><div class="summary-value">${
+      rows.length
+    }
+    </div></div><div class="summary-card"><div class="summary-label">需優先介入科次</div><div class="summary-value negative">${
+      counts.priority_support
+    }
+    </div></div><div class="summary-card"><div class="summary-label">基礎補強科次</div><div class="summary-value">${
+      counts.foundation
+    }
+    </div></div><div class="summary-card"><div class="summary-label">近期下降科次</div><div class="summary-value negative">${
+      counts.declining
+    }
+    </div></div>`;$('overviewTableBody').innerHTML=rows.map(r=>`<tr><td>${
+      escapeHtml(r.seat)
+    }
+    </td><td>${
+      escapeHtml(r.name)
+    }
+    </td>${
+      SUBJECTS.map(s=>{
+        const a=r.analyses.find(x=>x.key===s.key);
+        return `<td><span class="overview-badge">${escapeHtml(a.profile.name)}</span></td>`
+      }).join('')
+    }
+    <td class="overview-priority">${
+      escapeHtml(r.first?.name||'—')
+    }
+    </td><td>${
+      r.overallPriority
+    }
+    </td></tr>`).join('');$('overviewTableBody').dataset.loaded='1';$('overviewTableWrap').scrollTop=0;$('overviewTableWrap').scrollLeft=0}catch(e){console.error(e);showMessage($('overviewMessage'),'處方總覽載入失敗。','error')}finally{$('loadOverviewBtn').disabled=false;$('loadOverviewBtn').textContent='載入處方總覽'}}
 
-async function getExamList(){const s=await getDocs(collection(db,'examStats')),map=new Map();s.docs.forEach(item=>{const exam={id:item.id,...item.data()};map.set(exam.examCode||exam.id,exam)});const exams=Array.from(map.values());exams.sort((a,b)=>Number(a.schoolYear)-Number(b.schoolYear)||Number(a.semester)-Number(b.semester)||Number(a.examNo)-Number(b.examNo));return exams}
-async function loadExamList(){const exams=await getExamList();$('examSelect').replaceChildren();[...exams].reverse().forEach(exam=>{const o=document.createElement('option');o.value=exam.examCode||exam.id;o.textContent=exam.examName||exam.id;$('examSelect').appendChild(o)})}
-async function loadStudentList(){const exams=await getExamList(),snaps=await Promise.all(exams.map(exam=>getDocs(collection(db,'examResults',exam.examCode||exam.id,'students')))),map=new Map();exams.forEach((exam,index)=>snaps[index].docs.forEach(item=>{const r=item.data(),key=r.studentKey||item.id;if(!key||!r.name)return;const old=map.get(key);if(!old||index>=old.latestIndex)map.set(key,{studentKey:key,name:r.name,seat:normalizeSeat(r.seat),classCode:r.classCode||'',latestIndex:index})}));studentDirectory=map;const students=Array.from(map.values()).sort((a,b)=>Number(a.seat)-Number(b.seat)||a.name.localeCompare(b.name,'zh-Hant'));$('studentSelect').replaceChildren();students.forEach(s=>{const o=document.createElement('option');o.value=s.studentKey;o.textContent=s.seat?`${s.seat}號 ${s.name}`:s.name;$('studentSelect').appendChild(o)})}
-
-$('loadExamBtn').onclick=async()=>{clearMessage($('examMessage'));const code=$('examSelect').value;if(!code)return;try{const s=await getDocs(collection(db,'examResults',code,'students'));currentExamRows=s.docs.map(d=>d.data());currentExamSort={key:'seat',asc:true};renderExamTable();const st=await getDoc(doc(db,'examStats',code));renderSummary(st.exists()?st.data():null,currentExamRows);$('examTableWrap').scrollTop=0;$('examTableWrap').scrollLeft=0}catch(e){console.error(e);showMessage($('examMessage'),'總表載入失敗。','error')}};
-function renderExamTable(){const rows=[...currentExamRows].sort((a,b)=>compareValues(a[currentExamSort.key],b[currentExamSort.key],currentExamSort.key,currentExamSort.asc));$('examTableBody').innerHTML=rows.map(r=>`<tr><td>${escapeHtml(normalizeSeat(r.seat))}</td><td>${escapeHtml(r.name)}</td><td>${formatScore(r.chinese)}</td><td>${formatScore(r.english)}</td><td>${formatScore(r.math)}</td><td>${formatScore(r.science)}</td><td>${formatScore(r.social)}</td><td>${formatScore(r.total)}</td><td>${formatScore(r.average)}</td><td>${formatScore(r.rank)}</td></tr>`).join('');updateExamSort()}
-document.querySelectorAll('#examPage th[data-sort]').forEach(th=>th.onclick=()=>{const key=th.dataset.sort;if(currentExamSort.key===key)currentExamSort.asc=!currentExamSort.asc;else{currentExamSort.key=key;currentExamSort.asc=['seat','name','rank'].includes(key)}renderExamTable()});function updateExamSort(){document.querySelectorAll('#examPage th[data-sort]').forEach(th=>{th.classList.remove('sort-asc','sort-desc');if(th.dataset.sort===currentExamSort.key)th.classList.add(currentExamSort.asc?'sort-asc':'sort-desc')})}function renderSummary(stats,rows){$('examSummary').innerHTML=stats?`<div class="summary-card"><div class="summary-label">班級</div><div class="summary-value">${escapeHtml(stats.classCode||'')}</div></div><div class="summary-card"><div class="summary-label">有效人數</div><div class="summary-value">${rows.length}</div></div><div class="summary-card"><div class="summary-label">全班總分平均</div><div class="summary-value">${formatScore(stats.totalAvg)}</div></div><div class="summary-card"><div class="summary-label">五科平均</div><div class="summary-value">${formatScore(stats.averageAvg)}</div></div>`:''}
-
-$('loadHistoryBtn').onclick=loadHistoryTable;$('historyMetric').onchange=()=>{if(historyRows.length){buildHistoryRows();renderHistoryTable()}};
-async function loadHistoryTable(){clearMessage($('historyMessage'));try{historyExams=await getExamList();const snaps=await Promise.all(historyExams.map(exam=>getDocs(collection(db,'examResults',exam.examCode||exam.id,'students')))),map=new Map();historyExams.forEach((exam,index)=>snaps[index].docs.forEach(item=>{const r=item.data(),key=r.studentKey||item.id;if(!map.has(key))map.set(key,{studentKey:key,name:r.name||'',latestSeat:normalizeSeat(r.seat),latestOrder:-1,results:{}});const s=map.get(key);if(index>=s.latestOrder){s.latestOrder=index;s.name=r.name||s.name;s.latestSeat=normalizeSeat(r.seat)||s.latestSeat}s.results[exam.examCode||exam.id]=r}));historyRows=Array.from(map.values());historySort={key:'seat',asc:true};buildHistoryRows();renderHistoryTable()}catch(e){console.error(e);showMessage($('historyMessage'),'歷次總表載入失敗。','error')}}
-function buildHistoryRows(){const metric=$('historyMetric').value;historyRows.forEach(s=>{s.metricValues=historyExams.map(exam=>{const r=s.results[exam.examCode||exam.id];if(!r)return null;const v=Number(r[metric]);return Number.isFinite(v)?v:null});s.metricMean=mean(s.metricValues)})}
-function renderHistoryTable(){const metric=$('historyMetric').value,labelMap={average:'五科平均',rank:'班排平均',total:'總分平均',chinese:'國文平均',english:'英文平均',math:'數學平均',science:'自然平均',social:'社會平均'};$('historyTableHeader').innerHTML=`<th data-sort="seat">座號</th><th data-sort="name">姓名</th>${historyExams.map((e,i)=>`<th data-sort="exam-${i}">${escapeHtml(shortExamName(e))}</th>`).join('')}<th data-sort="mean">${labelMap[metric]}</th>`;document.querySelectorAll('#historyPage th[data-sort]').forEach(th=>th.onclick=()=>{const k=th.dataset.sort;if(historySort.key===k)historySort.asc=!historySort.asc;else{historySort.key=k;historySort.asc=k==='seat'||k==='name'||metric==='rank'}renderHistoryTable()});const rows=[...historyRows].sort((a,b)=>{if(historySort.key==='seat')return compareValues(a.latestSeat,b.latestSeat,'seat',historySort.asc);if(historySort.key==='name')return compareValues(a.name,b.name,'name',historySort.asc);if(historySort.key==='mean')return compareNullable(a.metricMean,b.metricMean,historySort.asc);if(historySort.key.startsWith('exam-')){const i=+historySort.key.split('-')[1];return compareNullable(a.metricValues[i],b.metricValues[i],historySort.asc)}return 0});$('historyTableBody').innerHTML=rows.map(s=>`<tr><td>${escapeHtml(s.latestSeat)}</td><td>${escapeHtml(s.name)}</td>${s.metricValues.map(v=>`<td>${v===null?'—':formatScore(v)}</td>`).join('')}<td class="history-mean">${formatScore(s.metricMean)}</td></tr>`).join('');document.querySelectorAll('#historyPage th[data-sort]').forEach(th=>{th.classList.remove('sort-asc','sort-desc');if(th.dataset.sort===historySort.key)th.classList.add(historySort.asc?'sort-asc':'sort-desc')})}
-
-function getSequentialTrend(values){const v=values.map(Number).filter(Number.isFinite).slice(-3);if(v.length<3)return'insufficient';if(v[0]<v[1]&&v[1]<v[2])return'up';if(v[0]>v[1]&&v[1]>v[2])return'down';return'mixed'}
-function classifyLearningProfile(d){const {historicalAverage,recentTrend,classDiff,volatility,latestVsSelf,sequentialTrend}=d;if(historicalAverage<60&&classDiff<-6&&recentTrend<=2)return{id:'priority_support',name:'需要優先介入型',priority:100,description:'歷次表現、班級相對位置與近期趨勢都顯示基礎能力需要重新整理。'};if(historicalAverage<70)return{id:'foundation',name:'基礎補強型',priority:85,description:'最重要的是先把基本知識、基本題與常見錯誤補穩。'};if(sequentialTrend==='down'||recentTrend<=-8)return{id:'declining',name:'近期下降型',priority:90,description:'近期已形成較明顯下降趨勢，需要先診斷原因。'};if(volatility>=10)return{id:'volatile',name:'波動調整型',priority:72,description:'能力未必不足，但表現不夠穩定，需要固定複習節奏。'};if(sequentialTrend==='up'||recentTrend>=8)return{id:'improving',name:'穩定進步型',priority:48,description:'近期持續往上，代表目前的學習方式正在產生效果。'};if(historicalAverage>=85&&classDiff>=5)return{id:'advanced',name:'高分精進型',priority:25,description:'基本能力完整，下一階段應提升整合、速度與高層次應用。'};if(classDiff>=8)return{id:'class_strength',name:'班級優勢型',priority:30,description:'長期相較班級平均具有優勢，維持即可。'};if(latestVsSelf<=-8)return{id:'recent_drop',name:'單次失常觀察型',priority:68,description:'最近一次明顯低於自己的正常水準，需要確認失常原因。'};return{id:'stable',name:'穩定發展型',priority:45,description:'歷次表現相對穩定，下一階段逐步提高弱點題型正確率。'}}
-function buildAnalyses(records,nextExam){return SUBJECTS.map(subject=>{const scores=[],classDiffs=[];records.forEach(record=>{const score=Number(record.result[subject.key]),ca=Number(record.exam[subject.avgKey]);if(Number.isFinite(score))scores.push(score);if(Number.isFinite(score)&&Number.isFinite(ca))classDiffs.push(score-ca)});const latest=scores.at(-1),previous=scores.length>=2?scores.at(-2):latest,average=mean(scores)??0,recent=scores.slice(-3),recentTrend=recent.length>=2?recent.at(-1)-recent[0]:0,latestChange=Number.isFinite(latest)&&Number.isFinite(previous)?latest-previous:0,classDiff=mean(classDiffs)??0,volatility=sd(scores),latestVsSelf=Number.isFinite(latest)?latest-average:0,sequentialTrend=getSequentialTrend(scores),profile=classifyLearningProfile({latest,historicalAverage:average,recentTrend,latestChange,classDiff,volatility,latestVsSelf,sequentialTrend});return{...subject,scores,latest,previous,average,recentTrend,latestChange,classDiff,volatility,latestVsSelf,sequentialTrend,profile,nextExam}})}
-function teacherDiagnosis(a){const p=[`目前判定為「${a.profile.name}」。`,a.profile.description,`最近一次 ${formatScore(a.latest)} 分，歷次平均 ${formatScore(a.average)} 分。`];if(a.recentTrend>=5)p.push(`近三次增加約 ${formatScore(a.recentTrend)} 分。`);else if(a.recentTrend<=-5)p.push(`近三次下降約 ${formatScore(Math.abs(a.recentTrend))} 分。`);else p.push('近三次變化不大，重點放在穩定度與固定失分。');if(a.classDiff>=5)p.push(`歷次平均約高於班平均 ${formatScore(a.classDiff)} 分。`);else if(a.classDiff<=-5)p.push(`歷次平均約低於班平均 ${formatScore(Math.abs(a.classDiff))} 分。`);return p.join('')}
-function practiceRatio(a){switch(a.profile.id){case'priority_support':return{foundation:55,correction:30,challenge:15};case'foundation':return{foundation:50,correction:30,challenge:20};case'declining':return{foundation:30,correction:45,challenge:25};case'volatile':return{foundation:30,correction:40,challenge:30};case'improving':return{foundation:30,correction:25,challenge:45};case'advanced':case'class_strength':return{foundation:15,correction:20,challenge:65};case'recent_drop':return{foundation:25,correction:50,challenge:25};default:return{foundation:30,correction:30,challenge:40}}}
-function subjectPrescription(a){const p=a.profile.id;switch(a.key){case'chinese':return (p==='foundation'||p==='priority_support')?["先用舊考卷分類字詞、課文、語文常識、閱讀理解，找出錯最多的一類。","課內內容採少量多次複習，每次只處理一課。","每週至少兩篇短篇閱讀，每題都回文中找答案依據。"]:["每課整理主旨、重要字詞、注釋、寫作特色。","閱讀題作答後一定回文章標記答案依據。","錯題依字詞／課文／語文常識／閱讀分類。"];
-case'english':return (p==='foundation'||p==='priority_support')?["把英文拆成單字、片語、文法、閱讀四部分。","每天 10～15 分鐘單字，隔天先回測昨天內容。","每個文法句型至少自己造 3 句。","每週至少兩篇短篇閱讀。"]:["每天維持少量單字回測。","每週選兩個文法重點自己造句。","每週完成兩篇閱讀。","錯題標記是單字、文法或閱讀造成。"];
-case'math':return (p==='foundation'||p==='priority_support')?["先檢核七年級正負數與分數、代數式、方程式、比例、文字題。","某類基本題若連錯 3 題以上，先回課本例題與基本題。","錯題標記觀念、計算、題意、步驟。","每週至少三次，每次 25～30 分鐘。"]:(p==='declining'?["先把最近兩次錯題按單元分類，找出下降集中在哪個概念。","不要直接增加刷題量，先確認是運算、概念還是題意問題。","每週一次只做最近錯題，直到能不看解答完成。"]:["每週三次：新觀念／變化題／錯題各一次。","逐步增加文字題與變化題。","段考前一週完成一份限時混合題。"]);
-case'science':return (p==='foundation'||p==='priority_support')?["每個概念都回答：是什麼、為什麼、條件改變會怎樣。","實驗題整理目的、變因、結果與結論。","計算題固定寫已知量→公式→代入→單位。","圖表題先讀軸、單位、趨勢再作答。"]:["每週整理核心概念。","每週至少重新看一次實驗。","計算題維持完整步驟。","圖表題先看軸與單位再作答。"];
-case'social':return (p==='foundation'||p==='priority_support')?["先確認失分主要在歷史、地理還是公民。","歷史用時間軸整理事件、原因、結果與影響。","地理每章整理地圖、位置、氣候或統計圖。","公民把易混概念做兩欄比較表。"]:["歷史做時間軸。","地理做圖表與地圖判讀。","公民做概念比較。","每週完成一次混合題。"]}return[]}
-function fourWeekPlan(a,nextExam){const r=practiceRatio(a);switch(a.profile.id){case'priority_support':case'foundation':return['第1週：用舊考卷找出最常錯的 2～3 類能力。',`第2週：基礎 ${r.foundation}%、錯題 ${r.correction}%、變化題 ${r.challenge}%。`,'第3週：基本題穩定後加入本階段新課與變化題。','第4週：完成一次限時練習，只整理仍會重複的錯誤。'];case'declining':return['第1週：比較最近兩次考卷，找出下降開始的單元與題型。',`第2週：錯題與薄弱題約占 ${r.correction+r.foundation}% 的時間。`,'第3週：加入新課，確認補舊內容沒有影響新單元。','第4週：用混合題確認下降問題是否改善。'];case'improving':return['第1週：保留目前有效的讀書方式。',`第2週：將變化題比例提高到約 ${r.challenge}%。`,'第3週：加入限時練習。','第4週：只精修仍會錯的題目。'];default:return['第1週：整理目前弱點與最近錯題。','第2週：維持新課同步並改善最常出現的失分。','第3週：增加變化題與整合題。',`第4週：完成一次 ${nextExam?nextExam.shortTitle:'下一次段考'} 前的限時檢核。']}}
-function priorityScore(a){let s=a.profile.priority;if(a.recentTrend<=-8)s+=20;else if(a.recentTrend<=-4)s+=10;if(a.classDiff<=-8)s+=15;if(a.latestVsSelf<=-8)s+=10;return s}
-
-$('loadStudentBtn').onclick=async()=>{clearMessage($('studentMessage'));const key=$('studentSelect').value;if(!key)return;try{const student=studentDirectory.get(key),exams=await getExamList(),records=[];for(const exam of exams){const d=await getDoc(doc(db,'examResults',exam.examCode||exam.id,'students',key));if(d.exists())records.push({exam,result:d.data()})}if(!records.length){showMessage($('studentMessage'),'此學生目前沒有段考資料。','error');return}renderStudentHistory(student,records,exams)}catch(e){console.error(e);showMessage($('studentMessage'),'學生歷程載入失敗。','error')}};
-function renderStudentHistory(student,records,allExams){$('studentResultArea').style.display='block';const latest=records.at(-1).result;$('studentName').textContent=student.name;$('studentMeta').textContent=`${latest.classCode||''} 班　${normalizeSeat(latest.seat)} 號`;$('studentExamCount').textContent=`已有 ${records.length} 次段考資料`;const nextExam=determineNextExam(allExams);$('nextStageTitle').textContent=nextExam?nextExam.title:'尚無法判斷下一階段';$('nextStageText').textContent=nextExam?`目前已完成到「${records.at(-1).exam.examName}」。以下分析以準備「${nextExam.shortTitle}」為目標。`:'';const avgs=records.map(x=>+x.result.average).filter(Number.isFinite),ranks=records.map(x=>+x.result.rank).filter(Number.isFinite);$('studentSummary').innerHTML=`<div class="summary-card"><div class="summary-label">歷次最高平均</div><div class="summary-value">${avgs.length?formatScore(Math.max(...avgs)):'—'}</div></div><div class="summary-card"><div class="summary-label">歷次最低平均</div><div class="summary-value">${avgs.length?formatScore(Math.min(...avgs)):'—'}</div></div><div class="summary-card"><div class="summary-label">最佳班排</div><div class="summary-value">${ranks.length?formatScore(Math.min(...ranks)):'—'}</div></div><div class="summary-card"><div class="summary-label">歷次平均</div><div class="summary-value">${formatScore(mean(avgs))}</div></div>`;renderStudentCharts(records);renderStudentSubjectTable(records);const analyses=buildAnalyses(records,nextExam);renderSubjectAnalyses(analyses,nextExam);renderPriorities(analyses)}
-function renderStudentCharts(records){const labels=records.map(x=>shortExamName(x.exam));if(studentAverageChart)studentAverageChart.destroy();if(studentRankChart)studentRankChart.destroy();studentAverageChart=new Chart($('studentAverageChart'),{type:'line',data:{labels,datasets:[{label:'五科平均',data:records.map(x=>+x.result.average),tension:.28}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{suggestedMin:0,suggestedMax:100}}}});studentRankChart=new Chart($('studentRankChart'),{type:'line',data:{labels,datasets:[{label:'班級排名',data:records.map(x=>+x.result.rank),tension:.28}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{reverse:true,suggestedMin:1,ticks:{precision:0}}}}})}
-function renderStudentSubjectTable(records){$('studentHistoryHeader').innerHTML=`<th>科目</th>${records.map(x=>`<th>${escapeHtml(shortExamName(x.exam))}</th>`).join('')}<th>歷次平均</th>`;$('studentHistoryBody').innerHTML=SUBJECTS.map(s=>{const vals=records.map(x=>+x.result[s.key]);return `<tr><td>${s.name}</td>${vals.map(v=>`<td>${formatScore(v)}</td>`).join('')}<td class="history-mean">${formatScore(mean(vals))}</td></tr>`}).join('')}
-function renderSubjectAnalyses(analyses,nextExam){$('subjectAnalysisList').innerHTML=analyses.map(a=>{const rx=subjectPrescription(a),plan=fourWeekPlan(a,nextExam),ratio=practiceRatio(a);return `<div class="subject-analysis-card"><div class="subject-analysis-head"><div class="subject-analysis-name">${a.icon} ${a.name}</div><div class="subject-status">${escapeHtml(a.profile.name)}</div></div><div class="subject-analysis-body"><div class="subject-data-grid"><div class="subject-data-item"><div class="subject-data-label">最近一次</div><div class="subject-data-value">${formatScore(a.latest)}</div></div><div class="subject-data-item"><div class="subject-data-label">歷次平均</div><div class="subject-data-value">${formatScore(a.average)}</div></div><div class="subject-data-item"><div class="subject-data-label">近三次變化</div><div class="subject-data-value ${a.recentTrend>0?'positive':a.recentTrend<0?'negative':''}">${signed(a.recentTrend)}</div></div><div class="subject-data-item"><div class="subject-data-label">相較班平均</div><div class="subject-data-value ${a.classDiff>0?'positive':a.classDiff<0?'negative':''}">${signed(a.classDiff)}</div></div></div><div class="teacher-box"><div class="box-title">🧑‍🏫 ${a.name}老師的判讀</div>${escapeHtml(teacherDiagnosis(a))}</div><div class="action-box"><div class="box-title">🎯 個人化學習處方</div><div style="font-weight:800;margin-bottom:8px">建議練習比例：基礎 ${ratio.foundation}% ／ 錯題修正 ${ratio.correction}% ／ 變化進階 ${ratio.challenge}%</div><ol class="action-list">${rx.map(x=>`<li>${escapeHtml(x)}</li>`).join('')}</ol></div><div class="week-box"><div class="box-title">📅 ${nextExam?nextExam.shortTitle:'下一次段考'}前四週計畫</div><ol class="action-list">${plan.map((x,i)=>`<li><strong>第 ${i+1} 週：</strong>${escapeHtml(x.replace(/^第\d週：/,''))}</li>`).join('')}</ol></div></div></div>`}).join('')}
-function renderPriorities(analyses){const ranked=[...analyses].map(a=>({...a,finalPriority:priorityScore(a)})).sort((a,b)=>b.finalPriority-a.finalPriority),first=ranked[0],second=ranked[1],strongest=[...analyses].sort((a,b)=>b.average-a.average)[0],items=[];if(first)items.push({title:`第一優先：${first.name}`,text:`${first.name}目前屬於「${first.profile.name}」，下一階段先執行該科處方前兩項。`});if(second)items.push({title:`第二優先：${second.name}`,text:`${second.name}是第二需要投入時間的科目，建議固定每週時段。`});if(strongest)items.push({title:`${strongest.name}維持即可`,text:`${strongest.name}目前相對較穩定，維持正常複習，把額外時間留給前兩科。`});$('priorityGrid').innerHTML=items.slice(0,3).map((x,i)=>`<div class="priority-card"><div class="priority-number">${i+1}</div><div class="priority-title">${escapeHtml(x.title)}</div><div class="priority-text">${escapeHtml(x.text)}</div></div>`).join('')}
-
-$('loadOverviewBtn').onclick=loadOverview;$('overviewSort').onchange=()=>{if($('overviewTableBody').dataset.loaded==='1')loadOverview()};
-async function loadOverview(){clearMessage($('overviewMessage'));$('loadOverviewBtn').disabled=true;$('loadOverviewBtn').textContent='分析中...';try{const exams=await getExamList();if(!exams.length){showMessage($('overviewMessage'),'目前沒有段考資料。','error');return}const snaps=await Promise.all(exams.map(exam=>getDocs(collection(db,'examResults',exam.examCode||exam.id,'students')))),studentMap=new Map();exams.forEach((exam,i)=>snaps[i].docs.forEach(item=>{const r=item.data(),key=r.studentKey||item.id;if(!studentMap.has(key))studentMap.set(key,{studentKey:key,name:r.name||'',seat:normalizeSeat(r.seat),records:[]});const s=studentMap.get(key);s.name=r.name||s.name;s.seat=normalizeSeat(r.seat)||s.seat;s.records.push({exam,result:r})}));const rows=[];for(const s of studentMap.values()){const nextExam=determineNextExam(exams),analyses=buildAnalyses(s.records,nextExam),ranked=[...analyses].map(a=>({...a,finalPriority:priorityScore(a)})).sort((a,b)=>b.finalPriority-a.finalPriority);rows.push({...s,analyses,first:ranked[0],overallPriority:ranked[0]?.finalPriority||0})}const sort=$('overviewSort').value;rows.sort((a,b)=>sort==='priority'?b.overallPriority-a.overallPriority:sort==='name'?a.name.localeCompare(b.name,'zh-Hant'):Number(a.seat)-Number(b.seat));const counts={priority_support:0,foundation:0,declining:0,volatile:0};rows.forEach(r=>r.analyses.forEach(a=>{if(counts[a.profile.id]!==undefined)counts[a.profile.id]++}));$('overviewSummary').innerHTML=`<div class="summary-card"><div class="summary-label">學生人數</div><div class="summary-value">${rows.length}</div></div><div class="summary-card"><div class="summary-label">需優先介入科次</div><div class="summary-value negative">${counts.priority_support}</div></div><div class="summary-card"><div class="summary-label">基礎補強科次</div><div class="summary-value">${counts.foundation}</div></div><div class="summary-card"><div class="summary-label">近期下降科次</div><div class="summary-value negative">${counts.declining}</div></div>`;$('overviewTableBody').innerHTML=rows.map(r=>`<tr><td>${escapeHtml(r.seat)}</td><td>${escapeHtml(r.name)}</td>${SUBJECTS.map(s=>{const a=r.analyses.find(x=>x.key===s.key);return `<td><span class="overview-badge">${escapeHtml(a.profile.name)}</span></td>`}).join('')}<td class="overview-priority">${escapeHtml(r.first?.name||'—')}</td><td>${r.overallPriority}</td></tr>`).join('');$('overviewTableBody').dataset.loaded='1';$('overviewTableWrap').scrollTop=0;$('overviewTableWrap').scrollLeft=0}catch(e){console.error(e);showMessage($('overviewMessage'),'處方總覽載入失敗。','error')}finally{$('loadOverviewBtn').disabled=false;$('loadOverviewBtn').textContent='載入處方總覽'}}
-
-$('loadClassBtn').onclick=loadClassAnalysis;async function loadClassAnalysis(){clearMessage($('classMessage'));$('loadClassBtn').disabled=true;$('loadClassBtn').textContent='分析中...';try{const exams=await getExamList();if(!exams.length){showMessage($('classMessage'),'目前沒有段考資料。','error');return}const snaps=await Promise.all(exams.map(exam=>getDocs(collection(db,'examResults',exam.examCode||exam.id,'students')))),maps=snaps.map(s=>{const m=new Map();s.docs.forEach(d=>{const r=d.data();m.set(r.studentKey||d.id,r)});return m}),li=exams.length-1,pi=exams.length>=2?li-1:null,latest=exams[li],previous=pi!==null?exams[pi]:null,latestMap=maps[li],previousMap=pi!==null?maps[pi]:new Map(),changes=[];latestMap.forEach((s,key)=>{const p=previousMap.get(key);if(!p)return;const c=+s.average-+p.average;if(Number.isFinite(c))changes.push({seat:normalizeSeat(s.seat),name:s.name,change:c})});const improved=changes.filter(x=>x.change>.5),declined=changes.filter(x=>x.change<-.5),stable=changes.filter(x=>Math.abs(x.change)<=.5),avgChange=previous?+latest.averageAvg-+previous.averageAvg:null;$('classSummary').innerHTML=`<div class="summary-card"><div class="summary-label">最新班平均</div><div class="summary-value">${formatScore(latest.averageAvg)}</div></div><div class="summary-card"><div class="summary-label">較前次</div><div class="summary-value ${avgChange>0?'positive':avgChange<0?'negative':''}">${avgChange===null?'—':signed(avgChange)}</div></div><div class="summary-card"><div class="summary-label">進步人數</div><div class="summary-value positive">${improved.length}</div></div><div class="summary-card"><div class="summary-label">下降人數</div><div class="summary-value negative">${declined.length}</div></div>`;$('classSubjectGrid').innerHTML=SUBJECTS.map(s=>{const l=+latest[s.avgKey],p=previous?+previous[s.avgKey]:null,d=Number.isFinite(p)?l-p:null;return `<div class="subject-card"><div class="subject-title">${s.name}</div><div class="subject-main">${formatScore(l)}</div><div class="subject-detail">${d===null?'沒有前次資料':`較前次 ${signed(d)} 分`}</div></div>`}).join('');renderClassCharts(exams);renderRankingList($('classImprovers'),[...changes].sort((a,b)=>b.change-a.change).slice(0,5),true);renderRankingList($('classDecliners'),[...changes].sort((a,b)=>a.change-b.change).slice(0,5),false);renderClassObservation(latest,previous,improved,declined,stable);$('classResultArea').style.display='block'}catch(e){console.error(e);showMessage($('classMessage'),'班級分析載入失敗。','error')}finally{$('loadClassBtn').disabled=false;$('loadClassBtn').textContent='載入班級分析'}}
-function renderClassCharts(exams){const labels=exams.map(shortExamName);if(classSubjectChart)classSubjectChart.destroy();if(classAverageChart)classAverageChart.destroy();classSubjectChart=new Chart($('classSubjectChart'),{type:'line',data:{labels,datasets:SUBJECTS.map(s=>({label:s.name,data:exams.map(e=>+e[s.avgKey]),tension:.25}))},options:{responsive:true,maintainAspectRatio:false,scales:{y:{suggestedMin:0,suggestedMax:100}}}});classAverageChart=new Chart($('classAverageChart'),{type:'line',data:{labels,datasets:[{label:'全班五科平均',data:exams.map(e=>+e.averageAvg),tension:.25}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{suggestedMin:0,suggestedMax:100}}}})}
-function renderRankingList(container,rows,improvement){container.innerHTML=rows.length?rows.map(x=>`<div class="rank-item"><span>${escapeHtml(x.seat)}號 ${escapeHtml(x.name)}</span><strong class="${improvement?'positive':'negative'}">${signed(x.change)}</strong></div>`).join(''):'<div class="rank-item">沒有可比較資料</div>'}
-function renderClassObservation(latest,previous,improved,declined,stable){const obs=[];if(previous){const c=+latest.averageAvg-+previous.averageAvg;if(c>2)obs.push(`最新一次班級五科平均較前次增加 ${formatScore(c)} 分，整體表現呈上升。`);else if(c<-2)obs.push(`最新一次班級五科平均較前次下降 ${formatScore(Math.abs(c))} 分，建議進一步找出下降集中在哪些科目與學生。`);else obs.push('最新一次與前一次班級平均差異不大，目前整體表現相對穩定。')}obs.push(`可比較學生中，有 ${improved.length} 人進步、${declined.length} 人下降、${stable.length} 人大致持平。`);$('classObservation').innerHTML=obs.map(x=>`<div class="observation-item">${escapeHtml(x)}</div>`).join('')}
-function compareValues(a,b,key,asc){if(key==='name'){const r=String(a??'').localeCompare(String(b??''),'zh-Hant',{numeric:true});return asc?r:-r}const an=Number(a),bn=Number(b);if(Number.isFinite(an)&&Number.isFinite(bn))return asc?an-bn:bn-an;return 0}function compareNullable(a,b,asc){const av=Number.isFinite(Number(a)),bv=Number.isFinite(Number(b));if(!av&&!bv)return 0;if(!av)return 1;if(!bv)return-1;return asc?Number(a)-Number(b):Number(b)-Number(a)}
+    $('loadClassBtn').onclick=loadClassAnalysis;async function loadClassAnalysis(){clearMessage($('classMessage'));$('loadClassBtn').disabled=true;$('loadClassBtn').textContent='分析中...';try{const exams=await getExamList();if(!exams.length){showMessage($('classMessage'),'目前沒有段考資料。','error');return}const snaps=await Promise.all(exams.map(exam=>getDocs(collection(db,'examResults',exam.examCode||exam.id,'students')))),maps=snaps.map(s=>{const m=new Map();s.docs.forEach(d=>{const r=d.data();m.set(r.studentKey||d.id,r)});return m}),li=exams.length-1,pi=exams.length>=2?li-1:null,latest=exams[li],previous=pi!==null?exams[pi]:null,latestMap=maps[li],previousMap=pi!==null?maps[pi]:new Map(),changes=[];latestMap.forEach((s,key)=>{const p=previousMap.get(key);if(!p)return;const c=+s.average-+p.average;if(Number.isFinite(c))changes.push({seat:normalizeSeat(s.seat),name:s.name,change:c})});const improved=changes.filter(x=>x.change>.5),declined=changes.filter(x=>x.change<-.5),stable=changes.filter(x=>Math.abs(x.change)<=.5),avgChange=previous?+latest.averageAvg-+previous.averageAvg:null;$('classSummary').innerHTML=`<div class="summary-card"><div class="summary-label">最新班平均</div><div class="summary-value">${
+      formatScore(latest.averageAvg)
+    }
+    </div></div><div class="summary-card"><div class="summary-label">較前次</div><div class="summary-value ${avgChange>0?'positive':avgChange<0?'negative':''}">${
+      avgChange===null?'—':signed(avgChange)
+    }
+    </div></div><div class="summary-card"><div class="summary-label">進步人數</div><div class="summary-value positive">${
+      improved.length
+    }
+    </div></div><div class="summary-card"><div class="summary-label">下降人數</div><div class="summary-value negative">${
+      declined.length
+    }
+    </div></div>`;$('classSubjectGrid').innerHTML=SUBJECTS.map(s=>{const l=+latest[s.avgKey],p=previous?+previous[s.avgKey]:null,d=Number.isFinite(p)?l-p:null;return `<div class="subject-card"><div class="subject-title">${
+      s.name
+    }
+    </div><div class="subject-main">${
+      formatScore(l)
+    }
+    </div><div class="subject-detail">${
+      d===null?'沒有前次資料':`較前次 ${signed(d)} 分`
+    }
+    </div></div>`}).join('');renderClassCharts(exams);renderRankingList($('classImprovers'),[...changes].sort((a,b)=>b.change-a.change).slice(0,5),true);renderRankingList($('classDecliners'),[...changes].sort((a,b)=>a.change-b.change).slice(0,5),false);renderClassObservation(latest,previous,improved,declined,stable);$('classResultArea').style.display='block'}catch(e){console.error(e);showMessage($('classMessage'),'班級分析載入失敗。','error')}finally{$('loadClassBtn').disabled=false;$('loadClassBtn').textContent='載入班級分析'}}
+    function renderClassCharts(exams){const labels=exams.map(shortExamName);if(classSubjectChart)classSubjectChart.destroy();if(classAverageChart)classAverageChart.destroy();classSubjectChart=new Chart($('classSubjectChart'),{type:'line',data:{labels,datasets:SUBJECTS.map(s=>({label:s.name,data:exams.map(e=>+e[s.avgKey]),tension:.25}))},options:{responsive:true,maintainAspectRatio:false,scales:{y:{suggestedMin:0,suggestedMax:100}}}});classAverageChart=new Chart($('classAverageChart'),{type:'line',data:{labels,datasets:[{label:'全班五科平均',data:exams.map(e=>+e.averageAvg),tension:.25}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{suggestedMin:0,suggestedMax:100}}}})}
+    function renderRankingList(container,rows,improvement){container.innerHTML=rows.length?rows.map(x=>`<div class="rank-item"><span>${
+      escapeHtml(x.seat)
+    }
+    號 ${
+      escapeHtml(x.name)
+    }
+    </span><strong class="${improvement?'positive':'negative'}">${
+      signed(x.change)
+    }
+    </strong></div>`).join(''):'<div class="rank-item">沒有可比較資料</div>'}
+    function renderClassObservation(latest,previous,improved,declined,stable){const obs=[];if(previous){const c=+latest.averageAvg-+previous.averageAvg;if(c>2)obs.push(`最新一次班級五科平均較前次增加 ${
+      formatScore(c)
+    }
+     分，整體表現呈上升。`);else if(c<-2)obs.push(`最新一次班級五科平均較前次下降 ${
+      formatScore(Math.abs(c))
+    }
+     分，建議進一步找出下降集中在哪些科目與學生。`);else obs.push('最新一次與前一次班級平均差異不大，目前整體表現相對穩定。')}obs.push(`可比較學生中，有 ${
+      improved.length
+    }
+     人進步、${
+      declined.length
+    }
+     人下降、${
+      stable.length
+    }
+     人大致持平。`);$('classObservation').innerHTML=obs.map(x=>`<div class="observation-item">${
+      escapeHtml(x)
+    }
+    </div>`).join('')}
+    function compareValues(a,b,key,asc){if(key==='name'){const r=String(a??'').localeCompare(String(b??''),'zh-Hant',{numeric:true});return asc?r:-r}const an=Number(a),bn=Number(b);if(Number.isFinite(an)&&Number.isFinite(bn))return asc?an-bn:bn-an;return 0}function compareNullable(a,b,asc){const av=Number.isFinite(Number(a)),bv=Number.isFinite(Number(b));if(!av&&!bv)return 0;if(!av)return 1;if(!bv)return-1;return asc?Number(a)-Number(b):Number(b)-Number(a)}
 </script>
 </body>
 </html>
