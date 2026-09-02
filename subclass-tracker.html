@@ -104,7 +104,18 @@ tbody tr:hover td{background:#fff4cd} tbody tr.overdue td{background:#fff0e6} tb
 @media print{
   body{background:white}.app{width:100%;margin:0}.hero,.panel{box-shadow:none}
   .toolbar,.controls,.history-row,.footer-note,.toast,.cloud-bar,.class-switch-panel{display:none!important}
-  .hero{border:2px solid #333}.panel{border:1px solid #555}.status-actions{display:none}.note-input{border:0;background:transparent}
+  .hero{border:2px solid #333}.panel{border:1px solid #555}.status-actions{display:block}
+  .status-actions .status-btn{display:none!important}
+  .status-actions .status-btn.selected{
+    display:inline-block!important;
+    background:transparent!important;
+    color:#111!important;
+    border:0!important;
+    box-shadow:none!important;
+    padding:0!important;
+    font-size:11px!important;
+  }
+  .note-input{border:0;background:transparent}
   table{min-width:0;font-size:11px}thead th{position:static;background:#ddd;color:#111}
 }
 </style>
