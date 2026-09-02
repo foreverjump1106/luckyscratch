@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>生日提醒｜導師 張宏維老師</title>
+  <title>804生日提醒｜導師 張宏維老師</title>
 
   <!-- 網頁小圖示：壽 -->
   <link
@@ -57,8 +57,6 @@
 
       --shadow-hover:
         0 18px 45px rgba(40, 50, 80, 0.16);
-
-      --radius: 22px;
     }
 
     html {
@@ -108,9 +106,9 @@
       padding-bottom: 50px;
     }
 
-    /* =========================================================
-       頂部
-    ========================================================= */
+    /* =========================
+       頁首
+    ========================= */
 
     .hero {
       padding: 34px 0 22px;
@@ -162,6 +160,7 @@
     .hero-inner {
       position: relative;
       z-index: 2;
+
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -184,27 +183,30 @@
     .hero-date {
       min-width: 220px;
       text-align: center;
+
       background: rgba(255,255,255,.16);
       border: 1px solid rgba(255,255,255,.24);
+
       padding: 16px 20px;
       border-radius: 20px;
+
       backdrop-filter: blur(8px);
     }
 
-    .hero-date .date-main {
+    .date-main {
       font-size: 20px;
       font-weight: 900;
       margin-bottom: 4px;
     }
 
-    .hero-date .weekday {
+    .weekday {
       font-size: 14px;
       opacity: .92;
     }
 
-    /* =========================================================
+    /* =========================
        下一位生日
-    ========================================================= */
+    ========================= */
 
     .next-birthday {
       margin-top: 18px;
@@ -216,9 +218,14 @@
       gap: 15px;
 
       background: rgba(255,255,255,.86);
-      border: 1px solid rgba(255,255,255,.8);
+
+      border:
+        1px solid rgba(255,255,255,.8);
+
       border-radius: 22px;
+
       box-shadow: var(--shadow);
+
       backdrop-filter: blur(10px);
     }
 
@@ -231,6 +238,7 @@
     .next-icon {
       width: 52px;
       height: 52px;
+
       border-radius: 16px;
 
       display: grid;
@@ -258,14 +266,16 @@
 
     .next-days {
       white-space: nowrap;
+
       font-size: 20px;
       font-weight: 900;
+
       color: var(--pink-dark);
     }
 
-    /* =========================================================
-       一般區塊
-    ========================================================= */
+    /* =========================
+       區塊
+    ========================= */
 
     .section {
       margin-top: 28px;
@@ -275,7 +285,9 @@
       display: flex;
       justify-content: space-between;
       align-items: end;
+
       gap: 15px;
+
       margin-bottom: 15px;
     }
 
@@ -286,28 +298,34 @@
 
     .section-desc {
       margin-top: 4px;
+
       color: var(--muted);
+
       font-size: 14px;
       line-height: 1.6;
     }
 
-    /* =========================================================
+    /* =========================
        今日壽星
-    ========================================================= */
+    ========================= */
 
     .today-grid {
       display: grid;
+
       grid-template-columns:
         repeat(
           auto-fit,
           minmax(260px, 1fr)
         );
+
       gap: 18px;
     }
 
     .birthday-main-card {
       background: white;
+
       border-radius: 26px;
+
       overflow: hidden;
 
       border:
@@ -362,7 +380,9 @@
 
     .birthday-info {
       margin-top: 7px;
+
       color: var(--muted);
+
       line-height: 1.6;
     }
 
@@ -370,6 +390,7 @@
       display: inline-block;
 
       margin-top: 12px;
+
       padding: 7px 12px;
 
       color: var(--pink-dark);
@@ -386,12 +407,13 @@
 
       display: grid;
       grid-template-columns: 1fr 1fr;
+
       gap: 10px;
     }
 
-    /* =========================================================
-       提前祝福區
-    ========================================================= */
+    /* =========================
+       提前祝福
+    ========================= */
 
     .early-section {
       display: none;
@@ -403,6 +425,7 @@
 
     .early-wrapper {
       padding: 20px;
+
       border-radius: 24px;
 
       background:
@@ -413,7 +436,7 @@
         );
 
       border:
-        2px solid rgba(255, 146, 43, .18);
+        2px solid rgba(255,146,43,.18);
 
       box-shadow: var(--shadow);
     }
@@ -440,11 +463,13 @@
 
     .early-grid {
       display: grid;
+
       grid-template-columns:
         repeat(
           auto-fit,
           minmax(260px, 1fr)
         );
+
       gap: 15px;
     }
 
@@ -460,6 +485,7 @@
 
       display: flex;
       flex-direction: column;
+
       gap: 13px;
 
       box-shadow:
@@ -497,6 +523,7 @@
       margin-top: 4px;
 
       color: var(--muted);
+
       font-size: 13px;
       line-height: 1.55;
     }
@@ -516,12 +543,13 @@
     .early-actions {
       display: grid;
       grid-template-columns: 1fr 1fr;
+
       gap: 8px;
     }
 
-    /* =========================================================
+    /* =========================
        按鈕
-    ========================================================= */
+    ========================= */
 
     .btn {
       min-height: 44px;
@@ -551,6 +579,7 @@
           #ff6b81,
           #8b5cf6
         );
+
       color: white;
     }
 
@@ -567,14 +596,20 @@
 
     .btn-success {
       background: var(--green-light);
+
       color: #318a14;
-      border: 1px solid #c9efbd;
+
+      border:
+        1px solid #c9efbd;
     }
 
     .btn-light {
       background: #f5f6fa;
+
       color: var(--text);
-      border: 1px solid var(--border);
+
+      border:
+        1px solid var(--border);
     }
 
     .blessed {
@@ -582,9 +617,9 @@
       color: #27830b;
     }
 
-    /* =========================================================
+    /* =========================
        無資料
-    ========================================================= */
+    ========================= */
 
     .empty-state {
       padding: 42px 24px;
@@ -592,7 +627,9 @@
       text-align: center;
 
       border-radius: 24px;
+
       background: white;
+
       box-shadow: var(--shadow);
     }
 
@@ -612,14 +649,17 @@
       line-height: 1.7;
     }
 
-    /* =========================================================
+    /* =========================
        搜尋
-    ========================================================= */
+    ========================= */
 
     .tools-card {
       background: white;
+
       border-radius: 22px;
+
       padding: 18px;
+
       box-shadow: var(--shadow);
     }
 
@@ -650,32 +690,41 @@
 
     .search-box input:focus {
       border-color: #c4b5fd;
+
       box-shadow:
         0 0 0 4px rgba(139,92,246,.10);
     }
 
     .search-icon {
       position: absolute;
+
       left: 16px;
       top: 50%;
+
       transform: translateY(-50%);
+
       font-size: 18px;
     }
 
     .search-results {
       margin-top: 14px;
+
       display: grid;
+
       gap: 10px;
     }
 
-    /* =========================================================
+    /* =========================
        分頁
-    ========================================================= */
+    ========================= */
 
     .tabs {
       display: flex;
+
       gap: 8px;
+
       overflow-x: auto;
+
       padding-bottom: 3px;
     }
 
@@ -689,6 +738,7 @@
       border-radius: 999px;
 
       color: var(--muted);
+
       background: #eef0f5;
 
       font-weight: 800;
@@ -715,6 +765,7 @@
 
     .birthday-list {
       display: grid;
+
       grid-template-columns:
         repeat(
           auto-fit,
@@ -736,6 +787,7 @@
 
       display: flex;
       align-items: center;
+
       gap: 13px;
 
       box-shadow:
@@ -781,15 +833,20 @@
 
     .person-meta {
       color: var(--muted);
+
       font-size: 13px;
+
       margin-top: 4px;
+
       line-height: 1.55;
     }
 
     .person-right {
       display: flex;
       flex-direction: column;
+
       align-items: flex-end;
+
       gap: 7px;
     }
 
@@ -801,6 +858,7 @@
       background: var(--pink-light);
 
       padding: 6px 8px;
+
       border-radius: 999px;
 
       white-space: nowrap;
@@ -826,21 +884,23 @@
       font-weight: 800;
     }
 
-    /* =========================================================
+    /* =========================
        Modal
-    ========================================================= */
+    ========================= */
 
     .modal {
       position: fixed;
       inset: 0;
 
       display: none;
+
       align-items: center;
       justify-content: center;
 
       padding: 20px;
 
-      background: rgba(27, 28, 39, .58);
+      background:
+        rgba(27,28,39,.58);
 
       backdrop-filter: blur(6px);
 
@@ -852,8 +912,11 @@
     }
 
     .modal-box {
-      width: min(1000px, 100%);
+      width:
+        min(1000px, 100%);
+
       max-height: 94vh;
+
       overflow: auto;
 
       background: white;
@@ -875,6 +938,7 @@
         1px solid var(--border);
 
       position: sticky;
+
       top: 0;
 
       background:
@@ -895,6 +959,7 @@
       height: 40px;
 
       border: none;
+
       border-radius: 12px;
 
       background: #f0f1f5;
@@ -904,6 +969,7 @@
 
     .modal-body {
       display: grid;
+
       grid-template-columns:
         minmax(0, 1fr) 310px;
 
@@ -945,19 +1011,23 @@
     .card-controls {
       display: flex;
       flex-direction: column;
+
       gap: 13px;
     }
 
     .control-title {
       font-size: 14px;
       font-weight: 900;
+
       color: var(--muted);
+
       margin-bottom: -5px;
     }
 
     .theme-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
+
       gap: 8px;
     }
 
@@ -978,7 +1048,9 @@
 
     .theme-btn.active {
       border-color: #a78bfa;
+
       background: #f5f0ff;
+
       color: #6d3bdb;
     }
 
@@ -1003,6 +1075,7 @@
 
     footer {
       margin-top: 42px;
+
       text-align: center;
 
       color: var(--muted);
@@ -1015,12 +1088,13 @@
       color: var(--text);
     }
 
-    /* =========================================================
+    /* =========================
        Toast
-    ========================================================= */
+    ========================= */
 
     .toast {
       position: fixed;
+
       left: 50%;
       bottom: 24px;
 
@@ -1030,7 +1104,9 @@
       padding: 12px 18px;
 
       color: white;
-      background: rgba(37,50,74,.95);
+
+      background:
+        rgba(37,50,74,.95);
 
       border-radius: 999px;
 
@@ -1041,6 +1117,7 @@
         0 12px 30px rgba(0,0,0,.18);
 
       opacity: 0;
+
       pointer-events: none;
 
       transition:
@@ -1057,14 +1134,15 @@
         translate(-50%, 0);
     }
 
-    /* =========================================================
-       手機
-    ========================================================= */
+    /* =========================
+       手機版
+    ========================= */
 
     @media (max-width: 780px) {
 
       .page {
-        width: min(100% - 20px, 1180px);
+        width:
+          min(100% - 20px, 1180px);
       }
 
       .hero {
@@ -1073,11 +1151,13 @@
 
       .hero-card {
         padding: 24px 20px;
+
         border-radius: 24px;
       }
 
       .hero-inner {
         flex-direction: column;
+
         align-items: flex-start;
       }
 
@@ -1087,6 +1167,7 @@
 
       .next-birthday {
         align-items: flex-start;
+
         flex-direction: column;
       }
 
@@ -1096,6 +1177,7 @@
 
       .section-head {
         align-items: flex-start;
+
         flex-direction: column;
       }
 
@@ -1109,6 +1191,7 @@
 
       .modal-body {
         grid-template-columns: 1fr;
+
         padding: 14px;
       }
 
@@ -1174,7 +1257,7 @@
         <div>
 
           <div class="hero-title">
-            🎂 生日提醒
+            🎂 804 生日提醒
           </div>
 
           <div class="hero-sub">
@@ -1286,18 +1369,17 @@
         </div>
 
         <div class="section-desc">
-          如果學生的生日落在星期六或星期日，星期五會自動提醒你提前準備生日卡片。
+          如果學生生日落在星期六或星期日，星期五會自動提醒提前準備生日卡片。
         </div>
 
       </div>
 
     </div>
 
-
     <div class="early-wrapper">
 
       <div class="early-notice">
-        💡 這些壽星的生日落在週末，可以今天先把生日卡印好並提前送給學生。
+        💡 這些壽星的生日落在週末，可以先把生日卡印好並提前送給學生。
       </div>
 
       <div
@@ -1322,7 +1404,7 @@
         </div>
 
         <div class="section-desc">
-          輸入姓名、班級或座號，可以隨時預先製作任何學生的生日卡片。
+          輸入姓名或座號，可以隨時預先製作任何學生的生日卡片。
         </div>
 
       </div>
@@ -1340,7 +1422,7 @@
         <input
           id="searchInput"
           type="text"
-          placeholder="例如：王小明、704、12..."
+          placeholder="例如：王禹涵、1、賴震宇..."
           autocomplete="off"
         >
 
@@ -1368,7 +1450,7 @@
         </div>
 
         <div class="section-desc">
-          未來 10 天的壽星可以直接預先製作生日卡片。
+          未來 10 天、本月與下月壽星都可以預先製作生日卡片。
         </div>
 
       </div>
@@ -1445,7 +1527,7 @@
 
   <footer>
 
-    🎂 Birthday Reminder
+    🎂 804 Birthday Reminder
     <br>
 
     <strong>
@@ -1461,7 +1543,7 @@
 </div>
 
 
-<!-- 生日卡片 Modal -->
+<!-- 生日卡片 -->
 <div
   id="cardModal"
   class="modal"
@@ -1588,68 +1670,206 @@
 <script>
 
 /* =========================================================
-   1. 學生生日資料
-   ---------------------------------------------------------
-   之後把正式學生資料放在這裡即可。
-   birthday 格式固定 MM-DD。
+   804 班學生生日資料
+   birthday 格式：MM-DD
 ========================================================= */
 
 const students = [
 
   {
-    className: "704",
+    className: "804",
     seat: 1,
-    name: "範例同學A",
-    birthday: "09-01"
+    name: "王禹涵",
+    birthday: "12-25"
   },
 
   {
-    className: "704",
+    className: "804",
     seat: 2,
-    name: "範例同學B",
-    birthday: "09-05"
+    name: "江育緹",
+    birthday: "02-01"
   },
 
   {
-    className: "704",
+    className: "804",
     seat: 3,
-    name: "範例同學C",
-    birthday: "09-06"
+    name: "呂思儀",
+    birthday: "08-28"
   },
 
   {
-    className: "704",
+    className: "804",
     seat: 4,
-    name: "範例同學D",
-    birthday: "09-09"
+    name: "李詠騏",
+    birthday: "06-17"
   },
 
   {
-    className: "704",
+    className: "804",
     seat: 5,
-    name: "範例同學E",
-    birthday: "09-18"
+    name: "林子歆",
+    birthday: "01-19"
   },
 
   {
-    className: "704",
+    className: "804",
     seat: 6,
-    name: "範例同學F",
-    birthday: "10-03"
+    name: "林禹萱",
+    birthday: "06-30"
   },
 
   {
-    className: "704",
+    className: "804",
     seat: 7,
-    name: "範例同學G",
-    birthday: "10-16"
+    name: "張馨勻",
+    birthday: "07-05"
+  },
+
+  {
+    className: "804",
+    seat: 8,
+    name: "陳昕樂",
+    birthday: "11-20"
+  },
+
+  {
+    className: "804",
+    seat: 9,
+    name: "陳梓安",
+    birthday: "03-29"
+  },
+
+  {
+    className: "804",
+    seat: 10,
+    name: "陳筠蓁",
+    birthday: "07-19"
+  },
+
+  {
+    className: "804",
+    seat: 11,
+    name: "陳苙絜",
+    birthday: "09-25"
+  },
+
+  {
+    className: "804",
+    seat: 12,
+    name: "楊錚諭",
+    birthday: "03-24"
+  },
+
+  {
+    className: "804",
+    seat: 13,
+    name: "趙安褕",
+    birthday: "02-15"
+  },
+
+  {
+    className: "804",
+    seat: 14,
+    name: "魏語潔",
+    birthday: "03-21"
+  },
+
+  {
+    className: "804",
+    seat: 15,
+    name: "江靚恩",
+    birthday: "01-05"
+  },
+
+  {
+    className: "804",
+    seat: 16,
+    name: "王洋振",
+    birthday: "08-24"
+  },
+
+  {
+    className: "804",
+    seat: 17,
+    name: "吳昊丞",
+    birthday: "01-03"
+  },
+
+  {
+    className: "804",
+    seat: 18,
+    name: "李祐誠",
+    birthday: "01-02"
+  },
+
+  {
+    className: "804",
+    seat: 19,
+    name: "林宸陞",
+    birthday: "04-25"
+  },
+
+  {
+    className: "804",
+    seat: 20,
+    name: "林維辰",
+    birthday: "04-10"
+  },
+
+  {
+    className: "804",
+    seat: 21,
+    name: "林鈺棟",
+    birthday: "12-19"
+  },
+
+  {
+    className: "804",
+    seat: 22,
+    name: "洪楷祥",
+    birthday: "12-10"
+  },
+
+  {
+    className: "804",
+    seat: 23,
+    name: "陳兆楷",
+    birthday: "06-22"
+  },
+
+  {
+    className: "804",
+    seat: 24,
+    name: "陳沂璟",
+    birthday: "11-11"
+  },
+
+  {
+    className: "804",
+    seat: 25,
+    name: "黑肚‧尤明",
+    birthday: "10-19"
+  },
+
+  {
+    className: "804",
+    seat: 26,
+    name: "賴震宇",
+    birthday: "09-03"
+  },
+
+  {
+    className: "804",
+    seat: 27,
+    name: "戴震龍",
+    birthday: "05-24"
   }
 
 ];
 
 
 /* =========================================================
-   2. 祝福語
+   生日祝福語
 ========================================================= */
 
 const birthdayWishes = [
@@ -1738,12 +1958,10 @@ const birthdayWishes = [
 
 
 /* =========================================================
-   3. 全域變數
+   全域變數
 ========================================================= */
 
 let selectedStudent = null;
-
-let selectedStudentIndex = null;
 
 let currentWish = "";
 
@@ -1753,7 +1971,7 @@ let lastWishIndex = -1;
 
 
 /* =========================================================
-   4. 日期工具
+   日期相關
 ========================================================= */
 
 function getToday() {
@@ -1763,7 +1981,6 @@ function getToday() {
   now.setHours(0, 0, 0, 0);
 
   return now;
-
 }
 
 
@@ -1778,7 +1995,6 @@ function parseBirthday(birthday) {
     month,
     day
   };
-
 }
 
 
@@ -1792,12 +2008,12 @@ function birthdayThisYear(student, year) {
       student.birthday
     );
 
+
   return new Date(
     year,
     month - 1,
     day
   );
-
 }
 
 
@@ -1805,6 +2021,7 @@ function nextBirthdayDate(student) {
 
   const today =
     getToday();
+
 
   let date =
     birthdayThisYear(
@@ -1820,12 +2037,10 @@ function nextBirthdayDate(student) {
         student,
         today.getFullYear() + 1
       );
-
   }
 
 
   return date;
-
 }
 
 
@@ -1834,10 +2049,10 @@ function daysBetween(a, b) {
   const oneDay =
     1000 * 60 * 60 * 24;
 
+
   return Math.round(
     (b - a) / oneDay
   );
-
 }
 
 
@@ -1845,6 +2060,7 @@ function isBirthdayToday(student) {
 
   const today =
     getToday();
+
 
   const {
     month,
@@ -1859,7 +2075,6 @@ function isBirthdayToday(student) {
     month === today.getMonth() + 1 &&
     day === today.getDate()
   );
-
 }
 
 
@@ -1873,8 +2088,8 @@ function formatBirthday(student) {
       student.birthday
     );
 
-  return `${month} 月 ${day} 日`;
 
+  return `${month} 月 ${day} 日`;
 }
 
 
@@ -1890,10 +2105,10 @@ function getWeekdayName(date) {
     "星期六"
   ];
 
+
   return names[
     date.getDay()
   ];
-
 }
 
 
@@ -1905,12 +2120,11 @@ function escapeHTML(text) {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
-
 }
 
 
 /* =========================================================
-   5. 日期顯示
+   今天日期
 ========================================================= */
 
 function renderCurrentDate() {
@@ -1918,27 +2132,29 @@ function renderCurrentDate() {
   const today =
     new Date();
 
+
   document
     .getElementById("todayDate")
     .textContent =
       `${today.getFullYear()} 年 ${today.getMonth() + 1} 月 ${today.getDate()} 日`;
 
+
   document
     .getElementById("todayWeekday")
     .textContent =
       getWeekdayName(today);
-
 }
 
 
 /* =========================================================
-   6. 已祝福紀錄
+   已祝福紀錄
 ========================================================= */
 
 function getBlessKey(student) {
 
   const today =
     getToday();
+
 
   return (
     "birthday-blessed-" +
@@ -1950,7 +2166,6 @@ function getBlessKey(student) {
     "-" +
     student.name
   );
-
 }
 
 
@@ -1961,7 +2176,6 @@ function isBlessed(student) {
       getBlessKey(student)
     ) === "1"
   );
-
 }
 
 
@@ -1969,6 +2183,7 @@ function toggleBlessed(index) {
 
   const student =
     students[index];
+
 
   const key =
     getBlessKey(student);
@@ -1979,6 +2194,7 @@ function toggleBlessed(index) {
   ) {
 
     localStorage.removeItem(key);
+
 
     showToast(
       `${student.name} 已取消「已祝福」`
@@ -1992,22 +2208,21 @@ function toggleBlessed(index) {
       "1"
     );
 
+
     showToast(
       `${student.name} 已標記完成祝福 🎉`
     );
-
   }
 
 
   renderTodayBirthdays();
 
   renderEarlyBirthday();
-
 }
 
 
 /* =========================================================
-   7. 下一位生日
+   下一位壽星
 ========================================================= */
 
 function renderNextBirthday() {
@@ -2019,25 +2234,31 @@ function renderNextBirthday() {
   if(students.length === 0) {
 
     document
-      .getElementById("nextBirthdayText")
+      .getElementById(
+        "nextBirthdayText"
+      )
       .textContent =
         "目前尚未建立生日資料。";
 
+
     document
-      .getElementById("nextBirthdayDays")
+      .getElementById(
+        "nextBirthdayDays"
+      )
       .textContent = "";
 
-    return;
 
+    return;
   }
 
 
   const sorted =
     students
-      .map((student, index) => {
+      .map((student,index) => {
 
         const date =
           nextBirthdayDate(student);
+
 
         return {
           student,
@@ -2052,7 +2273,7 @@ function renderNextBirthday() {
 
       })
       .sort(
-        (a, b) =>
+        (a,b) =>
           a.date - b.date
       );
 
@@ -2076,19 +2297,22 @@ function renderNextBirthday() {
 
 
     document
-      .getElementById("nextBirthdayText")
+      .getElementById(
+        "nextBirthdayText"
+      )
       .textContent =
         `今天就是 ${names} 的生日！`;
 
 
     document
-      .getElementById("nextBirthdayDays")
+      .getElementById(
+        "nextBirthdayDays"
+      )
       .textContent =
         "🎂 今天生日";
 
 
     return;
-
   }
 
 
@@ -2096,22 +2320,20 @@ function renderNextBirthday() {
     sorted[0];
 
 
-  const weekday =
-    getWeekdayName(
-      next.date
-    );
-
-
   document
-    .getElementById("nextBirthdayText")
+    .getElementById(
+      "nextBirthdayText"
+    )
     .textContent =
-      `${next.student.name}｜${formatBirthday(next.student)}｜${weekday}`;
+      `${next.student.name}｜${formatBirthday(next.student)}｜${getWeekdayName(next.date)}`;
 
 
   if(next.days === 1) {
 
     document
-      .getElementById("nextBirthdayDays")
+      .getElementById(
+        "nextBirthdayDays"
+      )
       .textContent =
         "明天生日 🎈";
 
@@ -2119,17 +2341,17 @@ function renderNextBirthday() {
   else {
 
     document
-      .getElementById("nextBirthdayDays")
+      .getElementById(
+        "nextBirthdayDays"
+      )
       .textContent =
         `還有 ${next.days} 天`;
-
   }
-
 }
 
 
 /* =========================================================
-   8. 今日壽星
+   今日壽星
 ========================================================= */
 
 function renderTodayBirthdays() {
@@ -2143,7 +2365,7 @@ function renderTodayBirthdays() {
   const birthdays =
     students
       .map(
-        (student, index) => ({
+        (student,index) => ({
           student,
           index
         })
@@ -2171,6 +2393,7 @@ function renderTodayBirthdays() {
           const date =
             nextBirthdayDate(student);
 
+
           return {
             student,
             days:
@@ -2188,14 +2411,22 @@ function renderTodayBirthdays() {
 
 
     let nextText =
-      "目前還沒有生日資料。";
+      "目前沒有生日資料。";
 
 
     if(next) {
 
-      nextText =
-        `下一位壽星是 ${next.student.name}，還有 ${next.days} 天。`;
+      if(next.days === 1) {
 
+        nextText =
+          `明天是 ${next.student.name} 的生日！`;
+
+      }
+      else {
+
+        nextText =
+          `下一位壽星是 ${next.student.name}，還有 ${next.days} 天。`;
+      }
     }
 
 
@@ -2223,7 +2454,6 @@ function renderTodayBirthdays() {
 
 
     return;
-
   }
 
 
@@ -2255,7 +2485,7 @@ function renderTodayBirthdays() {
 
               <div class="birthday-info">
 
-                ${escapeHTML(student.className)} 班
+                804 班
                 ・
                 ${escapeHTML(student.seat)} 號
 
@@ -2281,6 +2511,7 @@ function renderTodayBirthdays() {
                 🎁 產生生日卡
               </button>
 
+
               <button
                 class="btn btn-success ${blessed ? "blessed" : ""}"
                 onclick="toggleBlessed(${item.index})"
@@ -2302,12 +2533,11 @@ function renderTodayBirthdays() {
 
       })
       .join("");
-
 }
 
 
 /* =========================================================
-   9. 星期五提前祝福週末生日
+   星期五提醒週末生日
 ========================================================= */
 
 function renderEarlyBirthday() {
@@ -2316,6 +2546,7 @@ function renderEarlyBirthday() {
     document.getElementById(
       "earlyBirthdaySection"
     );
+
 
   const container =
     document.getElementById(
@@ -2328,39 +2559,44 @@ function renderEarlyBirthday() {
 
 
   /*
-    JavaScript：
-    星期日 = 0
-    星期一 = 1
-    ...
-    星期五 = 5
-    星期六 = 6
+    JS 星期：
+    0 日
+    1 一
+    2 二
+    3 三
+    4 四
+    5 五
+    6 六
   */
 
   if(
     today.getDay() !== 5
   ) {
 
-    section.classList.remove(
-      "show"
-    );
+    section
+      .classList
+      .remove("show");
+
 
     container.innerHTML = "";
 
-    return;
 
+    return;
   }
 
 
-  const tomorrow =
+  const saturday =
     new Date(today);
 
-  tomorrow.setDate(
+
+  saturday.setDate(
     today.getDate() + 1
   );
 
 
   const sunday =
     new Date(today);
+
 
   sunday.setDate(
     today.getDate() + 2
@@ -2370,42 +2606,33 @@ function renderEarlyBirthday() {
   const weekendBirthdays =
     students
       .map(
-        (student, index) => ({
+        (student,index) => ({
           student,
           index
         })
       )
       .filter(item => {
 
-        const student =
-          item.student;
-
         const {
           month,
           day
         } =
           parseBirthday(
-            student.birthday
+            item.student.birthday
           );
 
 
         const saturdayMatch =
           (
-            month ===
-              tomorrow.getMonth() + 1
-            &&
-            day ===
-              tomorrow.getDate()
+            month === saturday.getMonth() + 1 &&
+            day === saturday.getDate()
           );
 
 
         const sundayMatch =
           (
-            month ===
-              sunday.getMonth() + 1
-            &&
-            day ===
-              sunday.getDate()
+            month === sunday.getMonth() + 1 &&
+            day === sunday.getDate()
           );
 
 
@@ -2421,20 +2648,21 @@ function renderEarlyBirthday() {
     weekendBirthdays.length === 0
   ) {
 
-    section.classList.remove(
-      "show"
-    );
+    section
+      .classList
+      .remove("show");
+
 
     container.innerHTML = "";
 
-    return;
 
+    return;
   }
 
 
-  section.classList.add(
-    "show"
-  );
+  section
+    .classList
+    .add("show");
 
 
   container.innerHTML =
@@ -2445,22 +2673,14 @@ function renderEarlyBirthday() {
           item.student;
 
 
-        const nextDate =
-          nextBirthdayDate(
-            student
-          );
-
-
-        const dayName =
-          getWeekdayName(
-            nextDate
-          );
+        const birthdayDate =
+          nextBirthdayDate(student);
 
 
         const days =
           daysBetween(
             today,
-            nextDate
+            birthdayDate
           );
 
 
@@ -2492,15 +2712,15 @@ function renderEarlyBirthday() {
 
                 <div class="early-meta">
 
-                  ${escapeHTML(student.className)} 班
+                  804 班
                   ・
-                  ${escapeHTML(student.seat)} 號
+                  ${student.seat} 號
 
                   <br>
 
                   🎂 ${formatBirthday(student)}
                   ・
-                  ${dayName}
+                  ${getWeekdayName(birthdayDate)}
 
                 </div>
 
@@ -2545,12 +2765,11 @@ function renderEarlyBirthday() {
 
       })
       .join("");
-
 }
 
 
 /* =========================================================
-   10. 一般人物卡片
+   一般學生卡片
 ========================================================= */
 
 function personCard(
@@ -2568,6 +2787,7 @@ function personCard(
         🎈
       </div>
 
+
       <div class="person-content">
 
         <div class="person-name">
@@ -2576,9 +2796,9 @@ function personCard(
 
         <div class="person-meta">
 
-          ${escapeHTML(student.className)} 班
+          804 班
           ・
-          ${escapeHTML(student.seat)} 號
+          ${student.seat} 號
 
           <br>
 
@@ -2620,12 +2840,11 @@ function personCard(
     </div>
 
   `;
-
 }
 
 
 /* =========================================================
-   11. 未來十天
+   未來十天
 ========================================================= */
 
 function renderUpcoming() {
@@ -2643,12 +2862,10 @@ function renderUpcoming() {
   const items =
     students
       .map(
-        (student, index) => {
+        (student,index) => {
 
           const date =
-            nextBirthdayDate(
-              student
-            );
+            nextBirthdayDate(student);
 
 
           const days =
@@ -2701,7 +2918,6 @@ function renderUpcoming() {
 
 
     return;
-
   }
 
 
@@ -2724,18 +2940,11 @@ function renderUpcoming() {
 
           text =
             `${item.days} 天後`;
-
         }
 
 
-        const weekday =
-          getWeekdayName(
-            item.date
-          );
-
-
         text +=
-          `・${weekday}`;
+          `・${getWeekdayName(item.date)}`;
 
 
         return personCard(
@@ -2747,12 +2956,11 @@ function renderUpcoming() {
 
       })
       .join("");
-
 }
 
 
 /* =========================================================
-   12. 本月
+   本月壽星
 ========================================================= */
 
 function renderThisMonth() {
@@ -2794,23 +3002,25 @@ function renderThisMonth() {
         );
 
       })
-      .sort((a,b) => {
+      .sort(
+        (a,b) => {
 
-        const aa =
-          parseBirthday(
-            a.student.birthday
-          ).day;
-
-
-        const bb =
-          parseBirthday(
-            b.student.birthday
-          ).day;
+          const aa =
+            parseBirthday(
+              a.student.birthday
+            ).day;
 
 
-        return aa - bb;
+          const bb =
+            parseBirthday(
+              b.student.birthday
+            ).day;
 
-      });
+
+          return aa - bb;
+
+        }
+      );
 
 
   if(items.length === 0) {
@@ -2824,7 +3034,7 @@ function renderThisMonth() {
         </div>
 
         <div class="empty-title">
-          本月沒有壽星資料
+          本月沒有壽星
         </div>
 
       </div>
@@ -2833,7 +3043,6 @@ function renderThisMonth() {
 
 
     return;
-
   }
 
 
@@ -2843,6 +3052,13 @@ function renderThisMonth() {
 
         const student =
           item.student;
+
+
+        const birthdayDate =
+          birthdayThisYear(
+            student,
+            today.getFullYear()
+          );
 
 
         const {
@@ -2875,8 +3091,7 @@ function renderThisMonth() {
         else {
 
           status =
-            `${day - today.getDate()} 天後`;
-
+            `${day - today.getDate()} 天後・${getWeekdayName(birthdayDate)}`;
         }
 
 
@@ -2889,12 +3104,11 @@ function renderThisMonth() {
 
       })
       .join("");
-
 }
 
 
 /* =========================================================
-   13. 下個月
+   下月壽星
 ========================================================= */
 
 function renderNextMonth() {
@@ -2913,6 +3127,12 @@ function renderNextMonth() {
     today.getMonth() === 11
       ? 1
       : today.getMonth() + 2;
+
+
+  const nextMonthYear =
+    today.getMonth() === 11
+      ? today.getFullYear() + 1
+      : today.getFullYear();
 
 
   const items =
@@ -2938,23 +3158,25 @@ function renderNextMonth() {
         );
 
       })
-      .sort((a,b) => {
+      .sort(
+        (a,b) => {
 
-        const aa =
-          parseBirthday(
-            a.student.birthday
-          ).day;
-
-
-        const bb =
-          parseBirthday(
-            b.student.birthday
-          ).day;
+          const aa =
+            parseBirthday(
+              a.student.birthday
+            ).day;
 
 
-        return aa - bb;
+          const bb =
+            parseBirthday(
+              b.student.birthday
+            ).day;
 
-      });
+
+          return aa - bb;
+
+        }
+      );
 
 
   if(items.length === 0) {
@@ -2968,7 +3190,7 @@ function renderNextMonth() {
         </div>
 
         <div class="empty-title">
-          下個月沒有壽星資料
+          下個月沒有壽星
         </div>
 
       </div>
@@ -2977,7 +3199,6 @@ function renderNextMonth() {
 
 
     return;
-
   }
 
 
@@ -2985,21 +3206,37 @@ function renderNextMonth() {
     items
       .map(item => {
 
+        const {
+          month,
+          day
+        } =
+          parseBirthday(
+            item.student.birthday
+          );
+
+
+        const date =
+          new Date(
+            nextMonthYear,
+            month - 1,
+            day
+          );
+
+
         return personCard(
           item.student,
-          "下月",
+          getWeekdayName(date),
           item.index,
           true
         );
 
       })
       .join("");
-
 }
 
 
 /* =========================================================
-   14. 搜尋
+   搜尋
 ========================================================= */
 
 function renderSearchResults() {
@@ -3025,7 +3262,6 @@ function renderSearchResults() {
     container.innerHTML = "";
 
     return;
-
   }
 
 
@@ -3052,15 +3288,14 @@ function renderSearchResults() {
           ||
 
           String(
-            student.className
+            student.seat
           )
-            .toLowerCase()
             .includes(input)
 
           ||
 
           String(
-            student.seat
+            student.className
           )
             .includes(input)
 
@@ -3089,7 +3324,6 @@ function renderSearchResults() {
 
 
     return;
-
   }
 
 
@@ -3105,7 +3339,7 @@ function renderSearchResults() {
           item.student;
 
 
-        const nextDate =
+        const birthdayDate =
           nextBirthdayDate(
             student
           );
@@ -3114,7 +3348,7 @@ function renderSearchResults() {
         const days =
           daysBetween(
             today,
-            nextDate
+            birthdayDate
           );
 
 
@@ -3137,7 +3371,6 @@ function renderSearchResults() {
 
           text =
             `還有 ${days} 天`;
-
         }
 
 
@@ -3149,6 +3382,7 @@ function renderSearchResults() {
               🎂
             </div>
 
+
             <div class="person-content">
 
               <div class="person-name">
@@ -3157,15 +3391,15 @@ function renderSearchResults() {
 
               <div class="person-meta">
 
-                ${escapeHTML(student.className)} 班
+                804 班
                 ・
-                ${escapeHTML(student.seat)} 號
+                ${student.seat} 號
 
                 <br>
 
                 ${formatBirthday(student)}
                 ・
-                ${getWeekdayName(nextDate)}
+                ${getWeekdayName(birthdayDate)}
                 ・
                 ${text}
 
@@ -3187,12 +3421,11 @@ function renderSearchResults() {
 
       })
       .join("");
-
 }
 
 
 /* =========================================================
-   15. Tabs
+   Tabs
 ========================================================= */
 
 function setupTabs() {
@@ -3206,27 +3439,27 @@ function setupTabs() {
         () => {
 
           document
-            .querySelectorAll(
-              ".tab"
-            )
-            .forEach(
-              tab =>
-                tab.classList.remove(
-                  "active"
-                )
-            );
+            .querySelectorAll(".tab")
+            .forEach(tab => {
+
+              tab
+                .classList
+                .remove("active");
+
+            });
 
 
           document
             .querySelectorAll(
               ".tab-panel"
             )
-            .forEach(
-              panel =>
-                panel.classList.remove(
-                  "active"
-                )
-            );
+            .forEach(panel => {
+
+              panel
+                .classList
+                .remove("active");
+
+            });
 
 
           button
@@ -3245,12 +3478,11 @@ function setupTabs() {
       );
 
     });
-
 }
 
 
 /* =========================================================
-   16. 隨機祝福
+   隨機祝福
 ========================================================= */
 
 function getRandomWish() {
@@ -3260,7 +3492,6 @@ function getRandomWish() {
   ) {
 
     return "生日快樂！";
-
   }
 
 
@@ -3269,7 +3500,6 @@ function getRandomWish() {
   ) {
 
     return birthdayWishes[0];
-
   }
 
 
@@ -3295,7 +3525,6 @@ function getRandomWish() {
 
 
   return birthdayWishes[index];
-
 }
 
 
@@ -3314,12 +3543,11 @@ function newWish() {
 
 
   drawBirthdayCard();
-
 }
 
 
 /* =========================================================
-   17. 卡片主題
+   卡片主題
 ========================================================= */
 
 const cardThemes = {
@@ -3360,14 +3588,10 @@ const cardThemes = {
 
 
 /* =========================================================
-   18. 開啟生日卡
+   開啟卡片
 ========================================================= */
 
 function openCardModal(index) {
-
-  selectedStudentIndex =
-    index;
-
 
   selectedStudent =
     students[index];
@@ -3419,12 +3643,11 @@ function openCardModal(index) {
 
 
   drawBirthdayCard();
-
 }
 
 
 /* =========================================================
-   19. 關閉生日卡
+   關閉卡片
 ========================================================= */
 
 function closeCardModal() {
@@ -3439,12 +3662,11 @@ function closeCardModal() {
 
   document.body.style.overflow =
     "";
-
 }
 
 
 /* =========================================================
-   20. 主題按鈕
+   卡片主題按鈕
 ========================================================= */
 
 function setupThemeButtons() {
@@ -3467,12 +3689,13 @@ function setupThemeButtons() {
             .querySelectorAll(
               ".theme-btn"
             )
-            .forEach(
-              btn =>
-                btn.classList.remove(
-                  "active"
-                )
-            );
+            .forEach(btn => {
+
+              btn
+                .classList
+                .remove("active");
+
+            });
 
 
           button
@@ -3486,12 +3709,11 @@ function setupThemeButtons() {
       );
 
     });
-
 }
 
 
 /* =========================================================
-   21. 隨機換卡片
+   隨機更換
 ========================================================= */
 
 function randomizeCard() {
@@ -3519,14 +3741,17 @@ function randomizeCard() {
     .querySelectorAll(
       ".theme-btn"
     )
-    .forEach(
-      btn =>
-        btn.classList.toggle(
+    .forEach(btn => {
+
+      btn
+        .classList
+        .toggle(
           "active",
           btn.dataset.theme ===
             currentTheme
-        )
-    );
+        );
+
+    });
 
 
   document
@@ -3538,12 +3763,11 @@ function randomizeCard() {
 
 
   drawBirthdayCard();
-
 }
 
 
 /* =========================================================
-   22. Canvas 工具
+   Canvas 工具
 ========================================================= */
 
 function roundedRect(
@@ -3564,7 +3788,6 @@ function roundedRect(
     height,
     radius
   );
-
 }
 
 
@@ -3598,12 +3821,11 @@ function drawCircle(
   ctx.fill();
 
   ctx.restore();
-
 }
 
 
 /* =========================================================
-   23. 文字換行
+   文字自動換行
 ========================================================= */
 
 function wrapText(
@@ -3651,16 +3873,13 @@ function wrapText(
 
       line =
         testLine;
-
     }
-
   }
 
 
   if(line) {
 
     lines.push(line);
-
   }
 
 
@@ -3691,12 +3910,11 @@ function wrapText(
     lines.length *
     lineHeight
   );
-
 }
 
 
 /* =========================================================
-   24. 蛋糕
+   畫蛋糕
 ========================================================= */
 
 function drawCake(
@@ -3705,6 +3923,8 @@ function drawCake(
   y,
   theme
 ) {
+
+  /* 盤子 */
 
   ctx.fillStyle =
     "rgba(255,255,255,.9)";
@@ -3723,6 +3943,8 @@ function drawCake(
   ctx.fill();
 
 
+  /* 蛋糕 */
+
   ctx.fillStyle =
     theme.primary;
 
@@ -3739,6 +3961,8 @@ function drawCake(
 
   ctx.fill();
 
+
+  /* 奶油 */
 
   ctx.fillStyle =
     "#ffffff";
@@ -3757,10 +3981,14 @@ function drawCake(
   ctx.fill();
 
 
+  /* 蠟燭 */
+
   const candleXs = [
+
     centerX - 65,
     centerX,
     centerX + 65
+
   ];
 
 
@@ -3785,6 +4013,8 @@ function drawCake(
 
       ctx.fill();
 
+
+      /* 火焰 */
 
       ctx.fillStyle =
         "#ffb703";
@@ -3819,12 +4049,11 @@ function drawCake(
 
     }
   );
-
 }
 
 
 /* =========================================================
-   25. 畫生日卡
+   繪製生日卡
 ========================================================= */
 
 function drawBirthdayCard() {
@@ -3868,6 +4097,8 @@ function drawBirthdayCard() {
   );
 
 
+  /* 背景 */
+
   const gradient =
     ctx.createLinearGradient(
       0,
@@ -3901,6 +4132,8 @@ function drawBirthdayCard() {
   );
 
 
+  /* 裝飾圓 */
+
   const decorations = [
 
     [90,120,45],
@@ -3932,6 +4165,8 @@ function drawBirthdayCard() {
     }
   );
 
+
+  /* Emoji */
 
   ctx.textAlign =
     "center";
@@ -3969,6 +4204,8 @@ function drawBirthdayCard() {
   );
 
 
+  /* 白色主框 */
+
   ctx.fillStyle =
     "rgba(255,255,255,.90)";
 
@@ -4002,6 +4239,8 @@ function drawBirthdayCard() {
     "transparent";
 
 
+  /* 英文 */
+
   ctx.fillStyle =
     theme.primary;
 
@@ -4021,6 +4260,8 @@ function drawBirthdayCard() {
   );
 
 
+  /* 分隔線 */
+
   ctx.fillStyle =
     theme.accent;
 
@@ -4037,6 +4278,8 @@ function drawBirthdayCard() {
 
   ctx.fill();
 
+
+  /* 姓名 */
 
   ctx.fillStyle =
     currentTheme === "star"
@@ -4055,6 +4298,8 @@ function drawBirthdayCard() {
   );
 
 
+  /* 生日快樂 */
+
   ctx.fillStyle =
     theme.secondary;
 
@@ -4070,6 +4315,8 @@ function drawBirthdayCard() {
   );
 
 
+  /* 蛋糕 */
+
   drawCake(
     ctx,
     W / 2,
@@ -4077,6 +4324,8 @@ function drawBirthdayCard() {
     theme
   );
 
+
+  /* 生日日期 */
 
   ctx.fillStyle =
     "#6b7280";
@@ -4092,6 +4341,8 @@ function drawBirthdayCard() {
     755
   );
 
+
+  /* 祝福語底框 */
 
   ctx.fillStyle =
     "rgba(255,255,255,.80)";
@@ -4109,6 +4360,8 @@ function drawBirthdayCard() {
 
   ctx.fill();
 
+
+  /* 祝福語 */
 
   ctx.fillStyle =
     "#444a5a";
@@ -4133,6 +4386,8 @@ function drawBirthdayCard() {
   );
 
 
+  /* 老師署名 */
+
   ctx.fillStyle =
     theme.primary;
 
@@ -4148,6 +4403,8 @@ function drawBirthdayCard() {
   );
 
 
+  /* 底部文字 */
+
   ctx.fillStyle =
     "#9ca3af";
 
@@ -4161,12 +4418,11 @@ function drawBirthdayCard() {
     W / 2,
     1208
   );
-
 }
 
 
 /* =========================================================
-   26. 下載卡片
+   下載生日卡
 ========================================================= */
 
 function downloadCard() {
@@ -4191,12 +4447,8 @@ function downloadCard() {
     document.createElement("a");
 
 
-  const fileName =
-    `${selectedStudent.name}_生日卡.png`;
-
-
   link.download =
-    fileName;
+    `804_${selectedStudent.seat}號_${selectedStudent.name}_生日卡.png`;
 
 
   link.href =
@@ -4212,12 +4464,11 @@ function downloadCard() {
   showToast(
     `${selectedStudent.name} 的生日卡已產生 🎂`
   );
-
 }
 
 
 /* =========================================================
-   27. Toast
+   提示訊息
 ========================================================= */
 
 let toastTimer = null;
@@ -4235,9 +4486,9 @@ function showToast(message) {
     message;
 
 
-  toast.classList.add(
-    "show"
-  );
+  toast
+    .classList
+    .add("show");
 
 
   clearTimeout(
@@ -4251,19 +4502,16 @@ function showToast(message) {
 
         toast
           .classList
-          .remove(
-            "show"
-          );
+          .remove("show");
 
       },
       2600
     );
-
 }
 
 
 /* =========================================================
-   28. Modal 操作
+   Modal
 ========================================================= */
 
 document
@@ -4280,7 +4528,6 @@ document
       ) {
 
         closeCardModal();
-
       }
 
     }
@@ -4298,7 +4545,6 @@ document
       ) {
 
         closeCardModal();
-
       }
 
     }
@@ -4306,7 +4552,7 @@ document
 
 
 /* =========================================================
-   29. 搜尋
+   搜尋
 ========================================================= */
 
 document
@@ -4320,7 +4566,7 @@ document
 
 
 /* =========================================================
-   30. 初始化
+   初始化
 ========================================================= */
 
 function init() {
@@ -4342,7 +4588,6 @@ function init() {
   setupTabs();
 
   setupThemeButtons();
-
 }
 
 
