@@ -21,10 +21,6 @@
   <meta name="theme-color" content="#10182f" />
 
   <style>
-    /* =========================================================
-       基本設定
-    ========================================================= */
-
     * {
       box-sizing: border-box;
       margin: 0;
@@ -34,18 +30,10 @@
     :root {
       --bg-dark: #0a1020;
       --bg-blue: #101c3a;
-      --navy: #11182c;
       --gold: #f6c453;
-      --gold-dark: #a86b1d;
       --red: #bd2937;
-      --red-dark: #771826;
-      --paper: #f6e5b9;
-      --paper-dark: #c99d58;
-      --wood: #7b431f;
-      --wood-dark: #3c1f12;
       --white: #fffdf3;
       --text-dark: #2d2018;
-      --shadow: rgba(0, 0, 0, 0.38);
     }
 
     html {
@@ -55,7 +43,6 @@
     body {
       min-height: 100vh;
       overflow-x: hidden;
-
       color: var(--white);
 
       font-family:
@@ -67,36 +54,17 @@
         sans-serif;
 
       background:
-        radial-gradient(
-          circle at 15% 15%,
-          rgba(54, 128, 255, 0.24),
-          transparent 30%
-        ),
-        radial-gradient(
-          circle at 85% 20%,
-          rgba(250, 190, 60, 0.12),
-          transparent 28%
-        ),
-        radial-gradient(
-          circle at 50% 100%,
-          rgba(0, 153, 204, 0.22),
-          transparent 40%
-        ),
-        linear-gradient(
-          180deg,
-          #08101f 0%,
-          #102448 54%,
-          #07101d 100%
-        );
+        radial-gradient(circle at 15% 15%, rgba(54, 128, 255, 0.24), transparent 30%),
+        radial-gradient(circle at 85% 20%, rgba(250, 190, 60, 0.12), transparent 28%),
+        radial-gradient(circle at 50% 100%, rgba(0, 153, 204, 0.22), transparent 40%),
+        linear-gradient(180deg, #08101f 0%, #102448 54%, #07101d 100%);
     }
 
     body::before {
       content: "";
       position: fixed;
       inset: 0;
-
       pointer-events: none;
-
       opacity: 0.12;
 
       background-image:
@@ -121,21 +89,17 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    /* =========================================================
+    /* =========================
        背景裝飾
-    ========================================================= */
+    ========================= */
 
     .ocean-glow {
       position: fixed;
-
       left: 0;
       right: 0;
       bottom: -70px;
-
       height: 260px;
-
       pointer-events: none;
-
       z-index: -1;
 
       background:
@@ -150,146 +114,100 @@
 
     .floating-symbol {
       position: fixed;
-
       pointer-events: none;
-
       opacity: 0.09;
-
       user-select: none;
-
       z-index: -1;
 
-      filter:
-        drop-shadow(
-          0 8px 15px rgba(0, 0, 0, 0.45)
-        );
+      filter: drop-shadow(0 8px 15px rgba(0, 0, 0, 0.45));
 
-      animation:
-        floatSymbol 8s ease-in-out infinite;
+      animation: floatSymbol 8s ease-in-out infinite;
     }
 
     .symbol-1 {
       top: 13%;
       left: 4%;
-
-      font-size:
-        clamp(65px, 9vw, 130px);
-
-      transform:
-        rotate(-15deg);
+      font-size: clamp(65px, 9vw, 130px);
     }
 
     .symbol-2 {
       top: 28%;
       right: 3%;
-
-      font-size:
-        clamp(70px, 10vw, 150px);
-
-      animation-delay:
-        -2.5s;
+      font-size: clamp(70px, 10vw, 150px);
+      animation-delay: -2.5s;
     }
 
     .symbol-3 {
       bottom: 7%;
       left: 7%;
+      font-size: clamp(60px, 9vw, 120px);
+      animation-delay: -4s;
+    }
 
-      font-size:
-        clamp(60px, 9vw, 120px);
-
-      animation-delay:
-        -4s;
+    .symbol-4 {
+      bottom: 18%;
+      right: 7%;
+      font-size: clamp(55px, 8vw, 110px);
+      animation-delay: -6s;
     }
 
     @keyframes floatSymbol {
       0%,
       100% {
-        transform:
-          translateY(0)
-          rotate(-4deg);
+        transform: translateY(0) rotate(-4deg);
       }
 
       50% {
-        transform:
-          translateY(-16px)
-          rotate(4deg);
+        transform: translateY(-16px) rotate(4deg);
       }
     }
 
-    /* =========================================================
+    /* =========================
        頁首
-    ========================================================= */
+    ========================= */
 
     .hero {
       position: relative;
-
-      padding:
-        42px 18px 26px;
-
+      padding: 42px 18px 26px;
       text-align: center;
     }
 
     .top-badge {
       display: inline-flex;
-
       align-items: center;
       justify-content: center;
-
       gap: 9px;
 
       margin-bottom: 18px;
+      padding: 8px 17px;
 
-      padding:
-        8px 17px;
+      border: 2px solid rgba(246, 196, 83, 0.78);
+      border-radius: 999px;
 
-      border:
-        2px solid
-        rgba(246, 196, 83, 0.78);
+      color: var(--gold);
+      font-size: 14px;
+      font-weight: 900;
+      letter-spacing: 2px;
 
-      border-radius:
-        999px;
-
-      color:
-        var(--gold);
-
-      font-size:
-        14px;
-
-      font-weight:
-        900;
-
-      letter-spacing:
-        2px;
-
-      background:
-        rgba(7, 12, 27, 0.7);
+      background: rgba(7, 12, 27, 0.7);
 
       box-shadow:
-        0 6px 25px
-          rgba(0, 0, 0, 0.25),
-        inset
-          0 0 14px
-          rgba(246, 196, 83, 0.08);
+        0 6px 25px rgba(0, 0, 0, 0.25),
+        inset 0 0 14px rgba(246, 196, 83, 0.08);
 
-      backdrop-filter:
-        blur(10px);
+      backdrop-filter: blur(10px);
     }
 
     .logo-wrap {
       width: 112px;
       height: 112px;
-
-      margin:
-        0 auto 16px;
+      margin: 0 auto 16px;
 
       display: grid;
-
       place-items: center;
 
       position: relative;
-
-      border-radius:
-        50%;
+      border-radius: 50%;
 
       background:
         radial-gradient(
@@ -299,276 +217,158 @@
           #7c3d16 100%
         );
 
-      border:
-        6px solid #f9d66c;
+      border: 6px solid #f9d66c;
 
       box-shadow:
         0 0 0 5px #7a431c,
-        0 16px 30px
-          rgba(0, 0, 0, 0.38),
-        0 0 38px
-          rgba(246, 196, 83, 0.25);
+        0 16px 30px rgba(0, 0, 0, 0.38),
+        0 0 38px rgba(246, 196, 83, 0.25);
 
-      animation:
-        logoFloat
-        4s
-        ease-in-out
-        infinite;
+      animation: logoFloat 4s ease-in-out infinite;
     }
 
     .logo-wrap::before,
     .logo-wrap::after {
       content: "";
-
       position: absolute;
 
       width: 48px;
       height: 8px;
 
-      border-radius:
-        999px;
-
-      background:
-        #f3dfac;
-
+      border-radius: 999px;
+      background: #f3dfac;
       z-index: -1;
     }
 
     .logo-wrap::before {
-      transform:
-        rotate(36deg);
+      transform: rotate(36deg);
     }
 
     .logo-wrap::after {
-      transform:
-        rotate(-36deg);
+      transform: rotate(-36deg);
     }
 
     .logo-icon {
-      font-size:
-        58px;
+      font-size: 58px;
 
       filter:
         drop-shadow(
-          0 4px 3px
-          rgba(0, 0, 0, 0.24)
+          0 4px 3px rgba(0, 0, 0, 0.24)
         );
     }
 
     @keyframes logoFloat {
       0%,
       100% {
-        transform:
-          translateY(0)
-          rotate(-2deg);
+        transform: translateY(0) rotate(-2deg);
       }
 
       50% {
-        transform:
-          translateY(-8px)
-          rotate(2deg);
+        transform: translateY(-8px) rotate(2deg);
       }
     }
 
     .title {
-      font-size:
-        clamp(32px, 6vw, 62px);
-
-      font-weight:
-        1000;
-
-      line-height:
-        1.08;
-
-      letter-spacing:
-        3px;
+      font-size: clamp(32px, 6vw, 62px);
+      font-weight: 1000;
+      line-height: 1.08;
+      letter-spacing: 3px;
 
       text-shadow:
         0 4px 0 #771826,
-        0 8px 16px
-          rgba(0, 0, 0, 0.48);
+        0 8px 16px rgba(0, 0, 0, 0.48);
     }
 
     .title .gold {
-      color:
-        var(--gold);
+      color: var(--gold);
     }
 
     .title .red {
-      color:
-        #e14d50;
+      color: #e14d50;
     }
 
     .subtitle {
-      max-width:
-        700px;
+      max-width: 700px;
+      margin: 14px auto 0;
 
-      margin:
-        14px auto 0;
+      color: #dce7ff;
 
-      color:
-        #dce7ff;
-
-      font-size:
-        clamp(14px, 2.6vw, 18px);
-
-      line-height:
-        1.8;
-
-      font-weight:
-        700;
+      font-size: clamp(14px, 2.6vw, 18px);
+      line-height: 1.8;
+      font-weight: 700;
     }
 
-    /* =========================================================
-       懸賞令風提示牌
-    ========================================================= */
+    /* =========================
+       公告
+    ========================= */
 
     .notice-wrap {
-      width:
-        min(
-          900px,
-          calc(100% - 30px)
-        );
-
-      margin:
-        4px auto 30px;
+      width: min(900px, calc(100% - 30px));
+      margin: 4px auto 30px;
     }
 
     .notice {
       position: relative;
-
       overflow: hidden;
+      padding: 17px 20px;
 
-      padding:
-        17px 20px;
+      color: var(--text-dark);
+      text-align: center;
 
-      color:
-        var(--text-dark);
+      font-weight: 900;
+      line-height: 1.65;
 
-      text-align:
-        center;
-
-      font-weight:
-        900;
-
-      line-height:
-        1.65;
-
-      border:
-        3px solid #7b4a25;
-
-      border-radius:
-        8px;
+      border: 3px solid #7b4a25;
+      border-radius: 8px;
 
       background:
-        radial-gradient(
-          circle at 20% 30%,
-          rgba(122, 73, 36, 0.09),
-          transparent 22%
-        ),
-        radial-gradient(
-          circle at 80% 65%,
-          rgba(122, 73, 36, 0.1),
-          transparent 25%
-        ),
-        linear-gradient(
-          135deg,
-          #f6e3af,
-          #e8c37e
-        );
+        radial-gradient(circle at 20% 30%, rgba(122, 73, 36, 0.09), transparent 22%),
+        radial-gradient(circle at 80% 65%, rgba(122, 73, 36, 0.1), transparent 25%),
+        linear-gradient(135deg, #f6e3af, #e8c37e);
 
       box-shadow:
         0 10px 0 #4a2818,
-        0 18px 35px
-          rgba(0, 0, 0, 0.31);
+        0 18px 35px rgba(0, 0, 0, 0.31);
     }
 
-    .notice::before,
-    .notice::after {
-      content: "";
-
-      position: absolute;
-
-      width: 24px;
-      height: 24px;
-
-      border-radius:
-        50%;
-
-      background:
-        rgba(90, 44, 16, 0.22);
-    }
-
-    .notice::before {
-      top: -10px;
-      left: 10%;
-    }
-
-    .notice::after {
-      bottom: -10px;
-      right: 13%;
-    }
-
-    /* =========================================================
+    /* =========================
        主內容
-    ========================================================= */
+    ========================= */
 
     main {
-      width:
-        min(
-          1180px,
-          calc(100% - 28px)
-        );
-
-      margin:
-        0 auto;
-
-      padding-bottom:
-        68px;
+      width: min(1180px, calc(100% - 28px));
+      margin: 0 auto;
+      padding-bottom: 68px;
     }
 
     .section-title {
       position: relative;
 
       display: flex;
-
       align-items: center;
       justify-content: center;
-
       gap: 12px;
 
-      margin:
-        10px 0 24px;
+      margin: 10px 0 24px;
 
-      color:
-        var(--gold);
+      color: var(--gold);
 
-      font-size:
-        clamp(21px, 4vw, 30px);
-
-      font-weight:
-        1000;
-
-      letter-spacing:
-        2px;
+      font-size: clamp(21px, 4vw, 30px);
+      font-weight: 1000;
+      letter-spacing: 2px;
 
       text-shadow:
-        0 3px 8px
-          rgba(0, 0, 0, 0.45);
+        0 3px 8px rgba(0, 0, 0, 0.45);
     }
 
     .section-title::before,
     .section-title::after {
       content: "";
 
-      width:
-        min(120px, 16vw);
+      width: min(120px, 16vw);
+      height: 3px;
 
-      height:
-        3px;
-
-      border-radius:
-        999px;
+      border-radius: 999px;
 
       background:
         linear-gradient(
@@ -583,48 +383,32 @@
       display: grid;
 
       grid-template-columns:
-        repeat(
-          3,
-          minmax(0, 1fr)
-        );
+        repeat(3, minmax(0, 1fr));
 
       gap: 22px;
     }
 
-    /* =========================================================
-       功能卡
-    ========================================================= */
+    /* =========================
+       卡片
+    ========================= */
 
     .tool-card {
       --accent: #df3e46;
 
       position: relative;
-
       isolation: isolate;
-
       overflow: hidden;
 
-      min-height:
-        244px;
-
-      padding:
-        22px 19px 19px;
+      min-height: 244px;
+      padding: 22px 19px 19px;
 
       display: flex;
-
       flex-direction: column;
-
       align-items: center;
+      justify-content: space-between;
 
-      justify-content:
-        space-between;
-
-      border:
-        3px solid
-        rgba(246, 196, 83, 0.82);
-
-      border-radius:
-        18px;
+      border: 3px solid rgba(246, 196, 83, 0.82);
+      border-radius: 18px;
 
       background:
         linear-gradient(
@@ -634,12 +418,9 @@
         );
 
       box-shadow:
-        0 9px 0
-          rgba(67, 34, 18, 0.98),
-        0 15px 28px
-          rgba(0, 0, 0, 0.38),
-        inset 0 0 25px
-          rgba(255, 255, 255, 0.035);
+        0 9px 0 rgba(67, 34, 18, 0.98),
+        0 15px 28px rgba(0, 0, 0, 0.38),
+        inset 0 0 25px rgba(255, 255, 255, 0.035);
 
       transition:
         transform 0.24s ease,
@@ -651,38 +432,24 @@
       content: "";
 
       position: absolute;
-
       z-index: -1;
 
-      inset:
-        -80px auto auto -80px;
+      inset: -80px auto auto -80px;
 
-      width:
-        190px;
+      width: 190px;
+      height: 190px;
 
-      height:
-        190px;
+      border-radius: 50%;
 
-      border-radius:
-        50%;
-
-      background:
-        var(--accent);
-
-      opacity:
-        0.15;
-
-      filter:
-        blur(2px);
+      background: var(--accent);
+      opacity: 0.15;
     }
 
     .tool-card::after {
       content: "";
 
       position: absolute;
-
       inset: 0;
-
       z-index: -1;
 
       background:
@@ -693,216 +460,138 @@
           transparent 58%
         );
 
-      transform:
-        translateX(-120%);
-
-      transition:
-        transform 0.65s ease;
+      transform: translateX(-120%);
+      transition: transform 0.65s ease;
     }
 
     .tool-card:hover {
-      transform:
-        translateY(-8px)
-        rotate(-0.4deg);
+      transform: translateY(-8px) rotate(-0.4deg);
 
-      border-color:
-        #fff1a4;
+      border-color: #fff1a4;
 
       box-shadow:
-        0 10px 0
-          rgba(67, 34, 18, 0.98),
-        0 24px 42px
-          rgba(0, 0, 0, 0.48),
-        0 0 24px
-          rgba(246, 196, 83, 0.2);
+        0 10px 0 rgba(67, 34, 18, 0.98),
+        0 24px 42px rgba(0, 0, 0, 0.48),
+        0 0 24px rgba(246, 196, 83, 0.2);
     }
 
     .tool-card:hover::after {
-      transform:
-        translateX(120%);
+      transform: translateX(120%);
     }
 
     .card-top {
       width: 100%;
 
       display: flex;
-
-      justify-content:
-        space-between;
-
-      align-items:
-        center;
+      justify-content: space-between;
+      align-items: center;
     }
 
     .card-tag {
-      padding:
-        5px 10px;
+      padding: 5px 10px;
 
-      border-radius:
-        999px;
+      border-radius: 999px;
 
-      color:
-        var(--gold);
+      color: var(--gold);
 
-      font-size:
-        11px;
-
-      font-weight:
-        1000;
-
-      letter-spacing:
-        1px;
+      font-size: 11px;
+      font-weight: 1000;
+      letter-spacing: 1px;
 
       background:
         rgba(246, 196, 83, 0.1);
 
       border:
-        1px solid
-        rgba(246, 196, 83, 0.35);
+        1px solid rgba(246, 196, 83, 0.35);
     }
 
     .card-dot {
-      width:
-        11px;
+      width: 11px;
+      height: 11px;
 
-      height:
-        11px;
+      border-radius: 50%;
 
-      border-radius:
-        50%;
-
-      background:
-        var(--accent);
+      background: var(--accent);
 
       box-shadow:
-        0 0 0 5px
-          rgba(255,255,255,0.07),
-        0 0 18px
-          var(--accent);
+        0 0 0 5px rgba(255, 255, 255, 0.07),
+        0 0 18px var(--accent);
     }
 
     .tool-icon {
-      width:
-        82px;
-
-      height:
-        82px;
+      width: 82px;
+      height: 82px;
 
       display: grid;
+      place-items: center;
 
-      place-items:
-        center;
+      margin: 8px auto 11px;
 
-      margin:
-        8px auto 11px;
+      border-radius: 22px;
 
-      border-radius:
-        22px;
-
-      font-size:
-        43px;
+      font-size: 43px;
 
       background:
         linear-gradient(
           145deg,
-          rgba(255,255,255,0.12),
+          rgba(255, 255, 255, 0.12),
           #111a30
         );
 
       border:
-        2px solid
-        rgba(255, 255, 255, 0.14);
+        2px solid rgba(255, 255, 255, 0.14);
 
       box-shadow:
-        inset
-          0 4px 12px
-          rgba(255, 255, 255, 0.08),
-        0 10px 18px
-          rgba(0, 0, 0, 0.3);
+        inset 0 4px 12px rgba(255, 255, 255, 0.08),
+        0 10px 18px rgba(0, 0, 0, 0.3);
 
-      transition:
-        transform 0.25s ease;
+      transition: transform 0.25s ease;
     }
 
     .tool-card:hover .tool-icon {
-      transform:
-        scale(1.08)
-        rotate(3deg);
+      transform: scale(1.08) rotate(3deg);
     }
 
     .tool-name {
-      margin-bottom:
-        7px;
+      margin-bottom: 7px;
 
-      text-align:
-        center;
+      text-align: center;
 
-      font-size:
-        20px;
-
-      font-weight:
-        1000;
-
-      letter-spacing:
-        0.5px;
+      font-size: 20px;
+      font-weight: 1000;
     }
 
     .tool-desc {
-      min-height:
-        42px;
+      min-height: 42px;
 
-      color:
-        #b9c7e4;
+      color: #b9c7e4;
+      text-align: center;
 
-      text-align:
-        center;
-
-      font-size:
-        13px;
-
-      line-height:
-        1.65;
-
-      font-weight:
-        600;
+      font-size: 13px;
+      line-height: 1.65;
+      font-weight: 600;
     }
 
     .open-btn {
-      width:
-        100%;
+      width: 100%;
+      margin-top: 16px;
 
-      margin-top:
-        16px;
-
-      padding:
-        11px 14px;
+      padding: 11px 14px;
 
       display: flex;
-
-      align-items:
-        center;
-
-      justify-content:
-        center;
-
-      gap:
-        8px;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
 
       border:
-        2px solid
-        rgba(246, 196, 83, 0.65);
+        2px solid rgba(246, 196, 83, 0.65);
 
-      border-radius:
-        12px;
+      border-radius: 12px;
 
-      color:
-        #201607;
+      color: #201607;
 
-      font-size:
-        14px;
-
-      font-weight:
-        1000;
+      font-size: 14px;
+      font-weight: 1000;
 
       background:
         linear-gradient(
@@ -912,37 +601,13 @@
         );
 
       box-shadow:
-        inset
-          0 2px 0
-          rgba(255, 255, 255, 0.42),
-        0 4px 0
-          #8f571b;
-
-      transition:
-        transform 0.15s ease,
-        filter 0.15s ease;
+        inset 0 2px 0 rgba(255, 255, 255, 0.42),
+        0 4px 0 #8f571b;
     }
 
-    .tool-card:hover .open-btn {
-      filter:
-        brightness(1.08);
-    }
-
-    .open-btn:active {
-      transform:
-        translateY(3px);
-
-      box-shadow:
-        inset
-          0 2px 0
-          rgba(255, 255, 255, 0.35),
-        0 1px 0
-          #8f571b;
-    }
-
-    /* =========================================================
-       各卡片顏色
-    ========================================================= */
+    /* =========================
+       各功能色彩
+    ========================= */
 
     .card-class {
       --accent: #e0454f;
@@ -968,104 +633,86 @@
       --accent: #e262ae;
     }
 
+    .card-exam {
+      --accent: #f0c02e;
+    }
+
+    .card-birthday {
+      --accent: #ff6f91;
+    }
+
+    .card-running {
+      --accent: #27c9c0;
+    }
+
     .card-dojo {
       --accent: #32c46a;
     }
 
-    /* =========================================================
-       ClassDojo 特別卡
-    ========================================================= */
+    /* =========================
+       ClassDojo
+    ========================= */
 
     .tool-card.featured {
-      grid-column:
-        span 3;
+      grid-column: span 3;
 
-      min-height:
-        unset;
+      min-height: unset;
 
       display: grid;
 
       grid-template-columns:
         auto 1fr auto;
 
-      gap:
-        20px;
+      gap: 20px;
 
-      align-items:
-        center;
+      align-items: center;
 
-      padding:
-        21px 24px;
+      padding: 21px 24px;
     }
 
     .tool-card.featured .tool-icon {
-      margin:
-        0;
+      margin: 0;
 
-      width:
-        76px;
-
-      height:
-        76px;
+      width: 76px;
+      height: 76px;
     }
 
     .tool-card.featured .featured-info {
-      text-align:
-        left;
+      text-align: left;
     }
 
     .tool-card.featured .tool-name,
     .tool-card.featured .tool-desc {
-      text-align:
-        left;
-
-      min-height:
-        unset;
+      text-align: left;
+      min-height: unset;
     }
 
     .tool-card.featured .open-btn {
-      width:
-        auto;
-
-      min-width:
-        150px;
-
-      margin:
-        0;
-
-      padding-inline:
-        18px;
+      width: auto;
+      min-width: 150px;
+      margin: 0;
+      padding-inline: 18px;
     }
 
-    /* =========================================================
-       分隔線
-    ========================================================= */
+    /* =========================
+       分隔
+    ========================= */
 
     .divider {
-      margin:
-        46px auto 28px;
+      margin: 46px auto 28px;
 
       display: flex;
+      align-items: center;
+      justify-content: center;
 
-      align-items:
-        center;
+      gap: 16px;
 
-      justify-content:
-        center;
-
-      gap:
-        16px;
-
-      opacity:
-        0.76;
+      opacity: 0.76;
     }
 
     .divider-line {
-      width:
-        min(220px, 28vw);
-
-      height:
-        2px;
+      width: min(220px, 28vw);
+      height: 2px;
 
       background:
         linear-gradient(
@@ -1077,309 +724,226 @@
     }
 
     .divider-icon {
-      font-size:
-        28px;
+      font-size: 28px;
     }
 
-    /* =========================================================
+    /* =========================
        頁尾
-    ========================================================= */
+    ========================= */
 
     footer {
-      padding:
-        4px 20px 34px;
+      padding: 4px 20px 34px;
 
-      text-align:
-        center;
+      text-align: center;
 
-      color:
-        #8ea1c6;
+      color: #8ea1c6;
     }
 
     .footer-title {
-      margin-bottom:
-        7px;
+      margin-bottom: 7px;
 
-      color:
-        var(--gold);
+      color: var(--gold);
 
-      font-size:
-        15px;
-
-      font-weight:
-        900;
-
-      letter-spacing:
-        2px;
+      font-size: 15px;
+      font-weight: 900;
+      letter-spacing: 2px;
     }
 
     .footer-text {
-      font-size:
-        12px;
-
-      line-height:
-        1.7;
+      font-size: 12px;
+      line-height: 1.7;
     }
 
-    /* =========================================================
+    /* =========================
        返回頂端
-    ========================================================= */
+    ========================= */
 
     .back-top {
-      position:
-        fixed;
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 20;
 
-      right:
-        18px;
+      width: 48px;
+      height: 48px;
 
-      bottom:
-        18px;
+      display: grid;
+      place-items: center;
 
-      z-index:
-        20;
+      border: 2px solid var(--gold);
+      border-radius: 50%;
 
-      width:
-        48px;
+      color: var(--gold);
+      font-size: 20px;
 
-      height:
-        48px;
-
-      display:
-        grid;
-
-      place-items:
-        center;
-
-      border:
-        2px solid
-        var(--gold);
-
-      border-radius:
-        50%;
-
-      color:
-        var(--gold);
-
-      font-size:
-        20px;
-
-      cursor:
-        pointer;
+      cursor: pointer;
 
       background:
         rgba(10, 16, 32, 0.88);
 
       box-shadow:
-        0 7px 20px
-          rgba(0, 0, 0, 0.35);
+        0 7px 20px rgba(0, 0, 0, 0.35);
 
-      opacity:
-        0;
+      opacity: 0;
 
-      transform:
-        translateY(15px);
+      transform: translateY(15px);
 
-      pointer-events:
-        none;
+      pointer-events: none;
 
-      transition:
-        0.25s ease;
+      transition: 0.25s ease;
     }
 
     .back-top.show {
-      opacity:
-        1;
+      opacity: 1;
 
-      transform:
-        translateY(0);
+      transform: translateY(0);
 
-      pointer-events:
-        auto;
+      pointer-events: auto;
     }
 
-    /* =========================================================
+    /* =========================
        平板
-    ========================================================= */
+    ========================= */
 
     @media (max-width: 900px) {
 
       .tool-grid {
         grid-template-columns:
-          repeat(
-            2,
-            minmax(0, 1fr)
-          );
+          repeat(2, minmax(0, 1fr));
       }
 
       .tool-card.featured {
-        grid-column:
-          span 2;
+        grid-column: span 2;
       }
     }
 
-    /* =========================================================
+    /* =========================
        手機
-    ========================================================= */
+    ========================= */
 
     @media (max-width: 620px) {
 
       .hero {
-        padding-top:
-          28px;
+        padding-top: 28px;
       }
 
       .logo-wrap {
-        width:
-          92px;
-
-        height:
-          92px;
+        width: 92px;
+        height: 92px;
       }
 
       .logo-icon {
-        font-size:
-          48px;
+        font-size: 48px;
       }
 
       .title {
-        letter-spacing:
-          1px;
-      }
-
-      .subtitle {
-        padding:
-          0 6px;
+        letter-spacing: 1px;
       }
 
       main {
-        width:
-          min(
-            100% - 22px,
-            1180px
-          );
+        width: min(100% - 22px, 1180px);
       }
 
       .tool-grid {
-        grid-template-columns:
-          1fr;
-
-        gap:
-          18px;
+        grid-template-columns: 1fr;
+        gap: 18px;
       }
 
       .tool-card {
-        min-height:
-          222px;
+        min-height: 222px;
       }
 
       .tool-card.featured {
-        grid-column:
-          span 1;
+        grid-column: span 1;
 
-        display:
-          flex;
+        display: flex;
 
-        text-align:
-          center;
+        text-align: center;
       }
 
       .tool-card.featured .tool-icon {
-        margin:
-          7px auto 10px;
+        margin: 7px auto 10px;
       }
 
-      .tool-card.featured .featured-info {
-        text-align:
-          center;
-      }
-
+      .tool-card.featured .featured-info,
       .tool-card.featured .tool-name,
       .tool-card.featured .tool-desc {
-        text-align:
-          center;
+        text-align: center;
       }
 
       .tool-card.featured .open-btn {
-        width:
-          100%;
-
-        margin-top:
-          15px;
+        width: 100%;
+        margin-top: 15px;
       }
 
       .section-title::before,
       .section-title::after {
-        width:
-          42px;
+        width: 42px;
       }
     }
 
-    /* =========================================================
+    /* =========================
        進場動畫
-    ========================================================= */
+    ========================= */
 
     @keyframes fadeUp {
-      from {
-        opacity:
-          0;
 
-        transform:
-          translateY(25px);
+      from {
+        opacity: 0;
+        transform: translateY(25px);
       }
 
       to {
-        opacity:
-          1;
-
-        transform:
-          translateY(0);
+        opacity: 1;
+        transform: translateY(0);
       }
     }
 
     .tool-card {
-      opacity:
-        0;
+      opacity: 0;
 
       animation:
-        fadeUp
-        0.65s
-        ease
-        forwards;
+        fadeUp 0.65s ease forwards;
     }
 
     .tool-card:nth-child(1) {
-      animation-delay:
-        0.05s;
+      animation-delay: 0.05s;
     }
 
     .tool-card:nth-child(2) {
-      animation-delay:
-        0.12s;
+      animation-delay: 0.10s;
     }
 
     .tool-card:nth-child(3) {
-      animation-delay:
-        0.19s;
+      animation-delay: 0.15s;
     }
 
     .tool-card:nth-child(4) {
-      animation-delay:
-        0.26s;
+      animation-delay: 0.20s;
     }
 
     .tool-card:nth-child(5) {
-      animation-delay:
-        0.33s;
+      animation-delay: 0.25s;
     }
 
     .tool-card:nth-child(6) {
-      animation-delay:
-        0.40s;
+      animation-delay: 0.30s;
     }
 
     .tool-card:nth-child(7) {
-      animation-delay:
-        0.47s;
+      animation-delay: 0.35s;
+    }
+
+    .tool-card:nth-child(8) {
+      animation-delay: 0.40s;
+    }
+
+    .tool-card:nth-child(9) {
+      animation-delay: 0.45s;
+    }
+
+    .tool-card:nth-child(10) {
+      animation-delay: 0.50s;
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -1387,25 +951,18 @@
       *,
       *::before,
       *::after {
-        animation-duration:
-          0.01ms !important;
-
-        animation-iteration-count:
-          1 !important;
-
-        scroll-behavior:
-          auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
       }
     }
+
   </style>
 </head>
 
 <body>
 
-  <!-- =========================================================
-       背景裝飾
-  ========================================================== -->
-
+  <!-- 背景 -->
   <div class="ocean-glow"></div>
 
   <div class="floating-symbol symbol-1">
@@ -1420,10 +977,14 @@
     🪙
   </div>
 
+  <div class="floating-symbol symbol-4">
+    🗺️
+  </div>
 
-  <!-- =========================================================
+
+  <!-- =========================
        頁首
-  ========================================================== -->
+  ========================= -->
 
   <header class="hero">
 
@@ -1432,11 +993,9 @@
     </div>
 
     <div class="logo-wrap">
-
       <div class="logo-icon">
         🏴‍☠️
       </div>
-
     </div>
 
     <h1 class="title">
@@ -1452,7 +1011,7 @@
     </h1>
 
     <p class="subtitle">
-      教學、班級管理、數學練習與日常工具的專屬總入口
+      教學、班級管理、學生成績與日常工具的專屬總入口
       <br>
       揚帆出航，選擇今天要前往的教學島嶼！
     </p>
@@ -1460,9 +1019,9 @@
   </header>
 
 
-  <!-- =========================================================
+  <!-- =========================
        公告
-  ========================================================== -->
+  ========================= -->
 
   <section class="notice-wrap">
 
@@ -1482,9 +1041,9 @@
   </section>
 
 
-  <!-- =========================================================
-       主要內容
-  ========================================================== -->
+  <!-- =========================
+       主內容
+  ========================= -->
 
   <main>
 
@@ -1495,10 +1054,7 @@
     <section class="tool-grid">
 
 
-      <!-- =====================================================
-           導師班資料繳交系統
-      ====================================================== -->
-
+      <!-- 導師班 -->
       <a
         class="tool-card card-class"
         href="https://junteachlife.github.io/luckyscratch/class-tracker.html"
@@ -1507,13 +1063,11 @@
       >
 
         <div class="card-top">
-
           <span class="card-tag">
             CLASS
           </span>
 
           <span class="card-dot"></span>
-
         </div>
 
         <div class="tool-icon">
@@ -1521,7 +1075,6 @@
         </div>
 
         <div>
-
           <h3 class="tool-name">
             導師班資料繳交系統
           </h3>
@@ -1529,26 +1082,17 @@
           <p class="tool-desc">
             管理導師班學生的資料、作業與各項繳交紀錄。
           </p>
-
         </div>
 
         <div class="open-btn">
-
           前往系統
-
-          <span>
-            ↗
-          </span>
-
+          <span>↗</span>
         </div>
 
       </a>
 
 
-      <!-- =====================================================
-           任課班資料繳交系統
-      ====================================================== -->
-
+      <!-- 任課班 -->
       <a
         class="tool-card card-subclass"
         href="https://junteachlife.github.io/luckyscratch/subclass-tracker.html"
@@ -1557,13 +1101,11 @@
       >
 
         <div class="card-top">
-
           <span class="card-tag">
             SUBCLASS
           </span>
 
           <span class="card-dot"></span>
-
         </div>
 
         <div class="tool-icon">
@@ -1571,7 +1113,6 @@
         </div>
 
         <div>
-
           <h3 class="tool-name">
             任課班資料繳交系統
           </h3>
@@ -1579,26 +1120,17 @@
           <p class="tool-desc">
             快速查看與管理各任課班級的學生繳交狀況。
           </p>
-
         </div>
 
         <div class="open-btn">
-
           前往系統
-
-          <span>
-            ↗
-          </span>
-
+          <span>↗</span>
         </div>
 
       </a>
 
 
-      <!-- =====================================================
-           數學練習網站
-      ====================================================== -->
-
+      <!-- 數學 -->
       <a
         class="tool-card card-math"
         href="https://junteachlife.github.io/mathteach/"
@@ -1607,13 +1139,11 @@
       >
 
         <div class="card-top">
-
           <span class="card-tag">
             MATH
           </span>
 
           <span class="card-dot"></span>
-
         </div>
 
         <div class="tool-icon">
@@ -1621,7 +1151,6 @@
         </div>
 
         <div>
-
           <h3 class="tool-name">
             數學練習網站
           </h3>
@@ -1629,26 +1158,17 @@
           <p class="tool-desc">
             進入數學遊戲與線上練習，展開數學冒險挑戰。
           </p>
-
         </div>
 
         <div class="open-btn">
-
           開始挑戰
-
-          <span>
-            ↗
-          </span>
-
+          <span>↗</span>
         </div>
 
       </a>
 
 
-      <!-- =====================================================
-           刮刮樂
-      ====================================================== -->
-
+      <!-- 刮刮樂 -->
       <a
         class="tool-card card-scratch"
         href="https://junteachlife.github.io/luckyscratch/mixscratch.html"
@@ -1657,13 +1177,11 @@
       >
 
         <div class="card-top">
-
           <span class="card-tag">
             LUCKY
           </span>
 
           <span class="card-dot"></span>
-
         </div>
 
         <div class="tool-icon">
@@ -1671,7 +1189,6 @@
         </div>
 
         <div>
-
           <h3 class="tool-name">
             刮刮樂網站
           </h3>
@@ -1679,26 +1196,17 @@
           <p class="tool-desc">
             課堂抽獎、幸運挑戰與趣味活動的專屬刮刮樂。
           </p>
-
         </div>
 
         <div class="open-btn">
-
           開始刮獎
-
-          <span>
-            ↗
-          </span>
-
+          <span>↗</span>
         </div>
 
       </a>
 
 
-      <!-- =====================================================
-           座位系統
-      ====================================================== -->
-
+      <!-- 座位 -->
       <a
         class="tool-card card-seat"
         href="https://junteachlife.github.io/luckyscratch/seat.html"
@@ -1707,13 +1215,11 @@
       >
 
         <div class="card-top">
-
           <span class="card-tag">
             SEAT
           </span>
 
           <span class="card-dot"></span>
-
         </div>
 
         <div class="tool-icon">
@@ -1721,7 +1227,6 @@
         </div>
 
         <div>
-
           <h3 class="tool-name">
             座位系統
           </h3>
@@ -1729,26 +1234,17 @@
           <p class="tool-desc">
             班級座位安排與學生位置管理工具。
           </p>
-
         </div>
 
         <div class="open-btn">
-
           開啟座位表
-
-          <span>
-            ↗
-          </span>
-
+          <span>↗</span>
         </div>
 
       </a>
 
 
-      <!-- =====================================================
-           聯絡簿
-      ====================================================== -->
-
+      <!-- 聯絡簿 -->
       <a
         class="tool-card card-contact"
         href="https://junteachlife.github.io/luckyscratch/contact-book.html"
@@ -1757,13 +1253,11 @@
       >
 
         <div class="card-top">
-
           <span class="card-tag">
             CONTACT
           </span>
 
           <span class="card-dot"></span>
-
         </div>
 
         <div class="tool-icon">
@@ -1771,7 +1265,6 @@
         </div>
 
         <div>
-
           <h3 class="tool-name">
             聯絡簿登記系統
           </h3>
@@ -1779,26 +1272,140 @@
           <p class="tool-desc">
             整理每日聯絡事項、作業與班級重要提醒。
           </p>
-
         </div>
 
         <div class="open-btn">
-
           開啟聯絡簿
-
-          <span>
-            ↗
-          </span>
-
+          <span>↗</span>
         </div>
 
       </a>
 
 
-      <!-- =====================================================
-           ClassDojo
-      ====================================================== -->
+      <!-- =========================
+           新增：段考成績
+      ========================= -->
 
+      <a
+        class="tool-card card-exam"
+        href="https://junteachlife.github.io/luckyscratch/examscore.html"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+
+        <div class="card-top">
+          <span class="card-tag">
+            SCORE
+          </span>
+
+          <span class="card-dot"></span>
+        </div>
+
+        <div class="tool-icon">
+          📊
+        </div>
+
+        <div>
+          <h3 class="tool-name">
+            學生段考成績查詢系統
+          </h3>
+
+          <p class="tool-desc">
+            查詢學生段考成績、總分、平均、排名與學習表現。
+          </p>
+        </div>
+
+        <div class="open-btn">
+          查詢成績
+          <span>↗</span>
+        </div>
+
+      </a>
+
+
+      <!-- =========================
+           新增：生日提醒
+      ========================= -->
+
+      <a
+        class="tool-card card-birthday"
+        href="https://junteachlife.github.io/luckyscratch/birthday.html"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+
+        <div class="card-top">
+          <span class="card-tag">
+            BIRTHDAY
+          </span>
+
+          <span class="card-dot"></span>
+        </div>
+
+        <div class="tool-icon">
+          🎂
+        </div>
+
+        <div>
+          <h3 class="tool-name">
+            生日提醒系統
+          </h3>
+
+          <p class="tool-desc">
+            查看今日、本月與即將到來的壽星，快速製作生日祝福。
+          </p>
+        </div>
+
+        <div class="open-btn">
+          查看壽星
+          <span>↗</span>
+        </div>
+
+      </a>
+
+
+      <!-- =========================
+           新增：跑步系統
+      ========================= -->
+
+      <a
+        class="tool-card card-running"
+        href="https://junteachlife.github.io/luckyscratch/running.html"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+
+        <div class="card-top">
+          <span class="card-tag">
+            RUNNING
+          </span>
+
+          <span class="card-dot"></span>
+        </div>
+
+        <div class="tool-icon">
+          🏃
+        </div>
+
+        <div>
+          <h3 class="tool-name">
+            跑步系統
+          </h3>
+
+          <p class="tool-desc">
+            登記學生跑步圈數、查看歷史紀錄與每日運動成果。
+          </p>
+        </div>
+
+        <div class="open-btn">
+          開始登記
+          <span>↗</span>
+        </div>
+
+      </a>
+
+
+      <!-- ClassDojo -->
       <a
         class="tool-card featured card-dojo"
         href="https://www.classdojo.com/"
@@ -1823,24 +1430,14 @@
         </div>
 
         <div class="open-btn">
-
           前往 ClassDojo
-
-          <span>
-            ↗
-          </span>
-
+          <span>↗</span>
         </div>
 
       </a>
 
-
     </section>
 
-
-    <!-- =========================================================
-         分隔線
-    ========================================================== -->
 
     <div class="divider">
 
@@ -1857,9 +1454,9 @@
   </main>
 
 
-  <!-- =========================================================
+  <!-- =========================
        頁尾
-  ========================================================== -->
+  ========================= -->
 
   <footer>
 
@@ -1868,22 +1465,15 @@
     </div>
 
     <div class="footer-text">
-
       教師專屬教學工具導航站
-
       <br>
-
       Keep Sailing · Keep Teaching
-
     </div>
 
   </footer>
 
 
-  <!-- =========================================================
-       返回頂端
-  ========================================================== -->
-
+  <!-- 返回頂端 -->
   <button
     class="back-top"
     id="backTop"
@@ -1896,104 +1486,72 @@
 
   <script>
 
-    /* =========================================================
-       返回頂端
-    ========================================================= */
-
+    /* 返回頂端 */
     const backTop =
       document.getElementById("backTop");
 
-    window.addEventListener(
-      "scroll",
-      () => {
+    window.addEventListener("scroll", () => {
 
-        if (
-          window.scrollY > 400
-        ) {
+      if (window.scrollY > 400) {
 
-          backTop.classList.add(
-            "show"
-          );
+        backTop.classList.add("show");
 
-        } else {
+      } else {
 
-          backTop.classList.remove(
-            "show"
-          );
-
-        }
+        backTop.classList.remove("show");
 
       }
-    );
+
+    });
 
 
-    backTop.addEventListener(
-      "click",
-      () => {
+    backTop.addEventListener("click", () => {
 
-        window.scrollTo({
-          top: 0,
-          behavior: "smooth"
-        });
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
 
-      }
-    );
+    });
 
 
-    /* =========================================================
-       手機觸控回饋
-    ========================================================= */
-
+    /* 手機點擊回饋 */
     document
-      .querySelectorAll(
-        ".tool-card"
-      )
-      .forEach(
-        card => {
+      .querySelectorAll(".tool-card")
+      .forEach(card => {
 
-          card.addEventListener(
-            "touchstart",
-            () => {
+        card.addEventListener(
+          "touchstart",
+          () => {
+            card.style.transform =
+              "scale(.985)";
+          },
+          {
+            passive: true
+          }
+        );
 
-              card.style.transform =
-                "scale(.985)";
+        card.addEventListener(
+          "touchend",
+          () => {
+            card.style.transform = "";
+          },
+          {
+            passive: true
+          }
+        );
 
-            },
-            {
-              passive: true
-            }
-          );
+        card.addEventListener(
+          "touchcancel",
+          () => {
+            card.style.transform = "";
+          },
+          {
+            passive: true
+          }
+        );
 
-
-          card.addEventListener(
-            "touchend",
-            () => {
-
-              card.style.transform =
-                "";
-
-            },
-            {
-              passive: true
-            }
-          );
-
-
-          card.addEventListener(
-            "touchcancel",
-            () => {
-
-              card.style.transform =
-                "";
-
-            },
-            {
-              passive: true
-            }
-          );
-
-        }
-      );
+      });
 
   </script>
 
