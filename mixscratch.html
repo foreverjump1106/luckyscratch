@@ -80,17 +80,17 @@ a{
 
 
 /* =========================================================
-   登入
+   學生身分
 ========================================================= */
 
 .login-panel{
   width:min(900px,100%);
   margin:0 auto 18px;
-  padding:14px 18px;
+  padding:18px;
 
   border-radius:20px;
 
-  background:rgba(255,255,255,.82);
+  background:rgba(255,255,255,.88);
 
   border:2px solid rgba(190,155,70,.16);
 
@@ -98,64 +98,136 @@ a{
     0 8px 22px rgba(70,55,25,.09);
 }
 
-.login-panel.logged{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:14px;
-  flex-wrap:wrap;
-}
-
 .login-title{
   color:#304b84;
-  font-size:17px;
+  font-size:20px;
   font-weight:1000;
 }
 
 .login-tip{
-  margin:6px 0 12px;
+  margin:7px 0 14px;
 
   color:#6f603f;
 
   font-size:13px;
   font-weight:800;
-  line-height:1.5;
+  line-height:1.6;
 }
 
-.guest-badge{
-  display:inline-flex;
+.identity-form{
+  width:min(540px,100%);
+  margin:0 auto;
+
+  display:grid;
+  grid-template-columns:1fr 1.5fr auto;
+  gap:10px;
+  align-items:end;
+}
+
+.identity-field{
+  text-align:left;
+}
+
+.identity-field label{
+  display:block;
+  margin:0 0 5px 4px;
+
+  color:#6d5730;
+  font-size:13px;
+  font-weight:1000;
+}
+
+.identity-field select,
+.identity-name-box{
+  width:100%;
+  min-height:48px;
+
+  padding:10px 13px;
+
+  border:2px solid #d6c18b;
+  border-radius:14px;
+
+  background:#fffdf7;
+  color:#304b84;
+
+  font-size:17px;
+  font-weight:1000;
+}
+
+.identity-name-box{
+  display:flex;
   align-items:center;
-  gap:6px;
+}
 
-  margin-bottom:11px;
-  padding:7px 12px;
+.identity-status{
+  margin-top:11px;
 
-  border-radius:999px;
-
-  background:#f6edd8;
-  color:#755a22;
+  color:#8b6924;
 
   font-size:13px;
   font-weight:900;
 }
 
-.student-info{
-  text-align:left;
+.identity-status.error{
+  color:#a43c3c;
 }
 
-.student-name{
-  color:#304b84;
+.identity-status.ok{
+  color:#26714b;
+}
+
+.selected-student{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.selected-student-badge{
+  padding:11px 18px;
+
+  border-radius:999px;
+
+  color:#fff;
+  background:linear-gradient(#5879bd,#304b84);
+
   font-size:18px;
   font-weight:1000;
+
+  box-shadow:0 5px 0 #1e3159;
 }
 
-.student-email{
-  margin-top:3px;
+.current-player-banner{
+  width:min(780px,100%);
+  margin:0 auto 14px;
+  padding:14px 18px;
 
-  color:#756950;
+  position:sticky;
+  top:8px;
+  z-index:9000;
 
-  font-size:13px;
-  font-weight:800;
+  border:3px solid #f0d37a;
+  border-radius:18px;
+
+  background:rgba(255,253,244,.96);
+
+  color:#304b84;
+
+  font-size:clamp(18px,3vw,24px);
+  font-weight:1000;
+
+  box-shadow:0 9px 22px rgba(50,45,70,.17);
+}
+
+@media(max-width:650px){
+  .identity-form{
+    grid-template-columns:1fr;
+  }
+
+  .identity-form .btn{
+    width:100%;
+  }
 }
 
 
@@ -1677,7 +1749,7 @@ a{
 
 
 <!-- =====================================================
-     登入
+     學生身分
 ====================================================== -->
 
 <section
@@ -1685,60 +1757,76 @@ a{
   id="loginPanel"
 >
 
-  <div id="loggedOutArea">
+  <div id="studentSelectArea">
 
     <div class="login-title">
-      👤 Google 登入（選擇性）
+      👤 請先選擇抽獎學生
     </div>
 
     <div class="login-tip">
-      登入後會記錄你的抽獎時間與獎項。
+      學生名單會從 804 座位系統的 Firebase 共用名單讀取。
       <br>
-      不登入也可以直接玩，但不會留下個人抽獎紀錄。
+      選擇座號後會自動顯示姓名，確認後才能進入刮刮樂。
     </div>
 
-    <div class="guest-badge">
-      👻 目前：訪客模式
+    <div class="identity-form">
+
+      <div class="identity-field">
+        <label for="seatSelect">座號</label>
+
+        <select id="seatSelect">
+          <option value="">名單載入中……</option>
+        </select>
+      </div>
+
+      <div class="identity-field">
+        <label>姓名</label>
+
+        <div
+          class="identity-name-box"
+          id="selectedName"
+        >
+          —
+        </div>
+      </div>
+
+      <button
+        class="btn"
+        id="confirmStudentBtn"
+        disabled
+      >
+        ✅ 確認開始
+      </button>
+
     </div>
 
-    <br>
-
-    <button
-      class="btn"
-      id="googleLoginBtn"
+    <div
+      class="identity-status"
+      id="identityStatus"
     >
-      G　使用 Google 登入
-    </button>
+      正在連線座位系統學生名單……
+    </div>
 
   </div>
 
 
   <div
-    id="loggedInArea"
-    class="hidden"
+    id="studentConfirmedArea"
+    class="selected-student hidden"
   >
 
-    <div class="student-info">
-
-      <div
-        class="student-name"
-        id="studentName"
-      ></div>
-
-      <div
-        class="student-email"
-        id="studentEmail"
-      ></div>
-
+    <div
+      class="selected-student-badge"
+      id="confirmedStudentBadge"
+    >
+      👤 —
     </div>
 
-
-    <button
-      class="btn light"
-      id="logoutBtn"
+    <span
+      style="font-size:13px;font-weight:900;color:#745d30;"
     >
-      登出
-    </button>
+      本位學生完成抽獎前，系統會持續保留此身分。
+    </span>
 
   </div>
 
@@ -1756,11 +1844,11 @@ a{
   </h1>
 
   <p class="home-subtitle">
-    登入可留下紀錄，訪客也可以直接遊玩
+    先確認座號與姓名，再選擇銀卡或金卡刮刮樂
   </p>
 
 
-  <div class="mode-grid">
+  <div class="mode-grid hidden" id="modeGrid">
 
     <button
       class="mode-card silver"
@@ -1834,6 +1922,14 @@ a{
   id="gamePage"
   class="hidden"
 >
+
+  <div
+    class="current-player-banner"
+    id="currentPlayerBanner"
+  >
+    👤 目前抽獎者：—
+  </div>
+
 
   <div class="game-header">
 
@@ -1995,24 +2091,20 @@ import {
 
 
 import {
-  getAuth,
-  GoogleAuthProvider,
-  signInWithPopup,
-  signInWithRedirect,
-  getRedirectResult,
-  signOut,
-  onAuthStateChanged
-} from
-"https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-
-import {
   getFirestore,
   collection,
   addDoc,
   serverTimestamp
 } from
 "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+
+import {
+  getDatabase,
+  ref as realtimeRef,
+  get as realtimeGet
+} from
+"https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 
 const firebaseConfig = {
@@ -2044,25 +2136,38 @@ const app =
   );
 
 
-const auth =
-  getAuth(
-    app
-  );
-
-
 const db =
   getFirestore(
     app
   );
 
 
-const googleProvider =
-  new GoogleAuthProvider();
+/*
+  804 座位系統 Firebase
+  只讀取 class_804/students 共用學生名單。
+*/
+const seatFirebaseConfig = {
+  apiKey:"AIzaSyB2qXsbab4fh15C9YbCDWK208eJLLHgsKk",
+  authDomain:"seatweb-ccd44.firebaseapp.com",
+  databaseURL:"https://seatweb-ccd44-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId:"seatweb-ccd44",
+  storageBucket:"seatweb-ccd44.firebasestorage.app",
+  messagingSenderId:"607947077023",
+  appId:"1:607947077023:web:1a0ec5832414cf376fb9aa"
+};
 
 
-googleProvider.setCustomParameters({
-  prompt:"select_account"
-});
+const seatApp =
+  initializeApp(
+    seatFirebaseConfig,
+    "seatSystem"
+  );
+
+
+const seatDb =
+  getDatabase(
+    seatApp
+  );
 
 
 /* =========================================================
@@ -2072,23 +2177,32 @@ googleProvider.setCustomParameters({
 const loginPanel =
   document.getElementById("loginPanel");
 
-const loggedOutArea =
-  document.getElementById("loggedOutArea");
+const studentSelectArea =
+  document.getElementById("studentSelectArea");
 
-const loggedInArea =
-  document.getElementById("loggedInArea");
+const studentConfirmedArea =
+  document.getElementById("studentConfirmedArea");
 
-const studentName =
-  document.getElementById("studentName");
+const seatSelect =
+  document.getElementById("seatSelect");
 
-const studentEmail =
-  document.getElementById("studentEmail");
+const selectedName =
+  document.getElementById("selectedName");
 
-const googleLoginBtn =
-  document.getElementById("googleLoginBtn");
+const confirmStudentBtn =
+  document.getElementById("confirmStudentBtn");
 
-const logoutBtn =
-  document.getElementById("logoutBtn");
+const identityStatus =
+  document.getElementById("identityStatus");
+
+const confirmedStudentBadge =
+  document.getElementById("confirmedStudentBadge");
+
+const modeGrid =
+  document.getElementById("modeGrid");
+
+const currentPlayerBanner =
+  document.getElementById("currentPlayerBanner");
 
 const homePage =
   document.getElementById("homePage");
@@ -2152,11 +2266,14 @@ const musicTip =
 
 
 /* =========================================================
-   使用者
+   抽獎學生
 ========================================================= */
 
-let currentUser =
+let currentStudent =
   null;
+
+let studentDirectory =
+  {};
 
 
 /* =========================================================
@@ -2774,222 +2891,397 @@ function playTryAgainSound(){
 
 
 /* =========================================================
-   Google 登入
+   804 共用學生名單
 ========================================================= */
 
-googleLoginBtn.addEventListener(
-  "click",
-  async () => {
+function normalizeStudentDirectory(
+  raw
+){
 
-    googleLoginBtn.disabled =
-      true;
-
-
-    googleLoginBtn.textContent =
-      "登入中……";
+  const result = {};
 
 
-    try{
+  if(
+    !raw
+  ){
 
-      await signInWithPopup(
-        auth,
-        googleProvider
-      );
+    return result;
 
-    }
-
-
-    catch(error){
-
-      console.error(
-        error
-      );
+  }
 
 
-      if(
-        error.code ===
-        "auth/popup-blocked"
+  /*
+    支援：
+    1. {"1":"姓名"}
+    2. {"1":{"id":1,"name":"姓名"}}
+    3. [{id:1,name:"姓名"}]
+  */
 
-        ||
+  Object
+    .entries(
+      raw
+    )
+    .forEach(
+      ([key,value]) => {
 
-        error.code ===
-        "auth/cancelled-popup-request"
-      ){
+        if(
+          typeof value ===
+          "string"
+        ){
 
-        await signInWithRedirect(
-          auth,
-          googleProvider
-        );
+          result[String(key)] =
+            value;
+
+          return;
+
+        }
 
 
-        return;
+        if(
+          value
+          &&
+          typeof value ===
+          "object"
+        ){
+
+          const seat =
+            value.id
+            ??
+            value.seat
+            ??
+            key;
+
+
+          const name =
+            value.name
+            ??
+            value.studentName
+            ??
+            "";
+
+
+          if(
+            name
+          ){
+
+            result[String(seat)] =
+              String(name);
+
+          }
+
+        }
 
       }
-
-
-      alert(
-        "Google 登入失敗：\n"
-        +
-        error.message
-      );
-
-    }
-
-
-    finally{
-
-      googleLoginBtn.disabled =
-        false;
-
-
-      googleLoginBtn.textContent =
-        "G　使用 Google 登入";
-
-    }
-
-  }
-);
-
-
-try{
-
-  await getRedirectResult(
-    auth
-  );
-
-}
-
-catch(error){
-
-  console.error(
-    error
-  );
-
-}
-
-
-/* =========================================================
-   登出
-========================================================= */
-
-logoutBtn.addEventListener(
-  "click",
-  async () => {
-
-    await signOut(
-      auth
     );
 
-  }
-);
+
+  return result;
+
+}
 
 
-/* =========================================================
-   登入狀態
-========================================================= */
+async function loadSharedStudents(){
 
-onAuthStateChanged(
-  auth,
-  user => {
+  identityStatus.className =
+    "identity-status";
 
-    currentUser =
-      user;
+  identityStatus.textContent =
+    "正在連線座位系統學生名單……";
+
+
+  seatSelect.disabled =
+    true;
+
+  confirmStudentBtn.disabled =
+    true;
+
+
+  try{
+
+    const snapshot =
+      await realtimeGet(
+        realtimeRef(
+          seatDb,
+          "class_804/students"
+        )
+      );
 
 
     if(
-      user
+      !snapshot.exists()
     ){
 
-      loggedOutArea
-        .classList
-        .add(
-          "hidden"
-        );
-
-
-      loggedInArea
-        .classList
-        .remove(
-          "hidden"
-        );
-
-
-      loginPanel
-        .classList
-        .add(
-          "logged"
-        );
-
-
-      studentName.textContent =
-        `👤 ${
-          user.displayName
-          ||
-          "學生"
-        }`;
-
-
-      studentEmail.textContent =
-        user.email
-        ||
-        "";
-
-
-      if(
-        currentGame
-      ){
-
-        currentPlayer.textContent =
-          user.displayName
-          ||
-          "學生";
-
-      }
+      throw new Error(
+        "座位系統尚未建立 class_804/students 共用名單"
+      );
 
     }
 
 
-    else{
+    studentDirectory =
+      normalizeStudentDirectory(
+        snapshot.val()
+      );
 
-      loggedOutArea
-        .classList
-        .remove(
-          "hidden"
+
+    const seats =
+      Object
+        .keys(
+          studentDirectory
+        )
+        .sort(
+          (a,b) =>
+            Number(a)-Number(b)
         );
 
 
-      loggedInArea
-        .classList
-        .add(
-          "hidden"
-        );
+    if(
+      seats.length ===
+      0
+    ){
 
-
-      loginPanel
-        .classList
-        .remove(
-          "logged"
-        );
-
-
-      if(
-        currentGame
-      ){
-
-        currentPlayer.textContent =
-          "訪客";
-
-      }
+      throw new Error(
+        "共用學生名單是空的"
+      );
 
     }
+
+
+    seatSelect.innerHTML = `
+
+      <option value="">
+        請選擇座號
+      </option>
+
+      ${
+        seats
+          .map(
+            seat => `
+
+              <option value="${seat}">
+                ${seat} 號
+              </option>
+
+            `
+          )
+          .join("")
+      }
+
+    `;
+
+
+    seatSelect.disabled =
+      false;
+
+
+    identityStatus.className =
+      "identity-status ok";
+
+    identityStatus.textContent =
+      `✅ 已載入 ${seats.length} 位學生，請選擇座號。`;
+
+  }
+
+
+  catch(error){
+
+    console.error(
+      "讀取共用學生名單失敗：",
+      error
+    );
+
+
+    seatSelect.innerHTML =
+      `<option value="">名單讀取失敗</option>`;
+
+
+    identityStatus.className =
+      "identity-status error";
+
+
+    identityStatus.textContent =
+      "⚠️ 無法讀取座位系統共用名單，請確認 class_804/students 與 Realtime Database 規則。";
+
+  }
+
+}
+
+
+seatSelect.addEventListener(
+  "change",
+  () => {
+
+    const seat =
+      seatSelect.value;
+
+
+    const name =
+      studentDirectory[
+        seat
+      ]
+      ||
+      "";
+
+
+    selectedName.textContent =
+      name
+      ||
+      "—";
+
+
+    confirmStudentBtn.disabled =
+      !(
+        seat
+        &&
+        name
+      );
 
   }
 );
+
+
+confirmStudentBtn.addEventListener(
+  "click",
+  () => {
+
+    const seat =
+      seatSelect.value;
+
+
+    const name =
+      studentDirectory[
+        seat
+      ];
+
+
+    if(
+      !seat
+      ||
+      !name
+    ){
+
+      return;
+
+    }
+
+
+    currentStudent = {
+      seatNumber:
+        Number(
+          seat
+        ),
+
+      studentName:
+        name
+    };
+
+
+    updateStudentDisplay();
+
+
+    startBackgroundMusic();
+
+  }
+);
+
+
+function updateStudentDisplay(){
+
+  const hasStudent =
+    !!currentStudent;
+
+
+  studentSelectArea
+    .classList
+    .toggle(
+      "hidden",
+      hasStudent
+    );
+
+
+  studentConfirmedArea
+    .classList
+    .toggle(
+      "hidden",
+      !hasStudent
+    );
+
+
+  modeGrid
+    .classList
+    .toggle(
+      "hidden",
+      !hasStudent
+    );
+
+
+  if(
+    hasStudent
+  ){
+
+    const label =
+      `${currentStudent.seatNumber}號 ${currentStudent.studentName}`;
+
+
+    confirmedStudentBadge.textContent =
+      `👤 ${label}`;
+
+
+    currentPlayerBanner.textContent =
+      `👤 目前抽獎者：${label}`;
+
+
+    currentPlayer.textContent =
+      label;
+
+  }
+
+
+  else{
+
+    confirmedStudentBadge.textContent =
+      "👤 —";
+
+
+    currentPlayerBanner.textContent =
+      "👤 目前抽獎者：—";
+
+
+    currentPlayer.textContent =
+      "—";
+
+  }
+
+}
+
+
+function resetStudentSession(){
+
+  currentStudent =
+    null;
+
+
+  seatSelect.value =
+    "";
+
+
+  selectedName.textContent =
+    "—";
+
+
+  confirmStudentBtn.disabled =
+    true;
+
+
+  updateStudentDisplay();
+
+}
 
 
 /* =========================================================
    遊戲資料
 ========================================================= */
+
 
 const GAMES = {
 
@@ -3248,6 +3540,19 @@ document
         "click",
         () => {
 
+          if(
+            !currentStudent
+          ){
+
+            alert(
+              "請先選擇座號並確認學生身分。"
+            );
+
+            return;
+
+          }
+
+
           /*
             先啟動音訊。
           */
@@ -3295,6 +3600,9 @@ function goHome(){
     .add(
       "hidden"
     );
+
+
+  updateStudentDisplay();
 
 }
 
@@ -3469,19 +3777,27 @@ function openGame(
 
 
   currentPlayer.textContent =
-    currentUser
+    currentStudent
 
     ?
 
-    (
-      currentUser.displayName
-      ||
-      "學生"
-    )
+    `${currentStudent.seatNumber}號 ${currentStudent.studentName}`
 
     :
 
-    "訪客";
+    "—";
+
+
+  currentPlayerBanner.textContent =
+    currentStudent
+
+    ?
+
+    `👤 目前抽獎者：${currentStudent.seatNumber}號 ${currentStudent.studentName}`
+
+    :
+
+    "👤 目前抽獎者：—";
 
 
   homePage
@@ -5033,7 +5349,7 @@ function checkScratch(
 async function saveDrawRecord(){
 
   if(
-    !currentUser
+    !currentStudent
     ||
     !currentGame
     ||
@@ -5054,18 +5370,11 @@ async function saveDrawRecord(){
 
     {
 
-      uid:
-        currentUser.uid,
+      seatNumber:
+        currentStudent.seatNumber,
 
-      displayName:
-        currentUser.displayName
-        ||
-        "",
-
-      email:
-        currentUser.email
-        ||
-        "",
+      studentName:
+        currentStudent.studentName,
 
       gameType:
         currentGame.key,
@@ -5088,6 +5397,9 @@ async function saveDrawRecord(){
       remainingAfter:
         prizePool.length,
 
+      redeemed:
+        false,
+
       drawnAt:
         serverTimestamp()
 
@@ -5101,6 +5413,7 @@ async function saveDrawRecord(){
 /* =========================================================
    刮完
 ========================================================= */
+
 
 async function finishScratch(
   canvas
@@ -5198,90 +5511,60 @@ async function finishScratch(
 
 
   /*
-    已登入：
-    寫 Firebase
+    每次完成都寫入 Firebase。
+    學生身分來自座位系統共用名單。
   */
 
-  if(
-    currentUser
-  ){
-
-    hint.textContent =
-      "正在儲存抽獎紀錄……";
+  hint.textContent =
+    "正在儲存抽獎紀錄……";
 
 
-    saveStatus.textContent =
-      "☁️ 正在寫入 Firebase……";
+  saveStatus.textContent =
+    "☁️ 正在寫入 Firebase……";
 
 
-    try{
+  try{
 
-      await saveDrawRecord();
+    await saveDrawRecord();
 
-
-      saveStatus
-        .classList
-        .add(
-          "ok"
-        );
-
-
-      saveStatus.textContent =
-        `✅ 已記錄：${currentUser.displayName || "學生"}｜${currentGame.name}｜${currentPrize.name}`;
-
-
-      hint.textContent =
-        `本次完成，目前剩餘 ${prizePool.length} 張。`;
-
-    }
-
-
-    catch(error){
-
-      console.error(
-        error
-      );
-
-
-      saveStatus
-        .classList
-        .add(
-          "error"
-        );
-
-
-      saveStatus.textContent =
-        "⚠️ 獎項已抽出，但 Firebase 紀錄寫入失敗。";
-
-
-      hint.textContent =
-        "請通知老師確認 Firebase 設定。";
-
-    }
-
-  }
-
-
-  /*
-    訪客：
-    不寫 Firebase
-  */
-
-  else{
 
     saveStatus
       .classList
       .add(
-        "guest"
+        "ok"
       );
 
 
     saveStatus.textContent =
-      "👻 本次為訪客模式，因此不會留下個人抽獎紀錄。";
+      `✅ 已記錄：${currentStudent.seatNumber}號 ${currentStudent.studentName}｜${currentGame.name}｜${currentPrize.name}`;
 
 
     hint.textContent =
       `本次完成，目前剩餘 ${prizePool.length} 張。`;
+
+  }
+
+
+  catch(error){
+
+    console.error(
+      error
+    );
+
+
+    saveStatus
+      .classList
+      .add(
+        "error"
+      );
+
+
+    saveStatus.textContent =
+      "⚠️ 獎項已抽出，但 Firebase 紀錄寫入失敗。";
+
+
+    hint.textContent =
+      "請通知老師確認 Firebase 設定。";
 
   }
 
@@ -5351,15 +5634,7 @@ drawAgainBtn.addEventListener(
 
 
     hint.textContent =
-      currentUser
-
-      ?
-
-      `🎟️ ${currentUser.displayName || "這位同學"}獲得再抽一次！請重新洗牌。`
-
-      :
-
-      "🎟️ 訪客獲得再抽一次！請重新洗牌。";
+      `🎟️ ${currentStudent ? `${currentStudent.seatNumber}號 ${currentStudent.studentName}` : "這位同學"}獲得再抽一次！請重新洗牌。`;
 
   }
 );
@@ -5371,7 +5646,7 @@ drawAgainBtn.addEventListener(
 
 nextBtn.addEventListener(
   "click",
-  async () => {
+  () => {
 
     playTone(
       659.25,
@@ -5380,15 +5655,7 @@ nextBtn.addEventListener(
     );
 
 
-    if(
-      currentUser
-    ){
-
-      await signOut(
-        auth
-      );
-
-    }
+    resetStudentSession();
 
 
     goHome();
@@ -5548,6 +5815,10 @@ function showEmptyPool(){
 /* =========================================================
    啟動
 ========================================================= */
+
+updateStudentDisplay();
+
+loadSharedStudents();
 
 goHome();
 
