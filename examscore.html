@@ -4,143 +4,283 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>804學生段考成績查詢</title>
+  <title>學生段考成績查詢</title>
 
   <link
     rel="icon"
-    href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="20" fill="%231d4ed8"/><text x="50" y="68" text-anchor="middle" font-size="60" fill="white">績</text></svg>'
-  />
+    href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="20" fill="%231d4ed8"/><text x="50" y="68" text-anchor="middle" font-size="58" fill="white">績</text></svg>'
+  >
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 
   <style>
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
       min-height: 100vh;
-      font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
-      background: linear-gradient(135deg, #dbeafe, #eff6ff, #f8fafc);
-      color: #1e293b;
+
+      font-family:
+        "Microsoft JhengHei",
+        "Noto Sans TC",
+        sans-serif;
+
+      color: #0f172a;
+
+      background:
+        linear-gradient(
+          135deg,
+          #dbeafe,
+          #eff6ff,
+          #f8fafc
+        );
+    }
+
+    button,
+    input,
+    select {
+      font-family: inherit;
     }
 
     .page {
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      padding: 32px 16px;
-    }
-
-    .container {
       width: 100%;
-      max-width: 720px;
+      max-width: 1050px;
+
+      margin: 0 auto;
+
+      padding: 28px 14px 60px;
     }
 
     .header {
       text-align: center;
+
       margin-bottom: 24px;
     }
 
     .logo {
-      width: 78px;
-      height: 78px;
-      margin: 0 auto 14px;
-      border-radius: 22px;
+      width: 76px;
+      height: 76px;
+
+      margin: 0 auto 12px;
+
       display: flex;
-      justify-content: center;
       align-items: center;
-      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      justify-content: center;
+
+      border-radius: 22px;
+
       color: white;
-      font-size: 42px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #2563eb,
+          #1d4ed8
+        );
+
+      font-size: 40px;
       font-weight: 900;
+
+      box-shadow:
+        0 12px 28px
+        rgba(37,99,235,.2);
     }
 
     h1 {
       margin: 0;
+
       font-size: 30px;
     }
 
     .subtitle {
-      margin-top: 8px;
+      margin-top: 7px;
+
       color: #64748b;
+
       font-size: 15px;
     }
 
     .card {
-      background: rgba(255,255,255,.96);
-      border-radius: 24px;
-      padding: 28px;
-      border: 1px solid #e2e8f0;
-      box-shadow: 0 20px 50px rgba(15,23,42,.10);
+      margin-bottom: 18px;
+
+      padding: 22px;
+
+      border:
+        1px solid #e2e8f0;
+
+      border-radius: 20px;
+
+      background:
+        rgba(255,255,255,.97);
+
+      box-shadow:
+        0 14px 35px
+        rgba(15,23,42,.08);
+    }
+
+    .login-card {
+      max-width: 600px;
+
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .section-title {
+      margin-bottom: 16px;
+
+      font-size: 21px;
+      font-weight: 900;
     }
 
     .field {
-      margin-bottom: 18px;
+      margin-bottom: 17px;
     }
 
     label {
       display: block;
-      margin-bottom: 8px;
+
+      margin-bottom: 7px;
+
+      font-size: 14px;
       font-weight: 800;
     }
 
-    input, select {
+    input,
+    select {
       width: 100%;
-      height: 52px;
-      border: 1px solid #cbd5e1;
-      border-radius: 14px;
-      padding: 0 15px;
-      font-size: 17px;
+
+      min-height: 50px;
+
+      padding: 0 14px;
+
+      border:
+        1px solid #cbd5e1;
+
+      border-radius: 13px;
+
       background: white;
+
+      font-size: 16px;
+
+      outline: none;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: #2563eb;
+
+      box-shadow:
+        0 0 0 4px
+        rgba(37,99,235,.1);
     }
 
     .hint {
       margin-top: 7px;
-      font-size: 13px;
+
       color: #64748b;
+
+      font-size: 13px;
+      line-height: 1.6;
     }
 
-    button {
+    .btn {
       width: 100%;
-      min-height: 54px;
-      border: none;
-      border-radius: 14px;
-      font-size: 18px;
-      font-weight: 900;
+
+      min-height: 52px;
+
+      padding: 0 18px;
+
+      border: 0;
+
+      border-radius: 13px;
+
       color: white;
-      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+
+      background:
+        linear-gradient(
+          135deg,
+          #2563eb,
+          #1d4ed8
+        );
+
+      font-size: 17px;
+      font-weight: 900;
+
       cursor: pointer;
     }
 
-    button:disabled {
+    .btn:disabled {
       opacity: .55;
+
+      cursor: not-allowed;
+    }
+
+    .btn-secondary {
+      background: #475569;
     }
 
     .message {
       display: none;
-      margin-top: 16px;
-      padding: 13px 14px;
+
+      margin-top: 14px;
+
+      padding: 13px 15px;
+
       border-radius: 12px;
+
       font-size: 14px;
-      line-height: 1.6;
+      line-height: 1.7;
     }
 
     .message.error {
       display: block;
-      background: #fee2e2;
+
       color: #991b1b;
+
+      background: #fee2e2;
     }
 
-    .result {
+    .message.info {
+      display: block;
+
+      color: #1e40af;
+
+      background: #dbeafe;
+    }
+
+    .result-area {
       display: none;
-      margin-top: 24px;
     }
 
-    .result.show {
+    .result-area.show {
       display: block;
     }
 
-    .student-box {
-      text-align: center;
-      margin-bottom: 22px;
+    .student-head {
+      display: flex;
+
+      align-items: center;
+      justify-content: space-between;
+
+      gap: 16px;
+
+      margin-bottom: 18px;
+
+      padding: 18px 20px;
+
+      border:
+        1px solid #dbeafe;
+
+      border-radius: 18px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #eff6ff,
+          #f8fafc
+        );
     }
 
     .student-name {
@@ -148,67 +288,395 @@
       font-weight: 900;
     }
 
-    .student-sub {
+    .student-meta {
       margin-top: 5px;
+
       color: #64748b;
+
+      font-size: 14px;
+    }
+
+    .summary-grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(4, minmax(0,1fr));
+
+      gap: 12px;
+
+      margin-bottom: 18px;
+    }
+
+    .summary-card {
+      padding: 15px 12px;
+
+      border:
+        1px solid #e2e8f0;
+
+      border-radius: 15px;
+
+      background: #f8fafc;
+
+      text-align: center;
+    }
+
+    .summary-label {
+      color: #64748b;
+
+      font-size: 13px;
+    }
+
+    .summary-value {
+      margin-top: 5px;
+
+      font-size: 26px;
+      font-weight: 900;
+    }
+
+    .positive {
+      color: #15803d;
+    }
+
+    .negative {
+      color: #b91c1c;
+    }
+
+    .neutral {
+      color: #475569;
     }
 
     .exam-selector {
-      margin-bottom: 20px;
-    }
-
-    .score-list {
       display: grid;
+
+      grid-template-columns:
+        2fr 1fr;
+
       gap: 12px;
+
+      margin-bottom: 18px;
     }
 
-    .score-row {
+    .subject-list {
       display: grid;
-      grid-template-columns: 1fr auto;
-      align-items: center;
-      padding: 15px 17px;
-      border-radius: 14px;
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
+
+      gap: 10px;
     }
 
-    .subject {
+    .subject-row {
+      display: grid;
+
+      grid-template-columns:
+        80px 1fr 110px;
+
+      align-items: center;
+
+      gap: 12px;
+
+      padding: 13px;
+
+      border:
+        1px solid #e2e8f0;
+
+      border-radius: 14px;
+
+      background: #fff;
+    }
+
+    .subject-name {
+      font-weight: 900;
+    }
+
+    .subject-bar {
+      height: 12px;
+
+      overflow: hidden;
+
+      border-radius: 999px;
+
+      background: #e2e8f0;
+    }
+
+    .subject-fill {
+      height: 100%;
+
+      border-radius: 999px;
+
+      background: #2563eb;
+    }
+
+    .subject-score {
+      text-align: right;
+
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .subject-score strong {
+      font-size: 20px;
+    }
+
+    .compare {
+      margin-left: 5px;
+
+      font-size: 12px;
       font-weight: 800;
     }
 
-    .score {
-      font-size: 22px;
-      font-weight: 900;
-      color: #1d4ed8;
+    .chart-box {
+      position: relative;
+
+      min-height: 310px;
     }
 
-    .average-box {
-      margin-top: 18px;
-      border-radius: 16px;
-      padding: 18px;
+    canvas {
+      max-width: 100%;
+    }
+
+    .analysis-grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(3, minmax(0,1fr));
+
+      gap: 12px;
+    }
+
+    .analysis-card {
+      padding: 16px;
+
+      border-radius: 15px;
+
+      border:
+        1px solid #e2e8f0;
+
+      background: #f8fafc;
+    }
+
+    .analysis-title {
+      margin-bottom: 8px;
+
+      font-size: 16px;
+      font-weight: 900;
+    }
+
+    .analysis-text {
+      color: #475569;
+
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    .advice-list {
+      display: grid;
+
+      gap: 12px;
+    }
+
+    .advice-item {
+      padding: 15px 16px;
+
+      border-left:
+        5px solid #2563eb;
+
+      border-radius: 12px;
+
+      background: #f8fafc;
+
+      line-height: 1.8;
+    }
+
+    .advice-item strong {
+      display: block;
+
+      margin-bottom: 4px;
+    }
+
+    /* =========================================================
+       歷次段考表格
+       固定表頭＋固定左欄
+       ========================================================= */
+
+    .table-wrap {
+      position: relative;
+
+      width: 100%;
+
+      max-height: 520px;
+
+      overflow: auto;
+
+      -webkit-overflow-scrolling: touch;
+
+      overscroll-behavior: contain;
+
+      border:
+        1px solid #cbd5e1;
+
+      border-radius: 14px;
+
+      background: white;
+    }
+
+    table {
+      width: 100%;
+
+      min-width: 980px;
+
+      border-collapse: separate;
+      border-spacing: 0;
+
+      background: white;
+    }
+
+    th,
+    td {
+      height: 45px;
+
+      padding: 9px 10px;
+
+      border-right:
+        1px solid #e2e8f0;
+
+      border-bottom:
+        1px solid #e2e8f0;
+
       text-align: center;
-      background: linear-gradient(135deg, #eff6ff, #dbeafe);
+
+      white-space: nowrap;
+
+      font-size: 13px;
+
+      background: white;
     }
 
-    .average-value {
-      margin-top: 4px;
-      font-size: 34px;
+    thead th {
+      position: sticky;
+
+      top: 0;
+
+      z-index: 30;
+
+      background: #e2e8f0;
+
       font-weight: 900;
-      color: #1d4ed8;
+
+      border-bottom:
+        2px solid #94a3b8;
     }
 
-    .logout {
-      margin-top: 18px;
-      background: #475569;
+    thead th:first-child,
+    tbody td:first-child {
+      position: sticky;
+
+      left: 0;
+
+      min-width: 145px;
+
+      z-index: 15;
+
+      background: #f8fafc;
+
+      border-right:
+        2px solid #94a3b8;
     }
 
-    @media (max-width: 560px) {
+    thead th:first-child {
+      z-index: 50;
+
+      background: #cbd5e1;
+    }
+
+    tbody tr:nth-child(even) td {
+      background: #fbfdff;
+    }
+
+    tbody tr:nth-child(even) td:first-child {
+      background: #f1f5f9;
+    }
+
+    .logout-area {
+      max-width: 320px;
+
+      margin:
+        20px auto 0;
+    }
+
+    .privacy-note {
+      margin-top: 15px;
+
+      color: #64748b;
+
+      font-size: 12px;
+      line-height: 1.7;
+
+      text-align: center;
+    }
+
+    @media(max-width:760px) {
+
       .page {
-        padding: 20px 12px;
+        padding:
+          20px 10px 40px;
+      }
+
+      h1 {
+        font-size: 25px;
       }
 
       .card {
-        padding: 22px 18px;
+        padding:
+          18px 14px;
+      }
+
+      .student-head {
+        flex-direction: column;
+
+        align-items: flex-start;
+      }
+
+      .summary-grid,
+      .analysis-grid {
+        grid-template-columns:
+          repeat(2,1fr);
+      }
+
+      .exam-selector {
+        grid-template-columns: 1fr;
+      }
+
+      .subject-row {
+        grid-template-columns:
+          65px 1fr;
+
+        gap: 8px;
+      }
+
+      .subject-score {
+        grid-column:
+          1 / -1;
+
+        text-align: left;
+      }
+
+      .table-wrap {
+        max-height: 470px;
+      }
+
+      table {
+        min-width: 900px;
+      }
+    }
+
+    @media(max-width:430px) {
+
+      .summary-grid,
+      .analysis-grid {
+        grid-template-columns:
+          1fr 1fr;
+      }
+
+      .summary-value {
+        font-size: 22px;
       }
     }
   </style>
@@ -218,112 +686,338 @@
 
 <div class="page">
 
-  <div class="container">
+  <div class="header">
 
-    <div class="header">
-      <div class="logo">績</div>
-      <h1>學生段考成績查詢</h1>
-      <div class="subtitle">
-        請輸入學生出生月日與身分證號後五碼
-      </div>
+    <div class="logo">
+      績
     </div>
+
+    <h1>
+      學生段考成績查詢
+    </h1>
+
+    <div class="subtitle">
+      查看段考成績、歷次變化與學習分析
+    </div>
+
+  </div>
+
+
+  <!-- 登入 -->
+
+  <div
+    id="loginArea"
+    class="card login-card"
+  >
+
+    <div class="section-title">
+      家長／學生查詢
+    </div>
+
+    <div class="field">
+
+      <label for="birthMMDD">
+        學生出生月日
+      </label>
+
+      <input
+        id="birthMMDD"
+        maxlength="4"
+        inputmode="numeric"
+        autocomplete="off"
+        placeholder="例如：0815"
+      >
+
+      <div class="hint">
+        例如 8 月 15 日請輸入 0815。
+      </div>
+
+    </div>
+
+
+    <div class="field">
+
+      <label for="idLast5">
+        身分證號後五碼
+      </label>
+
+      <input
+        id="idLast5"
+        type="password"
+        maxlength="5"
+        inputmode="numeric"
+        autocomplete="off"
+        placeholder="請輸入後五碼"
+      >
+
+    </div>
+
+
+    <button
+      id="searchBtn"
+      class="btn"
+    >
+      查詢成績
+    </button>
+
+
+    <div
+      id="message"
+      class="message"
+    ></div>
+
+
+    <div class="privacy-note">
+      查詢資料僅供學生與家長了解學習狀況使用。
+    </div>
+
+  </div>
+
+
+  <!-- 查詢結果 -->
+
+  <div
+    id="resultArea"
+    class="result-area"
+  >
+
+    <div class="student-head">
+
+      <div>
+
+        <div
+          id="studentName"
+          class="student-name"
+        ></div>
+
+        <div
+          id="studentMeta"
+          class="student-meta"
+        ></div>
+
+      </div>
+
+      <div
+        id="latestExamName"
+        style="
+          color:#2563eb;
+          font-weight:900;
+        "
+      ></div>
+
+    </div>
+
+
+    <!-- 本次摘要 -->
 
     <div class="card">
 
-      <div id="loginArea">
-
-        <div class="field">
-          <label for="birthMMDD">出生月日</label>
-
-          <input
-            id="birthMMDD"
-            maxlength="4"
-            inputmode="numeric"
-            placeholder="例如：0815"
-          >
-
-          <div class="hint">
-            8 月 15 日請輸入 0815
-          </div>
-        </div>
-
-        <div class="field">
-          <label for="idLast5">身分證號後五碼</label>
-
-          <input
-            id="idLast5"
-            type="password"
-            maxlength="5"
-            inputmode="numeric"
-          >
-        </div>
-
-        <button id="searchBtn">查詢成績</button>
-
-        <div id="message" class="message"></div>
+      <div class="section-title">
+        本次段考摘要
       </div>
 
+      <div class="exam-selector">
 
-      <div id="result" class="result">
-
-        <div class="student-box">
-          <div id="studentName" class="student-name"></div>
-          <div id="studentSub" class="student-sub"></div>
-        </div>
-
-        <div class="exam-selector">
+        <div class="field">
 
           <label for="examSelect">
             選擇段考
           </label>
 
-          <select id="examSelect"></select>
+          <select
+            id="examSelect"
+          ></select>
 
         </div>
 
-        <div class="score-list">
+        <div class="field">
 
-          <div class="score-row">
-            <div class="subject">國文</div>
-            <div id="chinese" class="score"></div>
-          </div>
+          <label>
+            已有資料
+          </label>
 
-          <div class="score-row">
-            <div class="subject">英文</div>
-            <div id="english" class="score"></div>
-          </div>
-
-          <div class="score-row">
-            <div class="subject">數學</div>
-            <div id="math" class="score"></div>
-          </div>
-
-          <div class="score-row">
-            <div class="subject">自然</div>
-            <div id="science" class="score"></div>
-          </div>
-
-          <div class="score-row">
-            <div class="subject">社會</div>
-            <div id="social" class="score"></div>
-          </div>
+          <div
+            id="examCountText"
+            style="
+              min-height:50px;
+              display:flex;
+              align-items:center;
+              font-weight:900;
+            "
+          ></div>
 
         </div>
 
-        <div class="average-box">
-          <div>五科平均</div>
-          <div id="average" class="average-value"></div>
+      </div>
+
+
+      <div class="summary-grid">
+
+        <div class="summary-card">
+
+          <div class="summary-label">
+            總分
+          </div>
+
+          <div
+            id="totalValue"
+            class="summary-value"
+          ></div>
+
         </div>
 
-        <button id="logoutBtn" class="logout">
-          返回查詢
-        </button>
+
+        <div class="summary-card">
+
+          <div class="summary-label">
+            五科平均
+          </div>
+
+          <div
+            id="averageValue"
+            class="summary-value"
+          ></div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+          <div class="summary-label">
+            班級排名
+          </div>
+
+          <div
+            id="rankValue"
+            class="summary-value"
+          ></div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+          <div class="summary-label">
+            較前次平均
+          </div>
+
+          <div
+            id="averageChange"
+            class="summary-value"
+          ></div>
+
+        </div>
 
       </div>
 
     </div>
 
+
+    <!-- 五科 -->
+
+    <div class="card">
+
+      <div class="section-title">
+        五科成績與班平均
+      </div>
+
+      <div
+        id="subjectList"
+        class="subject-list"
+      ></div>
+
+    </div>
+
+
+    <!-- 平均趨勢 -->
+
+    <div class="card">
+
+      <div class="section-title">
+        歷次段考平均與排名趨勢
+      </div>
+
+      <div class="chart-box">
+        <canvas id="averageChart"></canvas>
+      </div>
+
+    </div>
+
+
+    <!-- 各科歷程 -->
+
+    <div class="card">
+
+      <div class="section-title">
+        各科歷次成績
+      </div>
+
+      <div class="table-wrap">
+
+        <table>
+
+          <thead>
+
+            <tr id="historyHeader">
+            </tr>
+
+          </thead>
+
+          <tbody id="historyBody">
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+
+    <!-- 分析 -->
+
+    <div class="card">
+
+      <div class="section-title">
+        學習表現分析
+      </div>
+
+      <div
+        id="analysisGrid"
+        class="analysis-grid"
+      ></div>
+
+    </div>
+
+
+    <!-- 建議 -->
+
+    <div class="card">
+
+      <div class="section-title">
+        下一步學習建議
+      </div>
+
+      <div
+        id="adviceList"
+        class="advice-list"
+      ></div>
+
+    </div>
+
+
+    <div class="logout-area">
+
+      <button
+        id="logoutBtn"
+        class="btn btn-secondary"
+      >
+        返回查詢
+      </button>
+
+    </div>
+
   </div>
+
 </div>
 
 
@@ -331,271 +1025,2135 @@
 
 import {
   initializeApp
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+} from
+"https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+
 
 import {
   getFirestore,
   collection,
-  query,
-  where,
+  doc,
+  getDoc,
   getDocs
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+} from
+"https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 
 const firebaseConfig = {
-  apiKey: "AIzaSyC7hXtxLARv3LsoPcaViptdoWMZMLibtiY",
-  authDomain: "exam-score-system.firebaseapp.com",
-  projectId: "exam-score-system",
-  storageBucket: "exam-score-system.firebasestorage.app",
-  messagingSenderId: "334811583790",
-  appId: "1:334811583790:web:a6207215915c163c8656bf"
+
+  apiKey:
+    "AIzaSyC7hXtxLARv3LsoPcaViptdoWMZMLibtiY",
+
+  authDomain:
+    "exam-score-system.firebaseapp.com",
+
+  projectId:
+    "exam-score-system",
+
+  storageBucket:
+    "exam-score-system.firebasestorage.app",
+
+  messagingSenderId:
+    "334811583790",
+
+  appId:
+    "1:334811583790:web:a6207215915c163c8656bf"
+
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
 
-const birthInput = document.getElementById("birthMMDD");
-const idInput = document.getElementById("idLast5");
-
-const searchBtn = document.getElementById("searchBtn");
-const logoutBtn = document.getElementById("logoutBtn");
-
-const loginArea = document.getElementById("loginArea");
-const result = document.getElementById("result");
-const message = document.getElementById("message");
-
-const examSelect = document.getElementById("examSelect");
-
-let exams = [];
+const app =
+  initializeApp(
+    firebaseConfig
+  );
 
 
-function showMessage(text) {
-  message.textContent = text;
-  message.className = "message error";
+const db =
+  getFirestore(
+    app
+  );
+
+
+const $ =
+  id =>
+    document
+      .getElementById(
+        id
+      );
+
+
+let studentData =
+  null;
+
+
+let examRecords =
+  [];
+
+
+let averageChart =
+  null;
+
+
+/* =========================================================
+   基本工具
+   ========================================================= */
+
+function showMessage(
+  text,
+  type = "error"
+) {
+
+  $("message")
+    .textContent =
+    text;
+
+
+  $("message")
+    .className =
+    "message " +
+    type;
+
 }
+
 
 function clearMessage() {
-  message.textContent = "";
-  message.className = "message";
+
+  $("message")
+    .textContent =
+    "";
+
+
+  $("message")
+    .className =
+    "message";
+
 }
 
 
-function isValidMMDD(value) {
+function formatNumber(
+  value,
+  digits = 1
+) {
 
-  if (!/^\d{4}$/.test(value)) return false;
-
-  const month = Number(value.slice(0,2));
-  const day = Number(value.slice(2,4));
-
-  const days = [
-    31,29,31,30,31,30,
-    31,31,30,31,30,31
-  ];
-
-  if (month < 1 || month > 12) return false;
-
-  return day >= 1 && day <= days[month - 1];
-}
-
-
-birthInput.addEventListener("input", () => {
-  birthInput.value = birthInput.value
-    .replace(/\D/g, "")
-    .slice(0,4);
-});
-
-idInput.addEventListener("input", () => {
-  idInput.value = idInput.value
-    .replace(/\D/g, "")
-    .slice(0,5);
-});
-
-
-function displayExam(index) {
-
-  const exam = exams[index];
-
-  if (!exam) return;
-
-  document.getElementById("chinese").textContent = exam.chinese;
-  document.getElementById("english").textContent = exam.english;
-  document.getElementById("math").textContent = exam.math;
-  document.getElementById("science").textContent = exam.science;
-  document.getElementById("social").textContent = exam.social;
-
-  const values = [
-    Number(exam.chinese),
-    Number(exam.english),
-    Number(exam.math),
-    Number(exam.science),
-    Number(exam.social)
-  ];
-
-  const avg =
-    values.reduce((a,b) => a + b, 0)
-    / values.length;
-
-  document.getElementById("average").textContent =
-    avg.toFixed(1);
-}
-
-
-examSelect.addEventListener("change", () => {
-  displayExam(Number(examSelect.value));
-});
-
-
-searchBtn.addEventListener("click", async () => {
-
-  clearMessage();
-
-  const birthMMDD = birthInput.value.trim();
-  const idLast5 = idInput.value.trim();
-
-  if (!isValidMMDD(birthMMDD)) {
-    showMessage(
-      "出生月日格式錯誤，例如 8 月 15 日請輸入 0815。"
-    );
-    return;
-  }
-
-  if (!/^\d{5}$/.test(idLast5)) {
-    showMessage("身分證後五碼必須為 5 位數。");
-    return;
-  }
-
-  searchBtn.disabled = true;
-  searchBtn.textContent = "查詢中...";
-
-  try {
-
-    /*
-      先找學生
-    */
-
-    const studentQuery = query(
-      collection(db, "students"),
-      where("birthMMDD", "==", birthMMDD),
-      where("idLast5", "==", idLast5)
+  const number =
+    Number(
+      value
     );
 
-    const studentSnapshot = await getDocs(studentQuery);
 
-    if (studentSnapshot.empty) {
-      showMessage("查無符合的學生資料。");
-      return;
-    }
-
-    const studentDoc = studentSnapshot.docs[0];
-
-    const student = studentDoc.data();
-    const studentKey = studentDoc.id;
-
-
-    /*
-      再讀這位學生所有考試
-    */
-
-    const examSnapshot = await getDocs(
-      collection(
-        db,
-        "scores",
-        studentKey,
-        "exams"
+  if (
+    !Number
+      .isFinite(
+        number
       )
+  ) {
+
+    return "-";
+
+  }
+
+
+  if (
+    Number
+      .isInteger(
+        number
+      )
+  ) {
+
+    return String(
+      number
     );
 
-    if (examSnapshot.empty) {
-      showMessage("目前尚無段考成績。");
-      return;
-    }
-
-    exams = examSnapshot.docs.map(docSnap => ({
-      id: docSnap.id,
-      ...docSnap.data()
-    }));
+  }
 
 
-    /*
-      依考試代碼排序
-      例如：
-      114-2-exam3
-      115-1-exam1
-    */
+  return number
+    .toFixed(
+      digits
+    )
+    .replace(
+      /\.?0+$/,
+      ""
+    );
 
-    exams.sort((a,b) =>
-      String(b.examCode || b.id)
-        .localeCompare(
-          String(a.examCode || a.id),
-          "zh-Hant",
-          {
-            numeric: true
-          }
+}
+
+
+function signedNumber(
+  value,
+  digits = 1
+) {
+
+  const number =
+    Number(
+      value
+    );
+
+
+  if (
+    !Number
+      .isFinite(
+        number
+      )
+  ) {
+
+    return "-";
+
+  }
+
+
+  const formatted =
+    Math
+      .abs(
+        number
+      )
+      .toFixed(
+        digits
+      )
+      .replace(
+        /\.?0+$/,
+        ""
+      );
+
+
+  if (
+    number >
+    0
+  ) {
+
+    return `+${formatted}`;
+
+  }
+
+
+  if (
+    number <
+    0
+  ) {
+
+    return `-${formatted}`;
+
+  }
+
+
+  return "0";
+
+}
+
+
+function escapeHtml(
+  value
+) {
+
+  return String(
+    value ??
+    ""
+  )
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+    .replace(
+      /</g,
+      "&lt;"
+    )
+    .replace(
+      />/g,
+      "&gt;"
+    )
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+
+/* =========================================================
+   MMDD
+   ========================================================= */
+
+function isValidMMDD(
+  value
+) {
+
+  if (
+    !/^\d{4}$/
+      .test(
+        value
+      )
+  ) {
+
+    return false;
+
+  }
+
+
+  const month =
+    Number(
+      value
+        .slice(
+          0,
+          2
         )
     );
 
 
-    examSelect.innerHTML = "";
+  const day =
+    Number(
+      value
+        .slice(
+          2,
+          4
+        )
+    );
 
-    exams.forEach((exam, index) => {
 
-      const option = document.createElement("option");
+  const days = [
 
-      option.value = index;
+    31,
+    29,
+    31,
+    30,
+    31,
+    30,
+    31,
+    31,
+    30,
+    31,
+    30,
+    31
 
-      option.textContent =
-        exam.examName ||
-        exam.examCode ||
-        exam.id;
+  ];
 
-      examSelect.appendChild(option);
+
+  return (
+
+    month >= 1 &&
+
+    month <= 12 &&
+
+    day >= 1 &&
+
+    day <=
+      days[
+        month -
+        1
+      ]
+
+  );
+
+}
+
+
+$("birthMMDD")
+  .addEventListener(
+    "input",
+    () => {
+
+      $("birthMMDD")
+        .value =
+        $("birthMMDD")
+          .value
+          .replace(
+            /\D/g,
+            ""
+          )
+          .slice(
+            0,
+            4
+          );
+
+    }
+  );
+
+
+$("idLast5")
+  .addEventListener(
+    "input",
+    () => {
+
+      $("idLast5")
+        .value =
+        $("idLast5")
+          .value
+          .replace(
+            /\D/g,
+            ""
+          )
+          .slice(
+            0,
+            5
+          );
+
+    }
+  );
+
+
+/* =========================================================
+   studentKey
+   必須和老師端完全相同
+   ========================================================= */
+
+async function createStudentKey(
+  birthMMDD,
+  idLast5
+) {
+
+  const raw =
+    `exam-score-v1|${birthMMDD}|${idLast5}`;
+
+
+  const data =
+    new TextEncoder()
+      .encode(
+        raw
+      );
+
+
+  const hash =
+    await crypto
+      .subtle
+      .digest(
+        "SHA-256",
+        data
+      );
+
+
+  return Array
+    .from(
+      new Uint8Array(
+        hash
+      )
+    )
+    .map(
+      byte =>
+        byte
+          .toString(
+            16
+          )
+          .padStart(
+            2,
+            "0"
+          )
+    )
+    .join(
+      ""
+    );
+
+}
+
+
+/* =========================================================
+   取得考試統計
+   ========================================================= */
+
+async function loadExamStats() {
+
+  const snapshot =
+    await getDocs(
+      collection(
+        db,
+        "examStats"
+      )
+    );
+
+
+  const exams =
+    snapshot
+      .docs
+      .map(
+        item => ({
+
+          id:
+            item.id,
+
+          ...item
+            .data()
+
+        })
+      );
+
+
+  exams
+    .sort(
+      (
+        a,
+        b
+      ) => {
+
+        if (
+          Number(
+            a.schoolYear
+          )
+          !==
+          Number(
+            b.schoolYear
+          )
+        ) {
+
+          return (
+            Number(
+              a.schoolYear
+            )
+            -
+            Number(
+              b.schoolYear
+            )
+          );
+
+        }
+
+
+        if (
+          Number(
+            a.semester
+          )
+          !==
+          Number(
+            b.semester
+          )
+        ) {
+
+          return (
+            Number(
+              a.semester
+            )
+            -
+            Number(
+              b.semester
+            )
+          );
+
+        }
+
+
+        return (
+          Number(
+            a.examNo
+          )
+          -
+          Number(
+            b.examNo
+          )
+        );
+
+      }
+    );
+
+
+  return exams;
+
+}
+
+
+/* =========================================================
+   查詢
+   ========================================================= */
+
+$("searchBtn")
+  .addEventListener(
+    "click",
+    searchStudent
+  );
+
+
+$("idLast5")
+  .addEventListener(
+    "keydown",
+    event => {
+
+      if (
+        event.key ===
+        "Enter"
+      ) {
+
+        searchStudent();
+
+      }
+
+    }
+  );
+
+
+async function searchStudent() {
+
+  clearMessage();
+
+
+  const birthMMDD =
+    $("birthMMDD")
+      .value
+      .trim();
+
+
+  const idLast5 =
+    $("idLast5")
+      .value
+      .trim();
+
+
+  if (
+    !isValidMMDD(
+      birthMMDD
+    )
+  ) {
+
+    showMessage(
+      "出生月日格式錯誤，例如 8 月 15 日請輸入 0815。"
+    );
+
+    return;
+
+  }
+
+
+  if (
+    !/^\d{5}$/
+      .test(
+        idLast5
+      )
+  ) {
+
+    showMessage(
+      "身分證號後五碼必須輸入 5 位數字。"
+    );
+
+    return;
+
+  }
+
+
+  $("searchBtn")
+    .disabled =
+    true;
+
+
+  $("searchBtn")
+    .textContent =
+    "查詢中...";
+
+
+  try {
+
+    const studentKey =
+      await createStudentKey(
+        birthMMDD,
+        idLast5
+      );
+
+
+    /*
+      只 get 精確 studentKey
+      不列出 students 集合。
+    */
+
+    const studentSnapshot =
+      await getDoc(
+        doc(
+          db,
+          "students",
+          studentKey
+        )
+      );
+
+
+    if (
+      !studentSnapshot
+        .exists()
+    ) {
+
+      showMessage(
+        "查無符合的學生資料，請確認出生月日與身分證後五碼。"
+      );
+
+      return;
+
+    }
+
+
+    studentData =
+      {
+
+        studentKey,
+
+        ...studentSnapshot
+          .data()
+
+      };
+
+
+    const examStats =
+      await loadExamStats();
+
+
+    const records =
+      [];
+
+
+    /*
+      每一次考試只 get
+      這名學生自己的文件。
+    */
+
+    for (
+      const exam
+      of examStats
+    ) {
+
+      const resultSnapshot =
+        await getDoc(
+          doc(
+            db,
+            "examResults",
+            exam.examCode ||
+              exam.id,
+            "students",
+            studentKey
+          )
+        );
+
+
+      if (
+        resultSnapshot
+          .exists()
+      ) {
+
+        records
+          .push({
+
+            examCode:
+              exam.examCode ||
+              exam.id,
+
+            examName:
+              exam.examName,
+
+            schoolYear:
+              exam.schoolYear,
+
+            semester:
+              exam.semester,
+
+            examNo:
+              exam.examNo,
+
+            stats:
+              exam,
+
+            result:
+              resultSnapshot
+                .data()
+
+          });
+
+      }
+
+    }
+
+
+    if (
+      records.length ===
+      0
+    ) {
+
+      showMessage(
+        "已找到學生，但目前沒有段考成績。"
+      );
+
+      return;
+
+    }
+
+
+    examRecords =
+      records;
+
+
+    renderAll();
+
+
+    $("loginArea")
+      .style
+      .display =
+      "none";
+
+
+    $("resultArea")
+      .classList
+      .add(
+        "show"
+      );
+
+
+  } catch (
+    error
+  ) {
+
+    console.error(
+      error
+    );
+
+
+    showMessage(
+      "查詢失敗，請稍後再試。"
+    );
+
+
+  } finally {
+
+    $("searchBtn")
+      .disabled =
+      false;
+
+
+    $("searchBtn")
+      .textContent =
+      "查詢成績";
+
+  }
+
+}
+
+
+/* =========================================================
+   全畫面
+   ========================================================= */
+
+function renderAll() {
+
+  const latest =
+    examRecords[
+      examRecords.length -
+      1
+    ];
+
+
+  $("studentName")
+    .textContent =
+    studentData
+      .name ||
+    "學生";
+
+
+  $("studentMeta")
+    .textContent =
+    `${studentData.currentClass || latest.result.classCode || ""} 班　${studentData.currentSeat || latest.result.seat || ""} 號`;
+
+
+  $("examCountText")
+    .textContent =
+    `共 ${examRecords.length} 次段考資料`;
+
+
+  renderExamOptions();
+
+
+  $("examSelect")
+    .value =
+    latest.examCode;
+
+
+  renderSelectedExam();
+
+
+  renderAverageChart();
+
+
+  renderHistoryTable();
+
+
+  renderAnalysis();
+
+}
+
+
+/* =========================================================
+   考試選單
+   ========================================================= */
+
+function renderExamOptions() {
+
+  const select =
+    $("examSelect");
+
+
+  select
+    .replaceChildren();
+
+
+  examRecords
+    .forEach(
+      record => {
+
+        const option =
+          document
+            .createElement(
+              "option"
+            );
+
+
+        option.value =
+          record
+            .examCode;
+
+
+        option.textContent =
+          record
+            .examName;
+
+
+        select
+          .appendChild(
+            option
+          );
+
+      }
+    );
+
+}
+
+
+$("examSelect")
+  .addEventListener(
+    "change",
+    () => {
+
+      renderSelectedExam();
+
+    }
+  );
+
+
+/* =========================================================
+   指定段考
+   ========================================================= */
+
+function renderSelectedExam() {
+
+  const examCode =
+    $("examSelect")
+      .value;
+
+
+  const index =
+    examRecords
+      .findIndex(
+        record =>
+          record
+            .examCode ===
+          examCode
+      );
+
+
+  if (
+    index <
+    0
+  ) {
+
+    return;
+
+  }
+
+
+  const record =
+    examRecords[
+      index
+    ];
+
+
+  const result =
+    record
+      .result;
+
+
+  const stats =
+    record
+      .stats;
+
+
+  $("latestExamName")
+    .textContent =
+    record
+      .examName;
+
+
+  $("totalValue")
+    .textContent =
+    formatNumber(
+      result
+        .total
+    );
+
+
+  $("averageValue")
+    .textContent =
+    formatNumber(
+      result
+        .average,
+      2
+    );
+
+
+  $("rankValue")
+    .textContent =
+    result
+      .rank
+      ? `${formatNumber(result.rank)} / ${stats.studentCount || "-"}`
+      : "-";
+
+
+  /*
+    與前次比較
+  */
+
+  if (
+    index >
+    0
+  ) {
+
+    const previous =
+      examRecords[
+        index -
+        1
+      ]
+        .result;
+
+
+    const change =
+      Number(
+        result.average
+      )
+      -
+      Number(
+        previous.average
+      );
+
+
+    $("averageChange")
+      .textContent =
+      signedNumber(
+        change
+      );
+
+
+    $("averageChange")
+      .className =
+      "summary-value "
+      +
+      (
+        change >
+        0
+          ? "positive"
+          : change <
+            0
+              ? "negative"
+              : "neutral"
+      );
+
+
+  } else {
+
+    $("averageChange")
+      .textContent =
+      "—";
+
+
+    $("averageChange")
+      .className =
+      "summary-value neutral";
+
+  }
+
+
+  renderSubjects(
+    result,
+    stats
+  );
+
+}
+
+
+/* =========================================================
+   五科
+   ========================================================= */
+
+function renderSubjects(
+  result,
+  stats
+) {
+
+  const subjects = [
+
+    {
+      key:
+        "chinese",
+      avg:
+        "chineseAvg",
+      name:
+        "國文"
+    },
+
+    {
+      key:
+        "english",
+      avg:
+        "englishAvg",
+      name:
+        "英文"
+    },
+
+    {
+      key:
+        "math",
+      avg:
+        "mathAvg",
+      name:
+        "數學"
+    },
+
+    {
+      key:
+        "science",
+      avg:
+        "scienceAvg",
+      name:
+        "自然"
+    },
+
+    {
+      key:
+        "social",
+      avg:
+        "socialAvg",
+      name:
+        "社會"
+    }
+
+  ];
+
+
+  $("subjectList")
+    .innerHTML =
+    subjects
+      .map(
+        subject => {
+
+          const score =
+            Number(
+              result[
+                subject.key
+              ]
+            );
+
+
+          const classAvg =
+            Number(
+              stats[
+                subject.avg
+              ]
+            );
+
+
+          const difference =
+            score -
+            classAvg;
+
+
+          const width =
+            Math.max(
+              0,
+              Math.min(
+                100,
+                score
+              )
+            );
+
+
+          return `
+
+            <div class="subject-row">
+
+              <div class="subject-name">
+                ${subject.name}
+              </div>
+
+              <div class="subject-bar">
+
+                <div
+                  class="subject-fill"
+                  style="width:${width}%"
+                ></div>
+
+              </div>
+
+              <div class="subject-score">
+
+                <strong>
+                  ${formatNumber(score)}
+                </strong>
+
+                <br>
+
+                班平均
+                ${formatNumber(classAvg,2)}
+
+                <span
+                  class="compare ${
+                    difference > 0
+                      ? "positive"
+                      : difference < 0
+                        ? "negative"
+                        : "neutral"
+                  }"
+                >
+
+                  ${
+                    difference === 0
+                      ? "相同"
+                      : `${signedNumber(difference)}`
+                  }
+
+                </span>
+
+              </div>
+
+            </div>
+
+          `;
+
+        }
+      )
+      .join("");
+
+}
+
+
+/* =========================================================
+   平均折線圖
+   ========================================================= */
+
+function renderAverageChart() {
+
+  const canvas =
+    $("averageChart");
+
+
+  if (
+    averageChart
+  ) {
+
+    averageChart
+      .destroy();
+
+  }
+
+
+  averageChart =
+    new Chart(
+      canvas,
+      {
+
+        type:
+          "line",
+
+        data: {
+
+          labels:
+            examRecords
+              .map(
+                record =>
+                  shortExamName(
+                    record
+                  )
+              ),
+
+          datasets: [
+
+            {
+              label:
+                "個人平均",
+
+              data:
+                examRecords
+                  .map(
+                    record =>
+                      Number(
+                        record
+                          .result
+                          .average
+                      )
+                  ),
+
+              tension:
+                .28
+            },
+
+            {
+              label:
+                "班平均",
+
+              data:
+                examRecords
+                  .map(
+                    record =>
+                      Number(
+                        record
+                          .stats
+                          .averageAvg
+                      )
+                  ),
+
+              tension:
+                .28
+            }
+
+          ]
+
+        },
+
+        options: {
+
+          responsive:
+            true,
+
+          maintainAspectRatio:
+            false,
+
+          interaction: {
+            intersect:
+              false,
+
+            mode:
+              "index"
+          },
+
+          scales: {
+
+            y: {
+
+              suggestedMin:
+                0,
+
+              suggestedMax:
+                100
+
+            }
+
+          }
+
+        }
+
+      }
+    );
+
+}
+
+
+function shortExamName(
+  record
+) {
+
+  return `${record.schoolYear}${record.semester === 1 ? "上" : "下"}${record.examNo}`;
+
+}
+
+
+/* =========================================================
+   六次歷程表
+   ========================================================= */
+
+function renderHistoryTable() {
+
+  const header =
+    $("historyHeader");
+
+
+  header
+    .innerHTML =
+    `
+      <th>項目</th>
+      ${
+        examRecords
+          .map(
+            record =>
+              `<th>${escapeHtml(shortExamName(record))}</th>`
+          )
+          .join("")
+      }
+    `;
+
+
+  const rows = [
+
+    {
+      label:
+        "平均",
+      key:
+        "average"
+    },
+
+    {
+      label:
+        "班排",
+      key:
+        "rank"
+    },
+
+    {
+      label:
+        "國文",
+      key:
+        "chinese"
+    },
+
+    {
+      label:
+        "英文",
+      key:
+        "english"
+    },
+
+    {
+      label:
+        "數學",
+      key:
+        "math"
+    },
+
+    {
+      label:
+        "自然",
+      key:
+        "science"
+    },
+
+    {
+      label:
+        "社會",
+      key:
+        "social"
+    }
+
+  ];
+
+
+  $("historyBody")
+    .innerHTML =
+    rows
+      .map(
+        row => `
+
+          <tr>
+
+            <td>
+              ${row.label}
+            </td>
+
+            ${
+              examRecords
+                .map(
+                  record =>
+                    `<td>${formatNumber(record.result[row.key],2)}</td>`
+                )
+                .join("")
+            }
+
+          </tr>
+
+        `
+      )
+      .join("");
+
+}
+
+
+/* =========================================================
+   分析
+   ========================================================= */
+
+function renderAnalysis() {
+
+  const subjectDefs = [
+
+    {
+      key:
+        "chinese",
+      avg:
+        "chineseAvg",
+      name:
+        "國文"
+    },
+
+    {
+      key:
+        "english",
+      avg:
+        "englishAvg",
+      name:
+        "英文"
+    },
+
+    {
+      key:
+        "math",
+      avg:
+        "mathAvg",
+      name:
+        "數學"
+    },
+
+    {
+      key:
+        "science",
+      avg:
+        "scienceAvg",
+      name:
+        "自然"
+    },
+
+    {
+      key:
+        "social",
+      avg:
+        "socialAvg",
+      name:
+        "社會"
+    }
+
+  ];
+
+
+  const subjectAnalysis =
+    subjectDefs
+      .map(
+        subject => {
+
+          const values =
+            examRecords
+              .map(
+                record =>
+                  Number(
+                    record
+                      .result[
+                        subject.key
+                      ]
+                  )
+              );
+
+
+          const classDiffs =
+            examRecords
+              .map(
+                record =>
+                  Number(
+                    record
+                      .result[
+                        subject.key
+                      ]
+                  )
+                  -
+                  Number(
+                    record
+                      .stats[
+                        subject.avg
+                      ]
+                  )
+              );
+
+
+          const average =
+            mean(
+              values
+            );
+
+
+          const avgClassDiff =
+            mean(
+              classDiffs
+            );
+
+
+          const latest =
+            values[
+              values.length -
+              1
+            ];
+
+
+          const previous =
+            values.length >
+            1
+              ? values[
+                  values.length -
+                  2
+                ]
+              : latest;
+
+
+          const latestChange =
+            latest -
+            previous;
+
+
+          const recent =
+            values
+              .slice(
+                -3
+              );
+
+
+          const recentTrend =
+            recent.length >=
+            2
+              ? recent[
+                  recent.length -
+                  1
+                ]
+                -
+                recent[
+                  0
+                ]
+              : 0;
+
+
+          const range =
+            Math.max(
+              ...values
+            )
+            -
+            Math.min(
+              ...values
+            );
+
+
+          return {
+
+            ...subject,
+
+            values,
+
+            average,
+
+            avgClassDiff,
+
+            latest,
+
+            latestChange,
+
+            recentTrend,
+
+            range
+
+          };
+
+        }
+      );
+
+
+  /*
+    優勢科：
+    優先考慮長期高於班平均。
+  */
+
+  const strongest =
+    [
+      ...subjectAnalysis
+    ]
+      .sort(
+        (
+          a,
+          b
+        ) =>
+          b.avgClassDiff
+          -
+          a.avgClassDiff
+      )[
+        0
+      ];
+
+
+  /*
+    近期進步：
+    最近三次起點 → 最新。
+  */
+
+  const improving =
+    [
+      ...subjectAnalysis
+    ]
+      .sort(
+        (
+          a,
+          b
+        ) =>
+          b.recentTrend
+          -
+          a.recentTrend
+      )[
+        0
+      ];
+
+
+  /*
+    需要關注：
+    最近趨勢下降優先，
+    否則看相對班平均。
+  */
+
+  const attention =
+    [
+      ...subjectAnalysis
+    ]
+      .sort(
+        (
+          a,
+          b
+        ) => {
+
+          const aScore =
+            a.recentTrend
+            +
+            a.avgClassDiff *
+            .35;
+
+
+          const bScore =
+            b.recentTrend
+            +
+            b.avgClassDiff *
+            .35;
+
+
+          return (
+            aScore -
+            bScore
+          );
+
+        }
+      )[
+        0
+      ];
+
+
+  $("analysisGrid")
+    .innerHTML = `
+
+      <div class="analysis-card">
+
+        <div class="analysis-title">
+          ⭐ 相對優勢
+        </div>
+
+        <div class="analysis-text">
+
+          ${strongest.name}
+          六次表現相較班平均最突出。
+
+          ${
+            strongest.avgClassDiff >= 0
+              ? `平均高於班平均約 ${formatNumber(strongest.avgClassDiff,1)} 分。`
+              : `目前仍可持續建立穩定表現。`
+          }
+
+        </div>
+
+      </div>
+
+
+      <div class="analysis-card">
+
+        <div class="analysis-title">
+          📈 近期進步
+        </div>
+
+        <div class="analysis-text">
+
+          ${improving.name}
+          最近幾次的變化較明顯。
+
+          ${
+            improving.recentTrend > 0
+              ? `最近三次起點至目前提升約 ${formatNumber(improving.recentTrend,1)} 分。`
+              : `近期尚未出現明顯上升，可先以穩定表現為目標。`
+          }
+
+        </div>
+
+      </div>
+
+
+      <div class="analysis-card">
+
+        <div class="analysis-title">
+          🔎 優先關注
+        </div>
+
+        <div class="analysis-text">
+
+          ${attention.name}
+          是目前較值得優先檢視的科目。
+
+          ${
+            attention.recentTrend < 0
+              ? `近期約下降 ${formatNumber(Math.abs(attention.recentTrend),1)} 分。`
+              : `可從錯題類型與基本概念掌握度進一步確認。`
+          }
+
+        </div>
+
+      </div>
+
+    `;
+
+
+  renderAdvice(
+    subjectAnalysis,
+    strongest,
+    improving,
+    attention
+  );
+
+}
+
+
+/* =========================================================
+   學習建議
+   ========================================================= */
+
+function renderAdvice(
+  subjectAnalysis,
+  strongest,
+  improving,
+  attention
+) {
+
+  const latest =
+    examRecords[
+      examRecords.length -
+      1
+    ];
+
+
+  const previous =
+    examRecords.length >
+    1
+      ? examRecords[
+          examRecords.length -
+          2
+        ]
+      : null;
+
+
+  const advice =
+    [];
+
+
+  /*
+    整體
+  */
+
+  if (
+    previous
+  ) {
+
+    const avgChange =
+      Number(
+        latest
+          .result
+          .average
+      )
+      -
+      Number(
+        previous
+          .result
+          .average
+      );
+
+
+    if (
+      avgChange >=
+      3
+    ) {
+
+      advice
+        .push({
+
+          title:
+            "整體表現正在進步",
+
+          text:
+            `本次五科平均較前次提高 ${formatNumber(avgChange,1)} 分。建議先保留目前有效的讀書方式，再把額外時間集中在較弱科目，不需要全部重新調整。`
+
+        });
+
+
+    } else if (
+      avgChange <=
+      -3
+    ) {
+
+      advice
+        .push({
+
+          title:
+            "先找出本次下降的來源",
+
+          text:
+            `本次五科平均較前次下降 ${formatNumber(Math.abs(avgChange),1)} 分。建議先比較五科中哪一科下降幅度最大，再檢查是觀念不熟、題意理解、計算失誤或複習時間不足，不必只以總平均判斷。`
+
+        });
+
+    }
+
+  }
+
+
+  /*
+    優勢科
+  */
+
+  advice
+    .push({
+
+      title:
+        `維持 ${strongest.name} 的有效方法`,
+
+      text:
+        `${strongest.name}是目前相對穩定的優勢。建議維持原有複習節奏，不需要為了再提高少量分數投入過多時間，可將部分時間轉移到較需要加強的科目。`
 
     });
 
 
-    document.getElementById("studentName").textContent =
-      student.name || "學生";
+  /*
+    關注科
+  */
 
-    document.getElementById("studentSub").textContent =
-      student.classCode
-      ? `${student.classCode} 班　${student.seat || ""} 號`
-      : "";
+  advice
+    .push({
+
+      title:
+        `${attention.name}優先做錯題分類`,
+
+      text:
+        `建議把最近 2～3 次${attention.name}考卷的錯題分成「觀念不熟、計算或作答失誤、題意看錯、沒有複習到」四類。先處理重複出現的錯誤，比單純重新寫整本題目更有效率。`
+
+    });
 
 
-    loginArea.style.display = "none";
-    result.classList.add("show");
+  /*
+    進步科
+  */
 
-    displayExam(0);
+  if (
+    improving.recentTrend >
+    0
+  ) {
 
-  } catch (error) {
+    advice
+      .push({
 
-    console.error(error);
+        title:
+          `延續 ${improving.name} 的進步方式`,
 
-    showMessage("查詢失敗，請稍後再試。");
+        text:
+          `${improving.name}近期呈現較明顯進步，表示目前的練習或複習方式可能有效。建議維持至少到下一次段考，再觀察是否能持續，而不是立即改變讀書方式。`
 
-  } finally {
+      });
 
-    searchBtn.disabled = false;
-    searchBtn.textContent = "查詢成績";
   }
 
-});
+
+  /*
+    波動最大科
+  */
+
+  const unstable =
+    [
+      ...subjectAnalysis
+    ]
+      .sort(
+        (
+          a,
+          b
+        ) =>
+          b.range -
+          a.range
+      )[
+        0
+      ];
 
 
-logoutBtn.addEventListener("click", () => {
+  if (
+    unstable.range >=
+    15
+  ) {
 
-  result.classList.remove("show");
-  loginArea.style.display = "block";
+    advice
+      .push({
 
-  birthInput.value = "";
-  idInput.value = "";
+        title:
+          `${unstable.name}注意成績波動`,
 
-  exams = [];
-  examSelect.innerHTML = "";
+        text:
+          `${unstable.name}歷次最高與最低成績差距約 ${formatNumber(unstable.range,1)} 分。這類情況通常比單純低分更值得注意，建議改成固定每週複習，而不要只在考前集中準備。`
 
-  clearMessage();
+      });
 
-});
+  }
+
+
+  $("adviceList")
+    .innerHTML =
+    advice
+      .slice(
+        0,
+        5
+      )
+      .map(
+        item => `
+
+          <div class="advice-item">
+
+            <strong>
+              ${escapeHtml(item.title)}
+            </strong>
+
+            ${escapeHtml(item.text)}
+
+          </div>
+
+        `
+      )
+      .join("");
+
+}
+
+
+/* =========================================================
+   平均
+   ========================================================= */
+
+function mean(
+  values
+) {
+
+  const valid =
+    values
+      .filter(
+        value =>
+          Number
+            .isFinite(
+              Number(
+                value
+              )
+            )
+      )
+      .map(
+        Number
+      );
+
+
+  if (
+    valid.length ===
+    0
+  ) {
+
+    return 0;
+
+  }
+
+
+  return valid
+    .reduce(
+      (
+        sum,
+        value
+      ) =>
+        sum +
+        value,
+      0
+    )
+    /
+    valid.length;
+
+}
+
+
+/* =========================================================
+   返回
+   ========================================================= */
+
+$("logoutBtn")
+  .addEventListener(
+    "click",
+    () => {
+
+      studentData =
+        null;
+
+
+      examRecords =
+        [];
+
+
+      if (
+        averageChart
+      ) {
+
+        averageChart
+          .destroy();
+
+
+        averageChart =
+          null;
+
+      }
+
+
+      $("resultArea")
+        .classList
+        .remove(
+          "show"
+        );
+
+
+      $("loginArea")
+        .style
+        .display =
+        "block";
+
+
+      $("birthMMDD")
+        .value =
+        "";
+
+
+      $("idLast5")
+        .value =
+        "";
+
+
+      clearMessage();
+
+
+      window
+        .scrollTo(
+          {
+            top:
+              0,
+
+            behavior:
+              "smooth"
+          }
+        );
+
+    }
+  );
 
 </script>
 
