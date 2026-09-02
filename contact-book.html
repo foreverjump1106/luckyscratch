@@ -153,6 +153,114 @@
             font-size: 0.9rem;
             color: #f4d06f;
         }
+
+
+        /* ===== 表格審查顯示改善：固定標題列＋固定左側識別欄 ===== */
+        /*
+           僅套用在「需要關注的夥伴清單」與「每週航行統計報告」。
+           不影響 Firebase、資料內容、審查邏輯或其他功能。
+        */
+        .sticky-audit-scroll {
+            position: relative;
+            max-height: 68vh;
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
+            border-radius: 6px;
+        }
+
+        .sticky-audit-table {
+            margin-bottom: 0;
+            min-width: 1050px;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        /* 往下捲動時，欄位標題固定在表格上方 */
+        .sticky-audit-table thead th {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            background-color: #122244 !important;
+            color: #f4d06f !important;
+            box-shadow: inset 0 -1px 0 #2a437e;
+            white-space: nowrap;
+        }
+
+        /* 每日關注表：固定「日期」與「座號/姓名」 */
+        #dailyAttentionTable th:nth-child(1),
+        #dailyAttentionTable td:nth-child(1) {
+            position: sticky;
+            left: 0;
+            min-width: 108px;
+            width: 108px;
+            z-index: 10;
+            background-color: #1f3460;
+        }
+
+        #dailyAttentionTable th:nth-child(2),
+        #dailyAttentionTable td:nth-child(2) {
+            position: sticky;
+            left: 108px;
+            min-width: 118px;
+            width: 118px;
+            z-index: 10;
+            background-color: #1f3460;
+            box-shadow: 3px 0 5px rgba(0,0,0,0.18);
+        }
+
+        #dailyAttentionTable thead th:nth-child(1),
+        #dailyAttentionTable thead th:nth-child(2) {
+            z-index: 30;
+            background-color: #122244 !important;
+        }
+
+        /* 每週統計表：固定「座號」與「夥伴姓名」 */
+        #weeklyStatsTable th:nth-child(1),
+        #weeklyStatsTable td:nth-child(1) {
+            position: sticky;
+            left: 0;
+            min-width: 70px;
+            width: 70px;
+            z-index: 10;
+            background-color: #1f3460;
+        }
+
+        #weeklyStatsTable th:nth-child(2),
+        #weeklyStatsTable td:nth-child(2) {
+            position: sticky;
+            left: 70px;
+            min-width: 120px;
+            width: 120px;
+            z-index: 10;
+            background-color: #1f3460;
+            box-shadow: 3px 0 5px rgba(0,0,0,0.18);
+        }
+
+        #weeklyStatsTable thead th:nth-child(1),
+        #weeklyStatsTable thead th:nth-child(2) {
+            z-index: 30;
+            background-color: #122244 !important;
+        }
+
+        /* 滑鼠移到資料列時，固定欄位也保持一致的視覺效果 */
+        #dailyAttentionTable tbody tr:hover td:nth-child(1),
+        #dailyAttentionTable tbody tr:hover td:nth-child(2),
+        #weeklyStatsTable tbody tr:hover td:nth-child(1),
+        #weeklyStatsTable tbody tr:hover td:nth-child(2) {
+            background-color: #263f72;
+        }
+
+        /* 平板／手機：保留橫向滑動，並縮短表格內垂直視窗高度 */
+        @media (max-width: 991.98px) {
+            .sticky-audit-scroll {
+                max-height: 62vh;
+            }
+
+            .sticky-audit-table {
+                min-width: 1100px;
+            }
+        }
+
         /* 登入遮罩樣式 */
         #loginOverlay {
             position: fixed;
@@ -363,8 +471,8 @@
                 <h4 class="mb-0">🎯 需要關注的夥伴清單（已自動過濾全員完成者）</h4>
                 <button class="btn btn-outline-light btn-sm" id="contactBookRefreshBtn">重新載入</button>
             </div>
-            <div class="table-responsive">
-                <table class="table table-hover align-middle">
+            <div class="table-responsive sticky-audit-scroll">
+                <table class="table table-hover align-middle sticky-audit-table" id="dailyAttentionTable">
                     <thead class="table-light">
                         <tr style="font-size: 0.95rem;">
                             <th>日期</th>
@@ -455,8 +563,8 @@
                     </select>
                 </div>
             </div>
-            <div class="table-responsive">
-                <table class="table table-hover align-middle">
+            <div class="table-responsive sticky-audit-scroll">
+                <table class="table table-hover align-middle sticky-audit-table" id="weeklyStatsTable">
                     <thead class="table-light">
                         <tr style="font-size: 0.95rem;">
                             <th>座號</th>
@@ -594,7 +702,7 @@
             1: "王禹涵", 2: "江育緹", 3: "呂思儀", 4: "李詠祺", 
             5: "林子歆", 6: "林禹萱", 7: "張馨勻", 8: "陳昕樂", 
             9: "陳梓安", 10: "陳筠蓁", 11: "陳苙絜", 12: "楊錚諭", 
-            13: "趙安褕", 14: "魏語潔", 15: "江靚恩", 16: "王洋振", 
+            13: "趙安瑜", 14: "魏語潔", 15: "江靚恩", 16: "王洋振", 
             17: "吳昊丞", 18: "李祐誠", 19: "林宸陞", 20: "林維辰", 
             21: "林鈺棟", 22: "洪楷祥", 23: "陳兆楷", 24: "陳沂璟", 
             25: "黑肚・尤明", 26: "賴震宇", 27: "戴震龍", 28: "謝宇哲"
