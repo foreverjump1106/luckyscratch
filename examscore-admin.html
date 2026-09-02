@@ -1730,7 +1730,7 @@ function fourWeekPlan(a,nextExam){
     case'priority_support':case'foundation':return['第1週：用舊考卷找出最常錯的 2～3 類能力。',`第2週：基礎 ${r.foundation}%、錯題 ${r.correction}%、變化題 ${r.challenge}%。`,'第3週：基本題穩定後加入本階段新課與變化題。','第4週：完成一次限時練習，只整理仍會重複的錯誤。'];
     case'declining':return['第1週：比較最近兩次考卷，找出下降開始的單元與題型。',`第2週：錯題與薄弱題約占 ${r.correction+r.foundation}% 的時間。`,'第3週：加入新課，確認補舊內容沒有影響新單元。','第4週：用混合題確認下降問題是否改善。'];
     case'improving':return['第1週：保留目前有效的讀書方式。',`第2週：將變化題比例提高到約 ${r.challenge}%。`,'第3週：加入限時練習。','第4週：只精修仍會錯的題目。'];
-    default:return['第1週：整理目前弱點與最近錯題。','第2週：維持新課同步並改善最常出現的失分。','第3週：增加變化題與整合題。',`第4週：完成一次 ${nextExam?nextExam.shortTitle:'下一次段考'} 前的限時檢核。']}}
+    default:return['第1週：整理目前弱點與最近錯題。','第2週：維持新課同步並改善最常出現的失分。','第3週：增加變化題與整合題。',`第4週：完成一次 ${nextExam?nextExam.shortTitle:'下一次段考'} 前的限時檢核。`]}}
     function priorityScore(a){let s=a.profile.priority;if(a.recentTrend<=-8)s+=20;else if(a.recentTrend<=-4)s+=10;if(a.classDiff<=-8)s+=15;if(a.latestVsSelf<=-8)s+=10;return s}
 
     $('loadStudentBtn').onclick=async()=>{clearMessage($('studentMessage'));const key=$('studentSelect').value;if(!key)return;try{const student=studentDirectory.get(key),exams=await getExamList(),records=[];for(const exam of exams){const d=await getDoc(doc(db,'examResults',exam.examCode||exam.id,'students',key));if(d.exists())records.push({exam,result:d.data()})}if(!records.length){showMessage($('studentMessage'),'此學生目前沒有段考資料。','error');return}renderStudentHistory(student,records,exams)}catch(e){console.error(e);showMessage($('studentMessage'),'學生歷程載入失敗。','error')}};
