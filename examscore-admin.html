@@ -1,54 +1,61 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>804段考成績管理系統</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>學生段考成績管理系統</title>
 
   <link
     rel="icon"
-    href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="20" fill="%230f766e"/><text x="50" y="68" text-anchor="middle" font-size="60" fill="white">管</text></svg>'
-  />
+    href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="20" fill="%230f766e"/><text x="50" y="68" text-anchor="middle" font-size="58" fill="white">績</text></svg>'
+  >
+
+  <!-- Excel 讀取函式庫 -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
   <style>
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
-      font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
-      color: #0f172a;
-      background: linear-gradient(135deg, #ecfeff, #f0fdfa, #f8fafc);
       min-height: 100vh;
+      font-family: "Microsoft JhengHei", "Noto Sans TC", sans-serif;
+      background: linear-gradient(135deg, #ecfeff, #f0fdfa, #f8fafc);
+      color: #0f172a;
     }
 
-    button, input, textarea {
+    button,
+    input,
+    select {
       font-family: inherit;
     }
 
     .page {
-      width: 100%;
-      max-width: 1180px;
-      margin: 0 auto;
-      padding: 30px 16px 60px;
+      max-width: 1250px;
+      margin: auto;
+      padding: 28px 16px 60px;
     }
 
     .header {
       text-align: center;
-      margin-bottom: 26px;
+      margin-bottom: 24px;
     }
 
     .logo {
-      width: 78px;
-      height: 78px;
-      margin: 0 auto 14px;
+      width: 76px;
+      height: 76px;
+      margin: 0 auto 12px;
+      border-radius: 22px;
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 22px;
-      color: white;
-      font-size: 42px;
-      font-weight: 900;
       background: linear-gradient(135deg, #0f766e, #115e59);
+      color: white;
+      font-size: 40px;
+      font-weight: 900;
     }
 
     h1 {
@@ -57,97 +64,86 @@
     }
 
     .subtitle {
+      margin-top: 7px;
       color: #64748b;
-      margin-top: 8px;
-      font-size: 15px;
     }
 
     .card {
-      background: rgba(255,255,255,.96);
+      background: rgba(255,255,255,.97);
       border: 1px solid #e2e8f0;
-      border-radius: 22px;
-      padding: 26px;
-      box-shadow: 0 16px 40px rgba(15,23,42,.08);
+      border-radius: 20px;
+      padding: 24px;
       margin-bottom: 20px;
+      box-shadow: 0 14px 34px rgba(15,23,42,.08);
     }
 
     .login-card {
       max-width: 520px;
-      margin: 0 auto;
+      margin: auto;
     }
 
     .section-title {
       font-size: 21px;
       font-weight: 900;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
     }
 
     .field {
-      margin-bottom: 17px;
+      margin-bottom: 16px;
     }
 
     label {
       display: block;
-      font-size: 14px;
-      font-weight: 800;
       margin-bottom: 7px;
+      font-weight: 800;
+      font-size: 14px;
     }
 
-    input, textarea {
+    input,
+    select {
       width: 100%;
+      min-height: 48px;
       border: 1px solid #cbd5e1;
-      border-radius: 13px;
+      border-radius: 12px;
+      padding: 0 13px;
       background: white;
-      color: #0f172a;
+      font-size: 16px;
       outline: none;
     }
 
-    input {
-      height: 50px;
-      padding: 0 14px;
-      font-size: 16px;
-    }
-
-    textarea {
-      min-height: 260px;
-      resize: vertical;
-      padding: 14px;
-      font-size: 15px;
-      line-height: 1.6;
-      white-space: pre;
-      overflow: auto;
-    }
-
-    input:focus, textarea:focus {
+    input:focus,
+    select:focus {
       border-color: #0f766e;
       box-shadow: 0 0 0 4px rgba(15,118,110,.10);
     }
 
-    .grid-3 {
-      display: grid;
-      grid-template-columns: 1fr 1fr 2fr;
-      gap: 16px;
-    }
-
     .btn {
-      min-height: 50px;
+      min-height: 48px;
       border: 0;
-      border-radius: 13px;
+      border-radius: 12px;
       padding: 0 18px;
       font-size: 16px;
       font-weight: 900;
-      cursor: pointer;
       color: white;
-      background: linear-gradient(135deg, #0f766e, #115e59);
+      background: #0f766e;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      filter: brightness(1.05);
+    }
+
+    .btn:disabled {
+      opacity: .5;
+      cursor: not-allowed;
     }
 
     .btn-secondary {
       background: #475569;
     }
 
-    .btn:disabled {
-      opacity: .55;
-      cursor: not-allowed;
+    .btn-blue {
+      background: #2563eb;
     }
 
     .btn-full {
@@ -156,9 +152,9 @@
 
     .actions {
       display: flex;
-      gap: 10px;
       flex-wrap: wrap;
-      margin-top: 18px;
+      gap: 10px;
+      margin-top: 16px;
     }
 
     .actions .btn {
@@ -167,23 +163,29 @@
 
     .message {
       display: none;
-      border-radius: 12px;
+      margin-top: 14px;
       padding: 13px 15px;
-      margin-top: 15px;
+      border-radius: 12px;
       line-height: 1.6;
       font-size: 14px;
     }
 
-    .message.error {
-      display: block;
-      color: #991b1b;
-      background: #fee2e2;
-    }
-
     .message.success {
       display: block;
-      color: #166534;
       background: #dcfce7;
+      color: #166534;
+    }
+
+    .message.error {
+      display: block;
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .message.info {
+      display: block;
+      background: #dbeafe;
+      color: #1e40af;
     }
 
     .admin-area {
@@ -196,85 +198,197 @@
 
     .topbar {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
       gap: 15px;
-      margin-bottom: 20px;
-      padding: 16px 18px;
       background: white;
+      padding: 15px 18px;
       border: 1px solid #e2e8f0;
-      border-radius: 16px;
+      border-radius: 15px;
+      margin-bottom: 18px;
     }
 
-    .teacher-email {
+    .tabs {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .tab {
+      border: 1px solid #cbd5e1;
+      background: white;
+      color: #334155;
+      min-height: 45px;
+      border-radius: 12px;
+      padding: 0 18px;
       font-weight: 900;
+      cursor: pointer;
     }
 
-    .format-box {
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: 14px;
-      padding: 15px;
-      margin-bottom: 15px;
-      color: #475569;
-      line-height: 1.8;
-      font-size: 14px;
+    .tab.active {
+      color: white;
+      background: #0f766e;
+      border-color: #0f766e;
     }
 
-    .preview-area {
+    .tab-page {
       display: none;
     }
 
-    .preview-area.show {
+    .tab-page.active {
       display: block;
+    }
+
+    .settings-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .help {
+      padding: 14px 16px;
+      border-radius: 13px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      color: #475569;
+      font-size: 14px;
+      line-height: 1.7;
+      margin-bottom: 17px;
+    }
+
+    .file-box {
+      border: 2px dashed #94a3b8;
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+      background: #f8fafc;
+    }
+
+    .sheet-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .sheet-card {
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 15px;
+      background: white;
+    }
+
+    .sheet-title {
+      font-weight: 900;
+      font-size: 17px;
+    }
+
+    .sheet-info {
+      color: #64748b;
+      font-size: 14px;
+      margin-top: 7px;
+      line-height: 1.7;
+    }
+
+    .sheet-ok {
+      color: #15803d;
+      font-weight: 900;
+    }
+
+    .sheet-error {
+      color: #b91c1c;
+      font-weight: 900;
     }
 
     .table-wrap {
       overflow-x: auto;
       border: 1px solid #e2e8f0;
       border-radius: 14px;
+      background: white;
     }
 
     table {
       width: 100%;
-      min-width: 900px;
+      min-width: 950px;
       border-collapse: collapse;
     }
 
-    th, td {
-      padding: 11px 10px;
+    th,
+    td {
+      padding: 10px 9px;
       border-bottom: 1px solid #e2e8f0;
       text-align: center;
       font-size: 14px;
+      white-space: nowrap;
     }
 
     th {
+      background: #f1f5f9;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    th:hover {
+      background: #e2e8f0;
+    }
+
+    .avg-row {
+      background: #eff6ff;
+      font-weight: 900;
+    }
+
+    .exam-controls {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(4,1fr);
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .summary-card {
+      padding: 14px;
       background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 13px;
+      text-align: center;
+    }
+
+    .summary-label {
+      color: #64748b;
+      font-size: 13px;
+    }
+
+    .summary-value {
+      font-size: 23px;
       font-weight: 900;
+      margin-top: 4px;
     }
 
-    .invalid-row {
-      background: #fff1f2;
-    }
-
-    .valid-text {
-      color: #15803d;
-      font-weight: 900;
-    }
-
-    .invalid-text {
-      color: #b91c1c;
-      font-weight: 900;
-    }
-
-    @media (max-width: 760px) {
-      .grid-3 {
+    @media(max-width:760px) {
+      .settings-grid,
+      .exam-controls,
+      .summary {
         grid-template-columns: 1fr;
       }
 
       .topbar {
         flex-direction: column;
         align-items: stretch;
+      }
+
+      h1 {
+        font-size: 25px;
+      }
+
+      .card {
+        padding: 19px 15px;
       }
     }
   </style>
@@ -285,632 +399,1864 @@
 <div class="page">
 
   <div class="header">
-    <div class="logo">管</div>
-    <h1>段考成績管理系統</h1>
+    <div class="logo">績</div>
+    <h1>學生段考成績管理系統</h1>
     <div class="subtitle">教師專用後台</div>
   </div>
 
+  <!-- 登入 -->
   <div id="loginArea" class="card login-card">
-    <div class="section-title">教師登入</div>
+
+    <div class="section-title">
+      教師登入
+    </div>
 
     <div class="field">
-      <label for="email">教師帳號</label>
+      <label>教師 Email</label>
       <input id="email" type="email" autocomplete="username">
     </div>
 
     <div class="field">
-      <label for="password">密碼</label>
+      <label>密碼</label>
       <input id="password" type="password" autocomplete="current-password">
     </div>
 
-    <button id="loginBtn" class="btn btn-full">登入管理系統</button>
+    <button id="loginBtn" class="btn btn-full">
+      登入管理系統
+    </button>
+
     <div id="loginMessage" class="message"></div>
+
   </div>
 
+
+  <!-- 後台 -->
   <div id="adminArea" class="admin-area">
 
     <div class="topbar">
+
       <div>
-        <div style="font-size:13px;color:#64748b;">已登入教師</div>
-        <div id="teacherEmail" class="teacher-email"></div>
+        <div style="font-size:13px;color:#64748b">
+          已登入教師
+        </div>
+        <strong id="teacherEmail"></strong>
       </div>
 
-      <button id="logoutBtn" class="btn btn-secondary">登出</button>
+      <button id="logoutBtn" class="btn btn-secondary">
+        登出
+      </button>
+
     </div>
 
-    <div class="card">
-      <div class="section-title">① 段考設定</div>
+    <div class="tabs">
 
-      <div class="grid-3">
+      <button class="tab active" data-page="syncPage">
+        Excel 同步
+      </button>
 
-        <div class="field">
-          <label for="classCode">班級</label>
-          <input id="classCode" value="804" maxlength="6">
+      <button class="tab" data-page="examPage">
+        段考總表
+      </button>
+
+    </div>
+
+
+    <!-- =========================
+         Excel 同步
+    ========================== -->
+
+    <section id="syncPage" class="tab-page active">
+
+      <div class="card">
+
+        <div class="section-title">
+          ① 基本設定
         </div>
 
-        <div class="field">
-          <label for="examCode">考試代碼</label>
-          <input id="examCode" value="114-2-exam3" placeholder="例如 114-2-exam3">
+        <div class="settings-grid">
+
+          <div class="field">
+            <label>七年級學年度</label>
+            <input
+              id="baseYear"
+              type="number"
+              value="114"
+            >
+          </div>
+
+          <div class="field">
+            <label>七年級年級數字</label>
+            <input
+              id="baseGrade"
+              type="number"
+              value="7"
+              min="1"
+              max="9"
+            >
+          </div>
+
+          <div class="field">
+            <label>班級尾碼</label>
+            <input
+              id="classSuffix"
+              value="04"
+              maxlength="2"
+            >
+          </div>
+
         </div>
 
-        <div class="field">
-          <label for="examName">考試名稱</label>
+        <div class="help">
+
+          這三項是用來自動判斷歷年班級。<br><br>
+
+          目前設定：
+          <strong>114學年度 = 704</strong>。<br>
+
+          因此系統會自動判斷：
+          <strong>115學年度 = 804</strong>、
+          <strong>116學年度 = 904</strong>。<br><br>
+
+          所以你以後只需要繼續增加新的段考工作表，
+          不必每次手動修改班級。
+
+        </div>
+
+      </div>
+
+
+      <div class="card">
+
+        <div class="section-title">
+          ② 選擇歷年段考 Excel
+        </div>
+
+        <div class="file-box">
+
           <input
-            id="examName"
-            value="114學年度下學期第三次段考"
+            id="excelFile"
+            type="file"
+            accept=".xlsx,.xls"
           >
+
+          <div style="margin-top:12px;color:#64748b">
+            直接選擇「歷年段考成績.xlsx」
+          </div>
+
         </div>
 
-      </div>
-    </div>
+        <div class="actions">
 
-    <div class="card">
+          <button
+            id="parseBtn"
+            class="btn btn-blue"
+          >
+            解析 Excel
+          </button>
 
-      <div class="section-title">② 貼上 Excel 資料</div>
+          <button
+            id="importBtn"
+            class="btn"
+            disabled
+          >
+            同步到 Firebase
+          </button>
 
-      <div class="format-box">
-        欄位順序：<br>
-        座號　姓名　出生月日　身分證後五碼　國文　英文　數學　自然　社會
-      </div>
+        </div>
 
-      <textarea
-        id="excelData"
-        placeholder="例如：
-1	王小明	0815	12345	86	92	95	88	90
-2	李小美	1207	67890	91	84	88	93	87"
-      ></textarea>
+        <div
+          id="excelMessage"
+          class="message"
+        ></div>
 
-      <div class="actions">
-        <button id="previewBtn" class="btn">解析並預覽</button>
-        <button id="clearBtn" class="btn btn-secondary">清除</button>
-      </div>
+        <div
+          id="sheetList"
+          class="sheet-list"
+        ></div>
 
-      <div id="parseMessage" class="message"></div>
-    </div>
-
-    <div id="previewArea" class="card preview-area">
-
-      <div class="section-title">③ 匯入前預覽</div>
-
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>學生代號</th>
-              <th>座號</th>
-              <th>姓名</th>
-              <th>出生月日</th>
-              <th>後五碼</th>
-              <th>國文</th>
-              <th>英文</th>
-              <th>數學</th>
-              <th>自然</th>
-              <th>社會</th>
-              <th>狀態</th>
-            </tr>
-          </thead>
-          <tbody id="previewBody"></tbody>
-        </table>
       </div>
 
-      <div class="actions">
-        <button id="importBtn" class="btn">確認匯入 Firebase</button>
+    </section>
+
+
+    <!-- =========================
+         段考總表
+    ========================== -->
+
+    <section id="examPage" class="tab-page">
+
+      <div class="card">
+
+        <div class="section-title">
+          段考總表
+        </div>
+
+        <div class="exam-controls">
+
+          <div class="field">
+            <label>選擇段考</label>
+            <select id="examSelect"></select>
+          </div>
+
+          <div class="field">
+            <label>操作</label>
+            <button
+              id="loadExamBtn"
+              class="btn btn-blue btn-full"
+            >
+              載入總表
+            </button>
+          </div>
+
+        </div>
+
+        <div id="examSummary" class="summary"></div>
+
+        <div class="table-wrap">
+
+          <table>
+
+            <thead>
+              <tr>
+                <th data-sort="seat">座號</th>
+                <th data-sort="name">姓名</th>
+                <th data-sort="chinese">國文</th>
+                <th data-sort="english">英文</th>
+                <th data-sort="math">數學</th>
+                <th data-sort="science">自然</th>
+                <th data-sort="social">社會</th>
+                <th data-sort="total">總分</th>
+                <th data-sort="average">平均</th>
+                <th data-sort="rank">班排</th>
+              </tr>
+            </thead>
+
+            <tbody id="examTableBody"></tbody>
+
+          </table>
+
+        </div>
+
+        <div
+          id="examMessage"
+          class="message"
+        ></div>
+
       </div>
 
-      <div id="importMessage" class="message"></div>
-    </div>
+    </section>
 
   </div>
+
 </div>
+
 
 <script type="module">
 
 import {
   initializeApp
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+} from
+"https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+
 
 import {
   getAuth,
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+} from
+"https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+
 
 import {
   getFirestore,
+  collection,
   doc,
+  getDocs,
   writeBatch,
   serverTimestamp
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+} from
+"https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 
 const firebaseConfig = {
-  apiKey: "AIzaSyC7hXtxLARv3LsoPcaViptdoWMZMLibtiY",
-  authDomain: "exam-score-system.firebaseapp.com",
-  projectId: "exam-score-system",
-  storageBucket: "exam-score-system.firebasestorage.app",
-  messagingSenderId: "334811583790",
-  appId: "1:334811583790:web:a6207215915c163c8656bf"
+
+  apiKey:
+    "AIzaSyC7hXtxLARv3LsoPcaViptdoWMZMLibtiY",
+
+  authDomain:
+    "exam-score-system.firebaseapp.com",
+
+  projectId:
+    "exam-score-system",
+
+  storageBucket:
+    "exam-score-system.firebasestorage.app",
+
+  messagingSenderId:
+    "334811583790",
+
+  appId:
+    "1:334811583790:web:a6207215915c163c8656bf"
+
 };
 
-const ADMIN_UID = "2e5K4CSfV7h7qryYfrNDw6r0zY13";
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
-
-const loginArea = document.getElementById("loginArea");
-const adminArea = document.getElementById("adminArea");
-
-const emailInput = document.getElementById("email");
-const passwordInput = document.getElementById("password");
-
-const loginBtn = document.getElementById("loginBtn");
-const logoutBtn = document.getElementById("logoutBtn");
-const loginMessage = document.getElementById("loginMessage");
-
-const teacherEmail = document.getElementById("teacherEmail");
-
-const classCodeInput = document.getElementById("classCode");
-const examCodeInput = document.getElementById("examCode");
-const examNameInput = document.getElementById("examName");
-
-const excelData = document.getElementById("excelData");
-const previewBtn = document.getElementById("previewBtn");
-const clearBtn = document.getElementById("clearBtn");
-const previewArea = document.getElementById("previewArea");
-const previewBody = document.getElementById("previewBody");
-
-const parseMessage = document.getElementById("parseMessage");
-const importMessage = document.getElementById("importMessage");
-const importBtn = document.getElementById("importBtn");
-
-let parsedStudents = [];
+const ADMIN_UID =
+  "2e5K4CSfV7h7qryYfrNDw6r0zY13";
 
 
-function showMessage(element, text, type) {
+const app =
+  initializeApp(firebaseConfig);
+
+const auth =
+  getAuth(app);
+
+const db =
+  getFirestore(app);
+
+
+const $ =
+  id => document.getElementById(id);
+
+
+let parsedExams = [];
+let currentExamRows = [];
+let currentSort = {
+  key: "seat",
+  asc: true
+};
+
+
+/* =========================
+   訊息
+========================= */
+
+function showMessage(
+  element,
+  text,
+  type = "info"
+) {
+
   element.textContent = text;
-  element.className = "message " + type;
+  element.className =
+    "message " + type;
+
 }
+
 
 function clearMessage(element) {
+
   element.textContent = "";
   element.className = "message";
+
 }
 
 
-loginBtn.addEventListener("click", async () => {
+/* =========================
+   登入
+========================= */
 
-  clearMessage(loginMessage);
+$("loginBtn").addEventListener(
+  "click",
+  async () => {
 
-  const email = emailInput.value.trim();
-  const password = passwordInput.value;
-
-  if (!email || !password) {
-    showMessage(loginMessage, "請輸入帳號與密碼。", "error");
-    return;
-  }
-
-  try {
-
-    const result = await signInWithEmailAndPassword(
-      auth,
-      email,
-      password
+    clearMessage(
+      $("loginMessage")
     );
 
-    if (result.user.uid !== ADMIN_UID) {
-      await signOut(auth);
-      showMessage(loginMessage, "此帳號沒有管理權限。", "error");
+    const email =
+      $("email").value.trim();
+
+    const password =
+      $("password").value;
+
+    if (!email || !password) {
+
+      showMessage(
+        $("loginMessage"),
+        "請輸入教師帳號與密碼。",
+        "error"
+      );
+
+      return;
     }
 
-  } catch (error) {
+    try {
 
-    console.error(error);
+      const credential =
+        await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
 
-    showMessage(
-      loginMessage,
-      "登入失敗，請確認帳號密碼。",
-      "error"
+      if (
+        credential.user.uid !==
+        ADMIN_UID
+      ) {
+
+        await signOut(auth);
+
+        showMessage(
+          $("loginMessage"),
+          "此帳號沒有成績管理權限。",
+          "error"
+        );
+
+      }
+
+    } catch (error) {
+
+      console.error(error);
+
+      showMessage(
+        $("loginMessage"),
+        "登入失敗，請確認帳號與密碼。",
+        "error"
+      );
+
+    }
+
+  }
+);
+
+
+$("password").addEventListener(
+  "keydown",
+  event => {
+
+    if (event.key === "Enter") {
+      $("loginBtn").click();
+    }
+
+  }
+);
+
+
+$("logoutBtn").addEventListener(
+  "click",
+  () => signOut(auth)
+);
+
+
+onAuthStateChanged(
+  auth,
+  user => {
+
+    if (
+      user &&
+      user.uid === ADMIN_UID
+    ) {
+
+      $("loginArea").style.display =
+        "none";
+
+      $("adminArea").classList.add(
+        "show"
+      );
+
+      $("teacherEmail").textContent =
+        user.email || "教師";
+
+      loadExamList();
+
+    } else {
+
+      $("loginArea").style.display =
+        "block";
+
+      $("adminArea").classList.remove(
+        "show"
+      );
+
+    }
+
+  }
+);
+
+
+/* =========================
+   頁籤
+========================= */
+
+document.querySelectorAll(
+  ".tab"
+).forEach(button => {
+
+  button.addEventListener(
+    "click",
+    () => {
+
+      document.querySelectorAll(
+        ".tab"
+      ).forEach(
+        item =>
+          item.classList.remove(
+            "active"
+          )
+      );
+
+      document.querySelectorAll(
+        ".tab-page"
+      ).forEach(
+        item =>
+          item.classList.remove(
+            "active"
+          )
+      );
+
+      button.classList.add(
+        "active"
+      );
+
+      $(
+        button.dataset.page
+      ).classList.add(
+        "active"
+      );
+
+      if (
+        button.dataset.page ===
+        "examPage"
+      ) {
+        loadExamList();
+      }
+
+    }
+  );
+
+});
+
+
+/* =========================
+   SHA-256 studentKey
+========================= */
+
+async function createStudentKey(
+  birthMMDD,
+  idLast5
+) {
+
+  const raw =
+    `exam-score-v1|${birthMMDD}|${idLast5}`;
+
+  const data =
+    new TextEncoder()
+      .encode(raw);
+
+  const hash =
+    await crypto.subtle.digest(
+      "SHA-256",
+      data
     );
+
+  return Array.from(
+    new Uint8Array(hash)
+  )
+    .map(
+      byte =>
+        byte
+          .toString(16)
+          .padStart(2, "0")
+    )
+    .join("");
+
+}
+
+
+/* =========================
+   格式化
+========================= */
+
+function padMMDD(value) {
+
+  if (
+    value === null ||
+    value === undefined ||
+    value === ""
+  ) {
+    return "";
   }
-});
+
+  const text =
+    String(value)
+      .replace(/\D/g, "");
+
+  return text.padStart(
+    4,
+    "0"
+  ).slice(-4);
+
+}
 
 
-logoutBtn.addEventListener("click", async () => {
-  await signOut(auth);
-});
+function padLast5(value) {
 
-
-onAuthStateChanged(auth, user => {
-
-  if (user && user.uid === ADMIN_UID) {
-
-    loginArea.style.display = "none";
-    adminArea.classList.add("show");
-    teacherEmail.textContent = user.email || "教師";
-
-  } else {
-
-    loginArea.style.display = "block";
-    adminArea.classList.remove("show");
+  if (
+    value === null ||
+    value === undefined ||
+    value === ""
+  ) {
+    return "";
   }
 
-});
+  const text =
+    String(value)
+      .replace(/\D/g, "");
+
+  return text.padStart(
+    5,
+    "0"
+  ).slice(-5);
+
+}
+
+
+function numberValue(value) {
+
+  if (
+    value === null ||
+    value === undefined ||
+    value === ""
+  ) {
+    return null;
+  }
+
+  const number =
+    Number(value);
+
+  return Number.isFinite(number)
+    ? number
+    : null;
+
+}
 
 
 function isValidMMDD(value) {
 
-  if (!/^\d{4}$/.test(value)) return false;
+  if (!/^\d{4}$/.test(value)) {
+    return false;
+  }
 
-  const month = Number(value.slice(0, 2));
-  const day = Number(value.slice(2, 4));
+  const month =
+    Number(value.slice(0,2));
+
+  const day =
+    Number(value.slice(2,4));
 
   const days = [
     31,29,31,30,31,30,
     31,31,30,31,30,31
   ];
 
-  if (month < 1 || month > 12) return false;
-
-  return day >= 1 && day <= days[month - 1];
-}
-
-
-function isValidScore(value) {
-
-  const n = Number(value);
-
   return (
-    value !== "" &&
-    Number.isFinite(n) &&
-    n >= 0 &&
-    n <= 100
+    month >= 1 &&
+    month <= 12 &&
+    day >= 1 &&
+    day <= days[month - 1]
   );
+
 }
 
 
-function formatSeat(value) {
-  return String(Number(value)).padStart(2, "0");
-}
+function formatScore(value) {
 
-
-function escapeHtml(value) {
-
-  return String(value ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-}
-
-
-previewBtn.addEventListener("click", () => {
-
-  clearMessage(parseMessage);
-  clearMessage(importMessage);
-
-  const classCode = classCodeInput.value.trim();
-  const examCode = examCodeInput.value.trim();
-  const examName = examNameInput.value.trim();
-
-  if (!classCode) {
-    showMessage(parseMessage, "請輸入班級。", "error");
-    return;
+  if (
+    value === null ||
+    value === undefined
+  ) {
+    return "";
   }
 
-  if (!examCode) {
-    showMessage(parseMessage, "請輸入考試代碼。", "error");
-    return;
+  if (
+    Number.isInteger(
+      Number(value)
+    )
+  ) {
+    return String(value);
   }
 
-  if (!/^[A-Za-z0-9_-]+$/.test(examCode)) {
-    showMessage(
-      parseMessage,
-      "考試代碼只能使用英文、數字、- 或 _。",
-      "error"
+  return Number(value)
+    .toFixed(2)
+    .replace(/\.?0+$/, "");
+
+}
+
+
+/* =========================
+   工作表名稱 →
+   考試資訊
+========================= */
+
+function chineseNumberToInt(value) {
+
+  const map = {
+    "一": 1,
+    "二": 2,
+    "三": 3
+  };
+
+  return map[value] ||
+    Number(value) ||
+    null;
+
+}
+
+
+function parseSheetName(
+  sheetName
+) {
+
+  const match =
+    sheetName.match(
+      /^(\d{3})(上|下)第([一二三123])次段考$/
     );
-    return;
+
+  if (!match) {
+    return null;
   }
 
-  if (!examName) {
-    showMessage(parseMessage, "請輸入考試名稱。", "error");
-    return;
+  const schoolYear =
+    Number(match[1]);
+
+  const semester =
+    match[2] === "上"
+      ? 1
+      : 2;
+
+  const examNo =
+    chineseNumberToInt(
+      match[3]
+    );
+
+  if (!examNo) {
+    return null;
   }
 
-  const raw = excelData.value.trim();
+  const examCode =
+    `${schoolYear}-${semester}-exam${examNo}`;
 
-  if (!raw) {
-    showMessage(parseMessage, "請先貼上 Excel 資料。", "error");
-    return;
-  }
+  const examName =
+    `${schoolYear}學年度${semester === 1 ? "上" : "下"}學期第${["","一","二","三"][examNo]}次段考`;
 
-  const rows = raw
-    .split(/\r?\n/)
-    .map(v => v.trim())
-    .filter(Boolean);
+  return {
+    schoolYear,
+    semester,
+    examNo,
+    examCode,
+    examName
+  };
 
-  const parsed = [];
+}
 
-  rows.forEach((line, index) => {
 
-    let cols = line.split("\t");
+/* =========================
+   自動判斷班級
+========================= */
 
-    if (cols.length < 9) {
-      cols = line.split(",");
+function getClassCode(
+  schoolYear
+) {
+
+  const baseYear =
+    Number(
+      $("baseYear").value
+    );
+
+  const baseGrade =
+    Number(
+      $("baseGrade").value
+    );
+
+  const suffix =
+    $("classSuffix").value
+      .trim()
+      .padStart(2,"0");
+
+  const grade =
+    baseGrade +
+    (
+      schoolYear -
+      baseYear
+    );
+
+  return `${grade}${suffix}`;
+
+}
+
+
+/* =========================
+   Excel 解析
+========================= */
+
+$("parseBtn").addEventListener(
+  "click",
+  async () => {
+
+    clearMessage(
+      $("excelMessage")
+    );
+
+    $("sheetList").innerHTML = "";
+    $("importBtn").disabled = true;
+
+    const file =
+      $("excelFile").files[0];
+
+    if (!file) {
+
+      showMessage(
+        $("excelMessage"),
+        "請先選擇 Excel 檔案。",
+        "error"
+      );
+
+      return;
     }
 
-    cols = cols.map(v => v.trim());
+    try {
+
+      const buffer =
+        await file.arrayBuffer();
+
+      const workbook =
+        XLSX.read(
+          buffer,
+          {
+            type: "array",
+            cellDates: false
+          }
+        );
+
+      const exams = [];
+
+      for (
+        const sheetName
+        of workbook.SheetNames
+      ) {
+
+        const examInfo =
+          parseSheetName(sheetName);
+
+        if (!examInfo) {
+
+          exams.push({
+            sheetName,
+            valid: false,
+            errors: [
+              "工作表名稱無法辨識"
+            ]
+          });
+
+          continue;
+        }
+
+        const worksheet =
+          workbook.Sheets[
+            sheetName
+          ];
+
+        const rows =
+          XLSX.utils.sheet_to_json(
+            worksheet,
+            {
+              header: 1,
+              raw: true,
+              defval: null
+            }
+          );
+
+        if (rows.length < 2) {
+
+          exams.push({
+            sheetName,
+            valid: false,
+            errors: [
+              "工作表沒有資料"
+            ]
+          });
+
+          continue;
+        }
+
+        const classCode =
+          getClassCode(
+            examInfo.schoolYear
+          );
+
+        const studentRows = [];
+
+        let averageRow = null;
+
+        for (
+          let rowIndex = 1;
+          rowIndex < rows.length;
+          rowIndex++
+        ) {
+
+          const row =
+            rows[rowIndex];
+
+          if (!row) {
+            continue;
+          }
+
+          const firstCell =
+            String(
+              row[0] ?? ""
+            ).trim();
+
+          if (
+            firstCell ===
+            "各科平均"
+          ) {
+
+            averageRow = row;
+            continue;
+
+          }
+
+          if (!firstCell) {
+            continue;
+          }
+
+          const seat =
+            Number(row[0]);
+
+          if (
+            !Number.isInteger(seat) ||
+            seat <= 0
+          ) {
+            continue;
+          }
+
+          const birthMMDD =
+            padMMDD(row[2]);
+
+          const idLast5 =
+            padLast5(row[3]);
+
+          const studentKey =
+            await createStudentKey(
+              birthMMDD,
+              idLast5
+            );
+
+          const errors = [];
+
+          if (!row[1]) {
+            errors.push("姓名空白");
+          }
+
+          if (
+            !isValidMMDD(
+              birthMMDD
+            )
+          ) {
+            errors.push(
+              "出生月日格式錯誤"
+            );
+          }
+
+          if (
+            !/^\d{5}$/.test(
+              idLast5
+            )
+          ) {
+            errors.push(
+              "末五碼格式錯誤"
+            );
+          }
+
+          const scores = [
+            row[4],
+            row[5],
+            row[6],
+            row[7],
+            row[8]
+          ].map(numberValue);
+
+          if (
+            scores.some(
+              value =>
+                value === null
+            )
+          ) {
+            errors.push(
+              "五科成績不完整"
+            );
+          }
+
+          studentRows.push({
+
+            studentKey,
+
+            classCode,
+
+            seat:
+              String(seat)
+                .padStart(2,"0"),
+
+            name:
+              String(row[1] ?? "")
+                .trim(),
+
+            birthMMDD,
+
+            idLast5,
+
+            chinese:
+              numberValue(row[4]),
+
+            english:
+              numberValue(row[5]),
+
+            math:
+              numberValue(row[6]),
+
+            science:
+              numberValue(row[7]),
+
+            social:
+              numberValue(row[8]),
+
+            total:
+              numberValue(row[9]),
+
+            average:
+              numberValue(row[10]),
+
+            rank:
+              numberValue(row[11]),
+
+            errors
+
+          });
+
+        }
+
+        const errors = [];
+
+        if (
+          studentRows.length === 0
+        ) {
+          errors.push(
+            "沒有找到學生資料"
+          );
+        }
+
+        if (!averageRow) {
+          errors.push(
+            "找不到各科平均列"
+          );
+        }
+
+        const exam = {
+
+          ...examInfo,
+
+          sheetName,
+
+          classCode,
+
+          students:
+            studentRows,
+
+          stats:
+            averageRow
+              ? {
+                  chineseAvg:
+                    numberValue(
+                      averageRow[4]
+                    ),
+
+                  englishAvg:
+                    numberValue(
+                      averageRow[5]
+                    ),
+
+                  mathAvg:
+                    numberValue(
+                      averageRow[6]
+                    ),
+
+                  scienceAvg:
+                    numberValue(
+                      averageRow[7]
+                    ),
+
+                  socialAvg:
+                    numberValue(
+                      averageRow[8]
+                    ),
+
+                  totalAvg:
+                    numberValue(
+                      averageRow[9]
+                    ),
+
+                  averageAvg:
+                    numberValue(
+                      averageRow[10]
+                    )
+                }
+              : null,
+
+          errors,
+
+          valid:
+            errors.length === 0
+            &&
+            studentRows.every(
+              student =>
+                student.errors.length === 0
+            )
+
+        };
+
+        exams.push(exam);
+
+      }
+
+      parsedExams = exams;
+
+      renderParsedSheets();
+
+      const validExams =
+        parsedExams.filter(
+          exam => exam.valid
+        );
+
+      const invalidExams =
+        parsedExams.length -
+        validExams.length;
+
+      if (
+        validExams.length === 0
+      ) {
+
+        showMessage(
+          $("excelMessage"),
+          "沒有可匯入的段考資料。",
+          "error"
+        );
+
+        return;
+      }
+
+      if (invalidExams > 0) {
+
+        showMessage(
+          $("excelMessage"),
+          `解析完成，但有 ${invalidExams} 個工作表需要檢查。`,
+          "error"
+        );
+
+        $("importBtn").disabled =
+          true;
+
+      } else {
+
+        showMessage(
+          $("excelMessage"),
+          `成功解析 ${validExams.length} 次段考，可以同步到 Firebase。`,
+          "success"
+        );
+
+        $("importBtn").disabled =
+          false;
+
+      }
+
+    } catch (error) {
+
+      console.error(error);
+
+      showMessage(
+        $("excelMessage"),
+        "Excel 解析失敗，請確認檔案格式。",
+        "error"
+      );
+
+    }
+
+  }
+);
+
+
+/* =========================
+   顯示解析結果
+========================= */
+
+function renderParsedSheets() {
+
+  const container =
+    $("sheetList");
+
+  container.innerHTML = "";
+
+  parsedExams.forEach(
+    exam => {
+
+      const div =
+        document.createElement(
+          "div"
+        );
+
+      div.className =
+        "sheet-card";
+
+      if (!exam.valid) {
+
+        const allErrors = [
+          ...(exam.errors || [])
+        ];
+
+        if (exam.students) {
+
+          exam.students.forEach(
+            student => {
+
+              if (
+                student.errors &&
+                student.errors.length
+              ) {
+
+                allErrors.push(
+                  `${student.seat || "?"}號 ${student.name || ""}：${student.errors.join("、")}`
+                );
+
+              }
+
+            }
+          );
+
+        }
+
+        div.innerHTML = `
+          <div class="sheet-title">
+            ${escapeHtml(exam.sheetName)}
+          </div>
+
+          <div class="sheet-info">
+            <span class="sheet-error">
+              ✕ 無法匯入
+            </span>
+            <br>
+            ${escapeHtml(allErrors.join("；"))}
+          </div>
+        `;
+
+      } else {
+
+        div.innerHTML = `
+          <div class="sheet-title">
+            ${escapeHtml(exam.examName)}
+          </div>
+
+          <div class="sheet-info">
+
+            <span class="sheet-ok">
+              ✓ 資料正常
+            </span>
+
+            <br>
+
+            工作表：
+            ${escapeHtml(exam.sheetName)}
+
+            <br>
+
+            班級：
+            ${escapeHtml(exam.classCode)}
+
+            <br>
+
+            有效學生：
+            ${exam.students.length} 人
+
+            <br>
+
+            班平均：
+            ${formatScore(exam.stats.averageAvg)}
+
+          </div>
+        `;
+
+      }
+
+      container.appendChild(div);
+
+    }
+  );
+
+}
+
+
+/* =========================
+   匯入 Firebase
+========================= */
+
+$("importBtn").addEventListener(
+  "click",
+  async () => {
+
+    clearMessage(
+      $("excelMessage")
+    );
+
+    const user =
+      auth.currentUser;
 
     if (
-      index === 0 &&
-      (
-        (cols[0] || "").includes("座號") ||
-        (cols[0] || "").toLowerCase() === "seat"
+      !user ||
+      user.uid !== ADMIN_UID
+    ) {
+
+      showMessage(
+        $("excelMessage"),
+        "教師登入狀態已失效。",
+        "error"
+      );
+
+      return;
+    }
+
+    const exams =
+      parsedExams.filter(
+        exam => exam.valid
+      );
+
+    if (!exams.length) {
+
+      showMessage(
+        $("excelMessage"),
+        "沒有可以同步的資料。",
+        "error"
+      );
+
+      return;
+    }
+
+    const totalResults =
+      exams.reduce(
+        (sum, exam) =>
+          sum +
+          exam.students.length,
+        0
+      );
+
+    if (
+      !confirm(
+        `即將同步 ${exams.length} 次段考，共 ${totalResults} 筆學生成績。\n\n已存在的相同考次會更新。\n\n確定繼續嗎？`
       )
     ) {
       return;
     }
 
-    const [
-      seatRaw,
-      name,
-      birthMMDD,
-      idLast5,
-      chinese,
-      english,
-      math,
-      science,
-      social
-    ] = cols;
+    $("importBtn").disabled =
+      true;
 
-    const errors = [];
+    showMessage(
+      $("excelMessage"),
+      "正在同步 Firebase，請稍候……",
+      "info"
+    );
 
-    const seatNum = Number(seatRaw);
+    try {
 
-    if (!Number.isInteger(seatNum) || seatNum <= 0 || seatNum > 99) {
-      errors.push("座號錯誤");
-    }
+      /*
+        studentMap：
+        同一位學生六次只寫一次 students 文件。
 
-    if (!name) {
-      errors.push("姓名空白");
-    }
+        取最新學年度的資料當 currentClass/currentSeat。
+      */
 
-    if (!isValidMMDD(birthMMDD || "")) {
-      errors.push("生日錯誤");
-    }
+      const studentMap =
+        new Map();
 
-    if (!/^\d{5}$/.test(idLast5 || "")) {
-      errors.push("後五碼錯誤");
-    }
+      exams.forEach(
+        exam => {
 
-    const subjects = {
-      chinese,
-      english,
-      math,
-      science,
-      social
-    };
+          exam.students.forEach(
+            student => {
 
-    for (const [key, value] of Object.entries(subjects)) {
+              const existing =
+                studentMap.get(
+                  student.studentKey
+                );
 
-      if (!isValidScore(value)) {
+              if (
+                !existing ||
+                exam.schoolYear >
+                existing.schoolYear ||
+                (
+                  exam.schoolYear ===
+                    existing.schoolYear
+                  &&
+                  exam.semester >
+                    existing.semester
+                ) ||
+                (
+                  exam.schoolYear ===
+                    existing.schoolYear
+                  &&
+                  exam.semester ===
+                    existing.semester
+                  &&
+                  exam.examNo >
+                    existing.examNo
+                )
+              ) {
 
-        const names = {
-          chinese: "國文",
-          english: "英文",
-          math: "數學",
-          science: "自然",
-          social: "社會"
-        };
+                studentMap.set(
+                  student.studentKey,
+                  {
+                    student,
+                    schoolYear:
+                      exam.schoolYear,
+                    semester:
+                      exam.semester,
+                    examNo:
+                      exam.examNo
+                  }
+                );
 
-        errors.push(names[key] + "成績錯誤");
-      }
-    }
+              }
 
-    const seat = Number.isInteger(seatNum)
-      ? formatSeat(seatNum)
-      : String(seatRaw || "");
+            }
+          );
 
-    parsed.push({
-      studentKey: classCode + seat,
-      classCode,
-      seat,
-      name,
-      birthMMDD,
-      idLast5,
-      chinese: Number(chinese),
-      english: Number(english),
-      math: Number(math),
-      science: Number(science),
-      social: Number(social),
-      examCode,
-      examName,
-      valid: errors.length === 0,
-      errors
-    });
-
-  });
-
-  parsedStudents = parsed;
-
-  previewBody.innerHTML = "";
-
-  parsedStudents.forEach(row => {
-
-    const tr = document.createElement("tr");
-
-    if (!row.valid) {
-      tr.classList.add("invalid-row");
-    }
-
-    tr.innerHTML = `
-      <td>${escapeHtml(row.studentKey)}</td>
-      <td>${escapeHtml(row.seat)}</td>
-      <td>${escapeHtml(row.name)}</td>
-      <td>${escapeHtml(row.birthMMDD)}</td>
-      <td>${escapeHtml(row.idLast5)}</td>
-      <td>${row.chinese}</td>
-      <td>${row.english}</td>
-      <td>${row.math}</td>
-      <td>${row.science}</td>
-      <td>${row.social}</td>
-      <td>
-        ${
-          row.valid
-          ? '<span class="valid-text">正常</span>'
-          : `<span class="invalid-text">${escapeHtml(row.errors.join("、"))}</span>`
         }
-      </td>
-    `;
+      );
 
-    previewBody.appendChild(tr);
-  });
 
-  previewArea.classList.add("show");
+      const operations = [];
 
-  const invalid = parsedStudents.filter(v => !v.valid).length;
 
-  if (invalid > 0) {
+      /*
+        學生基本資料
+      */
 
-    importBtn.disabled = true;
+      studentMap.forEach(
+        item => {
 
-    showMessage(
-      parseMessage,
-      `共有 ${invalid} 筆資料錯誤，請先修正。`,
-      "error"
-    );
+          const student =
+            item.student;
 
-  } else {
+          operations.push({
+            ref:
+              doc(
+                db,
+                "students",
+                student.studentKey
+              ),
 
-    importBtn.disabled = false;
+            data: {
+              name:
+                student.name,
 
-    showMessage(
-      parseMessage,
-      `資料檢查完成，共 ${parsedStudents.length} 位學生。`,
-      "success"
-    );
+              currentClass:
+                student.classCode,
+
+              currentSeat:
+                student.seat,
+
+              latestSchoolYear:
+                item.schoolYear,
+
+              updatedAt:
+                serverTimestamp()
+            }
+          });
+
+        }
+      );
+
+
+      /*
+        各次段考
+      */
+
+      exams.forEach(
+        exam => {
+
+          /*
+            班級統計
+          */
+
+          operations.push({
+
+            ref:
+              doc(
+                db,
+                "examStats",
+                exam.examCode
+              ),
+
+            data: {
+
+              examCode:
+                exam.examCode,
+
+              examName:
+                exam.examName,
+
+              sheetName:
+                exam.sheetName,
+
+              schoolYear:
+                exam.schoolYear,
+
+              semester:
+                exam.semester,
+
+              examNo:
+                exam.examNo,
+
+              classCode:
+                exam.classCode,
+
+              studentCount:
+                exam.students.length,
+
+              ...exam.stats,
+
+              updatedAt:
+                serverTimestamp()
+
+            }
+
+          });
+
+
+          /*
+            學生成績
+          */
+
+          exam.students.forEach(
+            student => {
+
+              operations.push({
+
+                ref:
+                  doc(
+                    db,
+                    "examResults",
+                    exam.examCode,
+                    "students",
+                    student.studentKey
+                  ),
+
+                data: {
+
+                  studentKey:
+                    student.studentKey,
+
+                  examCode:
+                    exam.examCode,
+
+                  examName:
+                    exam.examName,
+
+                  schoolYear:
+                    exam.schoolYear,
+
+                  semester:
+                    exam.semester,
+
+                  examNo:
+                    exam.examNo,
+
+                  classCode:
+                    exam.classCode,
+
+                  seat:
+                    student.seat,
+
+                  name:
+                    student.name,
+
+                  chinese:
+                    student.chinese,
+
+                  english:
+                    student.english,
+
+                  math:
+                    student.math,
+
+                  science:
+                    student.science,
+
+                  social:
+                    student.social,
+
+                  total:
+                    student.total,
+
+                  average:
+                    student.average,
+
+                  rank:
+                    student.rank,
+
+                  updatedAt:
+                    serverTimestamp()
+
+                }
+
+              });
+
+            }
+          );
+
+        }
+      );
+
+
+      /*
+        Firestore batch 上限 500，
+        我們分批 400 筆。
+      */
+
+      const chunkSize = 400;
+
+      for (
+        let index = 0;
+        index < operations.length;
+        index += chunkSize
+      ) {
+
+        const chunk =
+          operations.slice(
+            index,
+            index + chunkSize
+          );
+
+        const batch =
+          writeBatch(db);
+
+        chunk.forEach(
+          operation => {
+
+            batch.set(
+              operation.ref,
+              operation.data,
+              {
+                merge: true
+              }
+            );
+
+          }
+        );
+
+        await batch.commit();
+
+      }
+
+
+      showMessage(
+        $("excelMessage"),
+        `同步完成！共完成 ${exams.length} 次段考、${totalResults} 筆學生成績。`,
+        "success"
+      );
+
+      await loadExamList();
+
+    } catch (error) {
+
+      console.error(
+        "Firebase 匯入錯誤：",
+        error
+      );
+
+      showMessage(
+        $("excelMessage"),
+        `Firebase 同步失敗：${error.code || ""} ${error.message || ""}`,
+        "error"
+      );
+
+    } finally {
+
+      $("importBtn").disabled =
+        false;
+
+    }
+
   }
-
-});
-
-
-clearBtn.addEventListener("click", () => {
-
-  excelData.value = "";
-  parsedStudents = [];
-  previewBody.innerHTML = "";
-  previewArea.classList.remove("show");
-
-  clearMessage(parseMessage);
-  clearMessage(importMessage);
-});
+);
 
 
-importBtn.addEventListener("click", async () => {
+/* =========================
+   讀取考試清單
+========================= */
 
-  clearMessage(importMessage);
+async function loadExamList() {
 
-  const user = auth.currentUser;
+  const select =
+    $("examSelect");
 
-  if (!user || user.uid !== ADMIN_UID) {
-
-    showMessage(
-      importMessage,
-      "教師登入已失效，請重新登入。",
-      "error"
-    );
-
-    return;
-  }
-
-  const rows = parsedStudents.filter(v => v.valid);
-
-  if (!rows.length) {
-    showMessage(importMessage, "沒有可以匯入的資料。", "error");
-    return;
-  }
-
-  if (!confirm(
-    `確定匯入 ${rows.length} 位學生的「${rows[0].examName}」成績嗎？`
-  )) {
-    return;
-  }
-
-  importBtn.disabled = true;
+  select.innerHTML = "";
 
   try {
 
-    const batch = writeBatch(db);
-
-    rows.forEach(row => {
-
-      /*
-        基本資料：
-        students/80401
-      */
-
-      const studentRef = doc(
-        db,
-        "students",
-        row.studentKey
+    const snapshot =
+      await getDocs(
+        collection(
+          db,
+          "examStats"
+        )
       );
 
-      batch.set(
-        studentRef,
-        {
-          classCode: row.classCode,
-          seat: row.seat,
-          name: row.name,
-          birthMMDD: row.birthMMDD,
-          idLast5: row.idLast5,
-          updatedAt: serverTimestamp()
-        },
-        {
-          merge: true
+    const exams =
+      snapshot.docs.map(
+        snap => ({
+          id:
+            snap.id,
+          ...snap.data()
+        })
+      );
+
+    exams.sort(
+      (a,b) => {
+
+        if (
+          Number(a.schoolYear) !==
+          Number(b.schoolYear)
+        ) {
+          return (
+            Number(b.schoolYear) -
+            Number(a.schoolYear)
+          );
         }
-      );
 
-
-      /*
-        成績：
-        scores/80401/exams/114-2-exam3
-      */
-
-      const examRef = doc(
-        db,
-        "scores",
-        row.studentKey,
-        "exams",
-        row.examCode
-      );
-
-      batch.set(
-        examRef,
-        {
-          examCode: row.examCode,
-          examName: row.examName,
-          chinese: row.chinese,
-          english: row.english,
-          math: row.math,
-          science: row.science,
-          social: row.social,
-          updatedAt: serverTimestamp()
-        },
-        {
-          merge: true
+        if (
+          Number(a.semester) !==
+          Number(b.semester)
+        ) {
+          return (
+            Number(b.semester) -
+            Number(a.semester)
+          );
         }
-      );
 
-    });
+        return (
+          Number(b.examNo) -
+          Number(a.examNo)
+        );
 
-    await batch.commit();
+      }
+    );
+
+    exams.forEach(
+      exam => {
+
+        const option =
+          document.createElement(
+            "option"
+          );
+
+        option.value =
+          exam.id;
+
+        option.textContent =
+          exam.examName ||
+          exam.id;
+
+        select.appendChild(
+          option
+        );
+
+      }
+    );
+
+  } catch (error) {
+
+    console.error(error);
+
+  }
+
+}
+
+
+/* =========================
+   載入段考總表
+========================= */
+
+$("loadExamBtn").addEventListener(
+  "click",
+  loadExamTable
+);
+
+
+async function loadExamTable() {
+
+  clearMessage(
+    $("examMessage")
+  );
+
+  const examCode =
+    $("examSelect").value;
+
+  if (!examCode) {
 
     showMessage(
-      importMessage,
-      `成功匯入 ${rows.length} 位學生的「${rows[0].examName}」成績。`,
-      "success"
+      $("examMessage"),
+      "目前沒有段考資料。",
+      "error"
+    );
+
+    return;
+  }
+
+  try {
+
+    const resultSnapshot =
+      await getDocs(
+        collection(
+          db,
+          "examResults",
+          examCode,
+          "students"
+        )
+      );
+
+    currentExamRows =
+      resultSnapshot.docs.map(
+        snap => snap.data()
+      );
+
+    currentSort = {
+      key: "seat",
+      asc: true
+    };
+
+    renderExamTable();
+
+    const statsSnapshot =
+      await getDocs(
+        collection(
+          db,
+          "examStats"
+        )
+      );
+
+    const statsDoc =
+      statsSnapshot.docs.find(
+        snap =>
+          snap.id === examCode
+      );
+
+    const stats =
+      statsDoc
+        ? statsDoc.data()
+        : null;
+
+    renderSummary(
+      stats,
+      currentExamRows
     );
 
   } catch (error) {
@@ -918,17 +2264,228 @@ importBtn.addEventListener("click", async () => {
     console.error(error);
 
     showMessage(
-      importMessage,
-      "匯入失敗，請檢查 Firestore Rules。",
+      $("examMessage"),
+      "段考總表載入失敗。",
       "error"
     );
 
-  } finally {
-
-    importBtn.disabled = false;
   }
 
-});
+}
+
+
+/* =========================
+   段考表格
+========================= */
+
+function renderExamTable() {
+
+  const rows =
+    [...currentExamRows];
+
+  const key =
+    currentSort.key;
+
+  const asc =
+    currentSort.asc;
+
+  rows.sort(
+    (a,b) => {
+
+      let av = a[key];
+      let bv = b[key];
+
+      if (
+        typeof av === "number" ||
+        typeof bv === "number"
+      ) {
+
+        av =
+          Number(av ?? 0);
+
+        bv =
+          Number(bv ?? 0);
+
+        return asc
+          ? av - bv
+          : bv - av;
+
+      }
+
+      return asc
+        ? String(av ?? "")
+            .localeCompare(
+              String(bv ?? ""),
+              "zh-Hant",
+              {
+                numeric: true
+              }
+            )
+        : String(bv ?? "")
+            .localeCompare(
+              String(av ?? ""),
+              "zh-Hant",
+              {
+                numeric: true
+              }
+            );
+
+    }
+  );
+
+  const body =
+    $("examTableBody");
+
+  body.innerHTML = "";
+
+  rows.forEach(
+    row => {
+
+      const tr =
+        document.createElement(
+          "tr"
+        );
+
+      tr.innerHTML = `
+        <td>${escapeHtml(row.seat)}</td>
+        <td>${escapeHtml(row.name)}</td>
+        <td>${formatScore(row.chinese)}</td>
+        <td>${formatScore(row.english)}</td>
+        <td>${formatScore(row.math)}</td>
+        <td>${formatScore(row.science)}</td>
+        <td>${formatScore(row.social)}</td>
+        <td>${formatScore(row.total)}</td>
+        <td>${formatScore(row.average)}</td>
+        <td>${formatScore(row.rank)}</td>
+      `;
+
+      body.appendChild(tr);
+
+    }
+  );
+
+}
+
+
+/* 點表頭排序 */
+
+document.querySelectorAll(
+  "th[data-sort]"
+).forEach(
+  th => {
+
+    th.addEventListener(
+      "click",
+      () => {
+
+        const key =
+          th.dataset.sort;
+
+        if (
+          currentSort.key === key
+        ) {
+
+          currentSort.asc =
+            !currentSort.asc;
+
+        } else {
+
+          currentSort.key =
+            key;
+
+          currentSort.asc =
+            key === "seat" ||
+            key === "rank";
+
+        }
+
+        renderExamTable();
+
+      }
+    );
+
+  }
+);
+
+
+/* =========================
+   統計卡
+========================= */
+
+function renderSummary(
+  stats,
+  rows
+) {
+
+  const container =
+    $("examSummary");
+
+  if (!stats) {
+
+    container.innerHTML = "";
+    return;
+
+  }
+
+  container.innerHTML = `
+
+    <div class="summary-card">
+      <div class="summary-label">
+        班級
+      </div>
+      <div class="summary-value">
+        ${escapeHtml(stats.classCode || "")}
+      </div>
+    </div>
+
+    <div class="summary-card">
+      <div class="summary-label">
+        有效人數
+      </div>
+      <div class="summary-value">
+        ${rows.length}
+      </div>
+    </div>
+
+    <div class="summary-card">
+      <div class="summary-label">
+        全班總分平均
+      </div>
+      <div class="summary-value">
+        ${formatScore(stats.totalAvg)}
+      </div>
+    </div>
+
+    <div class="summary-card">
+      <div class="summary-label">
+        五科平均
+      </div>
+      <div class="summary-value">
+        ${formatScore(stats.averageAvg)}
+      </div>
+    </div>
+
+  `;
+
+}
+
+
+/* =========================
+   防止 HTML 注入
+========================= */
+
+function escapeHtml(value) {
+
+  return String(
+    value ?? ""
+  )
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
 
 </script>
 
