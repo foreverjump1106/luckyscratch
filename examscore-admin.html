@@ -11,7 +11,6 @@
     href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="20" fill="%230f766e"/><text x="50" y="68" text-anchor="middle" font-size="58" fill="white">績</text></svg>'
   >
 
-  <!-- Excel 讀取 -->
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
   <style>
@@ -26,20 +25,8 @@
     body {
       margin: 0;
       min-height: 100vh;
-
-      font-family:
-        "Microsoft JhengHei",
-        "Noto Sans TC",
-        sans-serif;
-
-      background:
-        linear-gradient(
-          135deg,
-          #ecfeff,
-          #f0fdfa,
-          #f8fafc
-        );
-
+      font-family: "Microsoft JhengHei", "Noto Sans TC", sans-serif;
+      background: linear-gradient(135deg, #ecfeff, #f0fdfa, #f8fafc);
       color: #0f172a;
     }
 
@@ -51,109 +38,69 @@
 
     .page {
       width: 100%;
-      max-width: 1250px;
-
+      max-width: 1350px;
       margin: 0 auto;
-
       padding: 28px 16px 60px;
     }
 
     .header {
       text-align: center;
-
       margin-bottom: 24px;
     }
 
     .logo {
       width: 76px;
       height: 76px;
-
       margin: 0 auto 12px;
-
       border-radius: 22px;
-
       display: flex;
       align-items: center;
       justify-content: center;
-
-      background:
-        linear-gradient(
-          135deg,
-          #0f766e,
-          #115e59
-        );
-
+      background: linear-gradient(135deg, #0f766e, #115e59);
       color: white;
-
       font-size: 40px;
       font-weight: 900;
     }
 
     h1 {
       margin: 0;
-
       font-size: 30px;
     }
 
     .subtitle {
       margin-top: 7px;
-
       color: #64748b;
     }
 
     .card {
-      background:
-        rgba(
-          255,
-          255,
-          255,
-          .97
-        );
-
-      border:
-        1px solid #e2e8f0;
-
+      background: rgba(255,255,255,.97);
+      border: 1px solid #e2e8f0;
       border-radius: 20px;
-
       padding: 24px;
-
       margin-bottom: 20px;
-
-      box-shadow:
-        0 14px 34px
-        rgba(
-          15,
-          23,
-          42,
-          .08
-        );
+      box-shadow: 0 14px 34px rgba(15,23,42,.08);
     }
 
     .login-card {
       width: 100%;
       max-width: 520px;
-
       margin: 0 auto;
     }
 
     .section-title {
       font-size: 21px;
       font-weight: 900;
-
       margin-bottom: 16px;
     }
 
     .field {
       min-width: 0;
-
       margin-bottom: 16px;
     }
 
     label {
       display: block;
-
       margin-bottom: 7px;
-
       font-size: 14px;
       font-weight: 800;
     }
@@ -161,53 +108,30 @@
     input,
     select {
       width: 100%;
-
       min-height: 48px;
-
-      border:
-        1px solid #cbd5e1;
-
+      border: 1px solid #cbd5e1;
       border-radius: 12px;
-
       padding: 0 13px;
-
       background: white;
-
       font-size: 16px;
-
       outline: none;
     }
 
     input:focus,
     select:focus {
       border-color: #0f766e;
-
-      box-shadow:
-        0 0 0 4px
-        rgba(
-          15,
-          118,
-          110,
-          .10
-        );
+      box-shadow: 0 0 0 4px rgba(15,118,110,.10);
     }
 
     .btn {
       min-height: 48px;
-
       border: 0;
-
       border-radius: 12px;
-
       padding: 0 18px;
-
       color: white;
-
       background: #0f766e;
-
       font-size: 16px;
       font-weight: 900;
-
       cursor: pointer;
     }
 
@@ -217,7 +141,6 @@
 
     .btn:disabled {
       opacity: .5;
-
       cursor: not-allowed;
     }
 
@@ -236,9 +159,7 @@
     .actions {
       display: flex;
       flex-wrap: wrap;
-
       gap: 10px;
-
       margin-top: 16px;
     }
 
@@ -248,38 +169,28 @@
 
     .message {
       display: none;
-
       margin-top: 14px;
-
       padding: 13px 15px;
-
       border-radius: 12px;
-
       font-size: 14px;
       line-height: 1.6;
     }
 
     .message.success {
       display: block;
-
       background: #dcfce7;
-
       color: #166534;
     }
 
     .message.error {
       display: block;
-
       background: #fee2e2;
-
       color: #991b1b;
     }
 
     .message.info {
       display: block;
-
       background: #dbeafe;
-
       color: #1e40af;
     }
 
@@ -293,57 +204,37 @@
 
     .topbar {
       display: flex;
-
       align-items: center;
       justify-content: space-between;
-
       gap: 15px;
-
       background: white;
-
       padding: 15px 18px;
-
-      border:
-        1px solid #e2e8f0;
-
+      border: 1px solid #e2e8f0;
       border-radius: 15px;
-
       margin-bottom: 18px;
     }
 
     .tabs {
       display: flex;
       flex-wrap: wrap;
-
       gap: 8px;
-
       margin-bottom: 20px;
     }
 
     .tab {
       min-height: 45px;
-
-      border:
-        1px solid #cbd5e1;
-
+      border: 1px solid #cbd5e1;
       border-radius: 12px;
-
       padding: 0 18px;
-
       background: white;
-
       color: #334155;
-
       font-weight: 900;
-
       cursor: pointer;
     }
 
     .tab.active {
       color: white;
-
       background: #0f766e;
-
       border-color: #0f766e;
     }
 
@@ -357,68 +248,40 @@
 
     .settings-grid {
       display: grid;
-
-      grid-template-columns:
-        repeat(
-          3,
-          minmax(
-            0,
-            1fr
-          )
-        );
-
+      grid-template-columns: repeat(3, minmax(0,1fr));
       gap: 14px;
-
       margin-bottom: 18px;
     }
 
     .help {
       padding: 14px 16px;
-
       border-radius: 13px;
-
-      border:
-        1px solid #e2e8f0;
-
+      border: 1px solid #e2e8f0;
       background: #f8fafc;
-
       color: #475569;
-
       font-size: 14px;
       line-height: 1.7;
-
       margin-bottom: 17px;
     }
 
     .file-box {
-      border:
-        2px dashed #94a3b8;
-
+      border: 2px dashed #94a3b8;
       border-radius: 16px;
-
       padding: 24px;
-
       text-align: center;
-
       background: #f8fafc;
     }
 
     .sheet-list {
       display: grid;
-
       gap: 12px;
-
       margin-top: 18px;
     }
 
     .sheet-card {
-      border:
-        1px solid #e2e8f0;
-
+      border: 1px solid #e2e8f0;
       border-radius: 14px;
-
       padding: 15px;
-
       background: white;
     }
 
@@ -429,130 +292,84 @@
 
     .sheet-info {
       margin-top: 7px;
-
       color: #64748b;
-
       font-size: 14px;
       line-height: 1.7;
     }
 
     .sheet-ok {
       color: #15803d;
-
       font-weight: 900;
     }
 
     .sheet-error {
       color: #b91c1c;
-
       font-weight: 900;
     }
 
     .exam-controls {
       display: grid;
-
-      grid-template-columns:
-        minmax(
-          0,
-          2fr
-        )
-        minmax(
-          180px,
-          1fr
-        );
-
+      grid-template-columns: minmax(0,2fr) minmax(180px,1fr);
       gap: 12px;
+      margin-bottom: 16px;
+    }
 
+    .history-controls {
+      display: grid;
+      grid-template-columns: minmax(0,1fr) minmax(180px,1fr);
+      gap: 12px;
       margin-bottom: 16px;
     }
 
     .summary {
       display: grid;
-
-      grid-template-columns:
-        repeat(
-          4,
-          minmax(
-            0,
-            1fr
-          )
-        );
-
+      grid-template-columns: repeat(4, minmax(0,1fr));
       gap: 12px;
-
       margin-bottom: 16px;
     }
 
     .summary-card {
       padding: 14px;
-
       background: #f8fafc;
-
-      border:
-        1px solid #e2e8f0;
-
+      border: 1px solid #e2e8f0;
       border-radius: 13px;
-
       text-align: center;
     }
 
     .summary-label {
       color: #64748b;
-
       font-size: 13px;
     }
 
     .summary-value {
       margin-top: 4px;
-
       font-size: 23px;
       font-weight: 900;
     }
 
     .table-tip {
       margin-bottom: 10px;
-
       padding: 10px 12px;
-
       border-radius: 10px;
-
       background: #f1f5f9;
-
       color: #475569;
-
       font-size: 13px;
       line-height: 1.6;
     }
 
     /* =========================================================
-       ★ 重點修正：
-       表格本身上下左右都可以滑動
+       固定表頭＋固定左側關鍵欄
        ========================================================= */
 
     .table-wrap {
       position: relative;
-
       width: 100%;
-
-      /*
-        讓「上下捲動」發生在表格本身，
-        sticky 表頭才能真正固定。
-      */
       max-height: 560px;
-
       overflow: auto;
-
       overscroll-behavior: contain;
-
       -webkit-overflow-scrolling: touch;
-
-      scrollbar-width: auto;
-
-      border:
-        1px solid #cbd5e1;
-
+      border: 1px solid #cbd5e1;
       border-radius: 14px;
-
       background: white;
     }
 
@@ -567,47 +384,27 @@
 
     .table-wrap::-webkit-scrollbar-thumb {
       background: #94a3b8;
-
       border-radius: 999px;
-
-      border:
-        3px solid #f1f5f9;
-    }
-
-    .table-wrap::-webkit-scrollbar-thumb:hover {
-      background: #64748b;
+      border: 3px solid #f1f5f9;
     }
 
     table {
       width: 100%;
-
       min-width: 1000px;
-
       border-collapse: separate;
-
       border-spacing: 0;
-
       background: white;
     }
 
     th,
     td {
       height: 46px;
-
-      padding: 10px 10px;
-
-      border-right:
-        1px solid #e2e8f0;
-
-      border-bottom:
-        1px solid #e2e8f0;
-
+      padding: 10px;
+      border-right: 1px solid #e2e8f0;
+      border-bottom: 1px solid #e2e8f0;
       text-align: center;
-
       white-space: nowrap;
-
       font-size: 14px;
-
       background: white;
     }
 
@@ -616,83 +413,47 @@
       border-right: 0;
     }
 
-    /* =========================================================
-       ★ 固定整排表頭
-       ========================================================= */
-
     thead th {
       position: sticky;
-
       top: 0;
-
       z-index: 30;
-
       background: #e2e8f0;
-
       color: #0f172a;
-
       font-weight: 900;
-
       cursor: pointer;
-
       user-select: none;
-
-      border-bottom:
-        2px solid #94a3b8;
-
-      box-shadow:
-        0 2px 5px
-        rgba(
-          15,
-          23,
-          42,
-          .12
-        );
+      border-bottom: 2px solid #94a3b8;
+      box-shadow: 0 2px 5px rgba(15,23,42,.12);
     }
 
     thead th:hover {
       background: #cbd5e1;
     }
 
-    /* 排序提示 */
-
     thead th[data-sort]::after {
       content: " ↕";
-
       color: #64748b;
-
       font-size: 11px;
     }
 
     thead th.sort-asc::after {
       content: " ▲";
-
       color: #0f766e;
     }
 
     thead th.sort-desc::after {
       content: " ▼";
-
       color: #0f766e;
     }
-
-    /* =========================================================
-       ★ 第一欄：座號固定
-       ========================================================= */
 
     thead th:nth-child(1),
     tbody td:nth-child(1) {
       position: sticky;
-
       left: 0;
-
       min-width: 66px;
       width: 66px;
-
       background: #f8fafc;
-
-      border-right:
-        1px solid #cbd5e1;
+      border-right: 1px solid #cbd5e1;
     }
 
     tbody td:nth-child(1) {
@@ -701,36 +462,18 @@
 
     thead th:nth-child(1) {
       z-index: 50;
-
       background: #cbd5e1;
     }
-
-    /* =========================================================
-       ★ 第二欄：姓名固定
-       ========================================================= */
 
     thead th:nth-child(2),
     tbody td:nth-child(2) {
       position: sticky;
-
       left: 66px;
-
       min-width: 115px;
       width: 115px;
-
       background: white;
-
-      border-right:
-        2px solid #94a3b8;
-
-      box-shadow:
-        4px 0 6px
-        rgba(
-          15,
-          23,
-          42,
-          .07
-        );
+      border-right: 2px solid #94a3b8;
+      box-shadow: 4px 0 6px rgba(15,23,42,.07);
     }
 
     tbody td:nth-child(2) {
@@ -739,27 +482,8 @@
 
     thead th:nth-child(2) {
       z-index: 49;
-
       background: #cbd5e1;
     }
-
-    /* =========================================================
-       資料列滑鼠提示
-       ========================================================= */
-
-    tbody tr:hover td {
-      background: #f8fafc;
-    }
-
-    tbody tr:hover td:nth-child(1),
-    tbody tr:hover td:nth-child(2) {
-      background: #e2e8f0;
-    }
-
-    /*
-      偶數列淡底色，
-      長表格比較容易追蹤。
-    */
 
     tbody tr:nth-child(even) td {
       background: #fbfdff;
@@ -770,34 +494,38 @@
       background: #f1f5f9;
     }
 
-    tbody tr:nth-child(even):hover td {
-      background: #f8fafc;
+    tbody tr:hover td {
+      background: #eef6ff;
     }
 
-    tbody tr:nth-child(even):hover td:nth-child(1),
-    tbody tr:nth-child(even):hover td:nth-child(2) {
-      background: #e2e8f0;
+    tbody tr:hover td:nth-child(1),
+    tbody tr:hover td:nth-child(2) {
+      background: #dbeafe;
     }
 
-    /* 手機 */
+    .missing-value {
+      color: #94a3b8;
+    }
+
+    .history-mean {
+      font-weight: 900;
+      background: #eff6ff !important;
+    }
 
     @media(max-width:760px) {
-
       .page {
-        padding:
-          20px 10px 40px;
+        padding: 20px 10px 40px;
       }
 
       .settings-grid,
       .exam-controls,
+      .history-controls,
       .summary {
-        grid-template-columns:
-          1fr;
+        grid-template-columns: 1fr;
       }
 
       .topbar {
         flex-direction: column;
-
         align-items: stretch;
       }
 
@@ -806,28 +534,19 @@
       }
 
       .card {
-        padding:
-          19px 12px;
+        padding: 19px 12px;
       }
 
       .tabs {
         display: grid;
-
-        grid-template-columns:
-          1fr 1fr;
+        grid-template-columns: 1fr 1fr 1fr;
       }
 
       .tab {
         width: 100%;
-
-        padding:
-          0 8px;
+        padding: 0 5px;
+        font-size: 13px;
       }
-
-      /*
-        手機上總表高度縮小一點，
-        讓上下滑動容易理解。
-      */
 
       .table-wrap {
         max-height: 500px;
@@ -840,10 +559,7 @@
       th,
       td {
         height: 44px;
-
-        padding:
-          9px 8px;
-
+        padding: 9px 8px;
         font-size: 13px;
       }
 
@@ -856,7 +572,6 @@
       thead th:nth-child(2),
       tbody td:nth-child(2) {
         left: 54px;
-
         min-width: 92px;
         width: 92px;
       }
@@ -869,114 +584,54 @@
 <div class="page">
 
   <div class="header">
-
-    <div class="logo">
-      績
-    </div>
-
-    <h1>
-      學生段考成績管理系統
-    </h1>
-
-    <div class="subtitle">
-      教師專用後台
-    </div>
-
+    <div class="logo">績</div>
+    <h1>學生段考成績管理系統</h1>
+    <div class="subtitle">教師專用後台</div>
   </div>
 
 
-  <!-- =========================
-       登入
-  ========================== -->
+  <!-- 登入 -->
 
-  <div
-    id="loginArea"
-    class="card login-card"
-  >
+  <div id="loginArea" class="card login-card">
 
     <div class="section-title">
       教師登入
     </div>
 
     <div class="field">
-
-      <label for="email">
-        教師 Email
-      </label>
-
-      <input
-        id="email"
-        type="email"
-        autocomplete="username"
-      >
-
+      <label for="email">教師 Email</label>
+      <input id="email" type="email" autocomplete="username">
     </div>
-
 
     <div class="field">
-
-      <label for="password">
-        密碼
-      </label>
-
-      <input
-        id="password"
-        type="password"
-        autocomplete="current-password"
-      >
-
+      <label for="password">密碼</label>
+      <input id="password" type="password" autocomplete="current-password">
     </div>
 
-
-    <button
-      id="loginBtn"
-      class="btn btn-full"
-    >
+    <button id="loginBtn" class="btn btn-full">
       登入管理系統
     </button>
 
-
-    <div
-      id="loginMessage"
-      class="message"
-    ></div>
+    <div id="loginMessage" class="message"></div>
 
   </div>
 
 
-  <!-- =========================
-       後台
-  ========================== -->
+  <!-- 後台 -->
 
-  <div
-    id="adminArea"
-    class="admin-area"
-  >
+  <div id="adminArea" class="admin-area">
 
     <div class="topbar">
 
       <div>
-
-        <div
-          style="
-            font-size:13px;
-            color:#64748b;
-          "
-        >
+        <div style="font-size:13px;color:#64748b;">
           已登入教師
         </div>
 
-        <strong
-          id="teacherEmail"
-        ></strong>
-
+        <strong id="teacherEmail"></strong>
       </div>
 
-
-      <button
-        id="logoutBtn"
-        class="btn btn-secondary"
-      >
+      <button id="logoutBtn" class="btn btn-secondary">
         登出
       </button>
 
@@ -1001,17 +656,22 @@
         段考總表
       </button>
 
+      <button
+        type="button"
+        class="tab"
+        data-page="historyPage"
+      >
+        歷次總表
+      </button>
+
     </div>
 
 
-    <!-- =========================
+    <!-- =====================================================
          Excel 同步
-    ========================== -->
+         ===================================================== -->
 
-    <section
-      id="syncPage"
-      class="tab-page active"
-    >
+    <section id="syncPage" class="tab-page active">
 
       <div class="card">
 
@@ -1019,89 +679,35 @@
           ① 基本設定
         </div>
 
-
         <div class="settings-grid">
 
           <div class="field">
-
-            <label for="baseYear">
-              七年級學年度
-            </label>
-
-            <input
-              id="baseYear"
-              type="number"
-              value="114"
-            >
-
+            <label for="baseYear">七年級學年度</label>
+            <input id="baseYear" type="number" value="114">
           </div>
 
-
           <div class="field">
-
-            <label for="baseGrade">
-              七年級年級數字
-            </label>
-
-            <input
-              id="baseGrade"
-              type="number"
-              value="7"
-              min="1"
-              max="9"
-            >
-
+            <label for="baseGrade">七年級年級數字</label>
+            <input id="baseGrade" type="number" value="7" min="1" max="9">
           </div>
 
-
           <div class="field">
-
-            <label for="classSuffix">
-              班級尾碼
-            </label>
-
-            <input
-              id="classSuffix"
-              value="04"
-              maxlength="2"
-            >
-
+            <label for="classSuffix">班級尾碼</label>
+            <input id="classSuffix" value="04" maxlength="2">
           </div>
 
         </div>
 
-
         <div class="help">
-
           目前設定：
-
-          <strong>
-            114學年度 = 704
-          </strong>
-
-          。
-
-          <br>
+          <strong>114學年度 = 704</strong>。<br>
 
           系統會自動判斷：
-
-          <strong>
-            115學年度 = 804
-          </strong>
-
-          、
-
-          <strong>
-            116學年度 = 904
-          </strong>
-
-          。
-
+          <strong>115學年度 = 804</strong>、
+          <strong>116學年度 = 904</strong>。
           <br><br>
 
-          以後只需要在 Excel 增加新的段考工作表，
-          不需要重新建立資料庫。
-
+          以後只要在 Excel 增加新的段考工作表，再重新同步即可。
         </div>
 
       </div>
@@ -1113,7 +719,6 @@
           ② 選擇歷年段考 Excel
         </div>
 
-
         <div class="file-box">
 
           <input
@@ -1122,17 +727,11 @@
             accept=".xlsx,.xls"
           >
 
-          <div
-            style="
-              margin-top:12px;
-              color:#64748b;
-            "
-          >
+          <div style="margin-top:12px;color:#64748b;">
             選擇「歷年段考成績.xlsx」
           </div>
 
         </div>
-
 
         <div class="actions">
 
@@ -1143,7 +742,6 @@
           >
             解析 Excel
           </button>
-
 
           <button
             id="importBtn"
@@ -1156,31 +754,20 @@
 
         </div>
 
+        <div id="excelMessage" class="message"></div>
 
-        <div
-          id="excelMessage"
-          class="message"
-        ></div>
-
-
-        <div
-          id="sheetList"
-          class="sheet-list"
-        ></div>
+        <div id="sheetList" class="sheet-list"></div>
 
       </div>
 
     </section>
 
 
-    <!-- =========================
-         段考總表
-    ========================== -->
+    <!-- =====================================================
+         單次段考總表
+         ===================================================== -->
 
-    <section
-      id="examPage"
-      class="tab-page"
-    >
+    <section id="examPage" class="tab-page">
 
       <div class="card">
 
@@ -1188,18 +775,120 @@
           段考總表
         </div>
 
-
         <div class="exam-controls">
 
           <div class="field">
+            <label for="examSelect">選擇段考</label>
+            <select id="examSelect"></select>
+          </div>
 
-            <label for="examSelect">
-              選擇段考
+          <div class="field">
+            <label>操作</label>
+
+            <button
+              id="loadExamBtn"
+              type="button"
+              class="btn btn-blue btn-full"
+            >
+              載入總表
+            </button>
+          </div>
+
+        </div>
+
+        <div id="examSummary" class="summary"></div>
+
+        <div class="table-tip">
+          表頭固定在上方，座號與姓名固定在左側。可上下、左右滑動；點選表頭可排序，再點一次可反向排序。
+        </div>
+
+        <div id="examTableWrap" class="table-wrap">
+
+          <table>
+
+            <thead>
+              <tr>
+                <th data-exam-sort="seat">座號</th>
+                <th data-exam-sort="name">姓名</th>
+                <th data-exam-sort="chinese">國文</th>
+                <th data-exam-sort="english">英文</th>
+                <th data-exam-sort="math">數學</th>
+                <th data-exam-sort="science">自然</th>
+                <th data-exam-sort="social">社會</th>
+                <th data-exam-sort="total">總分</th>
+                <th data-exam-sort="average">平均</th>
+                <th data-exam-sort="rank">班排</th>
+              </tr>
+            </thead>
+
+            <tbody id="examTableBody"></tbody>
+
+          </table>
+
+        </div>
+
+        <div id="examMessage" class="message"></div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         歷次總表
+         ===================================================== -->
+
+    <section id="historyPage" class="tab-page">
+
+      <div class="card">
+
+        <div class="section-title">
+          歷次段考總表
+        </div>
+
+        <div class="history-controls">
+
+          <div class="field">
+
+            <label for="historyMetric">
+              顯示項目
             </label>
 
-            <select
-              id="examSelect"
-            ></select>
+            <select id="historyMetric">
+
+              <option value="average">
+                五科平均
+              </option>
+
+              <option value="rank">
+                班級排名
+              </option>
+
+              <option value="total">
+                總分
+              </option>
+
+              <option value="chinese">
+                國文
+              </option>
+
+              <option value="english">
+                英文
+              </option>
+
+              <option value="math">
+                數學
+              </option>
+
+              <option value="science">
+                自然
+              </option>
+
+              <option value="social">
+                社會
+              </option>
+
+            </select>
 
           </div>
 
@@ -1211,11 +900,11 @@
             </label>
 
             <button
-              id="loadExamBtn"
+              id="loadHistoryBtn"
               type="button"
               class="btn btn-blue btn-full"
             >
-              載入總表
+              載入歷次總表
             </button>
 
           </div>
@@ -1223,86 +912,28 @@
         </div>
 
 
-        <div
-          id="examSummary"
-          class="summary"
-        ></div>
-
-
         <div class="table-tip">
-          💡 表頭會固定在上方；座號與姓名會固定在左側。可直接在表格內上下、左右滑動。點選「國文、英文、數學、自然、社會、總分、平均、班排」可排序，再點一次可反向排序。
+          每一欄代表一次段考。表頭固定在上方，座號與姓名固定在左側。學生沒有參加該次段考時會顯示「—」。
         </div>
 
 
-        <div
-          id="examTableWrap"
-          class="table-wrap"
-        >
+        <div id="historyTableWrap" class="table-wrap">
 
-          <table>
+          <table id="historyTable">
 
             <thead>
-
-              <tr>
-
-                <th data-sort="seat">
-                  座號
-                </th>
-
-                <th data-sort="name">
-                  姓名
-                </th>
-
-                <th data-sort="chinese">
-                  國文
-                </th>
-
-                <th data-sort="english">
-                  英文
-                </th>
-
-                <th data-sort="math">
-                  數學
-                </th>
-
-                <th data-sort="science">
-                  自然
-                </th>
-
-                <th data-sort="social">
-                  社會
-                </th>
-
-                <th data-sort="total">
-                  總分
-                </th>
-
-                <th data-sort="average">
-                  平均
-                </th>
-
-                <th data-sort="rank">
-                  班排
-                </th>
-
+              <tr id="historyTableHeader">
               </tr>
-
             </thead>
 
-
-            <tbody
-              id="examTableBody"
-            ></tbody>
+            <tbody id="historyTableBody">
+            </tbody>
 
           </table>
 
         </div>
 
-
-        <div
-          id="examMessage"
-          class="message"
-        ></div>
+        <div id="historyMessage" class="message"></div>
 
       </div>
 
@@ -1317,8 +948,7 @@
 
 import {
   initializeApp
-} from
-"https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 
 
 import {
@@ -1326,8 +956,7 @@ import {
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged
-} from
-"https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
 
 import {
@@ -1338,8 +967,7 @@ import {
   getDocs,
   writeBatch,
   serverTimestamp
-} from
-"https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 
 const firebaseConfig = {
@@ -1398,26 +1026,33 @@ let currentExamRows =
   [];
 
 
-let currentSort = {
-
+let currentExamSort = {
   key: "seat",
-
   asc: true
-
 };
 
 
-/*
-  防止 loadExamList()
-  同時執行造成下拉選單重複。
-*/
+let historyRows =
+  [];
+
+
+let historyExams =
+  [];
+
+
+let historySort = {
+  key: "seat",
+  asc: true
+};
+
+
 let examListRequestId =
   0;
 
 
-/* =========================
+/* =========================================================
    訊息
-========================= */
+   ========================================================= */
 
 function showMessage(
   element,
@@ -1428,10 +1063,8 @@ function showMessage(
   element.textContent =
     text;
 
-
   element.className =
-    "message " +
-    type;
+    "message " + type;
 
 }
 
@@ -1443,16 +1076,15 @@ function clearMessage(
   element.textContent =
     "";
 
-
   element.className =
     "message";
 
 }
 
 
-/* =========================
+/* =========================================================
    登入
-========================= */
+   ========================================================= */
 
 $("loginBtn")
   .addEventListener(
@@ -1491,13 +1123,11 @@ $("loginBtn")
       }
 
 
-      $("loginBtn")
-        .disabled =
+      $("loginBtn").disabled =
         true;
 
 
-      $("loginBtn")
-        .textContent =
+      $("loginBtn").textContent =
         "登入中...";
 
 
@@ -1512,9 +1142,7 @@ $("loginBtn")
 
 
         if (
-          credential
-            .user
-            .uid !==
+          credential.user.uid !==
           ADMIN_UID
         ) {
 
@@ -1532,13 +1160,9 @@ $("loginBtn")
         }
 
 
-      } catch (
-        error
-      ) {
+      } catch (error) {
 
-        console.error(
-          error
-        );
+        console.error(error);
 
 
         showMessage(
@@ -1550,13 +1174,11 @@ $("loginBtn")
 
       } finally {
 
-        $("loginBtn")
-          .disabled =
+        $("loginBtn").disabled =
           false;
 
 
-        $("loginBtn")
-          .textContent =
+        $("loginBtn").textContent =
           "登入管理系統";
 
       }
@@ -1603,13 +1225,10 @@ onAuthStateChanged(
 
     if (
       user &&
-      user.uid ===
-      ADMIN_UID
+      user.uid === ADMIN_UID
     ) {
 
-      $("loginArea")
-        .style
-        .display =
+      $("loginArea").style.display =
         "none";
 
 
@@ -1620,26 +1239,17 @@ onAuthStateChanged(
         );
 
 
-      $("teacherEmail")
-        .textContent =
+      $("teacherEmail").textContent =
         user.email ||
         "教師";
 
 
-      /*
-        不在這裡與頁籤點擊同時
-        反覆追加資料。
-
-        函式本身也有防重複。
-      */
       loadExamList();
 
 
     } else {
 
-      $("loginArea")
-        .style
-        .display =
+      $("loginArea").style.display =
         "block";
 
 
@@ -1655,9 +1265,9 @@ onAuthStateChanged(
 );
 
 
-/* =========================
+/* =========================================================
    頁籤
-========================= */
+   ========================================================= */
 
 document
   .querySelectorAll(
@@ -1676,15 +1286,10 @@ document
                 ".tab"
               )
               .forEach(
-                item => {
-
-                  item
-                    .classList
-                    .remove(
-                      "active"
-                    );
-
-                }
+                item =>
+                  item.classList.remove(
+                    "active"
+                  )
               );
 
 
@@ -1693,15 +1298,10 @@ document
                 ".tab-page"
               )
               .forEach(
-                item => {
-
-                  item
-                    .classList
-                    .remove(
-                      "active"
-                    );
-
-                }
+                item =>
+                  item.classList.remove(
+                    "active"
+                  )
               );
 
 
@@ -1713,9 +1313,7 @@ document
 
 
             $(
-              button
-                .dataset
-                .page
+              button.dataset.page
             )
               .classList
               .add(
@@ -1724,19 +1322,10 @@ document
 
 
             if (
-              button
-                .dataset
-                .page ===
+              button.dataset.page ===
               "examPage"
             ) {
 
-              /*
-                呼叫沒關係，
-                loadExamList() 已經有：
-                1. request id
-                2. 去重複
-                3. replaceChildren
-              */
               await loadExamList();
 
             }
@@ -1748,9 +1337,9 @@ document
   );
 
 
-/* =========================
-   SHA-256 studentKey
-========================= */
+/* =========================================================
+   SHA256 studentKey
+   ========================================================= */
 
 async function createStudentKey(
   birthMMDD,
@@ -1769,41 +1358,31 @@ async function createStudentKey(
 
 
   const hash =
-    await crypto
-      .subtle
-      .digest(
-        "SHA-256",
-        data
-      );
+    await crypto.subtle.digest(
+      "SHA-256",
+      data
+    );
 
 
-  return Array
-    .from(
-      new Uint8Array(
-        hash
-      )
+  return Array.from(
+    new Uint8Array(
+      hash
     )
+  )
     .map(
       byte =>
         byte
-          .toString(
-            16
-          )
-          .padStart(
-            2,
-            "0"
-          )
+          .toString(16)
+          .padStart(2,"0")
     )
-    .join(
-      ""
-    );
+    .join("");
 
 }
 
 
-/* =========================
-   格式化
-========================= */
+/* =========================================================
+   格式工具
+   ========================================================= */
 
 function padMMDD(
   value
@@ -1814,30 +1393,13 @@ function padMMDD(
     value === undefined ||
     value === ""
   ) {
-
     return "";
-
   }
 
-
-  const text =
-    String(
-      value
-    )
-      .replace(
-        /\D/g,
-        ""
-      );
-
-
-  return text
-    .padStart(
-      4,
-      "0"
-    )
-    .slice(
-      -4
-    );
+  return String(value)
+    .replace(/\D/g,"")
+    .padStart(4,"0")
+    .slice(-4);
 
 }
 
@@ -1851,30 +1413,13 @@ function padLast5(
     value === undefined ||
     value === ""
   ) {
-
     return "";
-
   }
 
-
-  const text =
-    String(
-      value
-    )
-      .replace(
-        /\D/g,
-        ""
-      );
-
-
-  return text
-    .padStart(
-      5,
-      "0"
-    )
-    .slice(
-      -5
-    );
+  return String(value)
+    .replace(/\D/g,"")
+    .padStart(5,"0")
+    .slice(-5);
 
 }
 
@@ -1888,24 +1433,15 @@ function numberValue(
     value === undefined ||
     value === ""
   ) {
-
     return null;
-
   }
 
-
   const number =
-    Number(
-      value
-    );
+    Number(value);
 
-
-  return Number
-    .isFinite(
-      number
-    )
-      ? number
-      : null;
+  return Number.isFinite(number)
+    ? number
+    : null;
 
 }
 
@@ -1915,68 +1451,31 @@ function isValidMMDD(
 ) {
 
   if (
-    !/^\d{4}$/
-      .test(
-        value
-      )
+    !/^\d{4}$/.test(value)
   ) {
-
     return false;
-
   }
-
 
   const month =
     Number(
-      value
-        .slice(
-          0,
-          2
-        )
+      value.slice(0,2)
     );
-
 
   const day =
     Number(
-      value
-        .slice(
-          2,
-          4
-        )
+      value.slice(2,4)
     );
 
-
   const days = [
-
-    31,
-    29,
-    31,
-    30,
-    31,
-    30,
-    31,
-    31,
-    30,
-    31,
-    30,
-    31
-
+    31,29,31,30,31,30,
+    31,31,30,31,30,31
   ];
 
-
   return (
-
     month >= 1 &&
-
     month <= 12 &&
-
     day >= 1 &&
-
-    day <=
-      days[
-        month - 1
-      ]
-
+    day <= days[month - 1]
   );
 
 }
@@ -1986,88 +1485,80 @@ function formatScore(
   value
 ) {
 
-  if (
-    value === null ||
-    value === undefined
-  ) {
-
-    return "";
-
-  }
-
-
   const number =
-    Number(
-      value
-    );
-
+    Number(value);
 
   if (
-    !Number
-      .isFinite(
-        number
-      )
-  ) {
-
-    return "";
-
-  }
-
-
-  if (
-    Number
-      .isInteger(
-        number
-      )
-  ) {
-
-    return String(
+    !Number.isFinite(
       number
-    );
-
+    )
+  ) {
+    return "—";
   }
 
+  if (
+    Number.isInteger(
+      number
+    )
+  ) {
+    return String(number);
+  }
 
   return number
-    .toFixed(
-      2
-    )
-    .replace(
-      /\.?0+$/,
-      ""
-    );
+    .toFixed(2)
+    .replace(/\.?0+$/,"");
 
 }
 
 
-/* =========================
-   工作表名稱
-========================= */
+function mean(
+  values
+) {
+
+  const valid =
+    values
+      .filter(
+        value =>
+          Number.isFinite(
+            Number(value)
+          )
+      )
+      .map(Number);
+
+
+  if (
+    valid.length === 0
+  ) {
+    return null;
+  }
+
+
+  return valid.reduce(
+    (sum,value) =>
+      sum + value,
+    0
+  ) / valid.length;
+
+}
+
+
+/* =========================================================
+   考試名稱
+   ========================================================= */
 
 function chineseNumberToInt(
   value
 ) {
 
   const map = {
-
-    "一": 1,
-
-    "二": 2,
-
-    "三": 3
-
+    "一":1,
+    "二":2,
+    "三":3
   };
 
-
   return (
-    map[
-      value
-    ]
-    ||
-    Number(
-      value
-    )
-    ||
+    map[value] ||
+    Number(value) ||
     null
   );
 
@@ -2079,68 +1570,42 @@ function parseSheetName(
 ) {
 
   const match =
-    sheetName
-      .match(
-        /^(\d{3})(上|下)第([一二三123])次段考$/
-      );
+    sheetName.match(
+      /^(\d{3})(上|下)第([一二三123])次段考$/
+    );
 
 
   if (!match) {
-
     return null;
-
   }
 
 
   const schoolYear =
-    Number(
-      match[
-        1
-      ]
-    );
+    Number(match[1]);
 
 
   const semester =
-    match[
-      2
-    ] ===
-    "上"
+    match[2] === "上"
       ? 1
       : 2;
 
 
   const examNo =
     chineseNumberToInt(
-      match[
-        3
-      ]
+      match[3]
     );
 
 
   if (!examNo) {
-
     return null;
-
   }
 
 
-  const examCode =
-    `${schoolYear}-${semester}-exam${examNo}`;
-
-
   const chineseNo = {
-
-    1: "一",
-
-    2: "二",
-
-    3: "三"
-
+    1:"一",
+    2:"二",
+    3:"三"
   };
-
-
-  const examName =
-    `${schoolYear}學年度${semester === 1 ? "上" : "下"}學期第${chineseNo[examNo]}次段考`;
 
 
   return {
@@ -2151,18 +1616,29 @@ function parseSheetName(
 
     examNo,
 
-    examCode,
+    examCode:
+      `${schoolYear}-${semester}-exam${examNo}`,
 
-    examName
+    examName:
+      `${schoolYear}學年度${semester === 1 ? "上" : "下"}學期第${chineseNo[examNo]}次段考`
 
   };
 
 }
 
 
-/* =========================
-   自動判斷班級
-========================= */
+function shortExamName(
+  exam
+) {
+
+  return `${exam.schoolYear}${exam.semester === 1 ? "上" : "下"}${exam.examNo}`;
+
+}
+
+
+/* =========================================================
+   班級
+   ========================================================= */
 
 function getClassCode(
   schoolYear
@@ -2170,15 +1646,13 @@ function getClassCode(
 
   const baseYear =
     Number(
-      $("baseYear")
-        .value
+      $("baseYear").value
     );
 
 
   const baseGrade =
     Number(
-      $("baseGrade")
-        .value
+      $("baseGrade").value
     );
 
 
@@ -2186,18 +1660,13 @@ function getClassCode(
     $("classSuffix")
       .value
       .trim()
-      .padStart(
-        2,
-        "0"
-      );
+      .padStart(2,"0");
 
 
   const grade =
-    baseGrade
-    +
+    baseGrade +
     (
-      schoolYear
-      -
+      schoolYear -
       baseYear
     );
 
@@ -2207,9 +1676,9 @@ function getClassCode(
 }
 
 
-/* =========================
+/* =========================================================
    Excel 解析
-========================= */
+   ========================================================= */
 
 $("parseBtn")
   .addEventListener(
@@ -2233,9 +1702,7 @@ $("parseBtn")
 
       const file =
         $("excelFile")
-          .files[
-            0
-          ];
+          .files[0];
 
 
       if (!file) {
@@ -2254,24 +1721,17 @@ $("parseBtn")
       try {
 
         const buffer =
-          await file
-            .arrayBuffer();
+          await file.arrayBuffer();
 
 
         const workbook =
-          XLSX
-            .read(
-              buffer,
-              {
-
-                type:
-                  "array",
-
-                cellDates:
-                  false
-
-              }
-            );
+          XLSX.read(
+            buffer,
+            {
+              type:"array",
+              cellDates:false
+            }
+          );
 
 
         const exams =
@@ -2280,8 +1740,7 @@ $("parseBtn")
 
         for (
           const sheetName
-          of workbook
-            .SheetNames
+          of workbook.SheetNames
         ) {
 
           const examInfo =
@@ -2290,24 +1749,15 @@ $("parseBtn")
             );
 
 
-          if (
-            !examInfo
-          ) {
+          if (!examInfo) {
 
-            exams
-              .push({
-
-                sheetName,
-
-                valid:
-                  false,
-
-                errors:
-                  [
-                    "工作表名稱無法辨識"
-                  ]
-
-              });
+            exams.push({
+              sheetName,
+              valid:false,
+              errors:[
+                "工作表名稱無法辨識"
+              ]
+            });
 
             continue;
 
@@ -2315,61 +1765,25 @@ $("parseBtn")
 
 
           const worksheet =
-            workbook
-              .Sheets[
-                sheetName
-              ];
+            workbook.Sheets[
+              sheetName
+            ];
 
 
           const rows =
-            XLSX
-              .utils
-              .sheet_to_json(
-                worksheet,
-                {
-
-                  header:
-                    1,
-
-                  raw:
-                    true,
-
-                  defval:
-                    null
-
-                }
-              );
-
-
-          if (
-            rows.length <
-            2
-          ) {
-
-            exams
-              .push({
-
-                sheetName,
-
-                valid:
-                  false,
-
-                errors:
-                  [
-                    "工作表沒有資料"
-                  ]
-
-              });
-
-            continue;
-
-          }
+            XLSX.utils.sheet_to_json(
+              worksheet,
+              {
+                header:1,
+                raw:true,
+                defval:null
+              }
+            );
 
 
           const classCode =
             getClassCode(
-              examInfo
-                .schoolYear
+              examInfo.schoolYear
             );
 
 
@@ -2388,29 +1802,19 @@ $("parseBtn")
           ) {
 
             const row =
-              rows[
-                rowIndex
-              ];
+              rows[rowIndex];
 
 
-            if (
-              !row
-            ) {
-
+            if (!row) {
               continue;
-
             }
 
 
             const firstCell =
               String(
-                row[
-                  0
-                ]
-                ??
+                row[0] ??
                 ""
-              )
-                .trim();
+              ).trim();
 
 
             if (
@@ -2426,31 +1830,18 @@ $("parseBtn")
             }
 
 
-            if (
-              !firstCell
-            ) {
-
-              continue;
-
-            }
-
-
             const seat =
               Number(
-                row[
-                  0
-                ]
+                row[0]
               );
 
 
             if (
-              !Number
-                .isInteger(
-                  seat
-                )
+              !Number.isInteger(
+                seat
+              )
               ||
-              seat <=
-                0
+              seat <= 0
             ) {
 
               continue;
@@ -2460,17 +1851,13 @@ $("parseBtn")
 
             const birthMMDD =
               padMMDD(
-                row[
-                  2
-                ]
+                row[2]
               );
 
 
             const idLast5 =
               padLast5(
-                row[
-                  3
-                ]
+                row[3]
               );
 
 
@@ -2485,17 +1872,10 @@ $("parseBtn")
               [];
 
 
-            if (
-              !row[
-                1
-              ]
-            ) {
-
-              errors
-                .push(
-                  "姓名空白"
-                );
-
+            if (!row[1]) {
+              errors.push(
+                "姓名空白"
+              );
             }
 
 
@@ -2504,164 +1884,70 @@ $("parseBtn")
                 birthMMDD
               )
             ) {
-
-              errors
-                .push(
-                  "出生月日格式錯誤"
-                );
-
-            }
-
-
-            if (
-              !/^\d{5}$/
-                .test(
-                  idLast5
-                )
-            ) {
-
-              errors
-                .push(
-                  "末五碼格式錯誤"
-                );
-
-            }
-
-
-            const scores = [
-
-              row[
-                4
-              ],
-
-              row[
-                5
-              ],
-
-              row[
-                6
-              ],
-
-              row[
-                7
-              ],
-
-              row[
-                8
-              ]
-
-            ]
-              .map(
-                numberValue
+              errors.push(
+                "出生月日錯誤"
               );
-
-
-            if (
-              scores
-                .some(
-                  value =>
-                    value ===
-                    null
-                )
-            ) {
-
-              errors
-                .push(
-                  "五科成績不完整"
-                );
-
             }
 
 
-            studentRows
-              .push({
+            if (
+              !/^\d{5}$/.test(
+                idLast5
+              )
+            ) {
+              errors.push(
+                "末五碼錯誤"
+              );
+            }
 
-                studentKey,
 
-                classCode,
+            studentRows.push({
 
-                seat:
-                  String(
-                    seat
-                  )
-                    .padStart(
-                      2,
-                      "0"
-                    ),
+              studentKey,
 
-                name:
-                  String(
-                    row[
-                      1
-                    ]
-                    ??
-                    ""
-                  )
-                    .trim(),
+              classCode,
 
-                birthMMDD,
+              seat:
+                String(seat)
+                  .padStart(2,"0"),
 
-                idLast5,
+              name:
+                String(
+                  row[1] ??
+                  ""
+                ).trim(),
 
-                chinese:
-                  numberValue(
-                    row[
-                      4
-                    ]
-                  ),
+              birthMMDD,
 
-                english:
-                  numberValue(
-                    row[
-                      5
-                    ]
-                  ),
+              idLast5,
 
-                math:
-                  numberValue(
-                    row[
-                      6
-                    ]
-                  ),
+              chinese:
+                numberValue(row[4]),
 
-                science:
-                  numberValue(
-                    row[
-                      7
-                    ]
-                  ),
+              english:
+                numberValue(row[5]),
 
-                social:
-                  numberValue(
-                    row[
-                      8
-                    ]
-                  ),
+              math:
+                numberValue(row[6]),
 
-                total:
-                  numberValue(
-                    row[
-                      9
-                    ]
-                  ),
+              science:
+                numberValue(row[7]),
 
-                average:
-                  numberValue(
-                    row[
-                      10
-                    ]
-                  ),
+              social:
+                numberValue(row[8]),
 
-                rank:
-                  numberValue(
-                    row[
-                      11
-                    ]
-                  ),
+              total:
+                numberValue(row[9]),
 
-                errors
+              average:
+                numberValue(row[10]),
 
-              });
+              rank:
+                numberValue(row[11]),
+
+              errors
+
+            });
 
           }
 
@@ -2671,32 +1957,22 @@ $("parseBtn")
 
 
           if (
-            studentRows
-              .length ===
-            0
+            studentRows.length === 0
           ) {
-
-            errors
-              .push(
-                "沒有找到學生資料"
-              );
-
+            errors.push(
+              "沒有學生資料"
+            );
           }
 
 
-          if (
-            !averageRow
-          ) {
-
-            errors
-              .push(
-                "找不到各科平均列"
-              );
-
+          if (!averageRow) {
+            errors.push(
+              "找不到各科平均"
+            );
           }
 
 
-          const exam = {
+          exams.push({
 
             ...examInfo,
 
@@ -2709,84 +1985,57 @@ $("parseBtn")
 
             stats:
               averageRow
-                ? {
+              ? {
 
-                    chineseAvg:
-                      numberValue(
-                        averageRow[
-                          4
-                        ]
-                      ),
+                  chineseAvg:
+                    numberValue(
+                      averageRow[4]
+                    ),
 
-                    englishAvg:
-                      numberValue(
-                        averageRow[
-                          5
-                        ]
-                      ),
+                  englishAvg:
+                    numberValue(
+                      averageRow[5]
+                    ),
 
-                    mathAvg:
-                      numberValue(
-                        averageRow[
-                          6
-                        ]
-                      ),
+                  mathAvg:
+                    numberValue(
+                      averageRow[6]
+                    ),
 
-                    scienceAvg:
-                      numberValue(
-                        averageRow[
-                          7
-                        ]
-                      ),
+                  scienceAvg:
+                    numberValue(
+                      averageRow[7]
+                    ),
 
-                    socialAvg:
-                      numberValue(
-                        averageRow[
-                          8
-                        ]
-                      ),
+                  socialAvg:
+                    numberValue(
+                      averageRow[8]
+                    ),
 
-                    totalAvg:
-                      numberValue(
-                        averageRow[
-                          9
-                        ]
-                      ),
+                  totalAvg:
+                    numberValue(
+                      averageRow[9]
+                    ),
 
-                    averageAvg:
-                      numberValue(
-                        averageRow[
-                          10
-                        ]
-                      )
+                  averageAvg:
+                    numberValue(
+                      averageRow[10]
+                    )
 
-                  }
-                :
-                  null,
+                }
+              : null,
 
             errors,
 
             valid:
-              errors
-                .length ===
-                0
+              errors.length === 0
               &&
-              studentRows
-                .every(
-                  student =>
-                    student
-                      .errors
-                      .length ===
-                    0
-                )
+              studentRows.every(
+                student =>
+                  student.errors.length === 0
+              )
 
-          };
-
-
-          exams
-            .push(
-              exam
-            );
+          });
 
         }
 
@@ -2798,85 +2047,51 @@ $("parseBtn")
         renderParsedSheets();
 
 
-        const validExams =
-          parsedExams
-            .filter(
-              exam =>
-                exam
-                  .valid
-            );
+        const invalid =
+          exams.filter(
+            exam =>
+              !exam.valid
+          ).length;
 
 
-        const invalidExams =
-          parsedExams
-            .length
-          -
-          validExams
-            .length;
-
-
-        if (
-          validExams
-            .length ===
-          0
-        ) {
-
-          showMessage(
-            $("excelMessage"),
-            "沒有可匯入的段考資料。",
-            "error"
-          );
-
-          return;
-
-        }
-
-
-        if (
-          invalidExams >
-          0
-        ) {
-
-          showMessage(
-            $("excelMessage"),
-            `解析完成，但有 ${invalidExams} 個工作表需要檢查。`,
-            "error"
-          );
-
+        if (invalid) {
 
           $("importBtn")
             .disabled =
             true;
 
 
-        } else {
-
           showMessage(
             $("excelMessage"),
-            `成功解析 ${validExams.length} 次段考，可以同步到 Firebase。`,
-            "success"
+            `解析完成，但有 ${invalid} 個工作表有問題。`,
+            "error"
           );
 
+
+        } else {
 
           $("importBtn")
             .disabled =
             false;
 
+
+          showMessage(
+            $("excelMessage"),
+            `成功解析 ${exams.length} 次段考，可以同步。`,
+            "success"
+          );
+
         }
 
 
-      } catch (
-        error
-      ) {
+      } catch (error) {
 
-        console.error(
-          error
-        );
+        console.error(error);
 
 
         showMessage(
           $("excelMessage"),
-          "Excel 解析失敗，請確認檔案格式。",
+          "Excel 解析失敗。",
           "error"
         );
 
@@ -2886,17 +2101,9 @@ $("parseBtn")
   );
 
 
-/* =========================
-   顯示解析結果
-========================= */
-
 function renderParsedSheets() {
 
-  const container =
-    $("sheetList");
-
-
-  container
+  $("sheetList")
     .innerHTML =
     "";
 
@@ -2906,152 +2113,78 @@ function renderParsedSheets() {
       exam => {
 
         const div =
-          document
-            .createElement(
-              "div"
-            );
+          document.createElement(
+            "div"
+          );
 
 
-        div
-          .className =
+        div.className =
           "sheet-card";
 
 
         if (
-          !exam
-            .valid
+          exam.valid
         ) {
 
-          const allErrors =
-            [
-              ...(
-                exam
-                  .errors
-                ||
-                []
-              )
-            ];
+          div.innerHTML = `
 
+            <div class="sheet-title">
+              ${escapeHtml(exam.examName)}
+            </div>
 
-          if (
-            exam
-              .students
-          ) {
+            <div class="sheet-info">
 
-            exam
-              .students
-              .forEach(
-                student => {
+              <span class="sheet-ok">
+                ✓ 資料正常
+              </span>
 
-                  if (
-                    student
-                      .errors
-                    &&
-                    student
-                      .errors
-                      .length
-                  ) {
+              <br>
 
-                    allErrors
-                      .push(
-                        `${student.seat || "?"}號 ${student.name || ""}：${student.errors.join("、")}`
-                      );
+              班級：
+              ${escapeHtml(exam.classCode)}
 
-                  }
+              <br>
 
-                }
-              );
+              有效學生：
+              ${exam.students.length}
+              人
 
-          }
+              <br>
 
+              班平均：
+              ${formatScore(exam.stats.averageAvg)}
 
-          div
-            .innerHTML = `
+            </div>
 
-              <div class="sheet-title">
-                ${escapeHtml(
-                  exam
-                    .sheetName
-                )}
-              </div>
-
-              <div class="sheet-info">
-
-                <span class="sheet-error">
-                  ✕ 無法匯入
-                </span>
-
-                <br>
-
-                ${escapeHtml(
-                  allErrors
-                    .join(
-                      "；"
-                    )
-                )}
-
-              </div>
-
-            `;
+          `;
 
 
         } else {
 
-          div
-            .innerHTML = `
+          div.innerHTML = `
 
-              <div class="sheet-title">
-                ${escapeHtml(
-                  exam
-                    .examName
-                )}
-              </div>
+            <div class="sheet-title">
+              ${escapeHtml(exam.sheetName)}
+            </div>
 
-              <div class="sheet-info">
+            <div class="sheet-info">
 
-                <span class="sheet-ok">
-                  ✓ 資料正常
-                </span>
+              <span class="sheet-error">
+                ✕ 無法匯入
+              </span>
 
-                <br>
+              <br>
 
-                工作表：
-                ${escapeHtml(
-                  exam
-                    .sheetName
-                )}
+              ${escapeHtml(exam.errors.join("、"))}
 
-                <br>
+            </div>
 
-                班級：
-                ${escapeHtml(
-                  exam
-                    .classCode
-                )}
-
-                <br>
-
-                有效學生：
-                ${exam.students.length}
-                人
-
-                <br>
-
-                班平均：
-                ${formatScore(
-                  exam
-                    .stats
-                    .averageAvg
-                )}
-
-              </div>
-
-            `;
+          `;
 
         }
 
 
-        container
+        $("sheetList")
           .appendChild(
             div
           );
@@ -3062,9 +2195,9 @@ function renderParsedSheets() {
 }
 
 
-/* =========================
-   匯入 Firebase
-========================= */
+/* =========================================================
+   Firebase 匯入
+   ========================================================= */
 
 $("importBtn")
   .addEventListener(
@@ -3077,8 +2210,7 @@ $("importBtn")
 
 
       const user =
-        auth
-          .currentUser;
+        auth.currentUser;
 
 
       if (
@@ -3089,7 +2221,7 @@ $("importBtn")
 
         showMessage(
           $("excelMessage"),
-          "教師登入狀態已失效。",
+          "教師登入已失效。",
           "error"
         );
 
@@ -3099,51 +2231,30 @@ $("importBtn")
 
 
       const exams =
-        parsedExams
-          .filter(
-            exam =>
-              exam
-                .valid
-          );
-
-
-      if (
-        !exams
-          .length
-      ) {
-
-        showMessage(
-          $("excelMessage"),
-          "沒有可以同步的資料。",
-          "error"
+        parsedExams.filter(
+          exam =>
+            exam.valid
         );
 
-        return;
 
+      if (!exams.length) {
+        return;
       }
 
 
       const totalResults =
-        exams
-          .reduce(
-            (
-              sum,
-              exam
-            ) =>
-              sum
-              +
-              exam
-                .students
-                .length,
-            0
-          );
+        exams.reduce(
+          (sum,exam) =>
+            sum +
+            exam.students.length,
+          0
+        );
 
 
       if (
-        !window
-          .confirm(
-            `即將同步 ${exams.length} 次段考，共 ${totalResults} 筆學生成績。\n\n已存在的相同考次會更新。\n\n確定繼續嗎？`
-          )
+        !confirm(
+          `即將同步 ${exams.length} 次段考，共 ${totalResults} 筆學生成績。\n\n確定繼續嗎？`
+        )
       ) {
 
         return;
@@ -3158,7 +2269,7 @@ $("importBtn")
 
       showMessage(
         $("excelMessage"),
-        "正在同步 Firebase，請稍候……",
+        "正在同步 Firebase……",
         "info"
       );
 
@@ -3169,215 +2280,219 @@ $("importBtn")
           new Map();
 
 
-        exams
-          .forEach(
-            exam => {
+        exams.forEach(
+          exam => {
 
-              exam
-                .students
-                .forEach(
-                  student => {
+            exam.students.forEach(
+              student => {
 
-                    const existing =
-                      studentMap
-                        .get(
-                          student
-                            .studentKey
-                        );
+                const old =
+                  studentMap.get(
+                    student.studentKey
+                  );
 
 
-                    const isNewer =
+                if (
+                  !old
+                  ||
+                  exam.schoolYear > old.schoolYear
+                  ||
+                  (
+                    exam.schoolYear === old.schoolYear
+                    &&
+                    exam.semester > old.semester
+                  )
+                  ||
+                  (
+                    exam.schoolYear === old.schoolYear
+                    &&
+                    exam.semester === old.semester
+                    &&
+                    exam.examNo > old.examNo
+                  )
+                ) {
 
-                      !existing
-
-                      ||
-
-                      exam
-                        .schoolYear >
-                      existing
-                        .schoolYear
-
-                      ||
-
-                      (
-                        exam
-                          .schoolYear ===
-                        existing
-                          .schoolYear
-
-                        &&
-
-                        exam
-                          .semester >
-                        existing
-                          .semester
-                      )
-
-                      ||
-
-                      (
-                        exam
-                          .schoolYear ===
-                        existing
-                          .schoolYear
-
-                        &&
-
-                        exam
-                          .semester ===
-                        existing
-                          .semester
-
-                        &&
-
-                        exam
-                          .examNo >
-                        existing
-                          .examNo
-                      );
-
-
-                    if (
-                      isNewer
-                    ) {
-
-                      studentMap
-                        .set(
-                          student
-                            .studentKey,
-                          {
-
-                            student,
-
-                            schoolYear:
-                              exam
-                                .schoolYear,
-
-                            semester:
-                              exam
-                                .semester,
-
-                            examNo:
-                              exam
-                                .examNo
-
-                          }
-                        );
-
+                  studentMap.set(
+                    student.studentKey,
+                    {
+                      student,
+                      schoolYear:
+                        exam.schoolYear,
+                      semester:
+                        exam.semester,
+                      examNo:
+                        exam.examNo
                     }
+                  );
 
-                  }
-                );
+                }
 
-            }
-          );
+              }
+            );
+
+          }
+        );
 
 
         const operations =
           [];
 
 
-        studentMap
-          .forEach(
-            item => {
+        studentMap.forEach(
+          item => {
 
-              const student =
-                item
-                  .student;
+            const student =
+              item.student;
 
 
-              operations
-                .push({
+            operations.push({
+
+              ref:
+                doc(
+                  db,
+                  "students",
+                  student.studentKey
+                ),
+
+              data: {
+
+                name:
+                  student.name,
+
+                currentClass:
+                  student.classCode,
+
+                currentSeat:
+                  student.seat,
+
+                latestSchoolYear:
+                  item.schoolYear,
+
+                updatedAt:
+                  serverTimestamp()
+
+              }
+
+            });
+
+          }
+        );
+
+
+        exams.forEach(
+          exam => {
+
+            operations.push({
+
+              ref:
+                doc(
+                  db,
+                  "examStats",
+                  exam.examCode
+                ),
+
+              data: {
+
+                examCode:
+                  exam.examCode,
+
+                examName:
+                  exam.examName,
+
+                sheetName:
+                  exam.sheetName,
+
+                schoolYear:
+                  exam.schoolYear,
+
+                semester:
+                  exam.semester,
+
+                examNo:
+                  exam.examNo,
+
+                classCode:
+                  exam.classCode,
+
+                studentCount:
+                  exam.students.length,
+
+                ...exam.stats,
+
+                updatedAt:
+                  serverTimestamp()
+
+              }
+
+            });
+
+
+            exam.students.forEach(
+              student => {
+
+                operations.push({
 
                   ref:
                     doc(
                       db,
+                      "examResults",
+                      exam.examCode,
                       "students",
-                      student
-                        .studentKey
+                      student.studentKey
                     ),
 
                   data: {
 
-                    name:
-                      student
-                        .name,
-
-                    currentClass:
-                      student
-                        .classCode,
-
-                    currentSeat:
-                      student
-                        .seat,
-
-                    latestSchoolYear:
-                      item
-                        .schoolYear,
-
-                    updatedAt:
-                      serverTimestamp()
-
-                  }
-
-                });
-
-            }
-          );
-
-
-        exams
-          .forEach(
-            exam => {
-
-              operations
-                .push({
-
-                  ref:
-                    doc(
-                      db,
-                      "examStats",
-                      exam
-                        .examCode
-                    ),
-
-                  data: {
+                    studentKey:
+                      student.studentKey,
 
                     examCode:
-                      exam
-                        .examCode,
+                      exam.examCode,
 
                     examName:
-                      exam
-                        .examName,
-
-                    sheetName:
-                      exam
-                        .sheetName,
+                      exam.examName,
 
                     schoolYear:
-                      exam
-                        .schoolYear,
+                      exam.schoolYear,
 
                     semester:
-                      exam
-                        .semester,
+                      exam.semester,
 
                     examNo:
-                      exam
-                        .examNo,
+                      exam.examNo,
 
                     classCode:
-                      exam
-                        .classCode,
+                      exam.classCode,
 
-                    studentCount:
-                      exam
-                        .students
-                        .length,
+                    seat:
+                      student.seat,
 
-                    ...exam
-                      .stats,
+                    name:
+                      student.name,
+
+                    chinese:
+                      student.chinese,
+
+                    english:
+                      student.english,
+
+                    math:
+                      student.math,
+
+                    science:
+                      student.science,
+
+                    social:
+                      student.social,
+
+                    total:
+                      student.total,
+
+                    average:
+                      student.average,
+
+                    rank:
+                      student.rank,
 
                     updatedAt:
                       serverTimestamp()
@@ -3386,137 +2501,22 @@ $("importBtn")
 
                 });
 
+              }
+            );
 
-              exam
-                .students
-                .forEach(
-                  student => {
+          }
+        );
 
-                    operations
-                      .push({
-
-                        ref:
-                          doc(
-                            db,
-                            "examResults",
-                            exam
-                              .examCode,
-                            "students",
-                            student
-                              .studentKey
-                          ),
-
-                        data: {
-
-                          studentKey:
-                            student
-                              .studentKey,
-
-                          examCode:
-                            exam
-                              .examCode,
-
-                          examName:
-                            exam
-                              .examName,
-
-                          schoolYear:
-                            exam
-                              .schoolYear,
-
-                          semester:
-                            exam
-                              .semester,
-
-                          examNo:
-                            exam
-                              .examNo,
-
-                          classCode:
-                            exam
-                              .classCode,
-
-                          seat:
-                            student
-                              .seat,
-
-                          name:
-                            student
-                              .name,
-
-                          chinese:
-                            student
-                              .chinese,
-
-                          english:
-                            student
-                              .english,
-
-                          math:
-                            student
-                              .math,
-
-                          science:
-                            student
-                              .science,
-
-                          social:
-                            student
-                              .social,
-
-                          total:
-                            student
-                              .total,
-
-                          average:
-                            student
-                              .average,
-
-                          rank:
-                            student
-                              .rank,
-
-                          updatedAt:
-                            serverTimestamp()
-
-                        }
-
-                      });
-
-                  }
-                );
-
-            }
-          );
-
-
-        /*
-          Firestore batch
-          每批最多保守抓 400 筆。
-        */
 
         const chunkSize =
           400;
 
 
         for (
-          let index = 0;
-          index <
-            operations
-              .length;
-          index +=
-            chunkSize
+          let i = 0;
+          i < operations.length;
+          i += chunkSize
         ) {
-
-          const chunk =
-            operations
-              .slice(
-                index,
-                index
-                +
-                chunkSize
-              );
-
 
           const batch =
             writeBatch(
@@ -3524,35 +2524,34 @@ $("importBtn")
             );
 
 
-          chunk
+          operations
+            .slice(
+              i,
+              i + chunkSize
+            )
             .forEach(
               operation => {
 
-                batch
-                  .set(
-                    operation
-                      .ref,
-                    operation
-                      .data,
-                    {
-                      merge:
-                        true
-                    }
-                  );
+                batch.set(
+                  operation.ref,
+                  operation.data,
+                  {
+                    merge:true
+                  }
+                );
 
               }
             );
 
 
-          await batch
-            .commit();
+          await batch.commit();
 
         }
 
 
         showMessage(
           $("excelMessage"),
-          `同步完成！共完成 ${exams.length} 次段考、${totalResults} 筆學生成績。`,
+          `同步完成，共 ${totalResults} 筆學生成績。`,
           "success"
         );
 
@@ -3560,19 +2559,14 @@ $("importBtn")
         await loadExamList();
 
 
-      } catch (
-        error
-      ) {
+      } catch (error) {
 
-        console.error(
-          "Firebase 匯入錯誤：",
-          error
-        );
+        console.error(error);
 
 
         showMessage(
           $("excelMessage"),
-          `Firebase 同步失敗：${error.code || ""} ${error.message || ""}`,
+          `同步失敗：${error.message || error.code}`,
           "error"
         );
 
@@ -3590,291 +2584,156 @@ $("importBtn")
 
 
 /* =========================================================
-   ★ 修正版：讀取考試清單
-   - 防止非同步重複
-   - 同 examCode 去重
-   - 每次真正 replaceChildren
+   考試清單
    ========================================================= */
+
+async function getExamList() {
+
+  const snapshot =
+    await getDocs(
+      collection(
+        db,
+        "examStats"
+      )
+    );
+
+
+  const map =
+    new Map();
+
+
+  snapshot.docs.forEach(
+    item => {
+
+      const exam = {
+        id:item.id,
+        ...item.data()
+      };
+
+
+      map.set(
+        exam.examCode ||
+        exam.id,
+        exam
+      );
+
+    }
+  );
+
+
+  const exams =
+    Array.from(
+      map.values()
+    );
+
+
+  exams.sort(
+    (a,b) => {
+
+      if (
+        Number(a.schoolYear) !==
+        Number(b.schoolYear)
+      ) {
+        return (
+          Number(a.schoolYear)
+          -
+          Number(b.schoolYear)
+        );
+      }
+
+      if (
+        Number(a.semester) !==
+        Number(b.semester)
+      ) {
+        return (
+          Number(a.semester)
+          -
+          Number(b.semester)
+        );
+      }
+
+      return (
+        Number(a.examNo)
+        -
+        Number(b.examNo)
+      );
+
+    }
+  );
+
+
+  return exams;
+
+}
+
 
 async function loadExamList() {
 
-  const select =
-    $("examSelect");
-
-
-  /*
-    每一次執行得到新的編號。
-  */
   const requestId =
     ++examListRequestId;
 
 
   try {
 
-    const snapshot =
-      await getDocs(
-        collection(
-          db,
-          "examStats"
-        )
-      );
+    const exams =
+      await getExamList();
 
 
-    /*
-      如果這次查詢完成前，
-      已經有更新的 loadExamList() 啟動，
-      就丟棄這次舊結果。
-    */
     if (
       requestId !==
       examListRequestId
     ) {
-
       return;
-
     }
 
 
-    const rawExams =
-      snapshot
-        .docs
-        .map(
-          snap => ({
-
-            id:
-              snap.id,
-
-            ...snap
-              .data()
-
-          })
-        );
+    const select =
+      $("examSelect");
 
 
-    /*
-      用 examCode 去重。
-
-      即使資料庫裡不慎存在
-      兩筆相同考試名稱，
-      下拉選單也只會保留一筆。
-    */
-    const examMap =
-      new Map();
+    select.replaceChildren();
 
 
-    rawExams
+    [...exams]
+      .reverse()
       .forEach(
         exam => {
 
-          const uniqueKey =
-            String(
-              exam
-                .examCode
-              ||
-              exam
-                .id
+          const option =
+            document.createElement(
+              "option"
             );
 
 
-          /*
-            正式 ID 等於 examCode 的資料優先。
-          */
-          const previous =
-            examMap
-              .get(
-                uniqueKey
-              );
+          option.value =
+            exam.examCode ||
+            exam.id;
 
 
-          if (
-            !previous
-            ||
-            exam.id ===
-              uniqueKey
-          ) {
-
-            examMap
-              .set(
-                uniqueKey,
-                exam
-              );
-
-          }
-
-        }
-      );
+          option.textContent =
+            exam.examName;
 
 
-    const exams =
-      Array
-        .from(
-          examMap
-            .values()
-        );
-
-
-    exams
-      .sort(
-        (
-          a,
-          b
-        ) => {
-
-          const yearDiff =
-            Number(
-              b
-                .schoolYear
-              ||
-              0
-            )
-            -
-            Number(
-              a
-                .schoolYear
-              ||
-              0
-            );
-
-
-          if (
-            yearDiff !==
-            0
-          ) {
-
-            return yearDiff;
-
-          }
-
-
-          const semesterDiff =
-            Number(
-              b
-                .semester
-              ||
-              0
-            )
-            -
-            Number(
-              a
-                .semester
-              ||
-              0
-            );
-
-
-          if (
-            semesterDiff !==
-            0
-          ) {
-
-            return semesterDiff;
-
-          }
-
-
-          return (
-            Number(
-              b
-                .examNo
-              ||
-              0
-            )
-            -
-            Number(
-              a
-                .examNo
-              ||
-              0
-            )
+          select.appendChild(
+            option
           );
 
         }
       );
 
 
-    /*
-      不用 innerHTML +=，
-      直接一次清乾淨。
-    */
-    select
-      .replaceChildren();
+  } catch (error) {
 
-
-    exams
-      .forEach(
-        exam => {
-
-          const option =
-            document
-              .createElement(
-                "option"
-              );
-
-
-          option
-            .value =
-            exam
-              .examCode
-            ||
-            exam
-              .id;
-
-
-          option
-            .textContent =
-            exam
-              .examName
-            ||
-            exam
-              .id;
-
-
-          select
-            .appendChild(
-              option
-            );
-
-        }
-      );
-
-
-    /*
-      如果只有六次資料，
-      這裡就一定只有六個 option。
-    */
-    console.log(
-      "段考清單數量：",
-      exams
-        .length,
-      exams
-        .map(
-          exam =>
-            exam
-              .examCode
-            ||
-            exam
-              .id
-        )
-    );
-
-
-  } catch (
-    error
-  ) {
-
-    console.error(
-      "載入段考清單失敗：",
-      error
-    );
+    console.error(error);
 
   }
 
 }
 
 
-/* =========================
-   載入段考總表
-========================= */
+/* =========================================================
+   單次段考總表
+   ========================================================= */
 
 $("loadExamBtn")
   .addEventListener(
@@ -3885,44 +2744,22 @@ $("loadExamBtn")
 
 async function loadExamTable() {
 
-  clearMessage(
-    $("examMessage")
-  );
-
-
   const examCode =
-    $("examSelect")
-      .value;
+    $("examSelect").value;
 
 
-  if (
-    !examCode
-  ) {
-
-    showMessage(
-      $("examMessage"),
-      "目前沒有段考資料。",
-      "error"
-    );
-
+  if (!examCode) {
     return;
-
   }
 
 
-  $("loadExamBtn")
-    .disabled =
+  $("loadExamBtn").disabled =
     true;
-
-
-  $("loadExamBtn")
-    .textContent =
-    "載入中...";
 
 
   try {
 
-    const resultSnapshot =
+    const snapshot =
       await getDocs(
         collection(
           db,
@@ -3934,34 +2771,22 @@ async function loadExamTable() {
 
 
     currentExamRows =
-      resultSnapshot
-        .docs
-        .map(
-          snap =>
-            snap
-              .data()
-        );
+      snapshot.docs.map(
+        item =>
+          item.data()
+      );
 
 
-    currentSort = {
-
-      key:
-        "seat",
-
-      asc:
-        true
-
+    currentExamSort = {
+      key:"seat",
+      asc:true
     };
 
 
     renderExamTable();
 
 
-    /*
-      直接 get 單一 examStats，
-      不需要把六筆全部抓回來再 find。
-    */
-    const statsSnapshot =
+    const statDoc =
       await getDoc(
         doc(
           db,
@@ -3971,458 +2796,174 @@ async function loadExamTable() {
       );
 
 
-    const stats =
-      statsSnapshot
-        .exists()
-        ? statsSnapshot
-            .data()
-        : null;
-
-
     renderSummary(
-      stats,
+      statDoc.exists()
+        ? statDoc.data()
+        : null,
       currentExamRows
     );
 
 
-    /*
-      載入新總表後，
-      回到表格最上方、最左方。
-    */
-    const tableWrap =
-      $("examTableWrap");
-
-
-    tableWrap
-      .scrollTop =
+    $("examTableWrap").scrollTop =
       0;
 
 
-    tableWrap
-      .scrollLeft =
+    $("examTableWrap").scrollLeft =
       0;
 
 
-    updateSortIndicators();
+  } catch (error) {
 
-
-  } catch (
-    error
-  ) {
-
-    console.error(
-      "段考總表載入錯誤：",
-      error
-    );
+    console.error(error);
 
 
     showMessage(
       $("examMessage"),
-      "段考總表載入失敗。",
+      "總表載入失敗。",
       "error"
     );
 
 
   } finally {
 
-    $("loadExamBtn")
-      .disabled =
+    $("loadExamBtn").disabled =
       false;
-
-
-    $("loadExamBtn")
-      .textContent =
-      "載入總表";
 
   }
 
 }
 
 
-/* =========================
-   段考表格
-========================= */
-
 function renderExamTable() {
 
   const rows =
-    [
-      ...currentExamRows
-    ];
+    [...currentExamRows];
 
 
   const key =
-    currentSort
-      .key;
+    currentExamSort.key;
 
 
   const asc =
-    currentSort
-      .asc;
+    currentExamSort.asc;
 
 
-  rows
-    .sort(
-      (
-        a,
-        b
-      ) => {
-
-        let av =
-          a[
-            key
-          ];
+  rows.sort(
+    (a,b) =>
+      compareValues(
+        a[key],
+        b[key],
+        key,
+        asc
+      )
+  );
 
 
-        let bv =
-          b[
-            key
-          ];
+  $("examTableBody")
+    .innerHTML =
+    rows.map(
+      row => `
+
+        <tr>
+
+          <td>${escapeHtml(row.seat)}</td>
+          <td>${escapeHtml(row.name)}</td>
+          <td>${formatScore(row.chinese)}</td>
+          <td>${formatScore(row.english)}</td>
+          <td>${formatScore(row.math)}</td>
+          <td>${formatScore(row.science)}</td>
+          <td>${formatScore(row.social)}</td>
+          <td>${formatScore(row.total)}</td>
+          <td>${formatScore(row.average)}</td>
+          <td>${formatScore(row.rank)}</td>
+
+        </tr>
+
+      `
+    ).join("");
 
 
-        /*
-          成績、總分、平均、排名
-          使用數值排序。
-        */
-        if (
-          [
-            "seat",
-            "chinese",
-            "english",
-            "math",
-            "science",
-            "social",
-            "total",
-            "average",
-            "rank"
-          ]
-            .includes(
-              key
-            )
-        ) {
-
-          const aNumber =
-            Number(
-              av
-            );
-
-
-          const bNumber =
-            Number(
-              bv
-            );
-
-
-          const safeA =
-            Number
-              .isFinite(
-                aNumber
-              )
-              ? aNumber
-              : (
-                  asc
-                    ? Infinity
-                    : -Infinity
-                );
-
-
-          const safeB =
-            Number
-              .isFinite(
-                bNumber
-              )
-              ? bNumber
-              : (
-                  asc
-                    ? Infinity
-                    : -Infinity
-                );
-
-
-          return asc
-            ? safeA
-              -
-              safeB
-            : safeB
-              -
-              safeA;
-
-        }
-
-
-        /*
-          姓名使用文字排序。
-        */
-        const textA =
-          String(
-            av
-            ??
-            ""
-          );
-
-
-        const textB =
-          String(
-            bv
-            ??
-            ""
-          );
-
-
-        return asc
-          ? textA
-              .localeCompare(
-                textB,
-                "zh-Hant",
-                {
-                  numeric:
-                    true
-                }
-              )
-          : textB
-              .localeCompare(
-                textA,
-                "zh-Hant",
-                {
-                  numeric:
-                    true
-                }
-              );
-
-      }
-    );
-
-
-  const body =
-    $("examTableBody");
-
-
-  body
-    .replaceChildren();
-
-
-  const fragment =
-    document
-      .createDocumentFragment();
-
-
-  rows
-    .forEach(
-      row => {
-
-        const tr =
-          document
-            .createElement(
-              "tr"
-            );
-
-
-        tr
-          .innerHTML = `
-
-            <td>
-              ${escapeHtml(
-                row
-                  .seat
-              )}
-            </td>
-
-            <td>
-              ${escapeHtml(
-                row
-                  .name
-              )}
-            </td>
-
-            <td>
-              ${formatScore(
-                row
-                  .chinese
-              )}
-            </td>
-
-            <td>
-              ${formatScore(
-                row
-                  .english
-              )}
-            </td>
-
-            <td>
-              ${formatScore(
-                row
-                  .math
-              )}
-            </td>
-
-            <td>
-              ${formatScore(
-                row
-                  .science
-              )}
-            </td>
-
-            <td>
-              ${formatScore(
-                row
-                  .social
-              )}
-            </td>
-
-            <td>
-              ${formatScore(
-                row
-                  .total
-              )}
-            </td>
-
-            <td>
-              ${formatScore(
-                row
-                  .average
-              )}
-            </td>
-
-            <td>
-              ${formatScore(
-                row
-                  .rank
-              )}
-            </td>
-
-          `;
-
-
-        fragment
-          .appendChild(
-            tr
-          );
-
-      }
-    );
-
-
-  body
-    .appendChild(
-      fragment
-    );
-
-
-  updateSortIndicators();
+  updateExamSortIndicators();
 
 }
 
 
-/* =========================
-   點表頭排序
-========================= */
-
 document
   .querySelectorAll(
-    "th[data-sort]"
+    "th[data-exam-sort]"
   )
   .forEach(
     th => {
 
-      th
-        .addEventListener(
-          "click",
-          () => {
+      th.addEventListener(
+        "click",
+        () => {
 
-            const key =
-              th
-                .dataset
-                .sort;
+          const key =
+            th.dataset.examSort;
 
 
-            if (
-              currentSort
-                .key ===
-              key
-            ) {
+          if (
+            currentExamSort.key ===
+            key
+          ) {
 
-              currentSort
-                .asc =
-                !currentSort
-                  .asc;
+            currentExamSort.asc =
+              !currentExamSort.asc;
 
 
-            } else {
+          } else {
 
-              currentSort
-                .key =
-                key;
-
-
-              /*
-                座號、姓名、班排：
-                預設小 → 大。
-
-                成績、總分、平均：
-                預設高 → 低。
-              */
-              currentSort
-                .asc =
-                (
-                  key ===
-                    "seat"
-                  ||
-                  key ===
-                    "name"
-                  ||
-                  key ===
-                    "rank"
-                );
-
-            }
+            currentExamSort.key =
+              key;
 
 
-            renderExamTable();
+            currentExamSort.asc =
+              (
+                key === "seat"
+                ||
+                key === "name"
+                ||
+                key === "rank"
+              );
 
           }
-        );
+
+
+          renderExamTable();
+
+        }
+      );
 
     }
   );
 
 
-/* =========================
-   排序箭頭
-========================= */
-
-function updateSortIndicators() {
+function updateExamSortIndicators() {
 
   document
     .querySelectorAll(
-      "th[data-sort]"
+      "th[data-exam-sort]"
     )
     .forEach(
       th => {
 
-        th
-          .classList
-          .remove(
-            "sort-asc",
-            "sort-desc"
-          );
+        th.classList.remove(
+          "sort-asc",
+          "sort-desc"
+        );
 
 
         if (
-          th
-            .dataset
-            .sort ===
-          currentSort
-            .key
+          th.dataset.examSort ===
+          currentExamSort.key
         ) {
 
-          th
-            .classList
-            .add(
-              currentSort
-                .asc
-                ? "sort-asc"
-                : "sort-desc"
-            );
+          th.classList.add(
+            currentExamSort.asc
+              ? "sort-asc"
+              : "sort-desc"
+          );
 
         }
 
@@ -4431,26 +2972,15 @@ function updateSortIndicators() {
 
 }
 
-
-/* =========================
-   統計卡
-========================= */
 
 function renderSummary(
   stats,
   rows
 ) {
 
-  const container =
-    $("examSummary");
+  if (!stats) {
 
-
-  if (
-    !stats
-  ) {
-
-    container
-      .innerHTML =
+    $("examSummary").innerHTML =
       "";
 
     return;
@@ -4458,109 +2988,774 @@ function renderSummary(
   }
 
 
-  container
-    .innerHTML = `
+  $("examSummary").innerHTML = `
 
-      <div class="summary-card">
+    <div class="summary-card">
+      <div class="summary-label">班級</div>
+      <div class="summary-value">${escapeHtml(stats.classCode || "")}</div>
+    </div>
 
-        <div class="summary-label">
-          班級
-        </div>
+    <div class="summary-card">
+      <div class="summary-label">有效人數</div>
+      <div class="summary-value">${rows.length}</div>
+    </div>
 
-        <div class="summary-value">
-          ${escapeHtml(
-            stats
-              .classCode
-            ||
-            ""
-          )}
-        </div>
+    <div class="summary-card">
+      <div class="summary-label">全班總分平均</div>
+      <div class="summary-value">${formatScore(stats.totalAvg)}</div>
+    </div>
 
-      </div>
+    <div class="summary-card">
+      <div class="summary-label">五科平均</div>
+      <div class="summary-value">${formatScore(stats.averageAvg)}</div>
+    </div>
 
-
-      <div class="summary-card">
-
-        <div class="summary-label">
-          有效人數
-        </div>
-
-        <div class="summary-value">
-          ${rows.length}
-        </div>
-
-      </div>
-
-
-      <div class="summary-card">
-
-        <div class="summary-label">
-          全班總分平均
-        </div>
-
-        <div class="summary-value">
-          ${formatScore(
-            stats
-              .totalAvg
-          )}
-        </div>
-
-      </div>
-
-
-      <div class="summary-card">
-
-        <div class="summary-label">
-          五科平均
-        </div>
-
-        <div class="summary-value">
-          ${formatScore(
-            stats
-              .averageAvg
-          )}
-        </div>
-
-      </div>
-
-    `;
+  `;
 
 }
 
 
-/* =========================
-   防止 HTML 注入
-========================= */
+/* =========================================================
+   ★ 歷次總表
+   ========================================================= */
+
+$("loadHistoryBtn")
+  .addEventListener(
+    "click",
+    loadHistoryTable
+  );
+
+
+$("historyMetric")
+  .addEventListener(
+    "change",
+    () => {
+
+      if (
+        historyRows.length
+      ) {
+
+        buildHistoryRows();
+        renderHistoryTable();
+
+      }
+
+    }
+  );
+
+
+async function loadHistoryTable() {
+
+  clearMessage(
+    $("historyMessage")
+  );
+
+
+  $("loadHistoryBtn")
+    .disabled =
+    true;
+
+
+  $("loadHistoryBtn")
+    .textContent =
+    "載入中...";
+
+
+  try {
+
+    historyExams =
+      await getExamList();
+
+
+    if (
+      !historyExams.length
+    ) {
+
+      showMessage(
+        $("historyMessage"),
+        "目前沒有段考資料。",
+        "error"
+      );
+
+      return;
+
+    }
+
+
+    /*
+      同時讀取六次段考學生資料
+    */
+
+    const snapshots =
+      await Promise.all(
+        historyExams.map(
+          exam =>
+            getDocs(
+              collection(
+                db,
+                "examResults",
+                exam.examCode ||
+                  exam.id,
+                "students"
+              )
+            )
+        )
+      );
+
+
+    const studentMap =
+      new Map();
+
+
+    historyExams.forEach(
+      (exam,examIndex) => {
+
+        const snapshot =
+          snapshots[
+            examIndex
+          ];
+
+
+        snapshot.docs.forEach(
+          item => {
+
+            const result =
+              item.data();
+
+
+            const key =
+              result.studentKey ||
+              item.id;
+
+
+            if (
+              !studentMap.has(
+                key
+              )
+            ) {
+
+              studentMap.set(
+                key,
+                {
+                  studentKey:key,
+                  name:result.name || "",
+                  latestSeat:result.seat || "",
+                  latestClass:result.classCode || "",
+                  latestOrder:-1,
+                  results:{}
+                }
+              );
+
+            }
+
+
+            const student =
+              studentMap.get(
+                key
+              );
+
+
+            /*
+              用最新考試更新目前座號姓名
+            */
+
+            if (
+              examIndex >
+              student.latestOrder
+            ) {
+
+              student.latestOrder =
+                examIndex;
+
+
+              student.name =
+                result.name ||
+                student.name;
+
+
+              student.latestSeat =
+                result.seat ||
+                student.latestSeat;
+
+
+              student.latestClass =
+                result.classCode ||
+                student.latestClass;
+
+            }
+
+
+            student.results[
+              exam.examCode ||
+              exam.id
+            ] =
+              result;
+
+          }
+        );
+
+      }
+    );
+
+
+    historyRows =
+      Array.from(
+        studentMap.values()
+      );
+
+
+    historySort = {
+      key:"seat",
+      asc:true
+    };
+
+
+    buildHistoryRows();
+
+
+    renderHistoryTable();
+
+
+    $("historyTableWrap").scrollTop =
+      0;
+
+
+    $("historyTableWrap").scrollLeft =
+      0;
+
+
+  } catch (error) {
+
+    console.error(
+      error
+    );
+
+
+    showMessage(
+      $("historyMessage"),
+      "歷次總表載入失敗。",
+      "error"
+    );
+
+
+  } finally {
+
+    $("loadHistoryBtn")
+      .disabled =
+      false;
+
+
+    $("loadHistoryBtn")
+      .textContent =
+      "載入歷次總表";
+
+  }
+
+}
+
+
+/*
+  依目前選擇的項目
+  建立每位學生的六次數值。
+*/
+
+function buildHistoryRows() {
+
+  const metric =
+    $("historyMetric").value;
+
+
+  historyRows.forEach(
+    student => {
+
+      student.metricValues =
+        historyExams.map(
+          exam => {
+
+            const result =
+              student.results[
+                exam.examCode ||
+                exam.id
+              ];
+
+
+            if (!result) {
+              return null;
+            }
+
+
+            const value =
+              Number(
+                result[
+                  metric
+                ]
+              );
+
+
+            return Number.isFinite(value)
+              ? value
+              : null;
+
+          }
+        );
+
+
+      /*
+        排名的平均只做參考，
+        其他科目正常計算歷次平均。
+      */
+
+      student.metricMean =
+        mean(
+          student.metricValues
+        );
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   畫歷次總表
+   ========================================================= */
+
+function renderHistoryTable() {
+
+  const metric =
+    $("historyMetric").value;
+
+
+  const metricLabels = {
+    average:"五科平均",
+    rank:"班排平均",
+    total:"總分平均",
+    chinese:"國文平均",
+    english:"英文平均",
+    math:"數學平均",
+    science:"自然平均",
+    social:"社會平均"
+  };
+
+
+  /*
+    表頭
+  */
+
+  $("historyTableHeader")
+    .innerHTML = `
+
+      <th data-history-sort="seat">
+        座號
+      </th>
+
+      <th data-history-sort="name">
+        姓名
+      </th>
+
+      ${
+        historyExams.map(
+          (exam,index) => `
+
+            <th data-history-sort="exam-${index}">
+              ${escapeHtml(shortExamName(exam))}
+            </th>
+
+          `
+        ).join("")
+      }
+
+      <th data-history-sort="mean">
+        ${metricLabels[metric]}
+      </th>
+
+    `;
+
+
+  attachHistorySortListeners();
+
+
+  const rows =
+    [...historyRows];
+
+
+  rows.sort(
+    (a,b) => {
+
+      if (
+        historySort.key ===
+        "seat"
+      ) {
+
+        return compareValues(
+          a.latestSeat,
+          b.latestSeat,
+          "seat",
+          historySort.asc
+        );
+
+      }
+
+
+      if (
+        historySort.key ===
+        "name"
+      ) {
+
+        return compareValues(
+          a.name,
+          b.name,
+          "name",
+          historySort.asc
+        );
+
+      }
+
+
+      if (
+        historySort.key ===
+        "mean"
+      ) {
+
+        return compareNullableNumbers(
+          a.metricMean,
+          b.metricMean,
+          historySort.asc
+        );
+
+      }
+
+
+      if (
+        historySort.key.startsWith(
+          "exam-"
+        )
+      ) {
+
+        const index =
+          Number(
+            historySort.key
+              .split("-")[1]
+          );
+
+
+        return compareNullableNumbers(
+          a.metricValues[index],
+          b.metricValues[index],
+          historySort.asc
+        );
+
+      }
+
+
+      return 0;
+
+    }
+  );
+
+
+  $("historyTableBody")
+    .innerHTML =
+    rows.map(
+      student => `
+
+        <tr>
+
+          <td>
+            ${escapeHtml(student.latestSeat)}
+          </td>
+
+          <td>
+            ${escapeHtml(student.name)}
+          </td>
+
+          ${
+            student.metricValues.map(
+              value => `
+
+                <td class="${
+                  value === null
+                    ? "missing-value"
+                    : ""
+                }">
+
+                  ${
+                    value === null
+                      ? "—"
+                      : formatScore(value)
+                  }
+
+                </td>
+
+              `
+            ).join("")
+          }
+
+          <td class="history-mean">
+
+            ${
+              student.metricMean === null
+                ? "—"
+                : formatScore(
+                    student.metricMean
+                  )
+            }
+
+          </td>
+
+        </tr>
+
+      `
+    ).join("");
+
+
+  updateHistorySortIndicators();
+
+}
+
+
+/* =========================================================
+   歷次總表排序
+   ========================================================= */
+
+function attachHistorySortListeners() {
+
+  document
+    .querySelectorAll(
+      "th[data-history-sort]"
+    )
+    .forEach(
+      th => {
+
+        th.addEventListener(
+          "click",
+          () => {
+
+            const key =
+              th.dataset.historySort;
+
+
+            if (
+              historySort.key ===
+              key
+            ) {
+
+              historySort.asc =
+                !historySort.asc;
+
+
+            } else {
+
+              historySort.key =
+                key;
+
+
+              /*
+                座號姓名、排名預設小到大，
+                成績預設大到小。
+              */
+
+              historySort.asc =
+                (
+                  key === "seat"
+                  ||
+                  key === "name"
+                  ||
+                  $("historyMetric").value === "rank"
+                );
+
+            }
+
+
+            renderHistoryTable();
+
+          }
+        );
+
+      }
+    );
+
+}
+
+
+function updateHistorySortIndicators() {
+
+  document
+    .querySelectorAll(
+      "th[data-history-sort]"
+    )
+    .forEach(
+      th => {
+
+        th.classList.remove(
+          "sort-asc",
+          "sort-desc"
+        );
+
+
+        if (
+          th.dataset.historySort ===
+          historySort.key
+        ) {
+
+          th.classList.add(
+            historySort.asc
+              ? "sort-asc"
+              : "sort-desc"
+          );
+
+        }
+
+      }
+    );
+
+}
+
+
+/* =========================================================
+   排序共用
+   ========================================================= */
+
+function compareValues(
+  a,
+  b,
+  key,
+  asc
+) {
+
+  if (
+    key === "name"
+  ) {
+
+    const result =
+      String(a ?? "")
+        .localeCompare(
+          String(b ?? ""),
+          "zh-Hant",
+          {
+            numeric:true
+          }
+        );
+
+
+    return asc
+      ? result
+      : -result;
+
+  }
+
+
+  const aNumber =
+    Number(a);
+
+
+  const bNumber =
+    Number(b);
+
+
+  if (
+    Number.isFinite(aNumber)
+    &&
+    Number.isFinite(bNumber)
+  ) {
+
+    return asc
+      ? aNumber - bNumber
+      : bNumber - aNumber;
+
+  }
+
+
+  const result =
+    String(a ?? "")
+      .localeCompare(
+        String(b ?? ""),
+        "zh-Hant",
+        {
+          numeric:true
+        }
+      );
+
+
+  return asc
+    ? result
+    : -result;
+
+}
+
+
+function compareNullableNumbers(
+  a,
+  b,
+  asc
+) {
+
+  const aValid =
+    Number.isFinite(
+      Number(a)
+    );
+
+
+  const bValid =
+    Number.isFinite(
+      Number(b)
+    );
+
+
+  /*
+    沒資料永遠放最後
+  */
+
+  if (
+    !aValid &&
+    !bValid
+  ) {
+    return 0;
+  }
+
+
+  if (!aValid) {
+    return 1;
+  }
+
+
+  if (!bValid) {
+    return -1;
+  }
+
+
+  const an =
+    Number(a);
+
+
+  const bn =
+    Number(b);
+
+
+  return asc
+    ? an - bn
+    : bn - an;
+
+}
+
+
+/* =========================================================
+   HTML 安全
+   ========================================================= */
 
 function escapeHtml(
   value
 ) {
 
   return String(
-    value
-    ??
+    value ??
     ""
   )
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-    .replace(
-      /</g,
-      "&lt;"
-    )
-    .replace(
-      />/g,
-      "&gt;"
-    )
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-    .replace(
-      /'/g,
-      "&#039;"
-    );
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 
 }
 
