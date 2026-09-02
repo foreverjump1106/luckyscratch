@@ -242,6 +242,18 @@
             background-color: #122244 !important;
         }
 
+        /* 固定欄位文字顏色：避免 Bootstrap 在部分裝置顯示成黑色 */
+        #dailyAttentionTable tbody td:nth-child(1),
+        #dailyAttentionTable tbody td:nth-child(2),
+        #dailyAttentionTable tbody td:nth-child(1) strong,
+        #dailyAttentionTable tbody td:nth-child(2) strong,
+        #weeklyStatsTable tbody td:nth-child(1),
+        #weeklyStatsTable tbody td:nth-child(2),
+        #weeklyStatsTable tbody td:nth-child(1) strong,
+        #weeklyStatsTable tbody td:nth-child(2) strong {
+            color: #ffffff !important;
+        }
+
         /* 滑鼠移到資料列時，固定欄位也保持一致的視覺效果 */
         #dailyAttentionTable tbody tr:hover td:nth-child(1),
         #dailyAttentionTable tbody tr:hover td:nth-child(2),
