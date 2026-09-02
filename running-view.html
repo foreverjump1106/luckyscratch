@@ -1,0 +1,3284 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+  >
+
+  <title>跑｜804班跑步挑戰</title>
+
+  <link
+    rel="icon"
+    href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="22" fill="%23111827"/><text x="50" y="68" font-size="58" text-anchor="middle" fill="%23ffffff" font-family="sans-serif">跑</text></svg>'
+  >
+
+  <style>
+
+    :root{
+      --bg:#07111f;
+      --bg2:#0d1b2d;
+      --card:#142136;
+      --card2:#192941;
+      --line:rgba(255,255,255,.10);
+
+      --text:#f8fafc;
+      --muted:#9fb0c7;
+
+      --green:#34d399;
+      --green2:#10b981;
+      --yellow:#fbbf24;
+      --orange:#fb923c;
+      --red:#fb7185;
+      --blue:#60a5fa;
+      --purple:#a78bfa;
+
+      --shadow:
+        0 14px 40px
+        rgba(0,0,0,.28);
+    }
+
+
+    *{
+      box-sizing:border-box;
+    }
+
+
+    html{
+      scroll-behavior:smooth;
+    }
+
+
+    body{
+      margin:0;
+
+      min-height:100vh;
+
+      color:var(--text);
+
+      font-family:
+        "Noto Sans TC",
+        "Microsoft JhengHei",
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        sans-serif;
+
+      background:
+
+        radial-gradient(
+          circle at top left,
+          rgba(52,211,153,.13),
+          transparent 28%
+        ),
+
+        radial-gradient(
+          circle at top right,
+          rgba(96,165,250,.12),
+          transparent 30%
+        ),
+
+        linear-gradient(
+          160deg,
+          var(--bg),
+          var(--bg2)
+        );
+    }
+
+
+    button,
+    input{
+      font:inherit;
+    }
+
+
+    button{
+      -webkit-tap-highlight-color:transparent;
+    }
+
+
+    .app{
+
+      width:min(
+        1160px,
+        100%
+      );
+
+      margin:auto;
+
+      padding:
+        16px
+        14px
+        50px;
+
+    }
+
+
+    /* =====================================================
+       TOP
+       ===================================================== */
+
+    .topbar{
+
+      display:flex;
+
+      justify-content:
+        space-between;
+
+      align-items:center;
+
+      gap:14px;
+
+      position:sticky;
+
+      top:8px;
+
+      z-index:20;
+
+      padding:
+        15px 17px;
+
+      border-radius:22px;
+
+      border:
+        1px solid var(--line);
+
+      background:
+        rgba(15,26,44,.88);
+
+      backdrop-filter:
+        blur(16px);
+
+      box-shadow:
+        var(--shadow);
+
+    }
+
+
+    .brand{
+
+      display:flex;
+
+      align-items:center;
+
+      gap:12px;
+
+    }
+
+
+    .brand-icon{
+
+      width:48px;
+      height:48px;
+
+      display:grid;
+      place-items:center;
+
+      flex:0 0 auto;
+
+      border-radius:15px;
+
+      font-size:26px;
+
+      background:
+        linear-gradient(
+          135deg,
+          var(--green),
+          var(--blue)
+        );
+
+    }
+
+
+    .brand h1{
+
+      margin:0;
+
+      font-size:
+        clamp(
+          19px,
+          4vw,
+          28px
+        );
+
+      font-weight:1000;
+
+    }
+
+
+    .brand p{
+
+      margin:
+        4px
+        0
+        0;
+
+      color:var(--muted);
+
+      font-size:12px;
+
+    }
+
+
+    .sync-badge{
+
+      padding:
+        8px
+        11px;
+
+      white-space:nowrap;
+
+      border-radius:999px;
+
+      border:
+        1px solid
+        rgba(52,211,153,.25);
+
+      background:
+        rgba(52,211,153,.12);
+
+      color:#b7f7dc;
+
+      font-size:12px;
+
+      font-weight:900;
+
+    }
+
+
+
+    /* =====================================================
+       HERO
+       ===================================================== */
+
+    .hero{
+
+      margin-top:17px;
+
+      overflow:hidden;
+
+      border-radius:26px;
+
+      border:
+        1px solid var(--line);
+
+      background:
+
+        linear-gradient(
+          120deg,
+          rgba(16,185,129,.20),
+          rgba(96,165,250,.08)
+        ),
+
+        rgba(17,29,48,.88);
+
+      box-shadow:
+        var(--shadow);
+
+    }
+
+
+    .hero-inner{
+      padding:28px;
+    }
+
+
+    .hero-kicker{
+
+      color:#9ff3cf;
+
+      font-size:13px;
+
+      font-weight:1000;
+
+      letter-spacing:.08em;
+
+    }
+
+
+    .hero-title{
+
+      margin:
+        8px
+        0;
+
+      font-size:
+        clamp(
+          32px,
+          7vw,
+          58px
+        );
+
+      line-height:1.05;
+
+      font-weight:1000;
+
+    }
+
+
+    .hero-date{
+
+      color:var(--muted);
+
+      font-size:14px;
+
+    }
+
+
+    /* =====================================================
+       800 圈
+       ===================================================== */
+
+    .goal{
+
+      margin-top:22px;
+
+      padding:18px;
+
+      border-radius:18px;
+
+      background:
+        rgba(0,0,0,.18);
+
+      border:
+        1px solid
+        rgba(255,255,255,.08);
+
+    }
+
+
+    .goal-top{
+
+      display:flex;
+
+      justify-content:
+        space-between;
+
+      align-items:flex-end;
+
+      gap:12px;
+
+      margin-bottom:10px;
+
+    }
+
+
+    .goal-label{
+
+      font-weight:1000;
+
+    }
+
+
+    .goal-number{
+
+      font-size:28px;
+
+      font-weight:1000;
+
+    }
+
+
+    .progress-shell{
+
+      height:22px;
+
+      overflow:hidden;
+
+      border-radius:999px;
+
+      background:#091421;
+
+      border:
+        1px solid
+        rgba(255,255,255,.08);
+
+    }
+
+
+    .progress-bar{
+
+      width:0%;
+
+      height:100%;
+
+      position:relative;
+
+      border-radius:inherit;
+
+      transition:
+        width .4s ease;
+
+      background:
+        linear-gradient(
+          90deg,
+          #10b981,
+          #34d399,
+          #fbbf24
+        );
+
+    }
+
+
+    .progress-bar::after{
+
+      content:"";
+
+      position:absolute;
+
+      inset:0;
+
+      background:
+        repeating-linear-gradient(
+          135deg,
+          rgba(255,255,255,.17)
+          0 8px,
+          transparent
+          8px 16px
+        );
+
+    }
+
+
+    .goal-caption{
+
+      margin-top:10px;
+
+      text-align:right;
+
+      color:var(--muted);
+
+      font-size:13px;
+
+    }
+
+
+
+    /* =====================================================
+       STATS
+       ===================================================== */
+
+    .stats{
+
+      display:grid;
+
+      grid-template-columns:
+        repeat(4,1fr);
+
+      gap:12px;
+
+      margin-top:16px;
+
+    }
+
+
+    .stat-card{
+
+      padding:17px;
+
+      border-radius:19px;
+
+      border:
+        1px solid var(--line);
+
+      background:
+        rgba(20,33,54,.90);
+
+      box-shadow:
+        var(--shadow);
+
+    }
+
+
+    .stat-icon{
+      font-size:25px;
+    }
+
+
+    .stat-label{
+
+      margin-top:9px;
+
+      color:var(--muted);
+
+      font-size:12px;
+
+    }
+
+
+    .stat-value{
+
+      margin-top:3px;
+
+      font-size:27px;
+
+      font-weight:1000;
+
+    }
+
+
+
+    /* =====================================================
+       TABS
+       ===================================================== */
+
+    .tabs{
+
+      display:flex;
+
+      gap:8px;
+
+      overflow-x:auto;
+
+      scrollbar-width:none;
+
+      margin:
+        19px
+        0
+        13px;
+
+    }
+
+
+    .tabs::-webkit-scrollbar{
+      display:none;
+    }
+
+
+    .tab-btn{
+
+      flex:0 0 auto;
+
+      min-height:44px;
+
+      padding:
+        10px
+        16px;
+
+      border:0;
+
+      border-radius:999px;
+
+      cursor:pointer;
+
+      color:#c6d4e5;
+
+      background:#17263d;
+
+      font-weight:900;
+
+    }
+
+
+    .tab-btn.active{
+
+      color:#07131f;
+
+      background:
+        linear-gradient(
+          135deg,
+          #6ee7b7,
+          #5eead4
+        );
+
+    }
+
+
+    .panel{
+      display:none;
+    }
+
+
+    .panel.active{
+      display:block;
+    }
+
+
+
+    /* =====================================================
+       SECTION
+       ===================================================== */
+
+    .section{
+
+      margin-bottom:15px;
+
+      padding:19px;
+
+      border-radius:21px;
+
+      border:
+        1px solid var(--line);
+
+      background:
+        rgba(20,33,54,.90);
+
+      box-shadow:
+        var(--shadow);
+
+    }
+
+
+    .section-head{
+
+      display:flex;
+
+      justify-content:
+        space-between;
+
+      align-items:center;
+
+      gap:12px;
+
+      margin-bottom:15px;
+
+    }
+
+
+    .section-title{
+
+      margin:0;
+
+      font-size:20px;
+
+      font-weight:1000;
+
+    }
+
+
+    .section-sub{
+
+      margin:
+        5px
+        0
+        0;
+
+      color:var(--muted);
+
+      font-size:12px;
+
+    }
+
+
+
+    /* =====================================================
+       RANK
+       ===================================================== */
+
+    .rank-list{
+
+      display:grid;
+
+      gap:9px;
+
+    }
+
+
+    .rank-item{
+
+      display:grid;
+
+      grid-template-columns:
+        50px
+        minmax(0,1fr)
+        auto;
+
+      gap:11px;
+
+      align-items:center;
+
+      padding:14px;
+
+      border-radius:16px;
+
+      border:
+        1px solid var(--line);
+
+      background:#132238;
+
+    }
+
+
+    .rank-no{
+
+      width:43px;
+      height:43px;
+
+      display:grid;
+      place-items:center;
+
+      border-radius:14px;
+
+      background:#223653;
+
+      font-weight:1000;
+
+    }
+
+
+    .rank-no.gold{
+
+      color:#4b3200;
+
+      background:
+        linear-gradient(
+          135deg,
+          #f59e0b,
+          #fcd34d
+        );
+
+    }
+
+
+    .rank-no.silver{
+
+      color:#263244;
+
+      background:
+        linear-gradient(
+          135deg,
+          #94a3b8,
+          #e2e8f0
+        );
+
+    }
+
+
+    .rank-no.bronze{
+
+      color:#3b1800;
+
+      background:
+        linear-gradient(
+          135deg,
+          #b45309,
+          #fb923c
+        );
+
+    }
+
+
+    .rank-name{
+      font-weight:1000;
+    }
+
+
+    .rank-meta{
+
+      margin-top:3px;
+
+      color:var(--muted);
+
+      font-size:12px;
+
+    }
+
+
+    .rank-score{
+
+      font-size:21px;
+
+      font-weight:1000;
+
+      white-space:nowrap;
+
+    }
+
+
+
+    /* =====================================================
+       MONTH
+       ===================================================== */
+
+    .month-controls{
+
+      display:flex;
+
+      align-items:center;
+
+      gap:7px;
+
+    }
+
+
+    .month-btn{
+
+      width:42px;
+      height:42px;
+
+      border:0;
+
+      border-radius:12px;
+
+      cursor:pointer;
+
+      color:white;
+
+      background:#223654;
+
+      font-size:20px;
+
+      font-weight:1000;
+
+    }
+
+
+    .month-label{
+
+      min-width:100px;
+
+      text-align:center;
+
+      font-weight:1000;
+
+    }
+
+
+
+    /* =====================================================
+       STUDENT LIST
+       ===================================================== */
+
+    .student-tools{
+
+      display:flex;
+
+      gap:8px;
+
+      margin-bottom:13px;
+
+    }
+
+
+    .search-input{
+
+      width:100%;
+
+      min-height:46px;
+
+      padding:
+        10px
+        13px;
+
+      color:white;
+
+      outline:none;
+
+      border-radius:13px;
+
+      border:
+        1px solid
+        rgba(255,255,255,.10);
+
+      background:#0f1a2a;
+
+    }
+
+
+    .student-list{
+
+      display:grid;
+
+      gap:8px;
+
+    }
+
+
+    .student-row{
+
+      display:grid;
+
+      grid-template-columns:
+        48px
+        minmax(0,1fr)
+        auto
+        auto;
+
+      gap:11px;
+
+      align-items:center;
+
+      padding:
+        13px
+        14px;
+
+      border-radius:15px;
+
+      border:
+        1px solid var(--line);
+
+      background:#132238;
+
+    }
+
+
+    .student-no{
+
+      color:#84caff;
+
+      font-weight:1000;
+
+    }
+
+
+    .student-name{
+
+      font-weight:1000;
+
+    }
+
+
+    .student-value{
+
+      text-align:right;
+
+      color:var(--muted);
+
+      font-size:12px;
+
+    }
+
+
+    .student-value strong{
+
+      display:block;
+
+      margin-top:2px;
+
+      color:white;
+
+      font-size:17px;
+
+    }
+
+
+
+    /* =====================================================
+       HISTORY
+       ===================================================== */
+
+    .history-list{
+
+      display:grid;
+
+      gap:8px;
+
+    }
+
+
+    .history-row{
+
+      display:grid;
+
+      grid-template-columns:
+        minmax(0,1fr)
+        auto
+        auto;
+
+      gap:10px;
+
+      align-items:center;
+
+      padding:
+        13px
+        14px;
+
+      border-radius:15px;
+
+      border:
+        1px solid var(--line);
+
+      background:#132238;
+
+    }
+
+
+    .history-date{
+      font-weight:1000;
+    }
+
+
+    .history-meta{
+
+      margin-top:3px;
+
+      color:var(--muted);
+
+      font-size:12px;
+
+    }
+
+
+    .history-score{
+
+      font-weight:1000;
+
+      white-space:nowrap;
+
+    }
+
+
+    .view-btn{
+
+      min-height:40px;
+
+      padding:
+        8px
+        12px;
+
+      border:0;
+
+      border-radius:12px;
+
+      cursor:pointer;
+
+      color:white;
+
+      background:
+        linear-gradient(
+          135deg,
+          #2563eb,
+          #3b82f6
+        );
+
+      font-weight:900;
+
+    }
+
+
+
+    /* =====================================================
+       HISTORY DETAIL
+       ===================================================== */
+
+    .detail-box{
+
+      margin-top:13px;
+
+      padding:14px;
+
+      border-radius:16px;
+
+      background:
+        rgba(0,0,0,.18);
+
+      border:
+        1px solid
+        rgba(255,255,255,.08);
+
+    }
+
+
+    .detail-title{
+
+      margin-bottom:10px;
+
+      font-weight:1000;
+
+    }
+
+
+    .detail-grid{
+
+      display:grid;
+
+      grid-template-columns:
+        repeat(2,1fr);
+
+      gap:7px;
+
+    }
+
+
+    .detail-student{
+
+      display:flex;
+
+      justify-content:
+        space-between;
+
+      gap:10px;
+
+      padding:
+        9px
+        10px;
+
+      border-radius:11px;
+
+      background:#132238;
+
+      font-size:13px;
+
+    }
+
+
+
+    /* =====================================================
+       EMPTY / LOADING
+       ===================================================== */
+
+    .empty{
+
+      padding:24px;
+
+      text-align:center;
+
+      color:var(--muted);
+
+      border:
+        1px dashed
+        rgba(255,255,255,.14);
+
+      border-radius:15px;
+
+    }
+
+
+    .loading{
+
+      min-height:160px;
+
+      display:grid;
+      place-items:center;
+
+      text-align:center;
+
+      color:var(--muted);
+
+    }
+
+
+    footer{
+
+      margin-top:22px;
+
+      padding:15px;
+
+      text-align:center;
+
+      color:#718198;
+
+      font-size:12px;
+
+    }
+
+
+
+    /* =====================================================
+       TABLET
+       ===================================================== */
+
+    @media(max-width:850px){
+
+      .stats{
+
+        grid-template-columns:
+          repeat(2,1fr);
+
+      }
+
+    }
+
+
+
+    /* =====================================================
+       MOBILE
+       ===================================================== */
+
+    @media(max-width:600px){
+
+      .app{
+
+        padding:
+          9px
+          9px
+          40px;
+
+      }
+
+
+      .topbar{
+
+        top:5px;
+
+        padding:11px;
+
+        border-radius:18px;
+
+      }
+
+
+      .brand{
+
+        gap:8px;
+
+      }
+
+
+      .brand-icon{
+
+        width:41px;
+        height:41px;
+
+        border-radius:12px;
+
+        font-size:22px;
+
+      }
+
+
+      .brand h1{
+        font-size:17px;
+      }
+
+
+      .brand p{
+        display:none;
+      }
+
+
+      .sync-badge{
+
+        padding:
+          6px
+          8px;
+
+        font-size:10px;
+
+      }
+
+
+      .hero-inner{
+        padding:19px;
+      }
+
+
+      .stats{
+        gap:8px;
+      }
+
+
+      .stat-card{
+
+        padding:13px;
+
+        border-radius:16px;
+
+      }
+
+
+      .stat-value{
+        font-size:23px;
+      }
+
+
+      .section{
+
+        padding:14px;
+
+        border-radius:18px;
+
+      }
+
+
+      .section-head{
+        align-items:flex-start;
+      }
+
+
+      .student-row{
+
+        grid-template-columns:
+          38px
+          minmax(0,1fr)
+          auto;
+
+      }
+
+
+      .student-row
+      .student-value.month{
+        display:none;
+      }
+
+
+      .detail-grid{
+        grid-template-columns:1fr;
+      }
+
+
+      .history-row{
+
+        grid-template-columns:
+          minmax(0,1fr)
+          auto;
+
+      }
+
+
+      .history-row .view-btn{
+
+        grid-column:
+          1 / -1;
+
+      }
+
+    }
+
+  </style>
+</head>
+
+
+<body>
+
+  <div class="app">
+
+
+    <!-- =====================================================
+         TOP
+         ===================================================== -->
+
+    <header class="topbar">
+
+      <div class="brand">
+
+        <div class="brand-icon">
+          🏃
+        </div>
+
+        <div>
+
+          <h1>
+            804班跑步挑戰
+          </h1>
+
+          <p>
+            RUNNING CHALLENGE
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div
+        id="syncBadge"
+        class="sync-badge"
+      >
+        ● 資料載入中
+      </div>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         HERO
+         ===================================================== -->
+
+    <section class="hero">
+
+      <div class="hero-inner">
+
+        <div class="hero-kicker">
+          🏁 804 CLASS RUNNING CHALLENGE
+        </div>
+
+
+        <div class="hero-title">
+          全班挑戰 800 圈
+        </div>
+
+
+        <div
+          id="todayLabel"
+          class="hero-date"
+        ></div>
+
+
+
+        <div class="goal">
+
+          <div class="goal-top">
+
+            <div class="goal-label">
+              🏃 全班累積進度
+            </div>
+
+
+            <div class="goal-number">
+
+              <span id="classTotal">
+                0
+              </span>
+
+              /
+
+              800
+
+            </div>
+
+          </div>
+
+
+          <div class="progress-shell">
+
+            <div
+              id="goalBar"
+              class="progress-bar"
+            ></div>
+
+          </div>
+
+
+          <div
+            id="goalCaption"
+            class="goal-caption"
+          >
+            資料計算中...
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         STATS
+         ===================================================== -->
+
+    <section class="stats">
+
+      <div class="stat-card">
+
+        <div class="stat-icon">
+          ✅
+        </div>
+
+        <div class="stat-label">
+          今日完成
+        </div>
+
+        <div
+          id="todayDone"
+          class="stat-value"
+        >
+          0 / 28
+        </div>
+
+      </div>
+
+
+      <div class="stat-card">
+
+        <div class="stat-icon">
+          ⭕
+        </div>
+
+        <div class="stat-label">
+          今日總圈數
+        </div>
+
+        <div
+          id="todayTotal"
+          class="stat-value"
+        >
+          0
+        </div>
+
+      </div>
+
+
+      <div class="stat-card">
+
+        <div class="stat-icon">
+          📅
+        </div>
+
+        <div class="stat-label">
+          本月全班圈數
+        </div>
+
+        <div
+          id="monthTotal"
+          class="stat-value"
+        >
+          0
+        </div>
+
+      </div>
+
+
+      <div class="stat-card">
+
+        <div class="stat-icon">
+          🏆
+        </div>
+
+        <div class="stat-label">
+          今日最高
+        </div>
+
+        <div
+          id="todayHighest"
+          class="stat-value"
+        >
+          0
+        </div>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         TABS
+         ===================================================== -->
+
+    <nav class="tabs">
+
+      <button
+        class="tab-btn active"
+        data-tab="ranking"
+      >
+        🏆 排行榜
+      </button>
+
+
+      <button
+        class="tab-btn"
+        data-tab="students"
+      >
+        👟 全班圈數
+      </button>
+
+
+      <button
+        class="tab-btn"
+        data-tab="history"
+      >
+        📊 每日紀錄
+      </button>
+
+    </nav>
+
+
+
+    <!-- =====================================================
+         RANKING
+         ===================================================== -->
+
+    <section
+      id="panel-ranking"
+      class="panel active"
+    >
+
+
+      <!-- 月排名 -->
+
+      <div class="section">
+
+        <div class="section-head">
+
+          <div>
+
+            <h2 class="section-title">
+              🏆 每月 TOP 5
+            </h2>
+
+            <p class="section-sub">
+              當月累積圈數排行
+            </p>
+
+          </div>
+
+
+          <div class="month-controls">
+
+            <button
+              id="prevMonthBtn"
+              class="month-btn"
+            >
+              ‹
+            </button>
+
+
+            <div
+              id="monthLabel"
+              class="month-label"
+            ></div>
+
+
+            <button
+              id="nextMonthBtn"
+              class="month-btn"
+            >
+              ›
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <div
+          id="monthRanking"
+          class="rank-list"
+        ></div>
+
+      </div>
+
+
+
+      <!-- 今日排行 -->
+
+      <div class="section">
+
+        <div class="section-head">
+
+          <div>
+
+            <h2 class="section-title">
+              ⚡ 今日跑步王
+            </h2>
+
+            <p class="section-sub">
+              今日圈數 TOP 5
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div
+          id="todayRanking"
+          class="rank-list"
+        ></div>
+
+      </div>
+
+
+
+      <!-- 總排行 -->
+
+      <div class="section">
+
+        <div class="section-head">
+
+          <div>
+
+            <h2 class="section-title">
+              🥇 總累積 TOP 5
+            </h2>
+
+            <p class="section-sub">
+              所有跑步紀錄累積排行
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div
+          id="allRanking"
+          class="rank-list"
+        ></div>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         STUDENTS
+         ===================================================== -->
+
+    <section
+      id="panel-students"
+      class="panel"
+    >
+
+      <div class="section">
+
+        <div class="section-head">
+
+          <div>
+
+            <h2 class="section-title">
+              👟 全班個人圈數
+            </h2>
+
+            <p class="section-sub">
+              每位同學本月與總累積圈數
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="student-tools">
+
+          <input
+            id="studentSearch"
+            class="search-input"
+            placeholder="🔍 搜尋姓名或座號"
+          >
+
+        </div>
+
+
+        <div
+          id="studentList"
+          class="student-list"
+        ></div>
+
+      </div>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         HISTORY
+         ===================================================== -->
+
+    <section
+      id="panel-history"
+      class="panel"
+    >
+
+      <div class="section">
+
+        <div class="section-head">
+
+          <div>
+
+            <h2 class="section-title">
+              📊 每日跑步紀錄
+            </h2>
+
+            <p class="section-sub">
+              查看每天全班的跑步成果
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div
+          id="historyList"
+          class="history-list"
+        ></div>
+
+
+        <div
+          id="historyDetail"
+        ></div>
+
+      </div>
+
+    </section>
+
+
+
+    <footer>
+      804班跑步挑戰｜RUNNING CHALLENGE
+    </footer>
+
+  </div>
+
+
+
+  <!-- =====================================================
+       FIREBASE
+       ===================================================== -->
+
+  <script type="module">
+
+    import {
+      initializeApp
+    } from
+    "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+
+
+    import {
+      getFirestore,
+      collection,
+      getDocs
+    } from
+    "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+
+
+    /* =====================================================
+       Firebase Config
+       ===================================================== */
+
+    const firebaseConfig = {
+
+      apiKey:
+        "AIzaSyANYNMX9rgHqpijGNink33-G-YinhonnIw",
+
+      authDomain:
+        "running-tracker-e4da4.firebaseapp.com",
+
+      projectId:
+        "running-tracker-e4da4",
+
+      storageBucket:
+        "running-tracker-e4da4.firebasestorage.app",
+
+      messagingSenderId:
+        "711776089192",
+
+      appId:
+        "1:711776089192:web:799a1a1975e3c9088bb7dd"
+
+    };
+
+
+
+    /* =====================================================
+       學生名單
+       ===================================================== */
+
+    const STUDENTS = [
+
+      { no:1,  name:"王禹涵" },
+      { no:2,  name:"江育緹" },
+      { no:3,  name:"呂思儀" },
+      { no:4,  name:"李詠騏" },
+
+      { no:5,  name:"林子歆" },
+      { no:6,  name:"林禹萱" },
+      { no:7,  name:"張馨勻" },
+      { no:8,  name:"陳昕樂" },
+
+      { no:9,  name:"陳梓安" },
+      { no:10, name:"陳筠蓁" },
+      { no:11, name:"陳苙絜" },
+      { no:12, name:"楊錚諭" },
+
+      { no:13, name:"趙安褕" },
+      { no:14, name:"魏語潔" },
+      { no:15, name:"江靚恩" },
+      { no:16, name:"王洋振" },
+
+      { no:17, name:"吳昊丞" },
+      { no:18, name:"李祐誠" },
+      { no:19, name:"林宸陞" },
+      { no:20, name:"林維辰" },
+
+      { no:21, name:"林鈺棟" },
+      { no:22, name:"洪楷祥" },
+      { no:23, name:"陳兆楷" },
+      { no:24, name:"陳沂璟" },
+
+      { no:25, name:"黑肚·尤明" },
+      { no:26, name:"賴震宇" },
+      { no:27, name:"戴震龍" },
+      { no:28, name:"謝宇哲" }
+
+    ];
+
+
+
+    const CLASS_GOAL = 800;
+
+
+
+    /* =====================================================
+       Firebase Init
+       ===================================================== */
+
+    const app =
+      initializeApp(
+        firebaseConfig
+      );
+
+
+    const db =
+      getFirestore(
+        app
+      );
+
+
+
+    /* =====================================================
+       STATE
+       ===================================================== */
+
+    let allRecords = {};
+
+
+    const now =
+      new Date();
+
+
+    const todayKey =
+      formatDateKey(
+        now
+      );
+
+
+    let rankingDate =
+      new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        1
+      );
+
+
+
+    /* =====================================================
+       DOM
+       ===================================================== */
+
+    const syncBadge =
+      document.getElementById(
+        "syncBadge"
+      );
+
+
+    const todayLabel =
+      document.getElementById(
+        "todayLabel"
+      );
+
+
+    const classTotal =
+      document.getElementById(
+        "classTotal"
+      );
+
+
+    const goalBar =
+      document.getElementById(
+        "goalBar"
+      );
+
+
+    const goalCaption =
+      document.getElementById(
+        "goalCaption"
+      );
+
+
+    const todayDone =
+      document.getElementById(
+        "todayDone"
+      );
+
+
+    const todayTotal =
+      document.getElementById(
+        "todayTotal"
+      );
+
+
+    const monthTotal =
+      document.getElementById(
+        "monthTotal"
+      );
+
+
+    const todayHighest =
+      document.getElementById(
+        "todayHighest"
+      );
+
+
+    const monthLabel =
+      document.getElementById(
+        "monthLabel"
+      );
+
+
+    const monthRanking =
+      document.getElementById(
+        "monthRanking"
+      );
+
+
+    const todayRanking =
+      document.getElementById(
+        "todayRanking"
+      );
+
+
+    const allRanking =
+      document.getElementById(
+        "allRanking"
+      );
+
+
+    const studentSearch =
+      document.getElementById(
+        "studentSearch"
+      );
+
+
+    const studentList =
+      document.getElementById(
+        "studentList"
+      );
+
+
+    const historyList =
+      document.getElementById(
+        "historyList"
+      );
+
+
+    const historyDetail =
+      document.getElementById(
+        "historyDetail"
+      );
+
+
+
+    /* =====================================================
+       DATE
+       ===================================================== */
+
+    function formatDateKey(
+      date
+    ){
+
+      const year =
+        date.getFullYear();
+
+
+      const month =
+        String(
+          date.getMonth()+1
+        ).padStart(
+          2,
+          "0"
+        );
+
+
+      const day =
+        String(
+          date.getDate()
+        ).padStart(
+          2,
+          "0"
+        );
+
+
+      return (
+        `${year}-${month}-${day}`
+      );
+
+    }
+
+
+
+    function displayDate(
+      date
+    ){
+
+      const weekdays =
+        [
+          "日",
+          "一",
+          "二",
+          "三",
+          "四",
+          "五",
+          "六"
+        ];
+
+
+      return (
+
+        `${date.getFullYear()} / ` +
+
+        `${String(
+          date.getMonth()+1
+        ).padStart(
+          2,
+          "0"
+        )} / ` +
+
+        `${String(
+          date.getDate()
+        ).padStart(
+          2,
+          "0"
+        )} ` +
+
+        `星期${
+          weekdays[
+            date.getDay()
+          ]
+        }`
+
+      );
+
+    }
+
+
+
+    todayLabel.textContent =
+      `📅 ${displayDate(now)}`;
+
+
+
+    /* =====================================================
+       TOTAL FUNCTIONS
+       ===================================================== */
+
+    function getStudentAllTotal(
+      studentNo
+    ){
+
+      let total = 0;
+
+
+      Object.values(
+        allRecords
+      ).forEach(
+        record=>{
+
+          total +=
+            Number(
+              record
+                .records?.[
+                  studentNo
+                ] || 0
+            );
+
+        }
+      );
+
+
+      return total;
+
+    }
+
+
+
+    function getStudentMonthTotal(
+      studentNo,
+      year,
+      month
+    ){
+
+      const prefix =
+        `${year}-${
+          String(
+            month
+          ).padStart(
+            2,
+            "0"
+          )
+        }`;
+
+
+      let total = 0;
+
+
+      Object.entries(
+        allRecords
+      ).forEach(
+        ([
+          dateKey,
+          record
+        ])=>{
+
+          if(
+            dateKey.startsWith(
+              prefix
+            )
+          ){
+
+            total +=
+              Number(
+                record
+                  .records?.[
+                    studentNo
+                  ] || 0
+              );
+
+          }
+
+        }
+      );
+
+
+      return total;
+
+    }
+
+
+
+    function getClassAllTotal(){
+
+      let total = 0;
+
+
+      Object.values(
+        allRecords
+      ).forEach(
+        record=>{
+
+          STUDENTS.forEach(
+            student=>{
+
+              total +=
+                Number(
+                  record
+                    .records?.[
+                      student.no
+                    ] || 0
+                );
+
+            }
+          );
+
+        }
+      );
+
+
+      return total;
+
+    }
+
+
+
+    function getClassMonthTotal(
+      year,
+      month
+    ){
+
+      const prefix =
+        `${year}-${
+          String(
+            month
+          ).padStart(
+            2,
+            "0"
+          )
+        }`;
+
+
+      let total = 0;
+
+
+      Object.entries(
+        allRecords
+      ).forEach(
+        ([
+          dateKey,
+          record
+        ])=>{
+
+          if(
+            dateKey.startsWith(
+              prefix
+            )
+          ){
+
+            STUDENTS.forEach(
+              student=>{
+
+                total +=
+                  Number(
+                    record
+                      .records?.[
+                        student.no
+                      ] || 0
+                  );
+
+              }
+            );
+
+          }
+
+        }
+      );
+
+
+      return total;
+
+    }
+
+
+
+    /* =====================================================
+       DASHBOARD
+       ===================================================== */
+
+    function renderDashboard(){
+
+      const total =
+        getClassAllTotal();
+
+
+      classTotal.textContent =
+        total.toLocaleString();
+
+
+      const percentage =
+        CLASS_GOAL>0
+        ? total/CLASS_GOAL*100
+        : 0;
+
+
+      goalBar.style.width =
+        `${
+          Math.min(
+            percentage,
+            100
+          )
+        }%`;
+
+
+      if(
+        total >= CLASS_GOAL
+      ){
+
+        goalCaption.textContent =
+          `🎉 800圈挑戰成功！目前全班累積 ${total} 圈`;
+
+      }
+
+      else{
+
+        goalCaption.textContent =
+          `目前完成 ${
+            percentage.toFixed(1)
+          }%，還差 ${
+            CLASS_GOAL-total
+          } 圈`;
+
+      }
+
+
+
+      /* 今日 */
+
+      const record =
+        allRecords[
+          todayKey
+        ];
+
+
+      const values =
+        STUDENTS.map(
+          student=>
+            Number(
+              record
+                ?.records?.[
+                  student.no
+                ] || 0
+            )
+        );
+
+
+      const dayTotal =
+        values.reduce(
+          (
+            sum,
+            value
+          )=>
+            sum+value,
+          0
+        );
+
+
+      const done =
+        values.filter(
+          value=>value>0
+        ).length;
+
+
+      const highest =
+        values.length
+
+        ? Math.max(
+            ...values
+          )
+
+        : 0;
+
+
+      todayDone.textContent =
+        `${done} / ${STUDENTS.length}`;
+
+
+      todayTotal.textContent =
+        dayTotal;
+
+
+      todayHighest.textContent =
+        highest;
+
+
+      const currentMonthTotal =
+        getClassMonthTotal(
+          now.getFullYear(),
+          now.getMonth()+1
+        );
+
+
+      monthTotal.textContent =
+        currentMonthTotal;
+
+    }
+
+
+
+    /* =====================================================
+       RANK COMMON
+       ===================================================== */
+
+    function renderRanking(
+      container,
+      items
+    ){
+
+      if(
+        items.length===0
+        ||
+        items.every(
+          item=>item.score===0
+        )
+      ){
+
+        container.innerHTML =
+          `
+            <div class="empty">
+              目前尚無跑步紀錄
+            </div>
+          `;
+
+
+        return;
+
+      }
+
+
+      const medal =
+        [
+          "🥇",
+          "🥈",
+          "🥉",
+          "4",
+          "5"
+        ];
+
+
+      const medalClass =
+        [
+          "gold",
+          "silver",
+          "bronze",
+          "",
+          ""
+        ];
+
+
+      container.innerHTML =
+        items.map(
+          (
+            item,
+            index
+          )=>`
+
+            <div class="rank-item">
+
+              <div
+                class="
+                  rank-no
+                  ${medalClass[index]}
+                "
+              >
+                ${medal[index]}
+              </div>
+
+
+              <div>
+
+                <div class="rank-name">
+
+                  ${String(
+                    item.no
+                  ).padStart(
+                    2,
+                    "0"
+                  )}
+
+                  ${item.name}
+
+                </div>
+
+                <div class="rank-meta">
+                  第 ${index+1} 名
+                </div>
+
+              </div>
+
+
+              <div class="rank-score">
+                ${item.score} 圈
+              </div>
+
+            </div>
+
+          `
+        ).join("");
+
+    }
+
+
+
+    /* =====================================================
+       TODAY RANK
+       ===================================================== */
+
+    function renderTodayRanking(){
+
+      const record =
+        allRecords[
+          todayKey
+        ];
+
+
+      const ranking =
+        STUDENTS.map(
+          student=>({
+
+            ...student,
+
+            score:
+              Number(
+                record
+                  ?.records?.[
+                    student.no
+                  ] || 0
+              )
+
+          })
+        )
+        .filter(
+          item=>item.score>0
+        )
+        .sort(
+          (
+            a,
+            b
+          )=>
+            b.score-a.score
+            ||
+            a.no-b.no
+        )
+        .slice(
+          0,
+          5
+        );
+
+
+      renderRanking(
+        todayRanking,
+        ranking
+      );
+
+    }
+
+
+
+    /* =====================================================
+       MONTH RANK
+       ===================================================== */
+
+    function renderMonthRanking(){
+
+      const year =
+        rankingDate
+          .getFullYear();
+
+
+      const month =
+        rankingDate
+          .getMonth()+1;
+
+
+      monthLabel.textContent =
+        `${year} / ${
+          String(
+            month
+          ).padStart(
+            2,
+            "0"
+          )
+        }`;
+
+
+      const ranking =
+        STUDENTS.map(
+          student=>({
+
+            ...student,
+
+            score:
+              getStudentMonthTotal(
+                student.no,
+                year,
+                month
+              )
+
+          })
+        )
+        .sort(
+          (
+            a,
+            b
+          )=>
+            b.score-a.score
+            ||
+            a.no-b.no
+        )
+        .slice(
+          0,
+          5
+        );
+
+
+      renderRanking(
+        monthRanking,
+        ranking
+      );
+
+    }
+
+
+
+    /* =====================================================
+       ALL RANK
+       ===================================================== */
+
+    function renderAllRanking(){
+
+      const ranking =
+        STUDENTS.map(
+          student=>({
+
+            ...student,
+
+            score:
+              getStudentAllTotal(
+                student.no
+              )
+
+          })
+        )
+        .sort(
+          (
+            a,
+            b
+          )=>
+            b.score-a.score
+            ||
+            a.no-b.no
+        )
+        .slice(
+          0,
+          5
+        );
+
+
+      renderRanking(
+        allRanking,
+        ranking
+      );
+
+    }
+
+
+
+    /* =====================================================
+       STUDENTS
+       ===================================================== */
+
+    function renderStudents(){
+
+      const keyword =
+        studentSearch
+          .value
+          .trim()
+          .toLowerCase();
+
+
+      const year =
+        now.getFullYear();
+
+
+      const month =
+        now.getMonth()+1;
+
+
+      const list =
+        STUDENTS.filter(
+          student=>
+
+            student.name
+              .toLowerCase()
+              .includes(
+                keyword
+              )
+
+            ||
+
+            String(
+              student.no
+            ).includes(
+              keyword
+            )
+
+        );
+
+
+      studentList.innerHTML =
+        list.map(
+          student=>{
+
+            const monthScore =
+              getStudentMonthTotal(
+                student.no,
+                year,
+                month
+              );
+
+
+            const allScore =
+              getStudentAllTotal(
+                student.no
+              );
+
+
+            return `
+
+              <div class="student-row">
+
+                <div class="student-no">
+
+                  ${String(
+                    student.no
+                  ).padStart(
+                    2,
+                    "0"
+                  )}
+
+                </div>
+
+
+                <div class="student-name">
+                  ${student.name}
+                </div>
+
+
+                <div class="student-value month">
+
+                  本月
+
+                  <strong>
+                    ${monthScore}圈
+                  </strong>
+
+                </div>
+
+
+                <div class="student-value">
+
+                  總累積
+
+                  <strong>
+                    ${allScore}圈
+                  </strong>
+
+                </div>
+
+              </div>
+
+            `;
+
+          }
+        ).join("");
+
+    }
+
+
+
+    /* =====================================================
+       HISTORY
+       ===================================================== */
+
+    function renderHistory(){
+
+      const entries =
+        Object.entries(
+          allRecords
+        )
+        .sort(
+          (
+            a,
+            b
+          )=>
+            b[0].localeCompare(
+              a[0]
+            )
+        );
+
+
+      if(
+        entries.length===0
+      ){
+
+        historyList.innerHTML =
+          `
+            <div class="empty">
+              目前尚無歷史紀錄
+            </div>
+          `;
+
+
+        return;
+
+      }
+
+
+      historyList.innerHTML =
+        entries.map(
+          ([
+            dateKey,
+            record
+          ])=>{
+
+            const values =
+              STUDENTS.map(
+                student=>
+                  Number(
+                    record
+                      .records?.[
+                        student.no
+                      ] || 0
+                  )
+              );
+
+
+            const total =
+              values.reduce(
+                (
+                  sum,
+                  value
+                )=>
+                  sum+value,
+                0
+              );
+
+
+            const done =
+              values.filter(
+                value=>value>0
+              ).length;
+
+
+            return `
+
+              <div class="history-row">
+
+                <div>
+
+                  <div class="history-date">
+                    📅 ${dateKey}
+                  </div>
+
+                  <div class="history-meta">
+                    ${done}/${STUDENTS.length} 人完成
+                  </div>
+
+                </div>
+
+
+                <div class="history-score">
+                  ${total}圈
+                </div>
+
+
+                <button
+                  class="view-btn"
+                  data-date="${dateKey}"
+                >
+                  查看28人
+                </button>
+
+              </div>
+
+            `;
+
+          }
+        ).join("");
+
+    }
+
+
+
+    function showHistoryDetail(
+      dateKey
+    ){
+
+      const record =
+        allRecords[
+          dateKey
+        ];
+
+
+      if(
+        !record
+      ){
+        return;
+      }
+
+
+      historyDetail.innerHTML =
+        `
+
+          <div class="detail-box">
+
+            <div class="detail-title">
+              📋 ${dateKey} 個人圈數
+            </div>
+
+            <div class="detail-grid">
+
+              ${
+                STUDENTS.map(
+                  student=>{
+
+                    const score =
+                      Number(
+                        record
+                          .records?.[
+                            student.no
+                          ] || 0
+                      );
+
+
+                    return `
+
+                      <div class="detail-student">
+
+                        <span>
+
+                          ${String(
+                            student.no
+                          ).padStart(
+                            2,
+                            "0"
+                          )}
+
+                          ${student.name}
+
+                        </span>
+
+                        <strong>
+                          ${score}圈
+                        </strong>
+
+                      </div>
+
+                    `;
+
+                  }
+                ).join("")
+              }
+
+            </div>
+
+          </div>
+
+        `;
+
+
+      historyDetail.scrollIntoView({
+        behavior:"smooth",
+        block:"start"
+      });
+
+    }
+
+
+
+    /* =====================================================
+       LOAD
+       ===================================================== */
+
+    async function loadData(){
+
+      syncBadge.textContent =
+        "● 資料載入中";
+
+
+      try{
+
+        const snapshot =
+          await getDocs(
+            collection(
+              db,
+              "runningRecords"
+            )
+          );
+
+
+        allRecords = {};
+
+
+        snapshot.forEach(
+          documentSnapshot=>{
+
+            allRecords[
+              documentSnapshot.id
+            ] =
+              documentSnapshot.data();
+
+          }
+        );
+
+
+        syncBadge.textContent =
+          "● 已更新";
+
+
+        renderDashboard();
+
+        renderTodayRanking();
+
+        renderMonthRanking();
+
+        renderAllRanking();
+
+        renderStudents();
+
+        renderHistory();
+
+      }
+      catch(error){
+
+        console.error(
+          error
+        );
+
+
+        syncBadge.textContent =
+          "● 讀取失敗";
+
+
+        document
+          .querySelectorAll(
+            ".rank-list"
+          )
+          .forEach(
+            element=>{
+
+              element.innerHTML =
+                `
+                  <div class="empty">
+                    Firebase資料讀取失敗
+                  </div>
+                `;
+
+            }
+          );
+
+      }
+
+    }
+
+
+
+    /* =====================================================
+       SEARCH
+       ===================================================== */
+
+    studentSearch.addEventListener(
+      "input",
+      renderStudents
+    );
+
+
+
+    /* =====================================================
+       MONTH
+       ===================================================== */
+
+    document
+      .getElementById(
+        "prevMonthBtn"
+      )
+      .addEventListener(
+        "click",
+        ()=>{
+
+          rankingDate =
+            new Date(
+              rankingDate
+                .getFullYear(),
+
+              rankingDate
+                .getMonth()-1,
+
+              1
+            );
+
+
+          renderMonthRanking();
+
+        }
+      );
+
+
+    document
+      .getElementById(
+        "nextMonthBtn"
+      )
+      .addEventListener(
+        "click",
+        ()=>{
+
+          rankingDate =
+            new Date(
+              rankingDate
+                .getFullYear(),
+
+              rankingDate
+                .getMonth()+1,
+
+              1
+            );
+
+
+          renderMonthRanking();
+
+        }
+      );
+
+
+
+    /* =====================================================
+       HISTORY CLICK
+       ===================================================== */
+
+    historyList.addEventListener(
+      "click",
+      event=>{
+
+        const button =
+          event.target.closest(
+            "[data-date]"
+          );
+
+
+        if(
+          !button
+        ){
+          return;
+        }
+
+
+        showHistoryDetail(
+          button.dataset.date
+        );
+
+      }
+    );
+
+
+
+    /* =====================================================
+       TABS
+       ===================================================== */
+
+    document
+      .querySelectorAll(
+        ".tab-btn"
+      )
+      .forEach(
+        button=>{
+
+          button.addEventListener(
+            "click",
+            ()=>{
+
+              const tab =
+                button.dataset.tab;
+
+
+              document
+                .querySelectorAll(
+                  ".tab-btn"
+                )
+                .forEach(
+                  item=>
+                    item.classList.remove(
+                      "active"
+                    )
+                );
+
+
+              document
+                .querySelectorAll(
+                  ".panel"
+                )
+                .forEach(
+                  panel=>
+                    panel.classList.remove(
+                      "active"
+                    )
+                );
+
+
+              button.classList.add(
+                "active"
+              );
+
+
+              document
+                .getElementById(
+                  `panel-${tab}`
+                )
+                .classList.add(
+                  "active"
+                );
+
+            }
+          );
+
+        }
+      );
+
+
+
+    /* =====================================================
+       INIT
+       ===================================================== */
+
+    loadData();
+
+  </script>
+
+</body>
+</html>
