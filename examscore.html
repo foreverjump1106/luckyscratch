@@ -2,3160 +2,2160 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta name="theme-color" content="#f2b15f">
+  <title>我的成績分析｜學生段考成績查詢</title>
 
-  <title>學生段考成績查詢</title>
-
-  <link
-    rel="icon"
-    href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="20" fill="%231d4ed8"/><text x="50" y="68" text-anchor="middle" font-size="58" fill="white">績</text></svg>'
-  >
+  <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" rx="20" fill="%230f766e"/><text x="50" y="68" text-anchor="middle" font-size="58" fill="white">績</text></svg>'>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
 
     body {
       margin: 0;
       min-height: 100vh;
-
-      font-family:
-        "Microsoft JhengHei",
-        "Noto Sans TC",
-        sans-serif;
-
-      color: #0f172a;
-
+      font-family: "Microsoft JhengHei","Noto Sans TC",sans-serif;
+      color: #404853;
       background:
-        linear-gradient(
-          135deg,
-          #dbeafe,
-          #eff6ff,
-          #f8fafc
-        );
+        radial-gradient(circle at 8% 9%, rgba(255,223,176,.54) 0 85px, transparent 86px),
+        radial-gradient(circle at 93% 13%, rgba(255,205,210,.46) 0 104px, transparent 105px),
+        radial-gradient(circle at 8% 84%, rgba(187,222,251,.42) 0 112px, transparent 113px),
+        radial-gradient(circle at 92% 84%, rgba(220,237,200,.52) 0 100px, transparent 101px),
+        linear-gradient(135deg,#fff8e7 0%,#fff4e8 36%,#f8fbec 68%,#eef8f5 100%);
+      background-attachment: fixed;
     }
 
-    button,
-    input,
-    select {
-      font-family: inherit;
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -1;
+      opacity: .16;
+      background-image:
+        radial-gradient(#e8a453 1.4px, transparent 1.4px),
+        radial-gradient(#78ad9e 1.4px, transparent 1.4px);
+      background-size: 34px 34px,46px 46px;
+      background-position: 0 0,18px 18px;
     }
+
+    button,input { font-family: inherit; }
 
     .page {
       width: 100%;
-      max-width: 1050px;
-
+      max-width: 1180px;
       margin: 0 auto;
-
-      padding: 28px 14px 60px;
+      padding: 26px 14px 70px;
     }
 
     .header {
       text-align: center;
-
       margin-bottom: 24px;
     }
 
-    .logo {
-      width: 76px;
-      height: 76px;
-
-      margin: 0 auto 12px;
-
-      display: flex;
+    .brand-bubble {
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-
-      border-radius: 22px;
-
-      color: white;
-
-      background:
-        linear-gradient(
-          135deg,
-          #2563eb,
-          #1d4ed8
-        );
-
-      font-size: 40px;
-      font-weight: 900;
-
-      box-shadow:
-        0 12px 28px
-        rgba(37,99,235,.2);
+      padding: 15px 28px;
+      border-radius: 30px;
+      background: linear-gradient(135deg,#fff0b8,#ffdca8);
+      border: 3px solid rgba(255,255,255,.93);
+      box-shadow: 0 10px 24px rgba(136,102,58,.14);
     }
 
-    h1 {
+    .brand-title {
       margin: 0;
-
-      font-size: 30px;
+      color: #4e5661;
+      font-size: 32px;
+      font-weight: 900;
+      letter-spacing: 2px;
     }
 
     .subtitle {
-      margin-top: 7px;
-
-      color: #64748b;
-
-      font-size: 15px;
+      display: inline-block;
+      margin-top: 9px;
+      padding: 7px 17px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.76);
+      color: #697482;
+      font-size: 14px;
     }
 
     .card {
       margin-bottom: 18px;
-
       padding: 22px;
-
-      border:
-        1px solid #e2e8f0;
-
-      border-radius: 20px;
-
-      background:
-        rgba(255,255,255,.97);
-
-      box-shadow:
-        0 14px 35px
-        rgba(15,23,42,.08);
+      border: 2px solid rgba(255,255,255,.98);
+      border-radius: 22px;
+      background: rgba(255,255,255,.95);
+      box-shadow: 0 12px 28px rgba(74,85,104,.08);
     }
 
     .login-card {
-      max-width: 600px;
-
-      margin-left: auto;
-      margin-right: auto;
+      max-width: 570px;
+      margin: 0 auto 18px;
     }
 
     .section-title {
-      margin-bottom: 16px;
-
+      margin-bottom: 15px;
+      color: #4d5663;
       font-size: 21px;
       font-weight: 900;
     }
 
-    .field {
-      margin-bottom: 17px;
+    .help {
+      padding: 13px 15px;
+      border: 1px solid #eadcc7;
+      border-radius: 14px;
+      background: #fff8e9;
+      color: #6d665e;
+      font-size: 14px;
+      line-height: 1.8;
     }
+
+    .field { margin-bottom: 15px; }
 
     label {
       display: block;
-
       margin-bottom: 7px;
-
       font-size: 14px;
-      font-weight: 800;
+      font-weight: 900;
     }
 
-    input,
-    select {
+    input {
       width: 100%;
-
       min-height: 50px;
-
       padding: 0 14px;
-
-      border:
-        1px solid #cbd5e1;
-
-      border-radius: 13px;
-
+      border: 1px solid #d6d8dc;
+      border-radius: 14px;
       background: white;
-
-      font-size: 16px;
-
+      font-size: 17px;
       outline: none;
     }
 
-    input:focus,
-    select:focus {
-      border-color: #2563eb;
-
-      box-shadow:
-        0 0 0 4px
-        rgba(37,99,235,.1);
-    }
-
-    .hint {
-      margin-top: 7px;
-
-      color: #64748b;
-
-      font-size: 13px;
-      line-height: 1.6;
+    input:focus {
+      border-color: #dc9d43;
+      box-shadow: 0 0 0 4px rgba(220,157,67,.14);
     }
 
     .btn {
       width: 100%;
-
-      min-height: 52px;
-
-      padding: 0 18px;
-
+      min-height: 50px;
       border: 0;
-
-      border-radius: 13px;
-
-      color: white;
-
-      background:
-        linear-gradient(
-          135deg,
-          #2563eb,
-          #1d4ed8
-        );
-
+      border-radius: 14px;
+      background: #d9903d;
+      color: #fff;
       font-size: 17px;
       font-weight: 900;
-
       cursor: pointer;
+      box-shadow: 0 5px 12px rgba(175,117,47,.16);
     }
 
-    .btn:disabled {
-      opacity: .55;
+    .btn:disabled { opacity: .6; cursor: wait; }
 
-      cursor: not-allowed;
-    }
-
-    .btn-secondary {
-      background: #475569;
+    .secondary-btn {
+      width: auto;
+      min-width: 110px;
+      padding: 0 18px;
+      background: #68778a;
     }
 
     .message {
       display: none;
-
       margin-top: 14px;
-
       padding: 13px 15px;
-
-      border-radius: 12px;
-
+      border-radius: 13px;
       font-size: 14px;
       line-height: 1.7;
     }
 
-    .message.error {
-      display: block;
+    .message.error { display:block; background:#fde7e4; color:#974b46; }
+    .message.info { display:block; background:#e8f3fb; color:#376f95; }
+    .message.success { display:block; background:#e6f5df; color:#3b7138; }
 
-      color: #991b1b;
+    .result-area { display: none; }
 
-      background: #fee2e2;
-    }
-
-    .message.info {
-      display: block;
-
-      color: #1e40af;
-
-      background: #dbeafe;
-    }
-
-    .result-area {
-      display: none;
-    }
-
-    .result-area.show {
-      display: block;
-    }
-
-    .student-head {
+    .student-header {
       display: flex;
-
       align-items: center;
       justify-content: space-between;
-
-      gap: 16px;
-
+      gap: 15px;
       margin-bottom: 18px;
-
-      padding: 18px 20px;
-
-      border:
-        1px solid #dbeafe;
-
-      border-radius: 18px;
-
-      background:
-        linear-gradient(
-          135deg,
-          #eff6ff,
-          #f8fafc
-        );
+      padding: 19px 21px;
+      border: 2px solid rgba(255,255,255,.95);
+      border-radius: 21px;
+      background: linear-gradient(135deg,#fff1c6,#eaf6df);
+      box-shadow: 0 8px 18px rgba(100,90,70,.08);
     }
 
-    .student-name {
-      font-size: 28px;
+    .student-name { font-size: 28px; font-weight: 900; }
+    .student-meta { margin-top: 5px; color: #687381; }
+
+    .next-stage {
+      margin-bottom: 18px;
+      padding: 20px;
+      border: 2px solid #f6d18d;
+      border-radius: 20px;
+      background: linear-gradient(135deg,#ffe7b8,#fff6dd);
+    }
+
+    .next-stage-label {
+      color: #976423;
+      font-size: 14px;
       font-weight: 900;
     }
 
-    .student-meta {
+    .next-stage-title {
       margin-top: 5px;
-
-      color: #64748b;
-
-      font-size: 14px;
+      color: #694e2f;
+      font-size: 24px;
+      font-weight: 900;
     }
 
-    .summary-grid {
+    .next-stage-text {
+      margin-top: 7px;
+      color: #6d645b;
+      line-height: 1.8;
+    }
+
+    .summary {
       display: grid;
-
-      grid-template-columns:
-        repeat(4, minmax(0,1fr));
-
-      gap: 12px;
-
-      margin-bottom: 18px;
+      grid-template-columns: repeat(4,minmax(0,1fr));
+      gap: 11px;
     }
 
     .summary-card {
-      padding: 15px 12px;
-
-      border:
-        1px solid #e2e8f0;
-
+      padding: 15px;
+      border: 1px solid #ebe2d5;
       border-radius: 15px;
-
-      background: #f8fafc;
-
+      background: linear-gradient(145deg,#fffdf8,#fff7ea);
       text-align: center;
     }
 
-    .summary-label {
-      color: #64748b;
+    .summary-label { color:#7a828d; font-size:13px; }
+    .summary-value { margin-top:4px; font-size:23px; font-weight:900; }
 
-      font-size: 13px;
-    }
-
-    .summary-value {
-      margin-top: 5px;
-
-      font-size: 26px;
-      font-weight: 900;
-    }
-
-    .positive {
-      color: #15803d;
-    }
-
-    .negative {
-      color: #b91c1c;
-    }
-
-    .neutral {
-      color: #475569;
-    }
-
-    .exam-selector {
+    .chart-grid {
       display: grid;
-
-      grid-template-columns:
-        2fr 1fr;
-
-      gap: 12px;
-
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
       margin-bottom: 18px;
     }
 
-    .subject-list {
-      display: grid;
-
-      gap: 10px;
+    .chart-card {
+      padding: 16px;
+      border: 1px solid #e7e1da;
+      border-radius: 18px;
+      background: rgba(255,255,255,.95);
     }
 
-    .subject-row {
-      display: grid;
-
-      grid-template-columns:
-        80px 1fr 110px;
-
-      align-items: center;
-
-      gap: 12px;
-
-      padding: 13px;
-
-      border:
-        1px solid #e2e8f0;
-
-      border-radius: 14px;
-
-      background: #fff;
-    }
-
-    .subject-name {
-      font-weight: 900;
-    }
-
-    .subject-bar {
-      height: 12px;
-
-      overflow: hidden;
-
-      border-radius: 999px;
-
-      background: #e2e8f0;
-    }
-
-    .subject-fill {
-      height: 100%;
-
-      border-radius: 999px;
-
-      background: #2563eb;
-    }
-
-    .subject-score {
-      text-align: right;
-
-      font-size: 14px;
-      line-height: 1.5;
-    }
-
-    .subject-score strong {
-      font-size: 20px;
-    }
-
-    .compare {
-      margin-left: 5px;
-
-      font-size: 12px;
-      font-weight: 800;
-    }
+    .chart-title { margin-bottom:9px; font-weight:900; }
 
     .chart-box {
       position: relative;
-
-      min-height: 310px;
+      min-height: 300px;
     }
 
-    canvas {
-      max-width: 100%;
+    .table-tip {
+      margin-bottom: 10px;
+      padding: 10px 12px;
+      border-radius: 11px;
+      background: #fff7e7;
+      color: #70675d;
+      font-size: 13px;
+      line-height: 1.7;
     }
-
-    .analysis-grid {
-      display: grid;
-
-      grid-template-columns:
-        repeat(3, minmax(0,1fr));
-
-      gap: 12px;
-    }
-
-    .analysis-card {
-      padding: 16px;
-
-      border-radius: 15px;
-
-      border:
-        1px solid #e2e8f0;
-
-      background: #f8fafc;
-    }
-
-    .analysis-title {
-      margin-bottom: 8px;
-
-      font-size: 16px;
-      font-weight: 900;
-    }
-
-    .analysis-text {
-      color: #475569;
-
-      font-size: 14px;
-      line-height: 1.8;
-    }
-
-    .advice-list {
-      display: grid;
-
-      gap: 12px;
-    }
-
-    .advice-item {
-      padding: 15px 16px;
-
-      border-left:
-        5px solid #2563eb;
-
-      border-radius: 12px;
-
-      background: #f8fafc;
-
-      line-height: 1.8;
-    }
-
-    .advice-item strong {
-      display: block;
-
-      margin-bottom: 4px;
-    }
-
-    /* =========================================================
-       歷次段考表格
-       固定表頭＋固定左欄
-       ========================================================= */
 
     .table-wrap {
-      position: relative;
-
       width: 100%;
-
       max-height: 520px;
-
       overflow: auto;
-
       -webkit-overflow-scrolling: touch;
-
       overscroll-behavior: contain;
-
-      border:
-        1px solid #cbd5e1;
-
-      border-radius: 14px;
-
+      border: 1px solid #ded8d1;
+      border-radius: 15px;
       background: white;
     }
 
     table {
       width: 100%;
-
-      min-width: 980px;
-
+      min-width: 800px;
       border-collapse: separate;
       border-spacing: 0;
-
-      background: white;
     }
 
-    th,
-    td {
-      height: 45px;
-
-      padding: 9px 10px;
-
-      border-right:
-        1px solid #e2e8f0;
-
-      border-bottom:
-        1px solid #e2e8f0;
-
-      text-align: center;
-
-      white-space: nowrap;
-
-      font-size: 13px;
-
+    th,td {
+      height: 46px;
+      padding: 10px;
+      border-right: 1px solid #eee9e3;
+      border-bottom: 1px solid #eee9e3;
       background: white;
+      text-align: center;
+      white-space: nowrap;
+      font-size: 14px;
     }
 
     thead th {
       position: sticky;
-
       top: 0;
-
-      z-index: 30;
-
-      background: #e2e8f0;
-
+      z-index: 20;
+      background: #f4eadb;
+      border-bottom: 2px solid #d8c6aa;
       font-weight: 900;
-
-      border-bottom:
-        2px solid #94a3b8;
     }
 
-    thead th:first-child,
-    tbody td:first-child {
+    .subject-history-table thead th:first-child,
+    .subject-history-table tbody td:first-child {
       position: sticky;
-
       left: 0;
-
-      min-width: 145px;
-
-      z-index: 15;
-
-      background: #f8fafc;
-
-      border-right:
-        2px solid #94a3b8;
+      z-index: 10;
+      min-width: 92px;
+      background: #fff9ef;
+      font-weight: 900;
     }
 
-    thead th:first-child {
-      z-index: 50;
-
-      background: #cbd5e1;
+    .subject-history-table thead th:first-child {
+      z-index: 30;
+      background: #eadbc5;
     }
 
-    tbody tr:nth-child(even) td {
-      background: #fbfdff;
+    .history-mean {
+      background: #eef7e8 !important;
+      font-weight: 900;
     }
 
-    tbody tr:nth-child(even) td:first-child {
-      background: #f1f5f9;
+    .subject-list {
+      display: grid;
+      gap: 18px;
     }
 
-    .logout-area {
-      max-width: 320px;
-
-      margin:
-        20px auto 0;
+    .subject-card {
+      overflow: hidden;
+      border: 1px solid #e8e1d9;
+      border-radius: 20px;
+      background: white;
+      box-shadow: 0 7px 16px rgba(85,80,70,.06);
     }
 
-    .privacy-note {
-      margin-top: 15px;
+    .subject-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 15px 18px;
+      background: linear-gradient(135deg,#fff5df,#f9f5ec);
+      border-bottom: 1px solid #eee5d8;
+    }
 
-      color: #64748b;
+    .subject-name { font-size:21px; font-weight:900; }
 
-      font-size: 12px;
-      line-height: 1.7;
+    .status-badge {
+      padding: 5px 11px;
+      border-radius: 999px;
+      background: #fff;
+      color: #73675b;
+      font-size: 13px;
+      font-weight: 900;
+    }
 
+    .subject-body { padding: 18px; }
+
+    .subject-data {
+      display: grid;
+      grid-template-columns: repeat(4,minmax(0,1fr));
+      gap: 9px;
+      margin-bottom: 13px;
+    }
+
+    .data-box {
+      padding: 11px;
+      border-radius: 13px;
+      background: #faf8f5;
       text-align: center;
     }
 
-    @media(max-width:760px) {
+    .data-label { color:#8a8178; font-size:12px; }
+    .data-value { margin-top:4px; font-size:18px; font-weight:900; }
 
-      .page {
-        padding:
-          20px 10px 40px;
-      }
+    .positive { color:#4a8745; }
+    .negative { color:#be5b56; }
 
-      h1 {
-        font-size: 25px;
-      }
-
-      .card {
-        padding:
-          18px 14px;
-      }
-
-      .student-head {
-        flex-direction: column;
-
-        align-items: flex-start;
-      }
-
-      .summary-grid,
-      .analysis-grid {
-        grid-template-columns:
-          repeat(2,1fr);
-      }
-
-      .exam-selector {
-        grid-template-columns: 1fr;
-      }
-
-      .subject-row {
-        grid-template-columns:
-          65px 1fr;
-
-        gap: 8px;
-      }
-
-      .subject-score {
-        grid-column:
-          1 / -1;
-
-        text-align: left;
-      }
-
-      .table-wrap {
-        max-height: 470px;
-      }
-
-      table {
-        min-width: 900px;
-      }
+    .analysis-box,.action-box,.week-box {
+      margin-top: 11px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      line-height: 1.85;
     }
 
-    @media(max-width:430px) {
+    .analysis-box { background:#eef5fb; border-left:5px solid #72a9ce; }
+    .action-box { background:#fff5dc; border-left:5px solid #dfa349; }
+    .week-box { background:#edf6e7; border-left:5px solid #83ad68; }
 
-      .summary-grid,
-      .analysis-grid {
-        grid-template-columns:
-          1fr 1fr;
-      }
+    .box-title { margin-bottom:6px; font-weight:900; }
 
-      .summary-value {
-        font-size: 22px;
-      }
+    .action-list {
+      margin: 7px 0 0;
+      padding-left: 22px;
+    }
+
+    .action-list li { margin: 6px 0; }
+
+    .priority-grid {
+      display: grid;
+      grid-template-columns: repeat(3,minmax(0,1fr));
+      gap: 12px;
+    }
+
+    .priority-card {
+      padding: 16px;
+      border: 1px solid #e5dfd5;
+      border-radius: 16px;
+      background: #fffdf8;
+    }
+
+    .priority-number {
+      display: inline-flex;
+      width: 32px;
+      height: 32px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: #e4a04c;
+      color: white;
+      font-weight: 900;
+    }
+
+    .priority-title {
+      margin-top: 8px;
+      font-size: 17px;
+      font-weight: 900;
+    }
+
+    .priority-text {
+      margin-top: 6px;
+      color: #69717c;
+      font-size: 14px;
+      line-height: 1.75;
+    }
+
+    .privacy-note {
+      margin-top: 13px;
+      color: #7b8490;
+      font-size: 13px;
+      line-height: 1.7;
+      text-align: center;
+    }
+
+    .footer {
+      margin-top: 25px;
+      color: #7b8490;
+      font-size: 13px;
+      line-height: 1.8;
+      text-align: center;
+    }
+
+    @media(max-width:820px) {
+      .summary,.chart-grid,.priority-grid { grid-template-columns:1fr; }
+      .subject-data { grid-template-columns:1fr 1fr; }
+      .student-header { flex-direction:column; align-items:stretch; }
+    }
+
+    @media(max-width:560px) {
+      .page { padding:18px 9px 45px; }
+      .card { padding:17px 12px; }
+      .brand-title { font-size:26px; }
+      .brand-bubble { padding:13px 21px; }
+      .subject-head { flex-direction:column; align-items:flex-start; }
     }
   </style>
 </head>
 
 <body>
+  <main class="page">
 
-<div class="page">
+    <header class="header">
+      <div class="brand-bubble">
+        <h1 class="brand-title">我的成績分析</h1>
+      </div>
+      <br>
+      <div class="subtitle">學生／家長段考成績查詢</div>
+    </header>
 
-  <div class="header">
+    <section id="loginArea" class="card login-card">
+      <div class="section-title">🔎 查詢個人成績</div>
 
-    <div class="logo">
-      績
-    </div>
-
-    <h1>
-      學生段考成績查詢
-    </h1>
-
-    <div class="subtitle">
-      查看段考成績、歷次變化與學習分析
-    </div>
-
-  </div>
-
-
-  <!-- 登入 -->
-
-  <div
-    id="loginArea"
-    class="card login-card"
-  >
-
-    <div class="section-title">
-      家長／學生查詢
-    </div>
-
-    <div class="field">
-
-      <label for="birthMMDD">
-        學生出生月日
-      </label>
-
-      <input
-        id="birthMMDD"
-        maxlength="4"
-        inputmode="numeric"
-        autocomplete="off"
-        placeholder="例如：0815"
-      >
-
-      <div class="hint">
-        例如 8 月 15 日請輸入 0815。
+      <div class="help">
+        請輸入學生的「出生月日 4 碼」與「身分證字號後 5 碼」。
+        系統會依這組資料查詢該名學生的歷次段考成績與學習建議。
       </div>
 
-    </div>
+      <div style="height:14px"></div>
 
-
-    <div class="field">
-
-      <label for="idLast5">
-        身分證號後五碼
-      </label>
-
-      <input
-        id="idLast5"
-        type="password"
-        maxlength="5"
-        inputmode="numeric"
-        autocomplete="off"
-        placeholder="請輸入後五碼"
-      >
-
-    </div>
-
-
-    <button
-      id="searchBtn"
-      class="btn"
-    >
-      查詢成績
-    </button>
-
-
-    <div
-      id="message"
-      class="message"
-    ></div>
-
-
-    <div class="privacy-note">
-      查詢資料僅供學生與家長了解學習狀況使用。
-    </div>
-
-  </div>
-
-
-  <!-- 查詢結果 -->
-
-  <div
-    id="resultArea"
-    class="result-area"
-  >
-
-    <div class="student-head">
-
-      <div>
-
-        <div
-          id="studentName"
-          class="student-name"
-        ></div>
-
-        <div
-          id="studentMeta"
-          class="student-meta"
-        ></div>
-
+      <div class="field">
+        <label for="birthMMDD">出生月日 4 碼</label>
+        <input id="birthMMDD" inputmode="numeric" maxlength="4" autocomplete="off" placeholder="例如 0201">
       </div>
 
-      <div
-        id="latestExamName"
-        style="
-          color:#2563eb;
-          font-weight:900;
-        "
-      ></div>
-
-    </div>
-
-
-    <!-- 本次摘要 -->
-
-    <div class="card">
-
-      <div class="section-title">
-        本次段考摘要
+      <div class="field">
+        <label for="idLast5">身分證字號後 5 碼</label>
+        <input id="idLast5" type="password" inputmode="numeric" maxlength="5" autocomplete="off" placeholder="請輸入 5 碼">
       </div>
 
-      <div class="exam-selector">
+      <button id="queryBtn" class="btn">查詢我的成績</button>
 
-        <div class="field">
+      <div id="loginMessage" class="message"></div>
 
-          <label for="examSelect">
-            選擇段考
-          </label>
+      <div class="privacy-note">
+        🔒 本頁只提供個人成績查詢，不顯示其他學生的個別成績。
+      </div>
+    </section>
 
-          <select
-            id="examSelect"
-          ></select>
+    <section id="resultArea" class="result-area">
 
+      <div class="student-header">
+        <div>
+          <div id="studentName" class="student-name"></div>
+          <div id="studentMeta" class="student-meta"></div>
         </div>
 
-        <div class="field">
-
-          <label>
-            已有資料
-          </label>
-
-          <div
-            id="examCountText"
-            style="
-              min-height:50px;
-              display:flex;
-              align-items:center;
-              font-weight:900;
-            "
-          ></div>
-
-        </div>
-
+        <button id="logoutBtn" class="btn secondary-btn">重新查詢</button>
       </div>
 
+      <div class="next-stage">
+        <div class="next-stage-label">🎯 下一階段學習目標</div>
+        <div id="nextStageTitle" class="next-stage-title"></div>
+        <div id="nextStageText" class="next-stage-text"></div>
+      </div>
 
-      <div class="summary-grid">
+      <section class="card">
+        <div class="section-title">📊 我的學習歷程摘要</div>
+        <div id="summary" class="summary"></div>
+      </section>
 
-        <div class="summary-card">
-
-          <div class="summary-label">
-            總分
+      <div class="chart-grid">
+        <section class="chart-card">
+          <div class="chart-title">歷次五科平均</div>
+          <div class="chart-box">
+            <canvas id="averageChart"></canvas>
           </div>
+        </section>
 
-          <div
-            id="totalValue"
-            class="summary-value"
-          ></div>
-
-        </div>
-
-
-        <div class="summary-card">
-
-          <div class="summary-label">
-            五科平均
+        <section class="chart-card">
+          <div class="chart-title">歷次班級排名</div>
+          <div class="chart-box">
+            <canvas id="rankChart"></canvas>
           </div>
+        </section>
+      </div>
 
-          <div
-            id="averageValue"
-            class="summary-value"
-          ></div>
+      <section class="card">
+        <div class="section-title">📖 五科歷次成績</div>
+        <div class="table-tip">手機可左右滑動查看歷次段考；「科目」固定於左側。</div>
 
+        <div class="table-wrap">
+          <table class="subject-history-table">
+            <thead>
+              <tr id="historyHeader"></tr>
+            </thead>
+            <tbody id="historyBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="section-title">🧭 下一階段五科學習建議</div>
+
+        <div class="help">
+          目前學生端使用與教師後台相同的核心判定邏輯，但文字改成學生與家長較容易執行的說法。
+          現階段會依歷次成績、近期趨勢、與班平均的差距及成績穩定度提供建議。
+          等之後加入各科教材版本與實際段考範圍後，這裡會再升級成更細的章節與題型建議。
         </div>
 
-
-        <div class="summary-card">
-
-          <div class="summary-label">
-            班級排名
-          </div>
-
-          <div
-            id="rankValue"
-            class="summary-value"
-          ></div>
-
-        </div>
-
-
-        <div class="summary-card">
-
-          <div class="summary-label">
-            較前次平均
-          </div>
-
-          <div
-            id="averageChange"
-            class="summary-value"
-          ></div>
-
-        </div>
-
-      </div>
-
-    </div>
-
-
-    <!-- 五科 -->
-
-    <div class="card">
-
-      <div class="section-title">
-        五科成績與班平均
-      </div>
-
-      <div
-        id="subjectList"
-        class="subject-list"
-      ></div>
-
-    </div>
-
-
-    <!-- 平均趨勢 -->
-
-    <div class="card">
-
-      <div class="section-title">
-        歷次段考平均與排名趨勢
-      </div>
-
-      <div class="chart-box">
-        <canvas id="averageChart"></canvas>
-      </div>
-
-    </div>
-
-
-    <!-- 各科歷程 -->
-
-    <div class="card">
-
-      <div class="section-title">
-        各科歷次成績
-      </div>
-
-      <div class="table-wrap">
-
-        <table>
-
-          <thead>
-
-            <tr id="historyHeader">
-            </tr>
-
-          </thead>
-
-          <tbody id="historyBody">
-          </tbody>
-
-        </table>
-
-      </div>
-
-    </div>
-
-
-    <!-- 分析 -->
-
-    <div class="card">
-
-      <div class="section-title">
-        學習表現分析
-      </div>
-
-      <div
-        id="analysisGrid"
-        class="analysis-grid"
-      ></div>
-
-    </div>
-
-
-    <!-- 建議 -->
-
-    <div class="card">
-
-      <div class="section-title">
-        下一步學習建議
-      </div>
-
-      <div
-        id="adviceList"
-        class="advice-list"
-      ></div>
-
-    </div>
-
-
-    <div class="logout-area">
-
-      <button
-        id="logoutBtn"
-        class="btn btn-secondary"
-      >
-        返回查詢
-      </button>
-
-    </div>
-
-  </div>
-
-</div>
-
-
-<script type="module">
-
-import {
-  initializeApp
-} from
-"https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-
-
-import {
-  getFirestore,
-  collection,
-  doc,
-  getDoc,
-  getDocs
-} from
-"https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
-
-
-const firebaseConfig = {
-
-  apiKey:
-    "AIzaSyC7hXtxLARv3LsoPcaViptdoWMZMLibtiY",
-
-  authDomain:
-    "exam-score-system.firebaseapp.com",
-
-  projectId:
-    "exam-score-system",
-
-  storageBucket:
-    "exam-score-system.firebasestorage.app",
-
-  messagingSenderId:
-    "334811583790",
-
-  appId:
-    "1:334811583790:web:a6207215915c163c8656bf"
-
-};
-
-
-const app =
-  initializeApp(
-    firebaseConfig
-  );
-
-
-const db =
-  getFirestore(
-    app
-  );
-
-
-const $ =
-  id =>
-    document
-      .getElementById(
-        id
-      );
-
-
-let studentData =
-  null;
-
-
-let examRecords =
-  [];
-
-
-let averageChart =
-  null;
-
-
-/* =========================================================
-   基本工具
-   ========================================================= */
-
-function showMessage(
-  text,
-  type = "error"
-) {
-
-  $("message")
-    .textContent =
-    text;
-
-
-  $("message")
-    .className =
-    "message " +
-    type;
-
-}
-
-
-function clearMessage() {
-
-  $("message")
-    .textContent =
-    "";
-
-
-  $("message")
-    .className =
-    "message";
-
-}
-
-
-function formatNumber(
-  value,
-  digits = 1
-) {
-
-  const number =
-    Number(
-      value
-    );
-
-
-  if (
-    !Number
-      .isFinite(
-        number
-      )
-  ) {
-
-    return "-";
-
-  }
-
-
-  if (
-    Number
-      .isInteger(
-        number
-      )
-  ) {
-
-    return String(
-      number
-    );
-
-  }
-
-
-  return number
-    .toFixed(
-      digits
-    )
-    .replace(
-      /\.?0+$/,
-      ""
-    );
-
-}
-
-
-function signedNumber(
-  value,
-  digits = 1
-) {
-
-  const number =
-    Number(
-      value
-    );
-
-
-  if (
-    !Number
-      .isFinite(
-        number
-      )
-  ) {
-
-    return "-";
-
-  }
-
-
-  const formatted =
-    Math
-      .abs(
-        number
-      )
-      .toFixed(
-        digits
-      )
-      .replace(
-        /\.?0+$/,
-        ""
-      );
-
-
-  if (
-    number >
-    0
-  ) {
-
-    return `+${formatted}`;
-
-  }
-
-
-  if (
-    number <
-    0
-  ) {
-
-    return `-${formatted}`;
-
-  }
-
-
-  return "0";
-
-}
-
-
-function escapeHtml(
-  value
-) {
-
-  return String(
-    value ??
-    ""
-  )
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-    .replace(
-      /</g,
-      "&lt;"
-    )
-    .replace(
-      />/g,
-      "&gt;"
-    )
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-    .replace(
-      /'/g,
-      "&#039;"
-    );
-
-}
-
-
-/* =========================================================
-   MMDD
-   ========================================================= */
-
-function isValidMMDD(
-  value
-) {
-
-  if (
-    !/^\d{4}$/
-      .test(
-        value
-      )
-  ) {
-
-    return false;
-
-  }
-
-
-  const month =
-    Number(
-      value
-        .slice(
-          0,
-          2
-        )
-    );
-
-
-  const day =
-    Number(
-      value
-        .slice(
-          2,
-          4
-        )
-    );
-
-
-  const days = [
-
-    31,
-    29,
-    31,
-    30,
-    31,
-    30,
-    31,
-    31,
-    30,
-    31,
-    30,
-    31
-
-  ];
-
-
-  return (
-
-    month >= 1 &&
-
-    month <= 12 &&
-
-    day >= 1 &&
-
-    day <=
-      days[
-        month -
-        1
-      ]
-
-  );
-
-}
-
-
-$("birthMMDD")
-  .addEventListener(
-    "input",
-    () => {
-
-      $("birthMMDD")
-        .value =
-        $("birthMMDD")
-          .value
-          .replace(
-            /\D/g,
-            ""
-          )
-          .slice(
-            0,
-            4
-          );
-
+        <div style="height:14px"></div>
+
+        <div id="subjectList" class="subject-list"></div>
+      </section>
+
+      <section class="card">
+        <div class="section-title">✅ 下一次段考前最優先的三件事</div>
+        <div id="priorityGrid" class="priority-grid"></div>
+      </section>
+
+    </section>
+
+    <footer class="footer">
+      班級成績分析系統<br>
+      成績與分析僅供學生、家長了解學習狀況與規劃複習使用。
+    </footer>
+
+  </main>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+
+    import {
+      getFirestore,
+      collection,
+      doc,
+      getDoc,
+      getDocs
+    } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyC7hXtxLARv3LsoPcaViptdoWMZMLibtiY",
+      authDomain: "exam-score-system.firebaseapp.com",
+      projectId: "exam-score-system",
+      storageBucket: "exam-score-system.firebasestorage.app",
+      messagingSenderId: "334811583790",
+      appId: "1:334811583790:web:a6207215915c163c8656bf"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const $ = id => document.getElementById(id);
+
+    let averageChart = null;
+    let rankChart = null;
+
+    const SUBJECTS = [
+      { key:"chinese", avgKey:"chineseAvg", name:"國文", icon:"📖" },
+      { key:"english", avgKey:"englishAvg", name:"英文", icon:"🔤" },
+      { key:"math", avgKey:"mathAvg", name:"數學", icon:"➗" },
+      { key:"science", avgKey:"scienceAvg", name:"自然", icon:"🔬" },
+      { key:"social", avgKey:"socialAvg", name:"社會", icon:"🌏" }
+    ];
+
+    function showMessage(element,text,type="info") {
+      element.textContent = text;
+      element.className = "message " + type;
     }
-  );
 
-
-$("idLast5")
-  .addEventListener(
-    "input",
-    () => {
-
-      $("idLast5")
-        .value =
-        $("idLast5")
-          .value
-          .replace(
-            /\D/g,
-            ""
-          )
-          .slice(
-            0,
-            5
-          );
-
+    function clearMessage(element) {
+      element.textContent = "";
+      element.className = "message";
     }
-  );
 
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+    }
 
-/* =========================================================
-   studentKey
-   必須和老師端完全相同
-   ========================================================= */
+    function formatScore(value) {
+      const n = Number(value);
+      if (!Number.isFinite(n)) return "—";
+      if (Number.isInteger(n)) return String(n);
+      return n.toFixed(2).replace(/\.?0+$/,"");
+    }
 
-async function createStudentKey(
-  birthMMDD,
-  idLast5
-) {
+    function mean(values) {
+      const valid = values.map(Number).filter(Number.isFinite);
+      if (!valid.length) return null;
+      return valid.reduce((sum,value) => sum + value,0) / valid.length;
+    }
 
-  const raw =
-    `exam-score-v1|${birthMMDD}|${idLast5}`;
-
-
-  const data =
-    new TextEncoder()
-      .encode(
-        raw
+    function standardDeviation(values) {
+      const valid = values.map(Number).filter(Number.isFinite);
+      if (valid.length < 2) return 0;
+      const avg = mean(valid);
+      return Math.sqrt(
+        valid.reduce(
+          (sum,value) => sum + Math.pow(value - avg,2),
+          0
+        ) / valid.length
       );
+    }
 
+    function signed(value) {
+      const n = Number(value);
+      if (!Number.isFinite(n)) return "—";
+      return n > 0 ? "+" + formatScore(n) : formatScore(n);
+    }
 
-  const hash =
-    await crypto
-      .subtle
-      .digest(
-        "SHA-256",
-        data
+    function normalizeMMDD(value) {
+      const digits = String(value ?? "").replace(/\D/g,"");
+      return digits.padStart(4,"0").slice(-4);
+    }
+
+    function normalizeLast5(value) {
+      const digits = String(value ?? "").replace(/\D/g,"");
+      return digits.padStart(5,"0").slice(-5);
+    }
+
+    function normalizeSeat(value) {
+      const n = Number(value);
+      if (!Number.isFinite(n) || n <= 0) return "";
+      return String(Math.trunc(n)).padStart(2,"0");
+    }
+
+    function isValidMMDD(value) {
+      if (!/^\d{4}$/.test(value)) return false;
+
+      const month = Number(value.slice(0,2));
+      const day = Number(value.slice(2,4));
+      const days = [31,29,31,30,31,30,31,31,30,31,30,31];
+
+      return (
+        month >= 1 &&
+        month <= 12 &&
+        day >= 1 &&
+        day <= days[month - 1]
       );
+    }
 
+    async function createStudentKey(birthMMDD,idLast5) {
+      const raw = `exam-score-v1|${birthMMDD}|${idLast5}`;
+      const data = new TextEncoder().encode(raw);
+      const hash = await crypto.subtle.digest("SHA-256",data);
 
-  return Array
-    .from(
-      new Uint8Array(
-        hash
-      )
-    )
-    .map(
-      byte =>
-        byte
-          .toString(
-            16
-          )
-          .padStart(
-            2,
-            "0"
-          )
-    )
-    .join(
-      ""
-    );
+      return Array.from(new Uint8Array(hash))
+        .map(byte => byte.toString(16).padStart(2,"0"))
+        .join("");
+    }
 
-}
+    function shortExamName(exam) {
+      return `${exam.schoolYear}${Number(exam.semester) === 1 ? "上" : "下"}${exam.examNo}`;
+    }
 
+    function chineseExamNo(no) {
+      return ({1:"一",2:"二",3:"三"})[Number(no)] || no;
+    }
 
-/* =========================================================
-   取得考試統計
-   ========================================================= */
+    function gradeChinese(grade) {
+      return ({7:"七",8:"八",9:"九"})[Number(grade)] || grade;
+    }
 
-async function loadExamStats() {
+    function inferGrade(schoolYear) {
+      return 7 + (Number(schoolYear) - 114);
+    }
 
-  const snapshot =
-    await getDocs(
-      collection(
-        db,
-        "examStats"
-      )
-    );
+    function determineNextExam(exams) {
+      if (!exams.length) return null;
 
+      const latest = exams[exams.length - 1];
 
-  const exams =
-    snapshot
-      .docs
-      .map(
-        item => ({
+      let schoolYear = Number(latest.schoolYear);
+      let semester = Number(latest.semester);
+      let examNo = Number(latest.examNo);
 
-          id:
-            item.id,
+      if (examNo < 3) {
+        examNo += 1;
+      } else {
+        examNo = 1;
 
-          ...item
-            .data()
-
-        })
-      );
-
-
-  exams
-    .sort(
-      (
-        a,
-        b
-      ) => {
-
-        if (
-          Number(
-            a.schoolYear
-          )
-          !==
-          Number(
-            b.schoolYear
-          )
-        ) {
-
-          return (
-            Number(
-              a.schoolYear
-            )
-            -
-            Number(
-              b.schoolYear
-            )
-          );
-
+        if (semester === 1) {
+          semester = 2;
+        } else {
+          semester = 1;
+          schoolYear += 1;
         }
-
-
-        if (
-          Number(
-            a.semester
-          )
-          !==
-          Number(
-            b.semester
-          )
-        ) {
-
-          return (
-            Number(
-              a.semester
-            )
-            -
-            Number(
-              b.semester
-            )
-          );
-
-        }
-
-
-        return (
-          Number(
-            a.examNo
-          )
-          -
-          Number(
-            b.examNo
-          )
-        );
-
-      }
-    );
-
-
-  return exams;
-
-}
-
-
-/* =========================================================
-   查詢
-   ========================================================= */
-
-$("searchBtn")
-  .addEventListener(
-    "click",
-    searchStudent
-  );
-
-
-$("idLast5")
-  .addEventListener(
-    "keydown",
-    event => {
-
-      if (
-        event.key ===
-        "Enter"
-      ) {
-
-        searchStudent();
-
       }
 
-    }
-  );
+      const grade = inferGrade(schoolYear);
 
-
-async function searchStudent() {
-
-  clearMessage();
-
-
-  const birthMMDD =
-    $("birthMMDD")
-      .value
-      .trim();
-
-
-  const idLast5 =
-    $("idLast5")
-      .value
-      .trim();
-
-
-  if (
-    !isValidMMDD(
-      birthMMDD
-    )
-  ) {
-
-    showMessage(
-      "出生月日格式錯誤，例如 8 月 15 日請輸入 0815。"
-    );
-
-    return;
-
-  }
-
-
-  if (
-    !/^\d{5}$/
-      .test(
-        idLast5
-      )
-  ) {
-
-    showMessage(
-      "身分證號後五碼必須輸入 5 位數字。"
-    );
-
-    return;
-
-  }
-
-
-  $("searchBtn")
-    .disabled =
-    true;
-
-
-  $("searchBtn")
-    .textContent =
-    "查詢中...";
-
-
-  try {
-
-    const studentKey =
-      await createStudentKey(
-        birthMMDD,
-        idLast5
-      );
-
-
-    /*
-      只 get 精確 studentKey
-      不列出 students 集合。
-    */
-
-    const studentSnapshot =
-      await getDoc(
-        doc(
-          db,
-          "students",
-          studentKey
-        )
-      );
-
-
-    if (
-      !studentSnapshot
-        .exists()
-    ) {
-
-      showMessage(
-        "查無符合的學生資料，請確認出生月日與身分證後五碼。"
-      );
-
-      return;
-
-    }
-
-
-    studentData =
-      {
-
-        studentKey,
-
-        ...studentSnapshot
-          .data()
-
+      return {
+        schoolYear,
+        semester,
+        examNo,
+        grade,
+        title:
+          `${schoolYear}學年度${semester === 1 ? "上" : "下"}學期第${chineseExamNo(examNo)}次段考`,
+        shortTitle:
+          `${gradeChinese(grade)}年級第${chineseExamNo(examNo)}次段考`
       };
+    }
 
+    async function getExamList() {
+      const snapshot = await getDocs(collection(db,"examStats"));
+      const map = new Map();
 
-    const examStats =
-      await loadExamStats();
+      snapshot.docs.forEach(item => {
+        const exam = {
+          id: item.id,
+          ...item.data()
+        };
 
-
-    const records =
-      [];
-
-
-    /*
-      每一次考試只 get
-      這名學生自己的文件。
-    */
-
-    for (
-      const exam
-      of examStats
-    ) {
-
-      const resultSnapshot =
-        await getDoc(
-          doc(
-            db,
-            "examResults",
-            exam.examCode ||
-              exam.id,
-            "students",
-            studentKey
-          )
+        map.set(
+          exam.examCode || exam.id,
+          exam
         );
+      });
 
+      const exams = Array.from(map.values());
+
+      exams.sort(
+        (a,b) =>
+          Number(a.schoolYear) - Number(b.schoolYear) ||
+          Number(a.semester) - Number(b.semester) ||
+          Number(a.examNo) - Number(b.examNo)
+      );
+
+      return exams;
+    }
+
+    function getSequentialTrend(values) {
+      const recent = values
+        .map(Number)
+        .filter(Number.isFinite)
+        .slice(-3);
+
+      if (recent.length < 3) return "insufficient";
 
       if (
-        resultSnapshot
-          .exists()
+        recent[0] < recent[1] &&
+        recent[1] < recent[2]
       ) {
+        return "up";
+      }
 
-        records
-          .push({
+      if (
+        recent[0] > recent[1] &&
+        recent[1] > recent[2]
+      ) {
+        return "down";
+      }
 
-            examCode:
-              exam.examCode ||
-              exam.id,
+      return "mixed";
+    }
 
-            examName:
-              exam.examName,
+    function classifyLearningProfile(data) {
+      const {
+        historicalAverage,
+        recentTrend,
+        classDiff,
+        volatility,
+        range,
+        latestVsSelf,
+        sequentialTrend
+      } = data;
 
-            schoolYear:
-              exam.schoolYear,
+      if (
+        historicalAverage < 60 &&
+        classDiff < -6 &&
+        recentTrend <= 2
+      ) {
+        return {
+          id:"priority_support",
+          name:"需要優先補強",
+          description:
+            "目前不只是一次考試較低，歷次表現也顯示這一科需要先把基礎重新整理。",
+          priority:100
+        };
+      }
 
-            semester:
-              exam.semester,
+      if (historicalAverage < 70) {
+        return {
+          id:"foundation",
+          name:"基礎補強型",
+          description:
+            "現階段先把基本知識與常見錯誤補穩，比直接做很多難題更重要。",
+          priority:85
+        };
+      }
 
-            examNo:
-              exam.examNo,
+      if (
+        sequentialTrend === "down" ||
+        recentTrend <= -8
+      ) {
+        return {
+          id:"declining",
+          name:"近期下降型",
+          description:
+            "最近幾次有明顯下降，要先找出是哪些內容或讀書方式造成，而不是只增加題量。",
+          priority:90
+        };
+      }
 
-            stats:
-              exam,
+      if (
+        volatility >= 10 ||
+        range >= 25
+      ) {
+        return {
+          id:"volatile",
+          name:"波動調整型",
+          description:
+            "能力不一定不足，但每次表現差距較大，重點是讓平常準備與考試表現更穩定。",
+          priority:72
+        };
+      }
 
-            result:
-              resultSnapshot
-                .data()
+      if (
+        sequentialTrend === "up" ||
+        recentTrend >= 8
+      ) {
+        return {
+          id:"improving",
+          name:"穩定進步型",
+          description:
+            "最近幾次持續往上，目前的學習方式正在產生效果，可以維持並逐步提高題目難度。",
+          priority:48
+        };
+      }
 
+      if (
+        historicalAverage >= 85 &&
+        classDiff >= 5
+      ) {
+        return {
+          id:"advanced",
+          name:"高分精進型",
+          description:
+            "基本能力已有一定程度，下一階段應把時間放在整合題、速度與容易失分的細節。",
+          priority:25
+        };
+      }
+
+      if (classDiff >= 8) {
+        return {
+          id:"class_strength",
+          name:"相對優勢型",
+          description:
+            "這一科長期高於班級平均，維持正常複習即可，把更多時間留給其他需要改善的科目。",
+          priority:30
+        };
+      }
+
+      if (latestVsSelf <= -8) {
+        return {
+          id:"recent_drop",
+          name:"單次失常觀察型",
+          description:
+            "平常能力並不差，但最近一次明顯低於自己的正常表現，需要找出這次失分原因。",
+          priority:68
+        };
+      }
+
+      return {
+        id:"stable",
+        name:"穩定發展型",
+        description:
+          "整體沒有明顯下降或大幅波動，持續維持固定複習並改善固定失分即可。",
+        priority:45
+      };
+    }
+
+    function buildAnalyses(records,nextExam) {
+      return SUBJECTS.map(subject => {
+        const scores = [];
+        const classDiffs = [];
+
+        records.forEach(record => {
+          const score = Number(record.result[subject.key]);
+          const classAverage = Number(record.exam[subject.avgKey]);
+
+          if (Number.isFinite(score)) {
+            scores.push(score);
+          }
+
+          if (
+            Number.isFinite(score) &&
+            Number.isFinite(classAverage)
+          ) {
+            classDiffs.push(score - classAverage);
+          }
+        });
+
+        const latest =
+          scores.length ? scores[scores.length - 1] : null;
+
+        const previous =
+          scores.length >= 2 ? scores[scores.length - 2] : latest;
+
+        const historicalAverage =
+          mean(scores) ?? 0;
+
+        const recent =
+          scores.slice(-3);
+
+        const recentTrend =
+          recent.length >= 2
+            ? recent[recent.length - 1] - recent[0]
+            : 0;
+
+        const latestChange =
+          Number.isFinite(latest) &&
+          Number.isFinite(previous)
+            ? latest - previous
+            : 0;
+
+        const classDiff =
+          mean(classDiffs) ?? 0;
+
+        const volatility =
+          standardDeviation(scores);
+
+        const range =
+          scores.length
+            ? Math.max(...scores) - Math.min(...scores)
+            : 0;
+
+        const latestVsSelf =
+          Number.isFinite(latest)
+            ? latest - historicalAverage
+            : 0;
+
+        const sequentialTrend =
+          getSequentialTrend(scores);
+
+        const profile =
+          classifyLearningProfile({
+            latest,
+            historicalAverage,
+            recentTrend,
+            latestChange,
+            classDiff,
+            volatility,
+            range,
+            latestVsSelf,
+            sequentialTrend
           });
 
+        return {
+          ...subject,
+          scores,
+          latest,
+          previous,
+          average:historicalAverage,
+          recentTrend,
+          latestChange,
+          classDiff,
+          volatility,
+          range,
+          latestVsSelf,
+          sequentialTrend,
+          profile,
+          nextExam
+        };
+      });
+    }
+
+    function practiceRatio(analysis) {
+      switch (analysis.profile.id) {
+        case "priority_support":
+          return {foundation:55,correction:30,challenge:15};
+
+        case "foundation":
+          return {foundation:50,correction:30,challenge:20};
+
+        case "declining":
+          return {foundation:30,correction:45,challenge:25};
+
+        case "volatile":
+          return {foundation:30,correction:40,challenge:30};
+
+        case "improving":
+          return {foundation:30,correction:25,challenge:45};
+
+        case "advanced":
+          return {foundation:15,correction:20,challenge:65};
+
+        case "class_strength":
+          return {foundation:20,correction:20,challenge:60};
+
+        case "recent_drop":
+          return {foundation:25,correction:50,challenge:25};
+
+        default:
+          return {foundation:30,correction:30,challenge:40};
+      }
+    }
+
+    function familyDiagnosis(analysis) {
+      const parts = [];
+
+      parts.push(
+        `目前屬於「${analysis.profile.name}」。`
+      );
+
+      parts.push(
+        analysis.profile.description
+      );
+
+      if (analysis.recentTrend >= 5) {
+        parts.push(
+          `最近三次整體增加約 ${formatScore(analysis.recentTrend)} 分，近期方向是往上的。`
+        );
+      } else if (analysis.recentTrend <= -5) {
+        parts.push(
+          `最近三次整體下降約 ${formatScore(Math.abs(analysis.recentTrend))} 分，建議不要只當成一次失常。`
+        );
+      } else {
+        parts.push(
+          "最近幾次變化不大，可以把重點放在固定錯誤與學習穩定度。"
+        );
       }
 
-    }
-
-
-    if (
-      records.length ===
-      0
-    ) {
-
-      showMessage(
-        "已找到學生，但目前沒有段考成績。"
-      );
-
-      return;
-
-    }
-
-
-    examRecords =
-      records;
-
-
-    renderAll();
-
-
-    $("loginArea")
-      .style
-      .display =
-      "none";
-
-
-    $("resultArea")
-      .classList
-      .add(
-        "show"
-      );
-
-
-  } catch (
-    error
-  ) {
-
-    console.error(
-      error
-    );
-
-
-    showMessage(
-      "查詢失敗，請稍後再試。"
-    );
-
-
-  } finally {
-
-    $("searchBtn")
-      .disabled =
-      false;
-
-
-    $("searchBtn")
-      .textContent =
-      "查詢成績";
-
-  }
-
-}
-
-
-/* =========================================================
-   全畫面
-   ========================================================= */
-
-function renderAll() {
-
-  const latest =
-    examRecords[
-      examRecords.length -
-      1
-    ];
-
-
-  $("studentName")
-    .textContent =
-    studentData
-      .name ||
-    "學生";
-
-
-  $("studentMeta")
-    .textContent =
-    `${studentData.currentClass || latest.result.classCode || ""} 班　${studentData.currentSeat || latest.result.seat || ""} 號`;
-
-
-  $("examCountText")
-    .textContent =
-    `共 ${examRecords.length} 次段考資料`;
-
-
-  renderExamOptions();
-
-
-  $("examSelect")
-    .value =
-    latest.examCode;
-
-
-  renderSelectedExam();
-
-
-  renderAverageChart();
-
-
-  renderHistoryTable();
-
-
-  renderAnalysis();
-
-}
-
-
-/* =========================================================
-   考試選單
-   ========================================================= */
-
-function renderExamOptions() {
-
-  const select =
-    $("examSelect");
-
-
-  select
-    .replaceChildren();
-
-
-  examRecords
-    .forEach(
-      record => {
-
-        const option =
-          document
-            .createElement(
-              "option"
-            );
-
-
-        option.value =
-          record
-            .examCode;
-
-
-        option.textContent =
-          record
-            .examName;
-
-
-        select
-          .appendChild(
-            option
-          );
-
+      if (analysis.classDiff >= 5) {
+        parts.push(
+          `歷次平均約高於班平均 ${formatScore(analysis.classDiff)} 分。`
+        );
+      } else if (analysis.classDiff <= -5) {
+        parts.push(
+          `歷次平均約低於班平均 ${formatScore(Math.abs(analysis.classDiff))} 分，需要先把基本能力缺口補起來。`
+        );
+      } else {
+        parts.push(
+          "整體大致落在班級平均附近。"
+        );
       }
-    );
 
-}
-
-
-$("examSelect")
-  .addEventListener(
-    "change",
-    () => {
-
-      renderSelectedExam();
-
-    }
-  );
-
-
-/* =========================================================
-   指定段考
-   ========================================================= */
-
-function renderSelectedExam() {
-
-  const examCode =
-    $("examSelect")
-      .value;
-
-
-  const index =
-    examRecords
-      .findIndex(
-        record =>
-          record
-            .examCode ===
-          examCode
-      );
-
-
-  if (
-    index <
-    0
-  ) {
-
-    return;
-
-  }
-
-
-  const record =
-    examRecords[
-      index
-    ];
-
-
-  const result =
-    record
-      .result;
-
-
-  const stats =
-    record
-      .stats;
-
-
-  $("latestExamName")
-    .textContent =
-    record
-      .examName;
-
-
-  $("totalValue")
-    .textContent =
-    formatNumber(
-      result
-        .total
-    );
-
-
-  $("averageValue")
-    .textContent =
-    formatNumber(
-      result
-        .average,
-      2
-    );
-
-
-  $("rankValue")
-    .textContent =
-    result
-      .rank
-      ? `${formatNumber(result.rank)} / ${stats.studentCount || "-"}`
-      : "-";
-
-
-  /*
-    與前次比較
-  */
-
-  if (
-    index >
-    0
-  ) {
-
-    const previous =
-      examRecords[
-        index -
-        1
-      ]
-        .result;
-
-
-    const change =
-      Number(
-        result.average
-      )
-      -
-      Number(
-        previous.average
-      );
-
-
-    $("averageChange")
-      .textContent =
-      signedNumber(
-        change
-      );
-
-
-    $("averageChange")
-      .className =
-      "summary-value "
-      +
-      (
-        change >
-        0
-          ? "positive"
-          : change <
-            0
-              ? "negative"
-              : "neutral"
-      );
-
-
-  } else {
-
-    $("averageChange")
-      .textContent =
-      "—";
-
-
-    $("averageChange")
-      .className =
-      "summary-value neutral";
-
-  }
-
-
-  renderSubjects(
-    result,
-    stats
-  );
-
-}
-
-
-/* =========================================================
-   五科
-   ========================================================= */
-
-function renderSubjects(
-  result,
-  stats
-) {
-
-  const subjects = [
-
-    {
-      key:
-        "chinese",
-      avg:
-        "chineseAvg",
-      name:
-        "國文"
-    },
-
-    {
-      key:
-        "english",
-      avg:
-        "englishAvg",
-      name:
-        "英文"
-    },
-
-    {
-      key:
-        "math",
-      avg:
-        "mathAvg",
-      name:
-        "數學"
-    },
-
-    {
-      key:
-        "science",
-      avg:
-        "scienceAvg",
-      name:
-        "自然"
-    },
-
-    {
-      key:
-        "social",
-      avg:
-        "socialAvg",
-      name:
-        "社會"
+      return parts.join("");
     }
 
-  ];
+    function getChinesePrescription(a) {
+      if (["priority_support","foundation"].includes(a.profile.id)) {
+        return [
+          "先拿以前的國文考卷，把錯題分成「字音字形／詞語成語、課文與注釋、語文常識、閱讀理解」四類，找出最常失分的類型。",
+          "課內內容不要一次全部重背；每天用 10～15 分鐘複習一課的重點字詞、注釋與主旨。",
+          "每週至少做 2 篇短篇閱讀，每一題訂正時都要在文章裡找出答案依據。",
+          "如果閱讀題常錯，不要只抄答案；要說明是「沒讀懂題目、找錯段落、還是推論錯誤」。"
+        ];
+      }
 
+      if (a.profile.id === "declining") {
+        return [
+          "先比較最近兩次國文考卷，確認下降主要來自課內題還是閱讀題。",
+          "若課內題失分增加，就先補字詞、注釋、課文主旨；若閱讀題下降，就把時間移到短篇閱讀與答案依據練習。",
+          "最近兩次錯過的題型先重做一次，不急著大量增加新題。",
+          "每週至少安排一次 20 分鐘的國文綜合複習。"
+        ];
+      }
 
-  $("subjectList")
-    .innerHTML =
-    subjects
-      .map(
-        subject => {
+      if (["advanced","class_strength"].includes(a.profile.id)) {
+        return [
+          "課內基本題維持即可，不需要花大量時間重複抄寫。",
+          "把更多時間放在長篇閱讀、文意推論、修辭判讀與跨文本比較。",
+          "閱讀練習加入時間限制，除了做對，也要提高判斷速度。",
+          "考前整理最容易混淆的字詞與語文常識，避免高分學生因小地方失分。"
+        ];
+      }
 
-          const score =
-            Number(
-              result[
-                subject.key
+      return [
+        "每週固定整理本週課文的字詞、注釋與主旨。",
+        "每週至少 2 篇閱讀理解，訂正時找出答案依據。",
+        "將錯題分成課內與閱讀兩類，看看哪一類最常重複出錯。",
+        "考前不要只重新看答案，要把曾經錯過的題目再做一次。"
+      ];
+    }
+
+    function getEnglishPrescription(a) {
+      if (["priority_support","foundation"].includes(a.profile.id)) {
+        return [
+          "把英文分成「單字、片語、文法句型、閱讀」四部分，不要只把全部時間拿來背單字。",
+          "每天 10～15 分鐘背少量單字，隔天先測昨天的字，再加入新的。",
+          "每個文法重點至少自己造 3 句，能自己寫出句子才算真的會用。",
+          "每週至少 2 篇短篇閱讀；先看題目，再回文章找關鍵句。",
+          "把考卷文法錯題整理成自己的文法錯題表，同類錯誤不要重複發生。"
+        ];
+      }
+
+      if (a.profile.id === "declining") {
+        return [
+          "先確認近期下降主要是單字忘記、文法混淆，還是閱讀速度不夠。",
+          "最近兩次考卷的文法錯題，要把正確句型重新寫一次。",
+          "維持每天少量英文接觸，不改成考前一週才大量背誦。",
+          "每週安排一次 15～20 分鐘限時閱讀，檢查時間是否足夠。"
+        ];
+      }
+
+      if (["advanced","class_strength"].includes(a.profile.id)) {
+        return [
+          "單字與基本文法維持即可，把時間增加在閱讀速度、長句判讀與文意推論。",
+          "文法練習改用句型轉換與混合題，不需要大量重做單一基本題。",
+          "每週至少一次限時閱讀，錯題再判斷是單字、句構或推論造成。",
+          "考前特別整理容易混淆的文法與例外用法。"
+        ];
+      }
+
+      return [
+        "每天維持 10～15 分鐘單字回測。",
+        "每週挑 2 個文法重點，各自造 3～5 句。",
+        "每週至少完成 2 篇閱讀。",
+        "英文錯題要標明是單字、文法還是閱讀造成。"
+      ];
+    }
+
+    function getMathPrescription(a) {
+      if (["priority_support","foundation"].includes(a.profile.id)) {
+        return [
+          "先檢查七年級先備能力：正負數與分數運算、代數式、一元一次方程式、比例與文字題。",
+          "某一類基本題若連續錯 3 題以上，先回課本例題與基本題，不急著做難題。",
+          "每一道數學錯題都標記原因：①觀念不懂 ②計算錯誤 ③看錯題意 ④步驟不完整。",
+          "每週至少安排 3 次，每次約 25～30 分鐘。",
+          "同類基本題連續兩次正確率達約 80% 以上後，再增加變化題。"
+        ];
+      }
+
+      if (a.profile.id === "declining") {
+        return [
+          "先把最近兩次數學考卷依單元分類，找出下降集中在哪一類題目。",
+          "不要直接把題量加倍；先確認是運算、觀念、題意轉譯還是粗心造成。",
+          "每週安排一次「只重做錯題」，直到可以不看解答完成。",
+          "補舊內容的同時要維持八年級新課進度，避免形成新的落差。"
+        ];
+      }
+
+      if (a.profile.id === "improving") {
+        return [
+          "目前的數學方法有效，先維持原本節奏。",
+          "基本題比例可以降低，逐步增加變化題、文字題與需要多步驟思考的題目。",
+          "每週挑 2 題較完整的題目，練習自己說明每一步為什麼可以這樣做。",
+          "保留固定錯題回顧，避免以前的錯誤重新出現。"
+        ];
+      }
+
+      if (["advanced","class_strength"].includes(a.profile.id)) {
+        return [
+          "減少大量重複基本題，把時間放在變化題、素養題與多步驟問題。",
+          "每次失分要分清楚是粗心計算還是解題策略問題。",
+          "每週一次限時混合題，訓練速度與穩定度。",
+          "除了做對，也要能說明解題理由與使用的概念。"
+        ];
+      }
+
+      return [
+        "每週安排 3 次數學：一次新觀念與基本題、一次變化題、一次錯題。",
+        "每一道錯題標記失分原因，不只抄正確答案。",
+        "每週至少挑 1～2 題重新說明完整解法。",
+        "段考前一週完成一次限時混合練習。"
+      ];
+    }
+
+    function getSciencePrescription(a) {
+      if (["priority_support","foundation"].includes(a.profile.id)) {
+        return [
+          "每個自然概念都要能回答三件事：「是什麼？為什麼？條件改變後會怎樣？」。",
+          "實驗題固定整理：目的、操作變因、控制變因、應變變因、結果與結論。",
+          "公式計算題固定寫「已知量 → 公式 → 代入 → 單位」。",
+          "圖表題先看橫軸、縱軸、單位和變化方向，再看選項。",
+          "如果基本概念題仍常錯，先回課本圖解與實驗，不要直接大量刷進階題。"
+        ];
+      }
+
+      if (a.profile.id === "declining") {
+        return [
+          "先確認下降是否從某個新單元開始，再決定要補哪一章。",
+          "把最近錯題分成「概念、實驗、圖表、計算」四類。",
+          "每週至少重新整理一個最近學過的實驗。",
+          "新單元先理解原因與結果，再記名詞，不要只背結論。"
+        ];
+      }
+
+      if (["advanced","class_strength"].includes(a.profile.id)) {
+        return [
+          "基本名詞與課文維持即可，把更多時間放在實驗設計、圖表判讀與跨概念整合。",
+          "練習從題目條件推論結果，不只記課本結論。",
+          "計算題要保持完整單位與步驟，避免小地方失分。",
+          "每週完成一次自然混合題，維持整體判讀能力。"
+        ];
+      }
+
+      return [
+        "每週整理本週 2～3 個核心概念。",
+        "每週至少重新看一次實驗或圖表。",
+        "計算題維持完整公式與單位。",
+        "錯題要分清楚是概念、實驗、讀圖或計算造成。"
+      ];
+    }
+
+    function getSocialPrescription(a) {
+      if (["priority_support","foundation"].includes(a.profile.id)) {
+        return [
+          "先把社會分成歷史、地理、公民，確認主要失分在哪一部分，不要三科都只用背誦。",
+          "歷史：用時間軸整理「原因 → 事件 → 結果 → 影響」。",
+          "地理：每章至少整理一次地圖、位置、氣候或統計圖。",
+          "公民：把容易混淆的概念做成兩欄比較表。",
+          "每次情境題做錯，都圈出題幹中真正決定答案的關鍵詞。"
+        ];
+      }
+
+      if (a.profile.id === "declining") {
+        return [
+          "比較最近兩次段考，確認下降主要在歷史、地理還是公民。",
+          "先補下降最明顯的領域，不要全部重新背一次。",
+          "情境題訂正時找題幹關鍵詞，不只抄選項答案。",
+          "每週做一次歷史、地理、公民混合題，確認不是只熟悉單一章節。"
+        ];
+      }
+
+      if (["advanced","class_strength"].includes(a.profile.id)) {
+        return [
+          "基本記憶維持即可，把更多時間放在跨章節比較、圖表資料判讀與長篇情境題。",
+          "歷史除了事件本身，要能比較前因後果。",
+          "地理與公民加強「從資料推論」，不只背課本文字。",
+          "考前整理最容易混淆的概念與相似制度。"
+        ];
+      }
+
+      return [
+        "歷史用時間軸整理前因後果。",
+        "地理固定練地圖與圖表判讀。",
+        "公民把容易混淆的概念做比較表。",
+        "每週完成一次歷史、地理、公民混合題。"
+      ];
+    }
+
+    function getSubjectPrescription(analysis) {
+      switch (analysis.key) {
+        case "chinese":
+          return getChinesePrescription(analysis);
+
+        case "english":
+          return getEnglishPrescription(analysis);
+
+        case "math":
+          return getMathPrescription(analysis);
+
+        case "science":
+          return getSciencePrescription(analysis);
+
+        case "social":
+          return getSocialPrescription(analysis);
+
+        default:
+          return [];
+      }
+    }
+
+    function getFourWeekPlan(analysis,nextExam) {
+      const ratio = practiceRatio(analysis);
+      const target = nextExam ? nextExam.shortTitle : "下一次段考";
+
+      switch (analysis.profile.id) {
+        case "priority_support":
+        case "foundation":
+          return [
+            "第1週：用以前考卷找出最常錯的 2～3 類能力。",
+            `第2週：練習比例以基礎 ${ratio.foundation}%、錯題修正 ${ratio.correction}%、變化題 ${ratio.challenge}% 為主。`,
+            "第3週：基本內容穩定後，再加入本階段新課與變化題。",
+            "第4週：完成一次限時練習，只整理仍會重複出現的錯誤。"
+          ];
+
+        case "declining":
+          return [
+            "第1週：比較最近兩次考卷，找出下降開始的內容與題型。",
+            `第2週：把大約 ${ratio.foundation + ratio.correction}% 的時間放在薄弱內容與錯題。`,
+            "第3週：加入新課，確認補舊內容時沒有落下目前進度。",
+            "第4週：用混合題檢查下降問題是否改善。"
+          ];
+
+        case "improving":
+          return [
+            "第1週：保留目前有效的讀書方式。",
+            `第2週：將變化與進階題比例提高到約 ${ratio.challenge}%。`,
+            "第3週：加入限時練習，確認速度與正確率。",
+            "第4週：只精修仍會錯的題目，不大量重做已熟練內容。"
+          ];
+
+        case "advanced":
+        case "class_strength":
+          return [
+            "第1週：確認基本題沒有因為太熟而出現粗心失分。",
+            `第2週：變化與進階內容約占 ${ratio.challenge}% 的練習時間。`,
+            "第3週：加入限時與跨單元整合練習。",
+            "第4週：只複習高頻錯誤與進階題，不重新刷大量基本題。"
+          ];
+
+        case "volatile":
+          return [
+            "第1週：回看歷次高低分，找出波動和單元、粗心或準備方式的關係。",
+            "第2週：建立固定複習節奏，不要有時完全不讀、有時突然大量練習。",
+            "第3週：用兩次短測驗檢查同樣內容是否能維持相近表現。",
+            "第4週：考前維持平常節奏，不做過量臨時衝刺。"
+          ];
+
+        default:
+          return [
+            "第1週：整理目前弱點與最近錯題。",
+            "第2週：維持新課同步並改善最常出現的失分。",
+            "第3週：增加變化題與整合題。",
+            `第4週：完成一次 ${target} 前的限時檢核。`
+          ];
+      }
+    }
+
+    function priorityScore(analysis) {
+      let score = analysis.profile.priority;
+
+      if (analysis.recentTrend <= -8) {
+        score += 20;
+      } else if (analysis.recentTrend <= -4) {
+        score += 10;
+      }
+
+      if (analysis.classDiff <= -8) {
+        score += 15;
+      }
+
+      if (analysis.latestVsSelf <= -8) {
+        score += 10;
+      }
+
+      return score;
+    }
+
+    function renderCharts(records) {
+      const labels =
+        records.map(item => shortExamName(item.exam));
+
+      if (averageChart) {
+        averageChart.destroy();
+      }
+
+      if (rankChart) {
+        rankChart.destroy();
+      }
+
+      averageChart =
+        new Chart(
+          $("averageChart"),
+          {
+            type:"line",
+
+            data:{
+              labels,
+
+              datasets:[
+                {
+                  label:"五科平均",
+
+                  data:
+                    records.map(
+                      item => Number(item.result.average)
+                    ),
+
+                  tension:.28
+                }
               ]
-            );
-
-
-          const classAvg =
-            Number(
-              stats[
-                subject.avg
-              ]
-            );
-
-
-          const difference =
-            score -
-            classAvg;
-
-
-          const width =
-            Math.max(
-              0,
-              Math.min(
-                100,
-                score
-              )
-            );
-
-
-          return `
-
-            <div class="subject-row">
-
-              <div class="subject-name">
-                ${subject.name}
-              </div>
-
-              <div class="subject-bar">
-
-                <div
-                  class="subject-fill"
-                  style="width:${width}%"
-                ></div>
-
-              </div>
-
-              <div class="subject-score">
-
-                <strong>
-                  ${formatNumber(score)}
-                </strong>
-
-                <br>
-
-                班平均
-                ${formatNumber(classAvg,2)}
-
-                <span
-                  class="compare ${
-                    difference > 0
-                      ? "positive"
-                      : difference < 0
-                        ? "negative"
-                        : "neutral"
-                  }"
-                >
-
-                  ${
-                    difference === 0
-                      ? "相同"
-                      : `${signedNumber(difference)}`
-                  }
-
-                </span>
-
-              </div>
-
-            </div>
-
-          `;
-
-        }
-      )
-      .join("");
-
-}
-
-
-/* =========================================================
-   平均折線圖
-   ========================================================= */
-
-function renderAverageChart() {
-
-  const canvas =
-    $("averageChart");
-
-
-  if (
-    averageChart
-  ) {
-
-    averageChart
-      .destroy();
-
-  }
-
-
-  averageChart =
-    new Chart(
-      canvas,
-      {
-
-        type:
-          "line",
-
-        data: {
-
-          labels:
-            examRecords
-              .map(
-                record =>
-                  shortExamName(
-                    record
-                  )
-              ),
-
-          datasets: [
-
-            {
-              label:
-                "個人平均",
-
-              data:
-                examRecords
-                  .map(
-                    record =>
-                      Number(
-                        record
-                          .result
-                          .average
-                      )
-                  ),
-
-              tension:
-                .28
             },
 
-            {
-              label:
-                "班平均",
+            options:{
+              responsive:true,
+              maintainAspectRatio:false,
 
-              data:
-                examRecords
-                  .map(
-                    record =>
-                      Number(
-                        record
-                          .stats
-                          .averageAvg
-                      )
-                  ),
-
-              tension:
-                .28
+              scales:{
+                y:{
+                  suggestedMin:0,
+                  suggestedMax:100
+                }
+              }
             }
-
-          ]
-
-        },
-
-        options: {
-
-          responsive:
-            true,
-
-          maintainAspectRatio:
-            false,
-
-          interaction: {
-            intersect:
-              false,
-
-            mode:
-              "index"
-          },
-
-          scales: {
-
-            y: {
-
-              suggestedMin:
-                0,
-
-              suggestedMax:
-                100
-
-            }
-
           }
+        );
 
-        }
+      rankChart =
+        new Chart(
+          $("rankChart"),
+          {
+            type:"line",
 
-      }
-    );
+            data:{
+              labels,
 
-}
+              datasets:[
+                {
+                  label:"班級排名",
 
+                  data:
+                    records.map(
+                      item => Number(item.result.rank)
+                    ),
 
-function shortExamName(
-  record
-) {
+                  tension:.28
+                }
+              ]
+            },
 
-  return `${record.schoolYear}${record.semester === 1 ? "上" : "下"}${record.examNo}`;
+            options:{
+              responsive:true,
+              maintainAspectRatio:false,
 
-}
+              scales:{
+                y:{
+                  reverse:true,
+                  suggestedMin:1,
 
-
-/* =========================================================
-   六次歷程表
-   ========================================================= */
-
-function renderHistoryTable() {
-
-  const header =
-    $("historyHeader");
-
-
-  header
-    .innerHTML =
-    `
-      <th>項目</th>
-      ${
-        examRecords
-          .map(
-            record =>
-              `<th>${escapeHtml(shortExamName(record))}</th>`
-          )
-          .join("")
-      }
-    `;
-
-
-  const rows = [
-
-    {
-      label:
-        "平均",
-      key:
-        "average"
-    },
-
-    {
-      label:
-        "班排",
-      key:
-        "rank"
-    },
-
-    {
-      label:
-        "國文",
-      key:
-        "chinese"
-    },
-
-    {
-      label:
-        "英文",
-      key:
-        "english"
-    },
-
-    {
-      label:
-        "數學",
-      key:
-        "math"
-    },
-
-    {
-      label:
-        "自然",
-      key:
-        "science"
-    },
-
-    {
-      label:
-        "社會",
-      key:
-        "social"
-    }
-
-  ];
-
-
-  $("historyBody")
-    .innerHTML =
-    rows
-      .map(
-        row => `
-
-          <tr>
-
-            <td>
-              ${row.label}
-            </td>
-
-            ${
-              examRecords
-                .map(
-                  record =>
-                    `<td>${formatNumber(record.result[row.key],2)}</td>`
-                )
-                .join("")
+                  ticks:{
+                    precision:0
+                  }
+                }
+              }
             }
-
-          </tr>
-
-        `
-      )
-      .join("");
-
-}
-
-
-/* =========================================================
-   分析
-   ========================================================= */
-
-function renderAnalysis() {
-
-  const subjectDefs = [
-
-    {
-      key:
-        "chinese",
-      avg:
-        "chineseAvg",
-      name:
-        "國文"
-    },
-
-    {
-      key:
-        "english",
-      avg:
-        "englishAvg",
-      name:
-        "英文"
-    },
-
-    {
-      key:
-        "math",
-      avg:
-        "mathAvg",
-      name:
-        "數學"
-    },
-
-    {
-      key:
-        "science",
-      avg:
-        "scienceAvg",
-      name:
-        "自然"
-    },
-
-    {
-      key:
-        "social",
-      avg:
-        "socialAvg",
-      name:
-        "社會"
+          }
+        );
     }
 
-  ];
+    function renderHistory(records) {
+      $("historyHeader").innerHTML = `
+        <th>科目</th>
 
-
-  const subjectAnalysis =
-    subjectDefs
-      .map(
-        subject => {
-
-          const values =
-            examRecords
-              .map(
-                record =>
-                  Number(
-                    record
-                      .result[
-                        subject.key
-                      ]
-                  )
-              );
-
-
-          const classDiffs =
-            examRecords
-              .map(
-                record =>
-                  Number(
-                    record
-                      .result[
-                        subject.key
-                      ]
-                  )
-                  -
-                  Number(
-                    record
-                      .stats[
-                        subject.avg
-                      ]
-                  )
-              );
-
-
-          const average =
-            mean(
-              values
-            );
-
-
-          const avgClassDiff =
-            mean(
-              classDiffs
-            );
-
-
-          const latest =
-            values[
-              values.length -
-              1
-            ];
-
-
-          const previous =
-            values.length >
-            1
-              ? values[
-                  values.length -
-                  2
-                ]
-              : latest;
-
-
-          const latestChange =
-            latest -
-            previous;
-
-
-          const recent =
-            values
-              .slice(
-                -3
-              );
-
-
-          const recentTrend =
-            recent.length >=
-            2
-              ? recent[
-                  recent.length -
-                  1
-                ]
-                -
-                recent[
-                  0
-                ]
-              : 0;
-
-
-          const range =
-            Math.max(
-              ...values
-            )
-            -
-            Math.min(
-              ...values
-            );
-
-
-          return {
-
-            ...subject,
-
-            values,
-
-            average,
-
-            avgClassDiff,
-
-            latest,
-
-            latestChange,
-
-            recentTrend,
-
-            range
-
-          };
-
+        ${
+          records.map(
+            item =>
+              `<th>${escapeHtml(shortExamName(item.exam))}</th>`
+          ).join("")
         }
-      );
 
+        <th>歷次平均</th>
+      `;
 
-  /*
-    優勢科：
-    優先考慮長期高於班平均。
-  */
+      $("historyBody").innerHTML =
+        SUBJECTS.map(
+          subject => {
+            const values =
+              records.map(
+                item => Number(item.result[subject.key])
+              );
 
-  const strongest =
-    [
-      ...subjectAnalysis
-    ]
-      .sort(
-        (
-          a,
-          b
-        ) =>
-          b.avgClassDiff
-          -
-          a.avgClassDiff
-      )[
-        0
-      ];
+            return `
+              <tr>
+                <td>${subject.name}</td>
 
+                ${
+                  values.map(
+                    value =>
+                      `<td>${formatScore(value)}</td>`
+                  ).join("")
+                }
 
-  /*
-    近期進步：
-    最近三次起點 → 最新。
-  */
+                <td class="history-mean">
+                  ${formatScore(mean(values))}
+                </td>
+              </tr>
+            `;
+          }
+        ).join("");
+    }
 
-  const improving =
-    [
-      ...subjectAnalysis
-    ]
-      .sort(
-        (
-          a,
-          b
-        ) =>
-          b.recentTrend
-          -
-          a.recentTrend
-      )[
-        0
-      ];
+    function renderAnalyses(analyses,nextExam) {
+      $("subjectList").innerHTML =
+        analyses.map(
+          analysis => {
+            const ratio =
+              practiceRatio(analysis);
 
+            const prescription =
+              getSubjectPrescription(analysis);
 
-  /*
-    需要關注：
-    最近趨勢下降優先，
-    否則看相對班平均。
-  */
+            const plan =
+              getFourWeekPlan(
+                analysis,
+                nextExam
+              );
 
-  const attention =
-    [
-      ...subjectAnalysis
-    ]
-      .sort(
-        (
-          a,
-          b
-        ) => {
+            return `
+              <article class="subject-card">
 
-          const aScore =
-            a.recentTrend
-            +
-            a.avgClassDiff *
-            .35;
+                <div class="subject-head">
 
+                  <div class="subject-name">
+                    ${analysis.icon}
+                    ${analysis.name}
+                  </div>
 
-          const bScore =
-            b.recentTrend
-            +
-            b.avgClassDiff *
-            .35;
+                  <div class="status-badge">
+                    ${escapeHtml(analysis.profile.name)}
+                  </div>
 
+                </div>
 
-          return (
-            aScore -
-            bScore
+                <div class="subject-body">
+
+                  <div class="subject-data">
+
+                    <div class="data-box">
+                      <div class="data-label">最近一次</div>
+                      <div class="data-value">
+                        ${formatScore(analysis.latest)}
+                      </div>
+                    </div>
+
+                    <div class="data-box">
+                      <div class="data-label">歷次平均</div>
+                      <div class="data-value">
+                        ${formatScore(analysis.average)}
+                      </div>
+                    </div>
+
+                    <div class="data-box">
+                      <div class="data-label">近三次變化</div>
+
+                      <div class="data-value ${
+                        analysis.recentTrend > 0
+                          ? "positive"
+                          : analysis.recentTrend < 0
+                            ? "negative"
+                            : ""
+                      }">
+                        ${signed(analysis.recentTrend)}
+                      </div>
+                    </div>
+
+                    <div class="data-box">
+                      <div class="data-label">相較班平均</div>
+
+                      <div class="data-value ${
+                        analysis.classDiff > 0
+                          ? "positive"
+                          : analysis.classDiff < 0
+                            ? "negative"
+                            : ""
+                      }">
+                        ${signed(analysis.classDiff)}
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <div class="analysis-box">
+                    <div class="box-title">
+                      🔎 目前狀況
+                    </div>
+
+                    ${escapeHtml(familyDiagnosis(analysis))}
+                  </div>
+
+                  <div class="action-box">
+                    <div class="box-title">
+                      🎯 接下來怎麼做
+                    </div>
+
+                    <div style="font-weight:800;margin-bottom:8px">
+                      建議練習比例：
+                      基礎 ${ratio.foundation}%
+                      ／ 錯題修正 ${ratio.correction}%
+                      ／ 變化進階 ${ratio.challenge}%
+                    </div>
+
+                    <ol class="action-list">
+                      ${
+                        prescription.map(
+                          item =>
+                            `<li>${escapeHtml(item)}</li>`
+                        ).join("")
+                      }
+                    </ol>
+                  </div>
+
+                  <div class="week-box">
+
+                    <div class="box-title">
+                      📅 ${
+                        nextExam
+                          ? nextExam.shortTitle
+                          : "下一次段考"
+                      }前四週安排
+                    </div>
+
+                    <ol class="action-list">
+                      ${
+                        plan.map(
+                          item =>
+                            `<li>${escapeHtml(item)}</li>`
+                        ).join("")
+                      }
+                    </ol>
+
+                  </div>
+
+                </div>
+
+              </article>
+            `;
+          }
+        ).join("");
+    }
+
+    function renderPriorities(analyses) {
+      const ranked =
+        analyses
+          .map(
+            analysis => ({
+              ...analysis,
+              finalPriority:priorityScore(analysis)
+            })
+          )
+          .sort(
+            (a,b) =>
+              b.finalPriority - a.finalPriority
           );
 
-        }
-      )[
-        0
-      ];
+      const first = ranked[0];
+      const second = ranked[1];
 
+      const strongest =
+        [...analyses]
+          .sort(
+            (a,b) =>
+              b.average - a.average
+          )[0];
 
-  $("analysisGrid")
-    .innerHTML = `
+      const items = [];
 
-      <div class="analysis-card">
-
-        <div class="analysis-title">
-          ⭐ 相對優勢
-        </div>
-
-        <div class="analysis-text">
-
-          ${strongest.name}
-          六次表現相較班平均最突出。
-
-          ${
-            strongest.avgClassDiff >= 0
-              ? `平均高於班平均約 ${formatNumber(strongest.avgClassDiff,1)} 分。`
-              : `目前仍可持續建立穩定表現。`
-          }
-
-        </div>
-
-      </div>
-
-
-      <div class="analysis-card">
-
-        <div class="analysis-title">
-          📈 近期進步
-        </div>
-
-        <div class="analysis-text">
-
-          ${improving.name}
-          最近幾次的變化較明顯。
-
-          ${
-            improving.recentTrend > 0
-              ? `最近三次起點至目前提升約 ${formatNumber(improving.recentTrend,1)} 分。`
-              : `近期尚未出現明顯上升，可先以穩定表現為目標。`
-          }
-
-        </div>
-
-      </div>
-
-
-      <div class="analysis-card">
-
-        <div class="analysis-title">
-          🔎 優先關注
-        </div>
-
-        <div class="analysis-text">
-
-          ${attention.name}
-          是目前較值得優先檢視的科目。
-
-          ${
-            attention.recentTrend < 0
-              ? `近期約下降 ${formatNumber(Math.abs(attention.recentTrend),1)} 分。`
-              : `可從錯題類型與基本概念掌握度進一步確認。`
-          }
-
-        </div>
-
-      </div>
-
-    `;
-
-
-  renderAdvice(
-    subjectAnalysis,
-    strongest,
-    improving,
-    attention
-  );
-
-}
-
-
-/* =========================================================
-   學習建議
-   ========================================================= */
-
-function renderAdvice(
-  subjectAnalysis,
-  strongest,
-  improving,
-  attention
-) {
-
-  const latest =
-    examRecords[
-      examRecords.length -
-      1
-    ];
-
-
-  const previous =
-    examRecords.length >
-    1
-      ? examRecords[
-          examRecords.length -
-          2
-        ]
-      : null;
-
-
-  const advice =
-    [];
-
-
-  /*
-    整體
-  */
-
-  if (
-    previous
-  ) {
-
-    const avgChange =
-      Number(
-        latest
-          .result
-          .average
-      )
-      -
-      Number(
-        previous
-          .result
-          .average
-      );
-
-
-    if (
-      avgChange >=
-      3
-    ) {
-
-      advice
-        .push({
-
-          title:
-            "整體表現正在進步",
+      if (first) {
+        items.push({
+          title:`第一優先：${first.name}`,
 
           text:
-            `本次五科平均較前次提高 ${formatNumber(avgChange,1)} 分。建議先保留目前有效的讀書方式，再把額外時間集中在較弱科目，不需要全部重新調整。`
-
+            `${first.name}目前屬於「${first.profile.name}」。先完成這一科建議中的前兩項，不要同時改太多學習方式。`
         });
-
-
-    } else if (
-      avgChange <=
-      -3
-    ) {
-
-      advice
-        .push({
-
-          title:
-            "先找出本次下降的來源",
-
-          text:
-            `本次五科平均較前次下降 ${formatNumber(Math.abs(avgChange),1)} 分。建議先比較五科中哪一科下降幅度最大，再檢查是觀念不熟、題意理解、計算失誤或複習時間不足，不必只以總平均判斷。`
-
-        });
-
-    }
-
-  }
-
-
-  /*
-    優勢科
-  */
-
-  advice
-    .push({
-
-      title:
-        `維持 ${strongest.name} 的有效方法`,
-
-      text:
-        `${strongest.name}是目前相對穩定的優勢。建議維持原有複習節奏，不需要為了再提高少量分數投入過多時間，可將部分時間轉移到較需要加強的科目。`
-
-    });
-
-
-  /*
-    關注科
-  */
-
-  advice
-    .push({
-
-      title:
-        `${attention.name}優先做錯題分類`,
-
-      text:
-        `建議把最近 2～3 次${attention.name}考卷的錯題分成「觀念不熟、計算或作答失誤、題意看錯、沒有複習到」四類。先處理重複出現的錯誤，比單純重新寫整本題目更有效率。`
-
-    });
-
-
-  /*
-    進步科
-  */
-
-  if (
-    improving.recentTrend >
-    0
-  ) {
-
-    advice
-      .push({
-
-        title:
-          `延續 ${improving.name} 的進步方式`,
-
-        text:
-          `${improving.name}近期呈現較明顯進步，表示目前的練習或複習方式可能有效。建議維持至少到下一次段考，再觀察是否能持續，而不是立即改變讀書方式。`
-
-      });
-
-  }
-
-
-  /*
-    波動最大科
-  */
-
-  const unstable =
-    [
-      ...subjectAnalysis
-    ]
-      .sort(
-        (
-          a,
-          b
-        ) =>
-          b.range -
-          a.range
-      )[
-        0
-      ];
-
-
-  if (
-    unstable.range >=
-    15
-  ) {
-
-    advice
-      .push({
-
-        title:
-          `${unstable.name}注意成績波動`,
-
-        text:
-          `${unstable.name}歷次最高與最低成績差距約 ${formatNumber(unstable.range,1)} 分。這類情況通常比單純低分更值得注意，建議改成固定每週複習，而不要只在考前集中準備。`
-
-      });
-
-  }
-
-
-  $("adviceList")
-    .innerHTML =
-    advice
-      .slice(
-        0,
-        5
-      )
-      .map(
-        item => `
-
-          <div class="advice-item">
-
-            <strong>
-              ${escapeHtml(item.title)}
-            </strong>
-
-            ${escapeHtml(item.text)}
-
-          </div>
-
-        `
-      )
-      .join("");
-
-}
-
-
-/* =========================================================
-   平均
-   ========================================================= */
-
-function mean(
-  values
-) {
-
-  const valid =
-    values
-      .filter(
-        value =>
-          Number
-            .isFinite(
-              Number(
-                value
-              )
-            )
-      )
-      .map(
-        Number
-      );
-
-
-  if (
-    valid.length ===
-    0
-  ) {
-
-    return 0;
-
-  }
-
-
-  return valid
-    .reduce(
-      (
-        sum,
-        value
-      ) =>
-        sum +
-        value,
-      0
-    )
-    /
-    valid.length;
-
-}
-
-
-/* =========================================================
-   返回
-   ========================================================= */
-
-$("logoutBtn")
-  .addEventListener(
-    "click",
-    () => {
-
-      studentData =
-        null;
-
-
-      examRecords =
-        [];
-
-
-      if (
-        averageChart
-      ) {
-
-        averageChart
-          .destroy();
-
-
-        averageChart =
-          null;
-
       }
 
+      if (second) {
+        items.push({
+          title:`第二優先：${second.name}`,
 
-      $("resultArea")
-        .classList
-        .remove(
-          "show"
+          text:
+            `${second.name}是目前第二需要投入時間的科目，建議固定每週複習時段。`
+        });
+      }
+
+      if (strongest) {
+        items.push({
+          title:`${strongest.name}維持即可`,
+
+          text:
+            `${strongest.name}目前歷次表現相對較穩定，維持正常複習，把額外時間留給前兩項。`
+        });
+      }
+
+      $("priorityGrid").innerHTML =
+        items
+          .slice(0,3)
+          .map(
+            (item,index) => `
+              <div class="priority-card">
+
+                <div class="priority-number">
+                  ${index + 1}
+                </div>
+
+                <div class="priority-title">
+                  ${escapeHtml(item.title)}
+                </div>
+
+                <div class="priority-text">
+                  ${escapeHtml(item.text)}
+                </div>
+
+              </div>
+            `
+          )
+          .join("");
+    }
+
+    function renderResult(student,records,exams) {
+      const latest =
+        records[records.length - 1].result;
+
+      const nextExam =
+        determineNextExam(exams);
+
+      $("studentName").textContent =
+        student.name ||
+        latest.name ||
+        "學生";
+
+      $("studentMeta").textContent =
+        `${latest.classCode || student.currentClass || ""} 班　${normalizeSeat(latest.seat || student.currentSeat)} 號　共 ${records.length} 次段考資料`;
+
+      if (nextExam) {
+        $("nextStageTitle").textContent =
+          nextExam.title;
+
+        $("nextStageText").textContent =
+          `目前資料已完成到「${records[records.length - 1].exam.examName}」。以下會把已有的歷次表現，轉成「${nextExam.shortTitle}」前可以直接執行的複習方向。`;
+      } else {
+        $("nextStageTitle").textContent =
+          "下一階段";
+
+        $("nextStageText").textContent =
+          "";
+      }
+
+      const averages =
+        records
+          .map(
+            item =>
+              Number(item.result.average)
+          )
+          .filter(Number.isFinite);
+
+      const ranks =
+        records
+          .map(
+            item =>
+              Number(item.result.rank)
+          )
+          .filter(Number.isFinite);
+
+      $("summary").innerHTML = `
+        <div class="summary-card">
+          <div class="summary-label">
+            歷次最高平均
+          </div>
+
+          <div class="summary-value">
+            ${
+              averages.length
+                ? formatScore(Math.max(...averages))
+                : "—"
+            }
+          </div>
+        </div>
+
+        <div class="summary-card">
+          <div class="summary-label">
+            歷次最低平均
+          </div>
+
+          <div class="summary-value">
+            ${
+              averages.length
+                ? formatScore(Math.min(...averages))
+                : "—"
+            }
+          </div>
+        </div>
+
+        <div class="summary-card">
+          <div class="summary-label">
+            最佳班排
+          </div>
+
+          <div class="summary-value">
+            ${
+              ranks.length
+                ? formatScore(Math.min(...ranks))
+                : "—"
+            }
+          </div>
+        </div>
+
+        <div class="summary-card">
+          <div class="summary-label">
+            歷次平均
+          </div>
+
+          <div class="summary-value">
+            ${formatScore(mean(averages))}
+          </div>
+        </div>
+      `;
+
+      renderCharts(records);
+      renderHistory(records);
+
+      const analyses =
+        buildAnalyses(
+          records,
+          nextExam
         );
 
+      renderAnalyses(
+        analyses,
+        nextExam
+      );
 
-      $("loginArea")
-        .style
-        .display =
+      renderPriorities(
+        analyses
+      );
+
+      $("loginArea").style.display =
+        "none";
+
+      $("resultArea").style.display =
         "block";
 
+      window.scrollTo({
+        top:0,
+        behavior:"smooth"
+      });
+    }
 
-      $("birthMMDD")
-        .value =
-        "";
+    async function queryStudent() {
+      clearMessage(
+        $("loginMessage")
+      );
 
+      const rawMMDD =
+        $("birthMMDD")
+          .value
+          .replace(/\D/g,"");
 
-      $("idLast5")
-        .value =
-        "";
+      const rawLast5 =
+        $("idLast5")
+          .value
+          .replace(/\D/g,"");
 
+      if (rawMMDD.length !== 4) {
+        showMessage(
+          $("loginMessage"),
+          "出生月日請輸入完整 4 碼，例如 0201。",
+          "error"
+        );
 
-      clearMessage();
+        return;
+      }
 
+      if (rawLast5.length !== 5) {
+        showMessage(
+          $("loginMessage"),
+          "請輸入完整的身分證字號後 5 碼。",
+          "error"
+        );
 
-      window
-        .scrollTo(
-          {
-            top:
-              0,
+        return;
+      }
 
-            behavior:
-              "smooth"
+      const mmdd =
+        normalizeMMDD(rawMMDD);
+
+      const last5 =
+        normalizeLast5(rawLast5);
+
+      if (!isValidMMDD(mmdd)) {
+        showMessage(
+          $("loginMessage"),
+          "出生月日格式不正確，請確認月份與日期。",
+          "error"
+        );
+
+        return;
+      }
+
+      $("queryBtn").disabled =
+        true;
+
+      $("queryBtn").textContent =
+        "查詢中...";
+
+      showMessage(
+        $("loginMessage"),
+        "正在讀取歷次段考資料……",
+        "info"
+      );
+
+      try {
+        const studentKey =
+          await createStudentKey(
+            mmdd,
+            last5
+          );
+
+        const studentDocument =
+          await getDoc(
+            doc(
+              db,
+              "students",
+              studentKey
+            )
+          );
+
+        if (!studentDocument.exists()) {
+          showMessage(
+            $("loginMessage"),
+            "查無符合資料，請確認出生月日與身分證後五碼是否正確。",
+            "error"
+          );
+
+          return;
+        }
+
+        const student =
+          studentDocument.data();
+
+        const exams =
+          await getExamList();
+
+        if (!exams.length) {
+          showMessage(
+            $("loginMessage"),
+            "目前尚未建立段考資料。",
+            "error"
+          );
+
+          return;
+        }
+
+        const resultDocuments =
+          await Promise.all(
+            exams.map(
+              exam =>
+                getDoc(
+                  doc(
+                    db,
+                    "examResults",
+                    exam.examCode || exam.id,
+                    "students",
+                    studentKey
+                  )
+                )
+            )
+          );
+
+        const records = [];
+
+        exams.forEach(
+          (exam,index) => {
+            if (
+              resultDocuments[index].exists()
+            ) {
+              records.push({
+                exam,
+                result:
+                  resultDocuments[index].data()
+              });
+            }
           }
         );
 
+        if (!records.length) {
+          showMessage(
+            $("loginMessage"),
+            "已找到學生資料，但目前沒有段考成績。",
+            "error"
+          );
+
+          return;
+        }
+
+        clearMessage(
+          $("loginMessage")
+        );
+
+        renderResult(
+          student,
+          records,
+          exams
+        );
+
+      } catch (error) {
+        console.error(
+          "成績查詢失敗：",
+          error
+        );
+
+        let text =
+          "成績查詢失敗，請稍後再試。";
+
+        if (
+          error?.code ===
+          "permission-denied"
+        ) {
+          text =
+            "目前 Firebase 讀取權限不允許查詢，請通知老師檢查 Firestore Rules。";
+        } else if (
+          error?.code ===
+          "unavailable"
+        ) {
+          text =
+            "目前無法連線到資料庫，請確認網路後重新整理。";
+        }
+
+        showMessage(
+          $("loginMessage"),
+          text,
+          "error"
+        );
+
+      } finally {
+        $("queryBtn").disabled =
+          false;
+
+        $("queryBtn").textContent =
+          "查詢我的成績";
+      }
     }
-  );
 
-</script>
+    function resetQuery() {
+      $("resultArea").style.display =
+        "none";
 
+      $("loginArea").style.display =
+        "block";
+
+      $("birthMMDD").value =
+        "";
+
+      $("idLast5").value =
+        "";
+
+      clearMessage(
+        $("loginMessage")
+      );
+
+      if (averageChart) {
+        averageChart.destroy();
+        averageChart = null;
+      }
+
+      if (rankChart) {
+        rankChart.destroy();
+        rankChart = null;
+      }
+
+      window.scrollTo({
+        top:0,
+        behavior:"smooth"
+      });
+
+      setTimeout(
+        () =>
+          $("birthMMDD").focus(),
+        250
+      );
+    }
+
+    $("queryBtn")
+      .addEventListener(
+        "click",
+        queryStudent
+      );
+
+    $("logoutBtn")
+      .addEventListener(
+        "click",
+        resetQuery
+      );
+
+    $("idLast5")
+      .addEventListener(
+        "keydown",
+        event => {
+          if (event.key === "Enter") {
+            queryStudent();
+          }
+        }
+      );
+
+    $("birthMMDD")
+      .addEventListener(
+        "input",
+        event => {
+          event.target.value =
+            event.target.value
+              .replace(/\D/g,"")
+              .slice(0,4);
+        }
+      );
+
+    $("idLast5")
+      .addEventListener(
+        "input",
+        event => {
+          event.target.value =
+            event.target.value
+              .replace(/\D/g,"")
+              .slice(0,5);
+        }
+      );
+  </script>
 </body>
 </html>
