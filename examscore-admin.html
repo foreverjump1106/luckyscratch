@@ -4708,4 +4708,218 @@ function renderStudentAdvice(
 
     const change =
       Number(
-       
+        latest.result.average
+      )
+      -
+      Number(
+        previous.result.average
+      );
+
+
+    if (
+      change >= 3
+    ) {
+
+      advice.push({
+
+        title:"整體表現有明顯進步",
+
+        text:
+          `最近一次平均較前一次提升 ${formatScore(change)} 分，表示目前讀書策略有一定效果。建議先維持原有節奏，再把額外時間集中在較弱科目。`
+
+      });
+
+
+    } else if (
+      change <= -3
+    ) {
+
+      advice.push({
+
+        title:"先找出本次下降來源",
+
+        text:
+          `最近一次平均較前一次下降 ${formatScore(Math.abs(change))} 分。建議先比較各科落差，確認是觀念不熟、題意理解、計算失誤，或複習時間不足。`
+
+      });
+
+    }
+
+  }
+
+
+  advice.push({
+
+    title:`維持 ${strongest.name} 的優勢`,
+
+    text:
+      `${strongest.name}目前是歷次平均較高的科目。建議保持目前複習方式，不必為了再增加少量分數投入過多時間。`
+
+  });
+
+
+  advice.push({
+
+    title:`優先整理 ${attention.name} 錯題`,
+
+    text:
+      `建議將最近 2～3 次${attention.name}段考錯題分成「觀念不熟、計算錯誤、題意理解、粗心」四類，先處理重複出現的錯誤。`
+
+  });
+
+
+  if (
+    improving.recentTrend > 0
+  ) {
+
+    advice.push({
+
+      title:`延續 ${improving.name} 的進步方式`,
+
+      text:
+        `${improving.name}最近幾次呈現進步，建議暫時不要改變目前練習方式，持續觀察下一次段考是否能維持。`
+
+    });
+
+  }
+
+
+  if (
+    unstable.range >= 15
+  ) {
+
+    advice.push({
+
+      title:`降低 ${unstable.name} 的成績波動`,
+
+      text:
+        `${unstable.name}歷次最高與最低分相差約 ${formatScore(unstable.range)} 分。建議改成固定每週複習，而不是集中在考前準備。`
+
+    });
+
+  }
+
+
+  $("studentAdviceList")
+    .innerHTML =
+    advice.map(
+      item => `
+
+        <div class="advice-item">
+
+          <strong>
+            ${escapeHtml(item.title)}
+          </strong>
+
+          ${escapeHtml(item.text)}
+
+        </div>
+
+      `
+    ).join("");
+
+}
+
+
+/* =========================================================
+   排序
+   ========================================================= */
+
+function compareValues(
+  a,
+  b,
+  key,
+  asc
+) {
+
+  if (
+    key === "name"
+  ) {
+
+    const result =
+      String(a ?? "")
+        .localeCompare(
+          String(b ?? ""),
+          "zh-Hant",
+          {
+            numeric:true
+          }
+        );
+
+
+    return asc
+      ? result
+      : -result;
+
+  }
+
+
+  const an =
+    Number(a);
+
+
+  const bn =
+    Number(b);
+
+
+  if (
+    Number.isFinite(an)
+    &&
+    Number.isFinite(bn)
+  ) {
+
+    return asc
+      ? an - bn
+      : bn - an;
+
+  }
+
+
+  return 0;
+
+}
+
+
+function compareNullableNumbers(
+  a,
+  b,
+  asc
+) {
+
+  const av =
+    Number.isFinite(
+      Number(a)
+    );
+
+
+  const bv =
+    Number.isFinite(
+      Number(b)
+    );
+
+
+  if (!av && !bv) {
+    return 0;
+  }
+
+
+  if (!av) {
+    return 1;
+  }
+
+
+  if (!bv) {
+    return -1;
+  }
+
+
+  return asc
+    ? Number(a) - Number(b)
+    : Number(b) - Number(a);
+
+}
+
+</script>
+
+</body>
+</html>
