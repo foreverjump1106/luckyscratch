@@ -200,7 +200,9 @@
 
         /* 座號與姓名改為同一行，減少垂直高度 */
         #dailyAttentionTable tbody td:nth-child(2) {
-            white-space: nowrap;
+            white-space: nowrap !important;
+            min-width: 150px !important;
+            width: 150px !important;
         }
 
         /* 操作欄兩顆按鈕保持同一排 */
@@ -246,8 +248,8 @@
         #dailyAttentionTable td:nth-child(2) {
             position: sticky;
             left: 108px;
-            min-width: 118px;
-            width: 118px;
+            min-width: 150px;
+            width: 150px;
             z-index: 10;
             box-shadow: 3px 0 5px rgba(0,0,0,0.18);
         }
@@ -1050,7 +1052,7 @@
                 const name = contactBookStudents[item.studentNo] || item.studentName || '';
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td>${item.date}</td>
+                    <td>${item.date ? item.date.slice(5).replace('-', '/') : ''}</td>
                     <td><strong>${item.studentNo} 號 ${name}</strong></td>
                     <td class="text-start"><span class="text-warning fw-bold">${getIssueSummary(item)}</span></td>
                     <td>
@@ -1165,7 +1167,7 @@
                     <td><strong>${item.studentNo} 號<br>${name}</strong></td>
                     <td>${subStatusDisplay}</td>
                     <td>${renderStatus(item.dateCheck, isNotSubmitted)}</td>
-                    <td>${renderStatus(item.examHw, isNotSubmitted)}</td>
+                    <td>${renderStatus(item.examHw === '完成/正常' ? '完成' : item.examHw, isNotSubmitted)}</td>
                     <td>${renderStatus(item.englishCopy, isNotSubmitted)}</td>
                     <td>${renderStatus(item.articleSummary, isNotSubmitted)}</td>
                     <td>${renderStatus(item.timeRecord, isNotSubmitted)}</td>
