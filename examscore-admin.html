@@ -1186,7 +1186,7 @@ function curriculumBridgeText(a,nextExam){
   const focus=c.focus.join("、");
   if(a.key==='math'&&c.prereq){
     const pre=c.prereq.join("、");
-    if(a.profile.id==='foundation'||a.profile.id==='priority_support'||a.profile.id==='declining'){
+    if(isWeakProfile(a.profile.id)){
       return `本次範圍是「${c.scope}」。以數學老師角度，先不要直接大量刷本次難題；應先檢查 ${pre}。這些能力會直接影響 ${focus}。`;
     }
     return `本次範圍是「${c.scope}」。七年級基礎若已穩定，可把練習重心直接放在 ${focus}，並用限時混合題檢查公式辨識、運算速度與步驟完整度。`;
@@ -1209,7 +1209,7 @@ function curriculumBridgeText(a,nextExam){
 function scopeSpecificActions(a,nextExam){
   const c=getCurriculumContext(a.key,nextExam);
   if(!c)return [];
-  const weak=a.profile.id==='foundation'||a.profile.id==='priority_support'||a.profile.id==='declining';
+  const weak=isWeakProfile(a.profile.id);
   if(a.key==='math'){
     if(Number(nextExam.examNo)===1){
       return weak?["先用 12～15 題先備診斷檢查：分配律、去括號、同類項、正負號與平方；任一類正確率未達 80%，先補該類再進入乘法公式。","乘法公式不可只背公式：每一種公式各做『辨識公式→展開→反向檢查』題，確認看得出題型。","多項式加減乘除每次計算都要求同類項對齊；錯題特別標記負號、漏項、指數錯誤。","2-1 平方根先確認『平方根、正平方根、根號』概念差異，避免只會按計算機。"]:["乘法公式直接進入混合辨識題，避免只做單一公式的重複題。","多項式乘除加入限時練習，檢查正負號、漏項與計算速度。","2-1 平方根加入概念判斷與數線估值題，確認不是只有機械計算。"];
@@ -1753,117 +1753,286 @@ function getSequentialTrend(values){
   if(v.length<3)return'insufficient';
   if(v[0]<v[1]&&v[1]<v[2])return'up';
   if(v[0]>v[1]&&v[1]>v[2])return'down';
-  return'mixed'
+  return'mixed';
 }
+
+function isWeakProfile(profileId){
+  return ['priority_support','foundation','foundation_declining','foundation_recovering','declining'].includes(profileId);
+}
+
+function getTrendStats(values){
+  const valid=values.map(Number).filter(Number.isFinite);
+  const last3=valid.slice(-3);
+  const latest=valid.at(-1);
+  const previous=valid.length>=2?valid.at(-2):latest;
+  const beforePrevious=valid.length>=3?valid.at(-3):previous;
+  const latestChange=Number.isFinite(latest)&&Number.isFinite(previous)?latest-previous:0;
+  const previousChange=Number.isFinite(previous)&&Number.isFinite(beforePrevious)?previous-beforePrevious:0;
+  const recentTrend=last3.length>=2?last3.at(-1)-last3[0]:0;
+  const recentSlope=last3.length>=2?recentTrend/(last3.length-1):0;
+  const early=valid.length>=4?valid.slice(0,Math.ceil(valid.length/2)):valid.slice(0,-1);
+  const late=valid.length>=4?valid.slice(Math.floor(valid.length/2)):valid.slice(-2);
+  const earlyMean=mean(early);
+  const lateMean=mean(late);
+  const halfChange=Number.isFinite(earlyMean)&&Number.isFinite(lateMean)?lateMean-earlyMean:0;
+  return {latest,previous,beforePrevious,latestChange,previousChange,recentTrend,recentSlope,earlyMean,lateMean,halfChange};
+}
+
+function buildLearningTraits(data){
+  const traits=[];
+  const add=(id,label,weight=0)=>traits.push({id,label,weight});
+  const {historicalAverage,recentTrend,latestChange,previousChange,classDiff,latestClassDiff,volatility,latestVsSelf,sequentialTrend,halfChange}=data;
+
+  if(sequentialTrend==='up')add('continuous_up','近三次連續上升',12);
+  if(sequentialTrend==='down')add('continuous_down','近三次連續下降',20);
+  if(recentTrend>=8)add('strong_up','近期明顯進步',12);
+  else if(recentTrend>=3)add('mild_up','近期緩步進步',6);
+  if(recentTrend<=-8)add('strong_down','近期明顯下降',20);
+  else if(recentTrend<=-3)add('mild_down','近期緩步下降',10);
+
+  if(latestChange>=5&&previousChange<0)add('rebound','最近一次回升',8);
+  if(latestChange<=-5&&previousChange>0)add('turn_down','最近一次轉為下降',12);
+  if(latestVsSelf<=-8)add('below_self','最近一次明顯低於個人常態',12);
+  if(latestVsSelf>=8)add('above_self','最近一次明顯高於個人常態',6);
+
+  if(volatility>=10)add('volatile','歷次波動偏大',12);
+  else if(volatility<=5)add('stable_scores','歷次表現穩定',-4);
+
+  if(classDiff>=8)add('above_class','長期高於班平均',-6);
+  else if(classDiff<=-8)add('below_class','長期低於班平均',12);
+  if(latestClassDiff>=8)add('latest_above_class','本次高於班平均',-3);
+  else if(latestClassDiff<=-8)add('latest_below_class','本次低於班平均',8);
+
+  if(historicalAverage<70&&recentTrend>=5)add('weak_but_improving','基礎仍需補強但方向向上',4);
+  if(historicalAverage>=80&&recentTrend<=-5)add('strong_but_declining','原有基礎不差但近期下滑',14);
+  if(historicalAverage>=85&&volatility<=6)add('stable_high','高分且穩定',-10);
+  if(historicalAverage>=70&&historicalAverage<85&&Math.abs(recentTrend)<5&&volatility<8)add('stable_middle','中段穩定',0);
+  if(halfChange>=8)add('long_term_up','前後期比較明顯進步',8);
+  if(halfChange<=-8)add('long_term_down','前後期比較明顯下降',14);
+
+  return traits.sort((a,b)=>b.weight-a.weight);
+}
+
 function classifyLearningProfile(d){
-  const {
-    historicalAverage,recentTrend,classDiff,volatility,latestVsSelf,sequentialTrend
+  const {historicalAverage,recentTrend,classDiff,volatility,latestVsSelf,sequentialTrend}=d;
+
+  if(historicalAverage<60&&classDiff<-6&&recentTrend<=2){
+    return {id:'priority_support',name:'需要優先介入型',priority:100,description:'歷次表現與班級相對位置都偏弱，且近期尚未形成明顯改善，應先重新建立核心基礎。'};
   }
-  =d;
-  if(historicalAverage<60&&classDiff<-6&&recentTrend<=2)return{
-    id:'priority_support',name:'需要優先介入型',priority:100,description:'歷次表現、班級相對位置與近期趨勢都顯示基礎能力需要重新整理。'
-  };
-  if(historicalAverage<70)return{
-    id:'foundation',name:'基礎補強型',priority:85,description:'最重要的是先把基本知識、基本題與常見錯誤補穩。'
-  };
-  if(sequentialTrend==='down'||recentTrend<=-8)return{
-    id:'declining',name:'近期下降型',priority:90,description:'近期已形成較明顯下降趨勢，需要先診斷原因。'
-  };
-  if(volatility>=10)return{
-    id:'volatile',name:'波動調整型',priority:72,description:'能力未必不足，但表現不夠穩定，需要固定複習節奏。'
-  };
-  if(sequentialTrend==='up'||recentTrend>=8)return{
-    id:'improving',name:'穩定進步型',priority:48,description:'近期持續往上，代表目前的學習方式正在產生效果。'
-  };
-  if(historicalAverage>=85&&classDiff>=5)return{
-    id:'advanced',name:'高分精進型',priority:25,description:'基本能力完整，下一階段應提升整合、速度與高層次應用。'
-  };
-  if(classDiff>=8)return{
-    id:'class_strength',name:'班級優勢型',priority:30,description:'長期相較班級平均具有優勢，維持即可。'
-  };
-  if(latestVsSelf<=-8)return{
-    id:'recent_drop',name:'單次失常觀察型',priority:68,description:'最近一次明顯低於自己的正常水準，需要確認失常原因。'
-  };
-  return{
-    id:'stable',name:'穩定發展型',priority:45,description:'歷次表現相對穩定，下一階段逐步提高弱點題型正確率。'
+  if(historicalAverage<70&&(sequentialTrend==='down'||recentTrend<=-5)){
+    return {id:'foundation_declining',name:'基礎補強＋近期下降型',priority:96,description:'原本基礎尚未穩固，近期又出現下降，應先找出下滑原因，再補最直接影響新課的基礎。'};
   }
+  if(historicalAverage<70&&(sequentialTrend==='up'||recentTrend>=5)){
+    return {id:'foundation_recovering',name:'基礎補強＋正在回升型',priority:76,description:'整體基礎仍需補強，但近期已經向上，應保留有效方法，只補真正卡住的基礎，不宜全部重來。'};
+  }
+  if(historicalAverage<70){
+    return {id:'foundation',name:'基礎補強型',priority:85,description:'先把本次段考會直接用到的基礎知識、基本題與固定錯誤補穩。'};
+  }
+  if(historicalAverage>=80&&(sequentialTrend==='down'||recentTrend<=-6)){
+    return {id:'strong_declining',name:'原有優勢但近期下滑型',priority:78,description:'原有能力並不差，但近期明顯下滑，應先確認新單元、準備節奏或考試失誤。'};
+  }
+  if(sequentialTrend==='down'||recentTrend<=-8){
+    return {id:'declining',name:'近期下降型',priority:90,description:'近期已形成下降趨勢，需要先診斷原因，再決定補基礎、修正錯題或調整複習方式。'};
+  }
+  if(volatility>=10){
+    return {id:'volatile',name:'波動調整型',priority:72,description:'能力未必不足，但表現起伏較大，需要建立固定節奏，降低粗心、遺忘與考試狀態造成的落差。'};
+  }
+  if(sequentialTrend==='up'||recentTrend>=8){
+    return {id:'improving',name:'穩定進步型',priority:48,description:'近期持續向上，代表目前方法有效；下一階段應保留節奏並增加適量整合與變化題。'};
+  }
+  if(historicalAverage>=85&&classDiff>=5){
+    return {id:'advanced',name:'高分精進型',priority:25,description:'基本能力相對完整，下一階段重點是整合、速度、推論與高層次應用。'};
+  }
+  if(classDiff>=8){
+    return {id:'class_strength',name:'班級優勢型',priority:30,description:'長期相較班平均具有優勢，維持正常複習即可，把更多時間留給其他科。'};
+  }
+  if(latestVsSelf<=-8){
+    return {id:'recent_drop',name:'單次失常觀察型',priority:68,description:'最近一次明顯低於自己的常態，先確認單元、粗心、時間分配或準備不足。'};
+  }
+  return {id:'stable',name:'穩定發展型',priority:45,description:'整體沒有明顯下降或大幅波動，維持節奏並針對固定失分逐步提高正確率。'};
 }
 function buildAnalyses(records,nextExam){
   return SUBJECTS.map(subject=>{
-    const scores=[],classDiffs=[];
+    const scores=[];
+    const classDiffs=[];
     records.forEach(record=>{
-      const score=Number(record.result[subject.key]),ca=Number(record.exam[subject.avgKey]);
+      const score=Number(record.result[subject.key]);
+      const classAverage=Number(record.exam[subject.avgKey]);
       if(Number.isFinite(score))scores.push(score);
-      if(Number.isFinite(score)&&Number.isFinite(ca))classDiffs.push(score-ca)
+      if(Number.isFinite(score)&&Number.isFinite(classAverage))classDiffs.push(score-classAverage);
     });
-    const latest=scores.at(-1),previous=scores.length>=2?scores.at(-2):latest,average=mean(scores)??0,recent=scores.slice(-3),recentTrend=recent.length>=2?recent.at(-1)-recent[0]:0,latestChange=Number.isFinite(latest)&&Number.isFinite(previous)?latest-previous:0,classDiff=mean(classDiffs)??0,volatility=sd(scores),latestVsSelf=Number.isFinite(latest)?latest-average:0,sequentialTrend=getSequentialTrend(scores),profile=classifyLearningProfile({
-      latest,historicalAverage:average,recentTrend,latestChange,classDiff,volatility,latestVsSelf,sequentialTrend
-    });
-    return{
-      ...subject,scores,latest,previous,average,recentTrend,latestChange,classDiff,volatility,latestVsSelf,sequentialTrend,profile,nextExam
-    }
-  })
+
+    const trend=getTrendStats(scores);
+    const latest=trend.latest;
+    const previous=trend.previous;
+    const average=mean(scores)??0;
+    const recentTrend=trend.recentTrend;
+    const latestChange=trend.latestChange;
+    const classDiff=mean(classDiffs)??0;
+    const latestClassDiff=classDiffs.length?classDiffs.at(-1):0;
+    const volatility=sd(scores);
+    const range=scores.length?Math.max(...scores)-Math.min(...scores):0;
+    const latestVsSelf=Number.isFinite(latest)?latest-average:0;
+    const sequentialTrend=getSequentialTrend(scores);
+
+    const data={latest,historicalAverage:average,recentTrend,latestChange,previousChange:trend.previousChange,classDiff,latestClassDiff,volatility,range,latestVsSelf,sequentialTrend,halfChange:trend.halfChange};
+    const profile=classifyLearningProfile(data);
+    const traits=buildLearningTraits(data);
+
+    return {...subject,scores,latest,previous,average,recentTrend,latestChange,previousChange:trend.previousChange,classDiff,latestClassDiff,volatility,range,latestVsSelf,sequentialTrend,halfChange:trend.halfChange,recentSlope:trend.recentSlope,profile,traits,nextExam};
+  });
 }
 function teacherDiagnosis(a,nextExam){
-  const p=[`目前判定為「${a.profile.name}」。`,a.profile.description,`最近一次 ${formatScore(a.latest)} 分，歷次平均 ${formatScore(a.average)} 分。`];
-  if(a.recentTrend>=5)p.push(`近三次增加約 ${formatScore(a.recentTrend)} 分。`);
-  else if(a.recentTrend<=-5)p.push(`近三次下降約 ${formatScore(Math.abs(a.recentTrend))} 分。`);
-  else p.push('近三次變化不大，重點放在穩定度與固定失分。');
-  if(a.classDiff>=5)p.push(`歷次平均約高於班平均 ${formatScore(a.classDiff)} 分。`);
-  else if(a.classDiff<=-5)p.push(`歷次平均約低於班平均 ${formatScore(Math.abs(a.classDiff))} 分。`);
-  p.push(curriculumBridgeText(a,nextExam));
-  return p.join('')
+  const parts=[];
+  parts.push(`目前主類型為「${a.profile.name}」。${a.profile.description}`);
+  const traitText=a.traits.slice(0,4).map(t=>t.label).join('、');
+  if(traitText)parts.push(`同時具有「${traitText}」等個人特徵。`);
+  parts.push(`最近一次 ${formatScore(a.latest)} 分，歷次平均 ${formatScore(a.average)} 分。`);
+
+  if(a.recentTrend>=5)parts.push(`近三次整體增加約 ${formatScore(a.recentTrend)} 分，近期方向向上。`);
+  else if(a.recentTrend<=-5)parts.push(`近三次整體下降約 ${formatScore(Math.abs(a.recentTrend))} 分，已不宜只視為單次波動。`);
+  else parts.push('近三次變化幅度不大，現階段重點是固定錯誤與穩定度。');
+
+  if(a.latestChange>=5&&a.previousChange<0)parts.push(`最近一次較前次回升 ${formatScore(a.latestChange)} 分，表示已有修正跡象，不宜把原本有效方法全部推翻。`);
+  if(a.latestChange<=-5&&a.previousChange>0)parts.push(`最近一次在前次回升後又下降 ${formatScore(Math.abs(a.latestChange))} 分，應特別檢查學習節奏是否不穩。`);
+
+  if(a.classDiff>=5)parts.push(`歷次平均約高於班平均 ${formatScore(a.classDiff)} 分。`);
+  else if(a.classDiff<=-5)parts.push(`歷次平均約低於班平均 ${formatScore(Math.abs(a.classDiff))} 分。`);
+
+  if(a.latestClassDiff>=8&&a.classDiff<5)parts.push('本次相對班平均比歷史常態更好，可視為近期正向訊號。');
+  if(a.latestClassDiff<=-8&&a.classDiff>-5)parts.push('本次相對班平均明顯偏低，但歷史並非長期落後，應先判斷是否為本次範圍或考試狀態造成。');
+  if(a.volatility>=10)parts.push(`歷次波動約 ${formatScore(a.volatility)}，需加入固定短測與考前模擬來提升穩定度。`);
+
+  parts.push(curriculumBridgeText(a,nextExam));
+  return parts.join('');
 }
 function practiceRatio(a){
+  let foundation=30,correction=30,challenge=40;
   switch(a.profile.id){
-    case'priority_support':return{
-      foundation:55,correction:30,challenge:15
-    };
-    case'foundation':return{
-      foundation:50,correction:30,challenge:20
-    };
-    case'declining':return{
-      foundation:30,correction:45,challenge:25
-    };
-    case'volatile':return{
-      foundation:30,correction:40,challenge:30
-    };
-    case'improving':return{
-      foundation:30,correction:25,challenge:45
-    };
-    case'advanced':case'class_strength':return{
-      foundation:15,correction:20,challenge:65
-    };
-    case'recent_drop':return{
-      foundation:25,correction:50,challenge:25
-    };
-    default:return{
-      foundation:30,correction:30,challenge:40
-    }
+    case'priority_support':foundation=55;correction=35;challenge=10;break;
+    case'foundation_declining':foundation=50;correction=40;challenge=10;break;
+    case'foundation_recovering':foundation=45;correction=30;challenge=25;break;
+    case'foundation':foundation=50;correction=30;challenge=20;break;
+    case'strong_declining':foundation=20;correction=50;challenge=30;break;
+    case'declining':foundation=30;correction=45;challenge=25;break;
+    case'volatile':foundation=25;correction=45;challenge=30;break;
+    case'improving':foundation=25;correction=25;challenge=50;break;
+    case'advanced':foundation=10;correction=20;challenge=70;break;
+    case'class_strength':foundation=15;correction=20;challenge=65;break;
+    case'recent_drop':foundation=20;correction=55;challenge=25;break;
   }
+
+  if(a.traits.some(t=>t.id==='below_class'))foundation+=5;
+  if(a.traits.some(t=>t.id==='volatile'))correction+=5;
+  if(a.traits.some(t=>t.id==='strong_down'||t.id==='continuous_down'))correction+=5;
+  if(a.traits.some(t=>t.id==='strong_up'||t.id==='continuous_up'))challenge+=5;
+  if(a.traits.some(t=>t.id==='stable_high'))challenge+=5;
+
+  const total=foundation+correction+challenge;
+  foundation=Math.round((foundation/total)*20)*5;
+  correction=Math.round((correction/total)*20)*5;
+  challenge=100-foundation-correction;
+  if(challenge<10){challenge=10;correction=Math.max(20,100-foundation-challenge);}
+  return {foundation,correction,challenge};
 }
 function subjectPrescription(a,nextExam){
   const p=a.profile.id;
   const scope=scopeSpecificActions(a,nextExam);
   let general=[];
+
   switch(a.key){
-    case'chinese':general=(p==='foundation'||p==='priority_support')?["用舊考卷分類字詞、課文、語文常識、閱讀理解，找出錯最多的一類。","課內內容採少量多次複習，每次只處理一課。","每週至少兩篇閱讀，每題回文中找答案依據。"]:["每課整理主旨、重要字詞、注釋、寫作特色。","閱讀題作答後回文章標記答案依據。","錯題依字詞／課文／語文常識／閱讀分類。"] ;break;
-    case'english':general=(p==='foundation'||p==='priority_support')?["把英文拆成單字、片語、文法、閱讀四部分。","每天 10～15 分鐘單字，隔天先回測昨天內容。","每個文法句型至少自己造 3 句。"]:["每天維持少量單字回測。","文法錯題整理成句型表並自己造句。","每週完成兩篇閱讀。"] ;break;
-    case'math':general=(p==='foundation'||p==='priority_support')?["錯題標記觀念、計算、題意、步驟。","每週至少三次，每次 25～30 分鐘。"]:(p==='declining'?["先把最近兩次錯題按單元分類，找出下降集中在哪個概念。","不要直接增加刷題量，先確認是運算、概念還是題意問題。"]:["每週三次：新觀念／變化題／錯題各一次。","段考前完成一份限時混合題。"]);break;
-    case'science':general=(p==='foundation'||p==='priority_support')?["概念要能回答：是什麼、為什麼、條件改變會怎樣。","實驗題整理目的、變因、結果與結論。","計算題固定寫已知量→公式→代入→單位。"]:["每週整理核心概念與一個實驗。","圖表題先看軸、單位、趨勢再作答。"] ;break;
-    case'social':general=(p==='foundation'||p==='priority_support')?["先確認失分主要在歷史、地理還是公民。","歷史用時間軸、地理用圖表／地圖、公民用概念比較。"]:["歷史做時間軸、地理做資料判讀、公民做概念比較。","每週完成一次三科混合題。"] ;break;
+    case'chinese':
+      general=isWeakProfile(p)
+        ? ['用舊考卷把錯題分成字詞／課文／語文常識／閱讀理解，先找固定失分來源。','課內內容採少量多次，每次只處理一課；閱讀題一定回文中找答案依據。']
+        : ['每課整理主旨、重要字詞、注釋、寫作特色，避免只靠考前重讀。','閱讀題作答後標記答案依據，並記錄推論錯誤或題意誤判。'];
+      break;
+    case'english':
+      general=isWeakProfile(p)
+        ? ['英文固定拆成單字、片語、文法、閱讀四類檢核，不只看總分。','每天10～15分鐘回測舊單字；核心文法每個句型至少自己造3句。']
+        : ['每天維持少量單字回測，文法錯題整理成句型表。','每週至少兩篇閱讀，錯題區分單字、句構與推論。'];
+      break;
+    case'math':
+      general=isWeakProfile(p)
+        ? ['數學錯題固定標記觀念、計算、題意、步驟四類；同一錯因連續出現時先停下來補基礎。','每週至少三次，每次25～30分鐘；基本題達標後才增加變化題。']
+        : (p==='strong_declining'||p==='declining'||p==='recent_drop')
+          ? ['先把最近兩次錯題按單元與錯因分類，不直接用增加題量處理下降。','至少安排一次只重做錯題，確認不看解答仍能完成。']
+          : ['每週三次：新觀念／變化題／錯題各一次。','段考前完成一份限時混合題，檢查速度與粗心。'];
+      break;
+    case'science':
+      general=isWeakProfile(p)
+        ? ['每個概念都要能回答「是什麼、為什麼、條件改變會怎樣」，再進入題目。','實驗題整理目的、變因、結果與結論；計算題固定寫已知量→公式→代入→單位。']
+        : ['每週整理核心概念與一個實驗，並加入圖表／計算混合題。','圖表題先讀軸、單位與趨勢，再看選項。'];
+      break;
+    case'social':
+      general=isWeakProfile(p)
+        ? ['社會先分歷史、地理、公民三條線檢查，不要全部只用背誦。','歷史用時間軸、地理用圖表／地圖、公民用概念比較，再用混合題驗證。']
+        : ['歷史做因果時間軸、地理做資料判讀、公民做概念比較。','每週完成一次三科混合題，檢查情境切換能力。'];
+      break;
   }
-  return [...scope,...general]
+
+  const modifiers=[];
+  if(a.traits.some(t=>t.id==='weak_but_improving'))modifiers.push('雖然歷次平均仍偏弱，但近期已經進步；不要把整冊重頭再學一次，只補本次範圍真正會用到、且診斷仍未達標的基礎。');
+  if(a.traits.some(t=>t.id==='strong_but_declining'))modifiers.push('原有基礎不差但近期下滑，本週先把錯題診斷放在新單元與考試策略，不要先假設所有基礎都不會。');
+  if(a.traits.some(t=>t.id==='volatile'))modifiers.push('增加每週一次固定時間、固定題數的短測；目標不是一次高分，而是讓兩次短測差距逐步縮小。');
+  if(a.traits.some(t=>t.id==='below_self'))modifiers.push('最近一次低於個人常態，先對照前一次與本次考卷；若錯誤集中在少數題型，就針對該題型修正，不全面增加負擔。');
+  if(a.traits.some(t=>t.id==='rebound'))modifiers.push('最近一次已回升，保留目前有效的複習節奏；新的補強措施一次只增加一項。');
+  if(a.traits.some(t=>t.id==='above_class')&&a.average>=80)modifiers.push('長期高於班平均，基本題以維持手感為主，把額外時間移到本次範圍的整合、推論與高層次題。');
+
+  return [...scope,...modifiers,...general];
 }
 function fourWeekPlan(a,nextExam){
-  const r=practiceRatio(a);
-  switch(a.profile.id){
-    case'priority_support':case'foundation':return['第1週：用舊考卷找出最常錯的 2～3 類能力。',`第2週：基礎 ${r.foundation}%、錯題 ${r.correction}%、變化題 ${r.challenge}%。`,'第3週：基本題穩定後加入本階段新課與變化題。','第4週：完成一次限時練習，只整理仍會重複的錯誤。'];
-    case'declining':return['第1週：比較最近兩次考卷，找出下降開始的單元與題型。',`第2週：錯題與薄弱題約占 ${r.correction+r.foundation}% 的時間。`,'第3週：加入新課，確認補舊內容沒有影響新單元。','第4週：用混合題確認下降問題是否改善。'];
-    case'improving':return['第1週：保留目前有效的讀書方式。',`第2週：將變化題比例提高到約 ${r.challenge}%。`,'第3週：加入限時練習。','第4週：只精修仍會錯的題目。'];
-    default:return['第1週：整理目前弱點與最近錯題。','第2週：維持新課同步並改善最常出現的失分。','第3週：增加變化題與整合題。',`第4週：完成一次 ${nextExam?nextExam.shortTitle:'下一次段考'} 前的限時檢核。`]}}
-    function priorityScore(a){let s=a.profile.priority;if(a.recentTrend<=-8)s+=20;else if(a.recentTrend<=-4)s+=10;if(a.classDiff<=-8)s+=15;if(a.latestVsSelf<=-8)s+=10;return s}
+  const ratio=practiceRatio(a);
+  const ctx=getCurriculumContext(a.key,nextExam);
+  const target=nextExam?nextExam.shortTitle:'下一次段考';
+  const focus1=ctx?.focus?.[0]||'本次段考核心內容';
+  const focus2=ctx?.focus?.[1]||'第二個核心內容';
 
+  let week1=`診斷週：用舊考卷與本次範圍小測，優先檢核「${focus1}」與「${focus2}」，只記錄真正未達標的能力。`;
+  let week2=`修正週：依個人比例安排基礎 ${ratio.foundation}%、錯題修正 ${ratio.correction}%、變化進階 ${ratio.challenge}%，集中處理第1週未達標內容。`;
+  let week3='整合週：把已補強內容放回本次段考混合題，確認沒有只會單一題型。';
+  let week4=`模擬週：完成一次接近 ${target} 的限時練習，最後只複習仍會重複出錯的內容。`;
+
+  if(a.profile.id==='foundation_recovering'){
+    week1=`保留有效方法：先確認「${focus1}」與「${focus2}」的先備能力，只有未達80%的部分才補，不全面重學。`;
+    week3='進階銜接：在維持基本題正確率的前提下增加變化題，讓近期進步延伸到八年級新內容。';
+  }
+  if(['foundation_declining','declining','strong_declining'].includes(a.profile.id)){
+    week1='找下降原因：比較最近兩次考卷的錯題類型，再用本次範圍小測確認下降是舊基礎、新單元還是考試策略造成。';
+    week2=`集中修正：本週約 ${ratio.foundation+ratio.correction}% 的時間只處理已確認的薄弱內容，不漫無目的增加題量。`;
+  }
+  if(a.profile.id==='volatile'){
+    week1=`穩定度診斷：針對「${focus1}」做兩次固定題數短測，記錄兩次分數差與錯因。`;
+    week3='穩定度驗證：再做兩次同規格短測，目標是正確率接近且錯誤類型不重複。';
+  }
+  if(['improving','advanced','class_strength'].includes(a.profile.id)){
+    week1=`維持＋確認：快速檢核「${focus1}」與「${focus2}」基本題，達標後不重複刷熟悉題。`;
+    week2=`提升週：將約 ${ratio.challenge}% 的時間放在本次範圍的變化、整合或限時題。`;
+    week3='應用週：使用跨題型混合題，要求說明判斷依據或解題理由。';
+  }
+  if(a.traits.some(t=>t.id==='rebound'))week1+=' 最近一次已有回升，本週不要同時更換多種讀書方法。';
+
+  return [week1,week2,week3,week4];
+}
+
+function priorityScore(a){
+  let score=a.profile.priority;
+  score+=a.traits.filter(t=>t.weight>0).slice(0,4).reduce((sum,t)=>sum+t.weight,0);
+  if(a.recentTrend<=-8)score+=10;
+  if(a.classDiff<=-8)score+=8;
+  if(a.latestVsSelf<=-8)score+=6;
+  return score;
+}
+
+function personalizedCheckpoints(a,nextExam){
+  const checks=[...curriculumCheckpoints(a,nextExam)];
+  if(isWeakProfile(a.profile.id))checks.unshift('本次範圍先備診斷中，未達80%的項目要能明確列出，不把整冊都當成弱點。');
+  if(['foundation_recovering','improving'].includes(a.profile.id))checks.push('連續兩次練習都維持進步，不因增加變化題而讓基本題正確率明顯下降。');
+  if(['declining','foundation_declining','strong_declining'].includes(a.profile.id))checks.push('最近兩次重複出現的主要錯因，在下一次同類練習中至少減少一半。');
+  if(a.profile.id==='volatile')checks.push('兩次固定題數短測的分數差逐步縮小到約10分以內，且重複錯誤減少。');
+  if(['advanced','class_strength'].includes(a.profile.id))checks.push('混合／進階題正確率維持約80%以上，基本題粗心失分控制在少數題。');
+  if(a.traits.some(t=>t.id==='below_self'))checks.push('能說明最近一次低於個人常態的主要原因，並在下一次短測驗證是否改善。');
+  return [...new Set(checks)];
+}
     $('loadStudentBtn').onclick=async()=>{clearMessage($('studentMessage'));const key=$('studentSelect').value;if(!key)return;try{const student=studentDirectory.get(key),exams=await getExamList(),records=[];for(const exam of exams){const d=await getDoc(doc(db,'examResults',exam.examCode||exam.id,'students',key));if(d.exists())records.push({exam,result:d.data()})}if(!records.length){showMessage($('studentMessage'),'此學生目前沒有段考資料。','error');return}renderStudentHistory(student,records,exams)}catch(e){console.error(e);showMessage($('studentMessage'),'學生歷程載入失敗。','error')}};
     function renderStudentHistory(student,records,allExams){$('studentResultArea').style.display='block';const latest=records.at(-1).result;$('studentName').textContent=student.name;$('studentMeta').textContent=`${
       latest.classCode||''
@@ -1902,62 +2071,45 @@ function fourWeekPlan(a,nextExam){
     }
     </td></tr>`}).join('')}
     function renderSubjectAnalyses(analyses,nextExam){
-  $('subjectAnalysisList').innerHTML=analyses.map(a=>{
-    const rx=subjectPrescription(a,nextExam),plan=fourWeekPlan(a,nextExam),ratio=practiceRatio(a),ctx=getCurriculumContext(a.key,nextExam),checks=curriculumCheckpoints(a,nextExam);
-    return `<div class="subject-analysis-card"><div class="subject-analysis-head"><div class="subject-analysis-name">${a.icon} ${a.name}</div><div class="subject-status">${escapeHtml(a.profile.name)}</div></div><div class="subject-analysis-body">
-      <div class="subject-data-grid"><div class="subject-data-item"><div class="subject-data-label">最近一次</div><div class="subject-data-value">${formatScore(a.latest)}</div></div><div class="subject-data-item"><div class="subject-data-label">歷次平均</div><div class="subject-data-value">${formatScore(a.average)}</div></div><div class="subject-data-item"><div class="subject-data-label">近三次變化</div><div class="subject-data-value ${a.recentTrend>0?'positive':a.recentTrend<0?'negative':''}">${signed(a.recentTrend)}</div></div><div class="subject-data-item"><div class="subject-data-label">相較班平均</div><div class="subject-data-value ${a.classDiff>0?'positive':a.classDiff<0?'negative':''}">${signed(a.classDiff)}</div></div></div>
-      ${ctx?`<div class="scope-box"><div class="box-title">📚 ${ctx.publisher}｜本次實際段考範圍</div><strong>${escapeHtml(ctx.scope)}</strong><br><span style="color:#6b6475">重點：${ctx.focus.map(escapeHtml).join('、')}</span></div>`:''}
-      <div class="teacher-box"><div class="box-title">🧑‍🏫 ${a.name}老師的判讀</div>${escapeHtml(teacherDiagnosis(a,nextExam))}</div>
-      <div class="action-box"><div class="box-title">🎯 依本次範圍的個人化學習處方</div><div style="font-weight:800;margin-bottom:8px">建議練習比例：基礎 ${ratio.foundation}% ／ 錯題修正 ${ratio.correction}% ／ 變化進階 ${ratio.challenge}%</div><ol class="action-list">${rx.map(x=>`<li>${escapeHtml(x)}</li>`).join('')}</ol></div>
-      <div class="checkpoint-box"><div class="box-title">✅ 達標檢核</div><ol class="action-list">${checks.map(x=>`<li>${escapeHtml(x)}</li>`).join('')}</ol></div>
-      <div class="week-box"><div class="box-title">📅 ${nextExam?nextExam.shortTitle:'下一次段考'}前四週計畫</div><ol class="action-list">${plan.map((x,i)=>`<li><strong>第 ${i+1} 週：</strong>${escapeHtml(x.replace(/^第\d週：/,''))}</li>`).join('')}</ol></div>
-    </div></div>`
-  }).join('')
+      $('subjectAnalysisList').innerHTML=analyses.map(a=>{
+        const rx=subjectPrescription(a,nextExam);
+        const plan=fourWeekPlan(a,nextExam);
+        const ratio=practiceRatio(a);
+        const ctx=getCurriculumContext(a.key,nextExam);
+        const checks=personalizedCheckpoints(a,nextExam);
+        const traits=a.traits.slice(0,5);
+    
+        return `<div class="subject-analysis-card"><div class="subject-analysis-head"><div class="subject-analysis-name">${a.icon} ${a.name}</div><div class="subject-status">${escapeHtml(a.profile.name)}</div></div><div class="subject-analysis-body">
+          <div class="subject-data-grid"><div class="subject-data-item"><div class="subject-data-label">最近一次</div><div class="subject-data-value">${formatScore(a.latest)}</div></div><div class="subject-data-item"><div class="subject-data-label">歷次平均</div><div class="subject-data-value">${formatScore(a.average)}</div></div><div class="subject-data-item"><div class="subject-data-label">近三次變化</div><div class="subject-data-value ${a.recentTrend>0?'positive':a.recentTrend<0?'negative':''}">${signed(a.recentTrend)}</div></div><div class="subject-data-item"><div class="subject-data-label">相較班平均</div><div class="subject-data-value ${a.classDiff>0?'positive':a.classDiff<0?'negative':''}">${signed(a.classDiff)}</div></div></div>
+          <div style="display:flex;flex-wrap:wrap;gap:7px;margin:0 0 12px;">${traits.map(t=>`<span style="padding:6px 10px;border-radius:999px;background:#f6f1e9;border:1px solid #e5d8c6;font-size:12px;font-weight:800;color:#6d6257;">${escapeHtml(t.label)}</span>`).join('')}</div>
+          ${ctx?`<div class="scope-box"><div class="box-title">📚 ${ctx.publisher}｜本次實際段考範圍</div><strong>${escapeHtml(ctx.scope)}</strong><br><span style="color:#6b6475">重點：${ctx.focus.map(escapeHtml).join('、')}</span></div>`:''}
+          <div class="teacher-box"><div class="box-title">🧑‍🏫 ${a.name}老師的判讀</div>${escapeHtml(teacherDiagnosis(a,nextExam))}</div>
+          <div class="action-box"><div class="box-title">🎯 依本次範圍的個人化學習處方</div><div style="font-weight:800;margin-bottom:8px">建議練習比例：基礎 ${ratio.foundation}% ／ 錯題修正 ${ratio.correction}% ／ 變化進階 ${ratio.challenge}%</div><ol class="action-list">${rx.map(x=>`<li>${escapeHtml(x)}</li>`).join('')}</ol></div>
+          <div class="checkpoint-box"><div class="box-title">✅ 個人達標檢核</div><ol class="action-list">${checks.map(x=>`<li>${escapeHtml(x)}</li>`).join('')}</ol></div>
+          <div class="week-box"><div class="box-title">📅 ${nextExam?nextExam.shortTitle:'下一次段考'}前四週個人計畫</div><ol class="action-list">${plan.map((x,i)=>`<li><strong>第 ${i+1} 週：</strong>${escapeHtml(x)}</li>`).join('')}</ol></div>
+        </div></div>`;
+      }).join('');
+    }
+function renderPriorities(analyses){
+  const ranked=[...analyses].map(a=>({...a,finalPriority:priorityScore(a)})).sort((a,b)=>b.finalPriority-a.finalPriority);
+  const first=ranked[0],second=ranked[1],strongest=[...analyses].sort((a,b)=>b.average-a.average)[0],items=[];
+  if(first){const trait=first.traits[0]?.label||first.profile.name;items.push({title:`第一優先：${first.name}`,text:`${first.name}目前為「${first.profile.name}」，主要特徵是「${trait}」。先完成第一週診斷，確認真正未達標內容後再增加練習量。`});}
+  if(second){const trait=second.traits[0]?.label||second.profile.name;items.push({title:`第二優先：${second.name}`,text:`${second.name}目前主要特徵是「${trait}」。固定每週時段處理，不要與第一優先科同時大幅增加負擔。`});}
+  if(strongest)items.push({title:`${strongest.name}維持優勢`,text:`${strongest.name}目前歷次平均相對較好；若本次基本檢核已達標，就維持手感，把額外時間留給前兩個優先科。`});
+  $('priorityGrid').innerHTML=items.slice(0,3).map((x,i)=>`<div class="priority-card"><div class="priority-number">${i+1}</div><div class="priority-title">${escapeHtml(x.title)}</div><div class="priority-text">${escapeHtml(x.text)}</div></div>`).join('');
 }
-function renderPriorities(analyses){const ranked=[...analyses].map(a=>({...a,finalPriority:priorityScore(a)})).sort((a,b)=>b.finalPriority-a.finalPriority),first=ranked[0],second=ranked[1],strongest=[...analyses].sort((a,b)=>b.average-a.average)[0],items=[];if(first)items.push({title:`第一優先：${
-      first.name
-    }
-    `,text:`${
-      first.name
-    }
-    目前屬於「${
-      first.profile.name
-    }
-    」，下一階段先執行該科處方前兩項。`});if(second)items.push({title:`第二優先：${
-      second.name
-    }
-    `,text:`${
-      second.name
-    }
-    是第二需要投入時間的科目，建議固定每週時段。`});if(strongest)items.push({title:`${
-      strongest.name
-    }
-    維持即可`,text:`${
-      strongest.name
-    }
-    目前相對較穩定，維持正常複習，把額外時間留給前兩科。`});$('priorityGrid').innerHTML=items.slice(0,3).map((x,i)=>`<div class="priority-card"><div class="priority-number">${
-      i+1
-    }
-    </div><div class="priority-title">${
-      escapeHtml(x.title)
-    }
-    </div><div class="priority-text">${
-      escapeHtml(x.text)
-    }
-    </div></div>`).join('')}
-
     $('loadOverviewBtn').onclick=loadOverview;$('overviewSort').onchange=()=>{if($('overviewTableBody').dataset.loaded==='1')loadOverview()};
-    async function loadOverview(){clearMessage($('overviewMessage'));$('loadOverviewBtn').disabled=true;$('loadOverviewBtn').textContent='分析中...';try{const exams=await getExamList();if(!exams.length){showMessage($('overviewMessage'),'目前沒有段考資料。','error');return}const snaps=await Promise.all(exams.map(exam=>getDocs(collection(db,'examResults',exam.examCode||exam.id,'students')))),studentMap=new Map();exams.forEach((exam,i)=>snaps[i].docs.forEach(item=>{const r=item.data(),key=r.studentKey||item.id;if(!studentMap.has(key))studentMap.set(key,{studentKey:key,name:r.name||'',seat:normalizeSeat(r.seat),records:[]});const s=studentMap.get(key);s.name=r.name||s.name;s.seat=normalizeSeat(r.seat)||s.seat;s.records.push({exam,result:r})}));const rows=[];for(const s of studentMap.values()){const nextExam=determineNextExam(exams),analyses=buildAnalyses(s.records,nextExam),ranked=[...analyses].map(a=>({...a,finalPriority:priorityScore(a)})).sort((a,b)=>b.finalPriority-a.finalPriority);rows.push({...s,analyses,first:ranked[0],overallPriority:ranked[0]?.finalPriority||0})}const sort=$('overviewSort').value;rows.sort((a,b)=>sort==='priority'?b.overallPriority-a.overallPriority:sort==='name'?a.name.localeCompare(b.name,'zh-Hant'):Number(a.seat)-Number(b.seat));const counts={priority_support:0,foundation:0,declining:0,volatile:0};rows.forEach(r=>r.analyses.forEach(a=>{if(counts[a.profile.id]!==undefined)counts[a.profile.id]++}));$('overviewSummary').innerHTML=`<div class="summary-card"><div class="summary-label">學生人數</div><div class="summary-value">${
+    async function loadOverview(){clearMessage($('overviewMessage'));$('loadOverviewBtn').disabled=true;$('loadOverviewBtn').textContent='分析中...';try{const exams=await getExamList();if(!exams.length){showMessage($('overviewMessage'),'目前沒有段考資料。','error');return}const snaps=await Promise.all(exams.map(exam=>getDocs(collection(db,'examResults',exam.examCode||exam.id,'students')))),studentMap=new Map();exams.forEach((exam,i)=>snaps[i].docs.forEach(item=>{const r=item.data(),key=r.studentKey||item.id;if(!studentMap.has(key))studentMap.set(key,{studentKey:key,name:r.name||'',seat:normalizeSeat(r.seat),records:[]});const s=studentMap.get(key);s.name=r.name||s.name;s.seat=normalizeSeat(r.seat)||s.seat;s.records.push({exam,result:r})}));const rows=[];for(const s of studentMap.values()){const nextExam=determineNextExam(exams),analyses=buildAnalyses(s.records,nextExam),ranked=[...analyses].map(a=>({...a,finalPriority:priorityScore(a)})).sort((a,b)=>b.finalPriority-a.finalPriority);rows.push({...s,analyses,first:ranked[0],overallPriority:ranked[0]?.finalPriority||0})}const sort=$('overviewSort').value;rows.sort((a,b)=>sort==='priority'?b.overallPriority-a.overallPriority:sort==='name'?a.name.localeCompare(b.name,'zh-Hant'):Number(a.seat)-Number(b.seat));const counts={priority_support:0,foundation:0,foundation_declining:0,foundation_recovering:0,strong_declining:0,declining:0,volatile:0};rows.forEach(r=>r.analyses.forEach(a=>{if(counts[a.profile.id]!==undefined)counts[a.profile.id]++}));$('overviewSummary').innerHTML=`<div class="summary-card"><div class="summary-label">學生人數</div><div class="summary-value">${
       rows.length
     }
     </div></div><div class="summary-card"><div class="summary-label">需優先介入科次</div><div class="summary-value negative">${
       counts.priority_support
     }
     </div></div><div class="summary-card"><div class="summary-label">基礎補強科次</div><div class="summary-value">${
-      counts.foundation
+      (counts.foundation+counts.foundation_declining+counts.foundation_recovering)
     }
     </div></div><div class="summary-card"><div class="summary-label">近期下降科次</div><div class="summary-value negative">${
-      counts.declining
+      (counts.declining+counts.strong_declining)
     }
     </div></div>`;$('overviewTableBody').innerHTML=rows.map(r=>`<tr><td>${
       escapeHtml(r.seat)
