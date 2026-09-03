@@ -1129,8 +1129,21 @@ ${currentDate} 的聯絡簿紀錄為「未繳交」嗎？
                 return;
             }
 
-            let revRecords = [...records].reverse();
-            let filteredRecords = revRecords.filter(item => {
+            // 排序規則：
+            // 1. 日期由新到舊
+            // 2. 同一天內依座號由小到大
+            let sortedRecords = [...records].sort((a, b) => {
+                const dateA = a.date || '';
+                const dateB = b.date || '';
+
+                if (dateA !== dateB) {
+                    return dateB.localeCompare(dateA);
+                }
+
+                return Number(a.studentNo || 0) - Number(b.studentNo || 0);
+            });
+
+            let filteredRecords = sortedRecords.filter(item => {
                 // 已審查的異常紀錄保留在 Firebase 與每週統計中，但不再顯示於每日關注清單
                 if (item.reviewed === true) return false;
 
