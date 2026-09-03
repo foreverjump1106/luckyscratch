@@ -186,6 +186,47 @@
             white-space: nowrap;
         }
 
+        /* ===== 每日關注清單緊湊顯示 ===== */
+        /* 只縮減需要關注清單的列高，不影響其他表格 */
+        #dailyAttentionTable tbody td {
+            padding-top: 4px !important;
+            padding-bottom: 4px !important;
+            line-height: 1.25;
+        }
+
+        #dailyAttentionTable tbody tr {
+            height: auto !important;
+        }
+
+        /* 座號與姓名改為同一行，減少垂直高度 */
+        #dailyAttentionTable tbody td:nth-child(2) {
+            white-space: nowrap;
+        }
+
+        /* 操作欄兩顆按鈕保持同一排 */
+        #dailyAttentionTable th:last-child,
+        #dailyAttentionTable td:last-child {
+            min-width: 150px;
+            width: 150px;
+            white-space: nowrap;
+        }
+
+        #dailyAttentionTable .audit-action-group {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            gap: 4px;
+            flex-wrap: nowrap;
+        }
+
+        #dailyAttentionTable .audit-action-btn {
+            padding: 2px 6px !important;
+            font-size: 0.76rem !important;
+            line-height: 1.2;
+            white-space: nowrap;
+        }
+
         /* 每日關注表：固定「日期」與「座號/姓名」 */
         #dailyAttentionTable th:nth-child(1),
         #dailyAttentionTable td:nth-child(1) {
@@ -734,7 +775,7 @@
             1: "王禹涵", 2: "江育緹", 3: "呂思儀", 4: "李詠祺", 
             5: "林子歆", 6: "林禹萱", 7: "張馨勻", 8: "陳昕樂", 
             9: "陳梓安", 10: "陳筠蓁", 11: "陳苙絜", 12: "楊錚諭", 
-            13: "趙安褕", 14: "魏語潔", 15: "江靚恩", 16: "王洋振", 
+            13: "趙安瑜", 14: "魏語潔", 15: "江靚恩", 16: "王洋振", 
             17: "吳昊丞", 18: "李祐誠", 19: "林宸陞", 20: "林維辰", 
             21: "林鈺棟", 22: "洪楷祥", 23: "陳兆楷", 24: "陳沂璟", 
             25: "黑肚・尤明", 26: "賴震宇", 27: "戴震龍", 28: "謝宇哲"
@@ -1010,7 +1051,7 @@
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td>${item.date}</td>
-                    <td><strong>${item.studentNo} 號<br>${name}</strong></td>
+                    <td><strong>${item.studentNo} 號 ${name}</strong></td>
                     <td class="text-start"><span class="text-warning fw-bold">${getIssueSummary(item)}</span></td>
                     <td>
                         <button class="btn btn-outline-light btn-sm" onclick="restoreReviewedRecord('${item.id}', '${item.date}', '${name}')">↩️ 恢復關注</button>
@@ -1131,9 +1172,9 @@
                     <td>${renderStatus(item.lifeNote, isNotSubmitted)}</td>
                     <td>${signDisplay}</td>
                     <td>
-                        <div class="d-flex flex-column gap-1">
-                            <button class="btn btn-outline-success btn-sm py-0" style="font-size: 0.8rem;" onclick="markRecordReviewed('${item.id}', '${item.date}', '${name}')">✅ 已審查</button>
-                            <button class="btn btn-outline-danger btn-sm py-0" style="font-size: 0.8rem;" onclick="deleteBackendRecord('${item.id}', '${item.date}', '${name}')">🗑️ 刪除後端</button>
+                        <div class="audit-action-group">
+                            <button class="btn btn-outline-success btn-sm audit-action-btn" onclick="markRecordReviewed('${item.id}', '${item.date}', '${name}')">✅ 審查</button>
+                            <button class="btn btn-outline-danger btn-sm audit-action-btn" onclick="deleteBackendRecord('${item.id}', '${item.date}', '${name}')">🗑️ 刪除</button>
                         </div>
                     </td>
                 `;
