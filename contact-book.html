@@ -234,8 +234,8 @@
         #dailyAttentionTable td:nth-child(1) {
             position: sticky;
             left: 0;
-            min-width: 108px;
-            width: 108px;
+            min-width: 72px;
+            width: 72px;
             z-index: 10;
         }
 
@@ -247,7 +247,7 @@
         #dailyAttentionTable th:nth-child(2),
         #dailyAttentionTable td:nth-child(2) {
             position: sticky;
-            left: 108px;
+            left: 72px;
             min-width: 150px;
             width: 150px;
             z-index: 10;
@@ -1163,8 +1163,8 @@
 
                 let tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td>${item.date}</td>
-                    <td><strong>${item.studentNo} 號<br>${name}</strong></td>
+                    <td>${item.date ? item.date.slice(5).replace('-', '/') : ''}</td>
+                    <td><strong>${item.studentNo} 號 ${name}</strong></td>
                     <td>${subStatusDisplay}</td>
                     <td>${renderStatus(item.dateCheck, isNotSubmitted)}</td>
                     <td>${renderStatus(item.examHw === '完成/正常' ? '完成' : item.examHw, isNotSubmitted)}</td>
