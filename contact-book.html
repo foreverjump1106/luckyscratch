@@ -194,7 +194,11 @@
             min-width: 108px;
             width: 108px;
             z-index: 10;
-            background-color: #1f3460;
+        }
+
+        #dailyAttentionTable tbody td:nth-child(1) {
+            background-color: #ffffff !important;
+            color: #212529 !important;
         }
 
         #dailyAttentionTable th:nth-child(2),
@@ -204,8 +208,12 @@
             min-width: 118px;
             width: 118px;
             z-index: 10;
-            background-color: #1f3460;
             box-shadow: 3px 0 5px rgba(0,0,0,0.18);
+        }
+
+        #dailyAttentionTable tbody td:nth-child(2) {
+            background-color: #ffffff !important;
+            color: #212529 !important;
         }
 
         #dailyAttentionTable thead th:nth-child(1),
@@ -222,7 +230,11 @@
             min-width: 70px;
             width: 70px;
             z-index: 10;
-            background-color: #1f3460;
+        }
+
+        #weeklyStatsTable tbody td:nth-child(1) {
+            background-color: #ffffff !important;
+            color: #212529 !important;
         }
 
         #weeklyStatsTable th:nth-child(2),
@@ -232,8 +244,12 @@
             min-width: 120px;
             width: 120px;
             z-index: 10;
-            background-color: #1f3460;
             box-shadow: 3px 0 5px rgba(0,0,0,0.18);
+        }
+
+        #weeklyStatsTable tbody td:nth-child(2) {
+            background-color: #ffffff !important;
+            color: #212529 !important;
         }
 
         #weeklyStatsTable thead th:nth-child(1),
@@ -242,7 +258,7 @@
             background-color: #122244 !important;
         }
 
-        /* 固定欄位文字顏色：避免 Bootstrap 在部分裝置顯示成黑色 */
+        /* 固定欄位維持原本白底黑字 */
         #dailyAttentionTable tbody td:nth-child(1),
         #dailyAttentionTable tbody td:nth-child(2),
         #dailyAttentionTable tbody td:nth-child(1) strong,
@@ -251,15 +267,16 @@
         #weeklyStatsTable tbody td:nth-child(2),
         #weeklyStatsTable tbody td:nth-child(1) strong,
         #weeklyStatsTable tbody td:nth-child(2) strong {
-            color: #ffffff !important;
+            color: #212529 !important;
         }
 
-        /* 滑鼠移到資料列時，固定欄位也保持一致的視覺效果 */
+        /* 滑鼠移到資料列時，固定欄位仍維持白底黑字 */
         #dailyAttentionTable tbody tr:hover td:nth-child(1),
         #dailyAttentionTable tbody tr:hover td:nth-child(2),
         #weeklyStatsTable tbody tr:hover td:nth-child(1),
         #weeklyStatsTable tbody tr:hover td:nth-child(2) {
-            background-color: #263f72;
+            background-color: #ffffff !important;
+            color: #212529 !important;
         }
 
         /* 平板／手機：保留橫向滑動，並縮短表格內垂直視窗高度 */
@@ -620,6 +637,17 @@
         const contactBookDb = getDatabase(app);
         const auth = getAuth(app);
 
+        // 先將資料庫方法掛載到全域，再開始監聽登入狀態
+        // 避免瀏覽器保留登入狀態時，onAuthStateChanged 太快觸發，
+        // 導致 loadAllData() 執行時 window.contactBookDb 尚未準備完成。
+        window.contactBookDb = contactBookDb;
+        window.dbRef = ref;
+        window.dbGet = get;
+        window.dbChild = child;
+        window.dbPush = push;
+        window.dbRemove = remove;
+        window.dbUpdate = update;
+
         // 監聽登入狀態
         onAuthStateChanged(auth, (user) => {
             const overlay = document.getElementById("loginOverlay");
@@ -663,14 +691,6 @@
             }
         };
 
-        // 將資料庫方法掛載到全域供底下邏輯使用
-        window.contactBookDb = contactBookDb;
-        window.dbRef = ref;
-        window.dbGet = get;
-        window.dbChild = child;
-        window.dbPush = push;
-        window.dbRemove = remove;
-        window.dbUpdate = update;
     </script>
 
     <script>
