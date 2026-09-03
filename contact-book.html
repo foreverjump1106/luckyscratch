@@ -957,12 +957,22 @@ ${currentDate} 的聯絡簿紀錄為「未繳交」嗎？
 
                 // 連續天數只計算「之前日期」，避免更新同一天時把自己再算一次。
                 let studentPastRecords = existingRecords
-                    .filter(r => r.studentNo === studentNoNum && r.date !== currentDate)
+                    .filter(r =>
+                        r.studentNo === studentNoNum &&
+                        r.date &&
+                        r.date < currentDate
+                    )
                     .sort((a, b) => new Date(b.date) - new Date(a.date));
 
                 let previousSignStreak = 0;
                 if (parentSignVal === '未簽' || parentSignVal === '未簽名') {
                     for (let r of studentPastRecords) {
+                        // 整本聯絡簿未繳交時，家長簽名沒有實際意義，
+                        // 因此不拿來中斷或累加未簽連續天數。
+                        if (r.submissionStatus === '未繳交') {
+                            continue;
+                        }
+
                         if (r.parentSign === '未簽' || r.parentSign === '未簽名') {
                             previousSignStreak = r.unsignedStreak || 1;
                             break;
@@ -1188,6 +1198,42 @@ ${currentDate} 的聯絡簿紀錄為「未繳交」嗎？
             }
         }
 
+        // 依目前全部資料即時計算「家長未簽連續天數」
+        // 只看該日期之前的紀錄，並跳過整本聯絡簿未繳交的日期。
+        function calculateUnsignedStreak(records, item) {
+            if (!(item.parentSign === '未簽' || item.parentSign === '未簽名')) {
+                return 0;
+            }
+
+            const previousRecords = records
+                .filter(r =>
+                    r.studentNo === item.studentNo &&
+                    r.date &&
+                    item.date &&
+                    r.date < item.date
+                )
+                .sort((a, b) => b.date.localeCompare(a.date));
+
+            let streak = 1;
+
+            for (let r of previousRecords) {
+                if (r.submissionStatus === '未繳交') {
+                    continue;
+                }
+
+                if (r.parentSign === '未簽' || r.parentSign === '未簽名') {
+                    streak += 1;
+                    continue;
+                }
+
+                if (r.parentSign === '已簽' || r.parentSign === '已簽名') {
+                    break;
+                }
+            }
+
+            return streak;
+        }
+
         // 渲染每日關注清單
         function renderDailyTable(records) {
             const tbody = document.getElementById('contactBookTableBody');
@@ -1265,7 +1311,7 @@ ${currentDate} 的聯絡簿紀錄為「未繳交」嗎？
                 }
 
                 let signDisplay = item.parentSign;
-                let streak = item.unsignedStreak || 1;
+                let streak = calculateUnsignedStreak(records, item);
                 
                 if (isNotSubmitted) {
                     signDisplay = `<span class="fw-bold" style="color: #000000;">?</span>`;
