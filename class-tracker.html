@@ -4,1125 +4,818 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>班級收繳航海日誌</title>
-
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Crect width=%2764%27 height=%2764%27 rx=%2714%27 fill=%27%23f4dfad%27/%3E%3Crect x=%273%27 y=%273%27 width=%2758%27 height=%2758%27 rx=%2712%27 fill=%27none%27 stroke=%27%237d241f%27 stroke-width=%276%27/%3E%3Ctext x=%2732%27 y=%2744%27 text-anchor=%27middle%27 font-size=%2738%27 font-weight=%27900%27 font-family=%27sans-serif%27 fill=%27%237d241f%27%3E%E8%B3%87%3C/text%3E%3C/svg%3E">
-
 <meta name="theme-color" content="#7d241f" />
-
 <style>
-
-:root{
-  --ink:#2d241b;
-  --paper:#f4dfad;
-  --paper2:#fff2c9;
-  --red:#c93b2f;
-  --red2:#8f251f;
-  --blue:#1d5875;
-  --blue2:#10394d;
-  --gold:#d9a62e;
-  --green:#2c8a63;
-  --orange:#d97924;
-  --gray:#7b756c;
-  --shadow:0 8px 20px rgba(35,28,18,.18);
-}
-
-*{
-  box-sizing:border-box;
-}
-
-html{
-  scroll-behavior:smooth;
-}
-
-body{
-  margin:0;
-  font-family:"Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;
-  color:var(--ink);
-
-  background:
-    radial-gradient(
-      circle at 20% 15%,
-      rgba(255,255,255,.35),
-      transparent 22%
-    ),
-    linear-gradient(
-      180deg,
-      #88cce4 0,
-      #56a7c8 33%,
-      #26769d 100%
-    );
-
-  min-height:100vh;
-}
-
-body::before{
-  content:"";
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  opacity:.16;
-
-  background-image:
-    repeating-linear-gradient(
-      0deg,
-      transparent 0 28px,
-      rgba(255,255,255,.18) 29px 30px
-    ),
-    repeating-linear-gradient(
-      90deg,
-      transparent 0 52px,
-      rgba(255,255,255,.08) 53px 54px
-    );
-}
-
-.app{
-  width:min(1180px,94vw);
-  margin:24px auto 50px;
-  position:relative;
-  z-index:1;
-}
-
-/* =========================
-   頂部
-========================= */
-
-.hero{
-  position:relative;
-  overflow:hidden;
-
-  background:
-    linear-gradient(
-      135deg,
-      #fff0bd,
-      #e7bd68
-    );
-
-  border:5px solid #51371d;
-  border-radius:24px;
-
-  box-shadow:var(--shadow);
-
-  padding:24px 24px 20px;
-}
-
-.hero::before,
-.hero::after{
-  content:"☠";
-  position:absolute;
-  font-size:100px;
-  opacity:.07;
-  top:-18px;
-}
-
-.hero::before{
-  left:18px;
-  transform:rotate(-12deg);
-}
-
-.hero::after{
-  right:18px;
-  transform:rotate(12deg);
-}
-
-.hero-top{
-  display:flex;
-  gap:18px;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-}
-
-.emblem{
-  width:72px;
-  height:72px;
-
-  display:grid;
-  place-items:center;
-
-  border-radius:50%;
-
-  background:#1f2933;
-  color:white;
-
-  border:5px solid var(--gold);
-
-  font-size:38px;
-
-  box-shadow:0 4px 0 #6b491f;
-}
-
-h1{
-  margin:0;
-
-  font-size:clamp(
-    28px,
-    5vw,
-    48px
-  );
-
-  letter-spacing:2px;
-
-  color:#7d241f;
-
-  text-shadow:
-    2px 2px 0 #fff3c7;
-}
-
-.subtitle{
-  margin:6px 0 0;
-  color:#5b4329;
-  font-weight:800;
-}
-
-/* =========================
-   面板
-========================= */
-
-.panel{
-  margin-top:18px;
-
-  background:
-    linear-gradient(
-      180deg,
-      rgba(255,247,216,.98),
-      rgba(243,219,166,.98)
-    );
-
-  border:3px solid #63451f;
-  border-radius:20px;
-
-  box-shadow:var(--shadow);
-
-  padding:18px;
-}
-
-.section-title{
-  display:flex;
-  align-items:center;
-  gap:8px;
-
-  font-size:20px;
-  font-weight:900;
-
-  margin:0 0 12px;
-
-  color:#6e2b22;
-}
-
-/* =========================
-   表單
-========================= */
-
-.form-grid{
-  display:grid;
-  grid-template-columns:2fr 1fr 1fr;
-  gap:12px;
-}
-
-label{
-  font-weight:800;
-  font-size:14px;
-  color:#503a27;
-
-  display:block;
-
-  margin-bottom:6px;
-}
-
-input,
-select,
-textarea,
-button{
-  font:inherit;
-}
-
-input[type="text"],
-input[type="date"],
-select{
-  width:100%;
-
-  border:2px solid #8b6a38;
-
-  background:#fffaf0;
-  color:#2d241b;
-
-  border-radius:12px;
-
-  padding:11px 12px;
-
-  outline:none;
-}
-
-input:focus,
-select:focus{
-  border-color:var(--blue);
-
-  box-shadow:
-    0 0 0 3px rgba(29,88,117,.14);
-}
-
-/* =========================
-   按鈕
-========================= */
-
-.toolbar{
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-
-  margin-top:12px;
-
-  align-items:center;
-}
-
-button{
-  border:0;
-
-  border-radius:12px;
-
-  padding:10px 14px;
-
-  font-weight:900;
-
-  cursor:pointer;
-
-  transition:
-    .15s transform,
-    .15s filter;
-
-  box-shadow:
-    0 3px 0 rgba(0,0,0,.18);
-}
-
-button:hover{
-  filter:brightness(1.05);
-  transform:translateY(-1px);
-}
-
-button:active{
-  transform:translateY(2px);
-  box-shadow:none;
-}
-
-.btn-primary{
-  background:var(--red);
-  color:#fff;
-}
-
-.btn-blue{
-  background:var(--blue);
-  color:#fff;
-}
-
-.btn-gold{
-  background:var(--gold);
-  color:#2d241b;
-}
-
-.btn-dark{
-  background:#3f352a;
-  color:#fff;
-}
-
-.btn-light{
-  background:#fff7df;
-  color:#493721;
-
-  border:1px solid #ac8952;
-}
-
-/* =========================
-   歷史紀錄
-========================= */
-
-.history-row{
-  display:grid;
-
-  grid-template-columns:
-    minmax(240px,1fr)
-    auto
-    auto;
-
-  gap:8px;
-
-  margin-top:12px;
-
-  align-items:end;
-}
-
-/* =========================
-   統計
-========================= */
-
-.stats{
-  display:grid;
-
-  grid-template-columns:
-    repeat(5,1fr);
-
-  gap:10px;
-
-  margin-top:16px;
-}
-
-.stat{
-  border:
-    2px solid
-    rgba(71,51,29,.35);
-
-  border-radius:16px;
-
-  padding:12px;
-
-  text-align:center;
-
-  background:#fff9e9;
-}
-
-.stat b{
-  display:block;
-
-  font-size:28px;
-  line-height:1.05;
-}
-
-.stat span{
-  font-size:13px;
-  font-weight:800;
-
-  color:#64543e;
-}
-
-.stat.all b{
-  color:var(--blue);
-}
-
-.stat.paid b{
-  color:var(--green);
-}
-
-.stat.unpaid b{
-  color:var(--red);
-}
-
-.stat.late b{
-  color:var(--orange);
-}
-
-.stat.exempt b{
-  color:var(--gray);
-}
-
-/* =========================
-   完成率
-========================= */
-
-.progress-wrap{
-  margin-top:12px;
-
-  background:#d4c39d;
-
-  border-radius:999px;
-
-  overflow:hidden;
-
-  border:2px solid #73542c;
-
-  height:24px;
-}
-
-.progress{
-  height:100%;
-
-  width:0;
-
-  background:
-    linear-gradient(
-      90deg,
-      #3ca678,
-      #68c792
-    );
-
-  transition:.25s width;
-}
-
-.progress-text{
-  text-align:right;
-
-  margin-top:5px;
-
-  font-size:13px;
-  font-weight:800;
-}
-
-/* =========================
-   搜尋與篩選
-========================= */
-
-.controls{
-  display:flex;
-
-  gap:8px;
-
-  flex-wrap:wrap;
-
-  align-items:center;
-
-  justify-content:space-between;
-}
-
-.left-controls,
-.right-controls{
-  display:flex;
-
-  gap:8px;
-
-  flex-wrap:wrap;
-
-  align-items:center;
-}
-
-.search{
-  min-width:230px;
-}
-
-.filter-btn.active{
-  background:#1e536d;
-  color:#fff;
-
-  border-color:#1e536d;
-}
-
-/* =========================
-   表格
-========================= */
-
-.table-wrap{
-  overflow:auto;
-
-  border-radius:16px;
-
-  border:2px solid #70502e;
-
-  background:#fff9e7;
-}
-
-table{
-  width:100%;
-
-  border-collapse:separate;
-
-  border-spacing:0;
-
-  min-width:900px;
-}
-
-thead th{
-  position:sticky;
-
-  top:0;
-
-  z-index:2;
-
-  background:#4a3524;
-
-  color:#fff7db;
-
-  padding:12px 9px;
-
-  border-right:
-    1px solid #765b3e;
-
-  font-size:14px;
-}
-
-tbody td{
-  padding:9px;
-
-  border-bottom:
-    1px dashed #c7ae80;
-
-  vertical-align:middle;
-
-  background:
-    rgba(255,250,236,.88);
-}
-
-tbody tr:hover td{
-  background:#fff4cd;
-}
-
-tbody tr.overdue td{
-  background:#fff0e6;
-}
-
-tbody tr.overdue td:first-child{
-  box-shadow:
-    inset 5px 0 0 #d95e3e;
-}
-
-.seat{
-  width:68px;
-
-  text-align:center;
-
-  font-weight:900;
-
-  color:var(--blue);
-}
-
-.name{
-  font-weight:900;
-
-  font-size:16px;
-
-  white-space:nowrap;
-}
-
-.status-cell{
-  min-width:330px;
-}
-
-.status-actions{
-  display:flex;
-
-  gap:6px;
-
-  flex-wrap:wrap;
-}
-
-/* 平常畫面隱藏列印用狀態 */
-.print-status{
-  display:none;
-
-  font-weight:900;
-
-  white-space:nowrap;
-}
-
-.status-btn{
-  padding:7px 10px;
-
-  border-radius:999px;
-
-  box-shadow:none;
-
-  border:2px solid transparent;
-
-  font-size:13px;
-}
-
-.status-btn.unpaid{
-  background:#fde7e3;
-  color:#922e24;
-}
-
-.status-btn.paid{
-  background:#dcf4e9;
-  color:#166643;
-}
-
-.status-btn.late{
-  background:#fff0d8;
-  color:#a95a13;
-}
-
-.status-btn.exempt{
-  background:#ece9e3;
-  color:#5f5a53;
-}
-
-.status-btn.selected{
-  border-color:#27231e;
-
-  box-shadow:
-    0 2px 0 rgba(0,0,0,.15);
-}
-
-.status-badge{
-  display:inline-block;
-
-  border-radius:999px;
-
-  padding:5px 9px;
-
-  font-weight:900;
-
-  font-size:12px;
-
-  white-space:nowrap;
-}
-
-.status-badge.overdue{
-  background:#c53c2f;
-  color:#fff;
-}
-
-.status-badge.normal{
-  background:#e8ddc5;
-  color:#5f503d;
-}
-
-.note-input{
-  width:100%;
-
-  min-width:160px;
-
-  border:1.5px solid #ad9369;
-
-  border-radius:10px;
-
-  padding:8px;
-
-  background:#fffdf6;
-}
-
-.empty{
-  padding:34px;
-
-  text-align:center;
-
-  font-weight:800;
-
-  color:#735f46;
-}
-
-.footer-note{
-  text-align:center;
-
-  color:#eef8fb;
-
-  margin-top:14px;
-
-  font-weight:700;
-
-  text-shadow:
-    0 1px 2px rgba(0,0,0,.2);
-}
-
-/* =========================
-   Toast
-========================= */
-
-.toast{
-  position:fixed;
-
-  right:20px;
-  bottom:20px;
-
-  background:#2f2923;
-
-  color:white;
-
-  padding:12px 16px;
-
-  border-radius:12px;
-
-  box-shadow:var(--shadow);
-
-  opacity:0;
-
-  transform:
-    translateY(10px);
-
-  pointer-events:none;
-
-  transition:.2s;
-
-  z-index:20;
-}
-
-.toast.show{
-  opacity:1;
-
-  transform:
-    translateY(0);
-}
-
-/* =========================
-   Firebase 狀態列
-========================= */
-
-.cloud-bar{
-  display:flex;
-
-  justify-content:space-between;
-
-  align-items:center;
-
-  gap:10px;
-
-  flex-wrap:wrap;
-
-  margin-top:14px;
-
-  padding:10px 12px;
-
-  border-radius:14px;
-
-  background:
-    rgba(255,250,232,.72);
-
-  border:
-    2px dashed #87663b;
-}
-
-.cloud-left,
-.cloud-right{
-  display:flex;
-
-  align-items:center;
-
-  gap:8px;
-
-  flex-wrap:wrap;
-}
-
-.sync-badge{
-  display:inline-flex;
-
-  align-items:center;
-
-  gap:6px;
-
-  padding:7px 11px;
-
-  border-radius:999px;
-
-  font-weight:900;
-
-  font-size:13px;
-
-  background:#e8ddc5;
-
-  color:#5f503d;
-}
-
-.sync-badge.ok{
-  background:#dcf4e9;
-
-  color:#166643;
-}
-
-.sync-badge.saving{
-  background:#fff0d8;
-
-  color:#9a570f;
-}
-
-.sync-badge.error{
-  background:#fde7e3;
-
-  color:#922e24;
-}
-
-.account-email{
-  font-size:13px;
-
-  font-weight:800;
-
-  color:#5e4930;
-}
-
-/* =========================
-   登入畫面
-========================= */
-
-.login-screen{
-  position:fixed;
-
-  inset:0;
-
-  z-index:100;
-
-  background:
-    linear-gradient(
-      180deg,
-      #7bc5e1,
-      #277ca4
-    );
-
-  display:grid;
-
-  place-items:center;
-
-  padding:20px;
-}
-
-.login-screen.hidden{
-  display:none;
-}
-
-.login-card{
-  width:min(440px,94vw);
-
-  background:
-    linear-gradient(
-      180deg,
-      #fff3c8,
-      #e6bd71
-    );
-
-  border:5px solid #51371d;
-
-  border-radius:24px;
-
-  padding:24px;
-
-  box-shadow:
-    0 16px 45px rgba(0,0,0,.28);
-
-  text-align:center;
-}
-
-.login-skull{
-  font-size:58px;
-
-  line-height:1;
-}
-
-.login-card h2{
-  margin:8px 0 4px;
-
-  color:#7d241f;
-
-  font-size:30px;
-}
-
-.login-card p{
-  margin:0 0 18px;
-
-  color:#60482d;
-
-  font-weight:800;
-}
-
-.login-card input{
-  width:100%;
-
-  margin:6px 0 10px;
-
-  border:2px solid #8b6a38;
-
-  background:#fffaf0;
-
-  color:#2d241b;
-
-  border-radius:12px;
-
-  padding:12px;
-
-  outline:none;
-}
-
-.login-card button{
-  width:100%;
-
-  margin-top:4px;
-}
-
-.login-error{
-  min-height:22px;
-
-  margin-top:10px;
-
-  color:#9a2b22;
-
-  font-weight:900;
-
-  font-size:13px;
-}
-
-/* =========================
-   手機版
-========================= */
-
-@media (max-width:760px){
-
-  .app{
-    width:96vw;
-    margin-top:10px;
+  :root{
+    --ink:#2d241b;
+    --paper:#f4dfad;
+    --paper2:#fff2c9;
+    --red:#c93b2f;
+    --red2:#8f251f;
+    --blue:#1d5875;
+    --blue2:#10394d;
+    --gold:#d9a62e;
+    --green:#2c8a63;
+    --orange:#d97924;
+    --gray:#7b756c;
+    --shadow:0 8px 20px rgba(35,28,18,.18);
   }
 
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    font-family:"Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(circle at 20% 15%, rgba(255,255,255,.35), transparent 22%),
+      linear-gradient(180deg,#88cce4 0,#56a7c8 33%,#26769d 100%);
+    min-height:100vh;
+  }
+
+  body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    opacity:.16;
+    background-image:
+      repeating-linear-gradient(0deg,transparent 0 28px,rgba(255,255,255,.18) 29px 30px),
+      repeating-linear-gradient(90deg,transparent 0 52px,rgba(255,255,255,.08) 53px 54px);
+  }
+
+  .app{width:min(1180px,94vw); margin:24px auto 50px; position:relative; z-index:1}
+
   .hero{
-    padding:18px 12px;
+    position:relative;
+    overflow:hidden;
+    background:linear-gradient(135deg,#fff0bd,#e7bd68);
+    border:5px solid #51371d;
+    border-radius:24px;
+    box-shadow:var(--shadow);
+    padding:24px 24px 20px;
+  }
+
+  .hero::before,.hero::after{
+    content:"☠";
+    position:absolute;
+    font-size:100px;
+    opacity:.07;
+    top:-18px;
+  }
+
+  .hero::before{left:18px; transform:rotate(-12deg)}
+  .hero::after{right:18px; transform:rotate(12deg)}
+
+  .hero-top{
+    display:flex;
+    gap:18px;
+    align-items:center;
+    justify-content:center;
+    text-align:center
   }
 
   .emblem{
-    width:58px;
-    height:58px;
-    font-size:30px;
+    width:72px;
+    height:72px;
+    display:grid;
+    place-items:center;
+    border-radius:50%;
+    background:#1f2933;
+    color:white;
+    border:5px solid var(--gold);
+    font-size:38px;
+    box-shadow:0 4px 0 #6b491f;
   }
 
   h1{
-    font-size:30px;
+    margin:0;
+    font-size:clamp(28px,5vw,48px);
+    letter-spacing:2px;
+    color:#7d241f;
+    text-shadow:2px 2px 0 #fff3c7
+  }
+
+  .subtitle{
+    margin:6px 0 0;
+    color:#5b4329;
+    font-weight:800
+  }
+
+  .panel{
+    margin-top:18px;
+    background:linear-gradient(180deg,rgba(255,247,216,.98),rgba(243,219,166,.98));
+    border:3px solid #63451f;
+    border-radius:20px;
+    box-shadow:var(--shadow);
+    padding:18px;
+  }
+
+  .section-title{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:20px;
+    font-weight:900;
+    margin:0 0 12px;
+    color:#6e2b22
   }
 
   .form-grid{
-    grid-template-columns:1fr;
+    display:grid;
+    grid-template-columns:2fr 1fr 1fr;
+    gap:12px
+  }
+
+  label{
+    font-weight:800;
+    font-size:14px;
+    color:#503a27;
+    display:block;
+    margin-bottom:6px
+  }
+
+  input,select,textarea,button{
+    font:inherit
+  }
+
+  input[type="text"],
+  input[type="date"],
+  select{
+    width:100%;
+    border:2px solid #8b6a38;
+    background:#fffaf0;
+    color:#2d241b;
+    border-radius:12px;
+    padding:11px 12px;
+    outline:none;
+  }
+
+  input:focus,
+  select:focus{
+    border-color:var(--blue);
+    box-shadow:0 0 0 3px rgba(29,88,117,.14)
+  }
+
+  .toolbar{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-top:12px;
+    align-items:center
+  }
+
+  button{
+    border:0;
+    border-radius:12px;
+    padding:10px 14px;
+    font-weight:900;
+    cursor:pointer;
+    transition:.15s transform,.15s filter;
+    box-shadow:0 3px 0 rgba(0,0,0,.18);
+  }
+
+  button:hover{
+    filter:brightness(1.05);
+    transform:translateY(-1px)
+  }
+
+  button:active{
+    transform:translateY(2px);
+    box-shadow:none
+  }
+
+  .btn-primary{background:var(--red);color:#fff}
+  .btn-blue{background:var(--blue);color:#fff}
+  .btn-gold{background:var(--gold);color:#2d241b}
+  .btn-dark{background:#3f352a;color:#fff}
+  .btn-light{
+    background:#fff7df;
+    color:#493721;
+    border:1px solid #ac8952
   }
 
   .history-row{
-    grid-template-columns:1fr;
+    display:grid;
+    grid-template-columns:minmax(240px,1fr) auto auto;
+    gap:8px;
+    margin-top:12px;
+    align-items:end
   }
 
   .stats{
-    grid-template-columns:
-      repeat(2,1fr);
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:10px;
+    margin-top:16px
   }
 
-  .stats .stat:first-child{
-    grid-column:1/-1;
+  .stat{
+    border:2px solid rgba(71,51,29,.35);
+    border-radius:16px;
+    padding:12px;
+    text-align:center;
+    background:#fff9e9
+  }
+
+  .stat b{
+    display:block;
+    font-size:28px;
+    line-height:1.05
+  }
+
+  .stat span{
+    font-size:13px;
+    font-weight:800;
+    color:#64543e
+  }
+
+  .stat.all b{color:var(--blue)}
+  .stat.paid b{color:var(--green)}
+  .stat.unpaid b{color:var(--red)}
+  .stat.late b{color:var(--orange)}
+  .stat.exempt b{color:var(--gray)}
+
+  .progress-wrap{
+    margin-top:12px;
+    background:#d4c39d;
+    border-radius:999px;
+    overflow:hidden;
+    border:2px solid #73542c;
+    height:24px
+  }
+
+  .progress{
+    height:100%;
+    width:0;
+    background:linear-gradient(90deg,#3ca678,#68c792);
+    transition:.25s width
+  }
+
+  .progress-text{
+    text-align:right;
+    margin-top:5px;
+    font-size:13px;
+    font-weight:800
   }
 
   .controls{
-    align-items:stretch;
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    align-items:center;
+    justify-content:space-between
   }
 
   .left-controls,
   .right-controls{
-    width:100%;
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    align-items:center
   }
 
-  .search{
-    min-width:100%;
+  .search{min-width:230px}
+
+  .filter-btn.active{
+    background:#1e536d;
+    color:#fff;
+    border-color:#1e536d
   }
 
-  .left-controls button,
-  .right-controls button{
-    flex:1;
-  }
-}
-
-/* ==================================================
-   列印模式
-   修正：列印時顯示實際繳交狀態文字
-================================================== */
-
-@media print{
-
-  body{
-    background:white;
-  }
-
-  body::before{
-    display:none;
-  }
-
-  .app{
-    width:100%;
-    margin:0;
-  }
-
-  .hero,
-  .panel{
-    box-shadow:none;
-  }
-
-  .toolbar,
-  .controls,
-  .history-row,
-  .footer-note,
-  .toast,
-  .cloud-bar{
-    display:none !important;
-  }
-
-  .hero{
-    border:2px solid #333;
-  }
-
-  .panel{
-    border:1px solid #555;
-  }
-
-  /*
-    網頁上的四個操作按鈕不列印
-  */
-  .status-actions{
-    display:none !important;
-  }
-
-  /*
-    改成顯示目前真正的狀態
-  */
-  .print-status{
-    display:inline-block !important;
-
-    font-weight:900;
-
-    color:#111;
-  }
-
-  .note-input{
-    border:0;
-
-    background:transparent;
-
-    padding:0;
+  .table-wrap{
+    overflow:auto;
+    border-radius:16px;
+    border:2px solid #70502e;
+    background:#fff9e7
   }
 
   table{
-    min-width:0;
-
-    font-size:11px;
+    width:100%;
+    border-collapse:separate;
+    border-spacing:0;
+    min-width:900px
   }
 
   thead th{
-    position:static;
-
-    background:#ddd !important;
-
-    color:#111 !important;
+    position:sticky;
+    top:0;
+    z-index:2;
+    background:#4a3524;
+    color:#fff7db;
+    padding:12px 9px;
+    border-right:1px solid #765b3e;
+    font-size:14px;
   }
 
   tbody td{
-    background:#fff !important;
+    padding:9px;
+    border-bottom:1px dashed #c7ae80;
+    vertical-align:middle;
+    background:rgba(255,250,236,.88)
   }
 
-  tbody tr.overdue td{
-    background:#fff4ef !important;
+  tbody tr:hover td{background:#fff4cd}
+  tbody tr.overdue td{background:#fff0e6}
+  tbody tr.overdue td:first-child{box-shadow:inset 5px 0 0 #d95e3e}
+
+  .seat{
+    width:68px;
+    text-align:center;
+    font-weight:900;
+    color:var(--blue)
+  }
+
+  .name{
+    font-weight:900;
+    font-size:16px;
+    white-space:nowrap
+  }
+
+  .status-cell{min-width:330px}
+
+  .status-actions{
+    display:flex;
+    gap:6px;
+    flex-wrap:wrap
+  }
+
+  .status-btn{
+    padding:7px 10px;
+    border-radius:999px;
+    box-shadow:none;
+    border:2px solid transparent;
+    font-size:13px
+  }
+
+  .status-btn.unpaid{
+    background:#fde7e3;
+    color:#922e24
+  }
+
+  .status-btn.paid{
+    background:#dcf4e9;
+    color:#166643
+  }
+
+  .status-btn.late{
+    background:#fff0d8;
+    color:#a95a13
+  }
+
+  .status-btn.exempt{
+    background:#ece9e3;
+    color:#5f5a53
+  }
+
+  .status-btn.selected{
+    border-color:#27231e;
+    box-shadow:0 2px 0 rgba(0,0,0,.15)
+  }
+
+  .status-badge{
+    display:inline-block;
+    border-radius:999px;
+    padding:5px 9px;
+    font-weight:900;
+    font-size:12px;
+    white-space:nowrap
   }
 
   .status-badge.overdue{
-    background:#fff !important;
-
-    color:#a1271e !important;
-
-    border:
-      1px solid #a1271e;
+    background:#c53c2f;
+    color:#fff
   }
 
   .status-badge.normal{
-    background:#fff !important;
-
-    color:#333 !important;
-
-    border:
-      1px solid #999;
+    background:#e8ddc5;
+    color:#5f503d
   }
-}
 
+  .note-input{
+    width:100%;
+    min-width:160px;
+    border:1.5px solid #ad9369;
+    border-radius:10px;
+    padding:8px;
+    background:#fffdf6
+  }
+
+  .empty{
+    padding:34px;
+    text-align:center;
+    font-weight:800;
+    color:#735f46
+  }
+
+  .footer-note{
+    text-align:center;
+    color:#eef8fb;
+    margin-top:14px;
+    font-weight:700;
+    text-shadow:0 1px 2px rgba(0,0,0,.2)
+  }
+
+  .toast{
+    position:fixed;
+    right:20px;
+    bottom:20px;
+    background:#2f2923;
+    color:white;
+    padding:12px 16px;
+    border-radius:12px;
+    box-shadow:var(--shadow);
+    opacity:0;
+    transform:translateY(10px);
+    pointer-events:none;
+    transition:.2s;
+    z-index:20
+  }
+
+  .toast.show{
+    opacity:1;
+    transform:translateY(0)
+  }
+
+  @media (max-width:760px){
+    .app{width:96vw;margin-top:10px}
+    .hero{padding:18px 12px}
+    .emblem{width:58px;height:58px;font-size:30px}
+    h1{font-size:30px}
+    .form-grid{grid-template-columns:1fr}
+    .history-row{grid-template-columns:1fr}
+    .stats{grid-template-columns:repeat(2,1fr)}
+    .stats .stat:first-child{grid-column:1/-1}
+    .controls{align-items:stretch}
+    .left-controls,.right-controls{width:100%}
+    .search{min-width:100%}
+    .left-controls button,.right-controls button{flex:1}
+  }
+
+  .cloud-bar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top:14px;
+    padding:10px 12px;
+    border-radius:14px;
+    background:rgba(255,250,232,.72);
+    border:2px dashed #87663b
+  }
+
+  .cloud-left,
+  .cloud-right{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    flex-wrap:wrap
+  }
+
+  .sync-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:7px 11px;
+    border-radius:999px;
+    font-weight:900;
+    font-size:13px;
+    background:#e8ddc5;
+    color:#5f503d
+  }
+
+  .sync-badge.ok{
+    background:#dcf4e9;
+    color:#166643
+  }
+
+  .sync-badge.saving{
+    background:#fff0d8;
+    color:#9a570f
+  }
+
+  .sync-badge.error{
+    background:#fde7e3;
+    color:#922e24
+  }
+
+  .account-email{
+    font-size:13px;
+    font-weight:800;
+    color:#5e4930
+  }
+
+  .login-screen{
+    position:fixed;
+    inset:0;
+    z-index:100;
+    background:linear-gradient(180deg,#7bc5e1,#277ca4);
+    display:grid;
+    place-items:center;
+    padding:20px
+  }
+
+  .login-screen.hidden{display:none}
+
+  .login-card{
+    width:min(440px,94vw);
+    background:linear-gradient(180deg,#fff3c8,#e6bd71);
+    border:5px solid #51371d;
+    border-radius:24px;
+    padding:24px;
+    box-shadow:0 16px 45px rgba(0,0,0,.28);
+    text-align:center
+  }
+
+  .login-skull{
+    font-size:58px;
+    line-height:1
+  }
+
+  .login-card h2{
+    margin:8px 0 4px;
+    color:#7d241f;
+    font-size:30px
+  }
+
+  .login-card p{
+    margin:0 0 18px;
+    color:#60482d;
+    font-weight:800
+  }
+
+  .login-card input{
+    width:100%;
+    margin:6px 0 10px;
+    border:2px solid #8b6a38;
+    background:#fffaf0;
+    color:#2d241b;
+    border-radius:12px;
+    padding:12px;
+    outline:none
+  }
+
+  .login-card button{
+    width:100%;
+    margin-top:4px
+  }
+
+  .login-error{
+    min-height:22px;
+    margin-top:10px;
+    color:#9a2b22;
+    font-weight:900;
+    font-size:13px
+  }
+
+
+  /* ==================================================
+     列印專用
+     僅改變列印版面，不影響原網頁設定
+  ================================================== */
+
+  .print-summary{
+    display:none
+  }
+
+  @page{
+    size:A4 portrait;
+    margin:7mm
+  }
+
+  @media print{
+
+    html,
+    body{
+      background:#fff!important;
+      margin:0!important;
+      padding:0!important
+    }
+
+    body::before{
+      display:none!important
+    }
+
+    .app{
+      width:100%!important;
+      margin:0!important;
+      padding:0!important
+    }
+
+    /* 隱藏網頁操作區 */
+    .hero,
+    .toolbar,
+    .controls,
+    .history-row,
+    .footer-note,
+    .toast,
+    .cloud-bar{
+      display:none!important
+    }
+
+    /* 列印上方摘要 */
+    .print-summary{
+      display:block!important;
+      margin:0 0 4mm 0;
+      padding:0 0 2.5mm 0;
+      border-bottom:1.2px solid #333;
+      color:#111
+    }
+
+    .print-summary-title{
+      font-size:15pt;
+      line-height:1.25;
+      font-weight:900;
+      text-align:center;
+      margin:0 0 2mm 0
+    }
+
+    .print-summary-stats{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:0;
+      flex-wrap:wrap;
+      font-size:10.5pt;
+      line-height:1.4;
+      font-weight:800
+    }
+
+    .print-summary-stats span{
+      white-space:nowrap
+    }
+
+    .print-summary-stats span:not(:last-child)::after{
+      content:"　｜　";
+      font-weight:400
+    }
+
+    /* 移除原本卡片外觀 */
+    .panel{
+      margin:0!important;
+      padding:0!important;
+      border:0!important;
+      border-radius:0!important;
+      box-shadow:none!important;
+      background:#fff!important
+    }
+
+    #rosterTitle{
+      display:none!important
+    }
+
+    .table-wrap{
+      overflow:visible!important;
+      border:1px solid #555!important;
+      border-radius:0!important;
+      background:#fff!important
+    }
+
+    /* 壓縮表格 */
+    table{
+      min-width:0!important;
+      width:100%!important;
+      border-collapse:collapse!important;
+      table-layout:fixed!important;
+      font-size:9.5pt!important;
+      line-height:1.15!important
+    }
+
+    thead{
+      display:table-header-group
+    }
+
+    thead th{
+      position:static!important;
+      background:#eee!important;
+      color:#111!important;
+      padding:1.7mm 1.2mm!important;
+      border:1px solid #777!important;
+      font-size:9.5pt!important
+    }
+
+    tbody tr{
+      break-inside:avoid;
+      page-break-inside:avoid
+    }
+
+    tbody td{
+      padding:1.45mm 1.2mm!important;
+      border:1px solid #aaa!important;
+      background:#fff!important;
+      vertical-align:middle!important
+    }
+
+    tbody tr:hover td,
+    tbody tr.overdue td{
+      background:#fff!important
+    }
+
+    tbody tr.overdue td:first-child{
+      box-shadow:none!important
+    }
+
+    /* A4 欄寬 */
+    th:nth-child(1),
+    td:nth-child(1){
+      width:9%;
+      text-align:center
+    }
+
+    th:nth-child(2),
+    td:nth-child(2){
+      width:18%
+    }
+
+    th:nth-child(3),
+    td:nth-child(3){
+      width:23%
+    }
+
+    th:nth-child(4),
+    td:nth-child(4){
+      width:16%;
+      text-align:center
+    }
+
+    th:nth-child(5),
+    td:nth-child(5){
+      width:34%
+    }
+
+    .seat{
+      font-size:9.5pt!important
+    }
+
+    .name{
+      font-size:9.5pt!important
+    }
+
+    .status-cell{
+      min-width:0!important
+    }
+
+    /* 列印時只留下真正選取的狀態 */
+    .status-actions{
+      display:block!important
+    }
+
+    .status-actions .status-btn{
+      display:none!important
+    }
+
+    .status-actions .status-btn.selected{
+      display:inline!important;
+      background:transparent!important;
+      color:#111!important;
+      border:0!important;
+      box-shadow:none!important;
+      padding:0!important;
+      margin:0!important;
+      font-size:9.5pt!important;
+      font-weight:800!important
+    }
+
+    .status-badge{
+      padding:0!important;
+      background:transparent!important;
+      color:#111!important;
+      font-size:9pt!important;
+      font-weight:700!important
+    }
+
+    .note-input{
+      width:100%!important;
+      min-width:0!important;
+      border:0!important;
+      background:transparent!important;
+      padding:0!important;
+      margin:0!important;
+      color:#111!important;
+      font-size:9pt!important;
+      box-shadow:none!important
+    }
+
+    .note-input::placeholder{
+      color:transparent!important
+    }
+
+    .empty{
+      display:none!important
+    }
+  }
 </style>
 </head>
 
 <body>
 
 <div class="login-screen" id="loginScreen">
-
   <div class="login-card">
-
-    <div class="login-skull">
-      ☠️
-    </div>
-
-    <h2>
-      船長登入
-    </h2>
-
-    <p>
-      登入後才能讀取與修改班級收繳航海日誌
-    </p>
+    <div class="login-skull">☠️</div>
+    <h2>船長登入</h2>
+    <p>登入後才能讀取與修改班級收繳航海日誌</p>
 
     <input
       id="loginEmail"
@@ -1149,455 +842,416 @@ tbody tr.overdue td:first-child{
       class="login-error"
       id="loginError"
     ></div>
-
   </div>
-
 </div>
 
 
 <div class="app">
 
-<section class="hero">
+  <section class="hero">
+
+    <div class="hero-top">
+
+      <div class="emblem">
+        ☠
+      </div>
+
+      <div>
+        <h1>班級收繳航海日誌</h1>
+        <p class="subtitle">
+          把每一份資料安全送上船，一個都不能少！
+        </p>
+      </div>
 
-<div class="hero-top">
+    </div>
 
-<div class="emblem">
-☠
-</div>
 
-<div>
+    <div
+      class="panel"
+      style="margin-top:18px;box-shadow:none"
+    >
 
-<h1>
-班級收繳航海日誌
-</h1>
+      <div class="section-title">
+        🧭 收繳任務設定
+      </div>
 
-<p class="subtitle">
-把每一份資料安全送上船，一個都不能少！
-</p>
 
-</div>
+      <div class="form-grid">
 
-</div>
+        <div>
+          <label for="itemName">
+            收繳項目名稱
+          </label>
 
+          <input
+            id="itemName"
+            type="text"
+            placeholder="例如：家長同意書、戶外教育費用、暑假作業…"
+          />
+        </div>
 
-<div
-  class="panel"
-  style="margin-top:18px;box-shadow:none"
->
 
-<div class="section-title">
-🧭 收繳任務設定
-</div>
+        <div>
+          <label for="receiveDate">
+            開始收繳日期
+          </label>
 
+          <input
+            id="receiveDate"
+            type="date"
+          />
+        </div>
 
-<div class="form-grid">
 
-<div>
+        <div>
+          <label for="dueDate">
+            截止日期
+          </label>
 
-<label for="itemName">
-收繳項目名稱
-</label>
+          <input
+            id="dueDate"
+            type="date"
+          />
+        </div>
 
-<input
-  id="itemName"
-  type="text"
-  placeholder="例如：家長同意書、戶外教育費用、暑假作業…"
-/>
+      </div>
 
-</div>
 
+      <div class="toolbar">
 
-<div>
+        <button
+          class="btn-primary"
+          id="saveRecordBtn"
+        >
+          💾 建立／儲存此項目
+        </button>
 
-<label for="receiveDate">
-開始收繳日期
-</label>
+        <button
+          class="btn-gold"
+          id="newRecordBtn"
+        >
+          🗺️ 新增收繳項目
+        </button>
 
-<input
-  id="receiveDate"
-  type="date"
-/>
+        <button
+          class="btn-blue"
+          id="copyUnpaidBtn"
+        >
+          📋 複製未繳名單
+        </button>
 
-</div>
+        <button
+          class="btn-light"
+          id="exportBtn"
+        >
+          📤 匯出 CSV
+        </button>
 
+        <button
+          class="btn-light"
+          id="printBtn"
+        >
+          🖨️ 列印
+        </button>
 
-<div>
+      </div>
 
-<label for="dueDate">
-截止日期
-</label>
 
-<input
-  id="dueDate"
-  type="date"
-/>
+      <div class="history-row">
 
-</div>
+        <div>
 
-</div>
+          <label for="historySelect">
+            歷史收繳紀錄
+          </label>
 
+          <select id="historySelect">
+            <option value="">
+              — 尚未建立紀錄 —
+            </option>
+          </select>
 
-<div class="toolbar">
+        </div>
 
-<button
-  class="btn-primary"
-  id="saveRecordBtn"
->
-💾 建立／儲存此項目
-</button>
+        <button
+          class="btn-dark"
+          id="loadBtn"
+        >
+          📖 載入紀錄
+        </button>
 
+        <button
+          class="btn-light"
+          id="deleteBtn"
+        >
+          🗑️ 刪除目前紀錄
+        </button>
 
-<button
-  class="btn-gold"
-  id="newRecordBtn"
->
-🗺️ 新增收繳項目
-</button>
+      </div>
 
 
-<button
-  class="btn-blue"
-  id="copyUnpaidBtn"
->
-📋 複製未繳名單
-</button>
+      <div class="cloud-bar">
 
+        <div class="cloud-left">
 
-<button
-  class="btn-light"
-  id="exportBtn"
->
-📤 匯出 CSV
-</button>
+          <span
+            class="sync-badge"
+            id="syncBadge"
+          >
+            ☁️ 等待登入
+          </span>
 
+          <span
+            class="account-email"
+            id="accountEmail"
+          ></span>
 
-<button
-  class="btn-light"
-  id="printBtn"
->
-🖨️ 列印
-</button>
+        </div>
 
-</div>
 
+        <div class="cloud-right">
 
-<div class="history-row">
+          <button
+            class="btn-light"
+            id="refreshCloudBtn"
+          >
+            🔄 重新同步
+          </button>
 
-<div>
+          <button
+            class="btn-dark"
+            id="logoutBtn"
+          >
+            🚪 登出
+          </button>
 
-<label for="historySelect">
-歷史收繳紀錄
-</label>
+        </div>
 
-<select id="historySelect">
+      </div>
 
-<option value="">
-— 尚未建立紀錄 —
-</option>
 
-</select>
+      <div class="stats">
 
-</div>
+        <div class="stat all">
+          <b id="countAll">28</b>
+          <span>全班人數</span>
+        </div>
 
+        <div class="stat paid">
+          <b id="countPaid">0</b>
+          <span>已繳交</span>
+        </div>
 
-<button
-  class="btn-dark"
-  id="loadBtn"
->
-📖 載入紀錄
-</button>
+        <div class="stat unpaid">
+          <b id="countUnpaid">28</b>
+          <span>未繳交</span>
+        </div>
 
+        <div class="stat late">
+          <b id="countLate">0</b>
+          <span>補交</span>
+        </div>
 
-<button
-  class="btn-light"
-  id="deleteBtn"
->
-🗑️ 刪除目前紀錄
-</button>
+        <div class="stat exempt">
+          <b id="countExempt">0</b>
+          <span>免繳</span>
+        </div>
 
-</div>
+      </div>
 
+      <div class="progress-wrap">
+        <div
+          class="progress"
+          id="progress"
+        ></div>
+      </div>
 
-<div class="cloud-bar">
+      <div
+        class="progress-text"
+        id="progressText"
+      >
+        完成率 0%
+      </div>
 
-<div class="cloud-left">
+    </div>
+
+  </section>
+
+
+  <section class="panel">
+
+    <!-- 只有列印時顯示 -->
+    <div
+      class="print-summary"
+      id="printSummary"
+    >
+
+      <div
+        class="print-summary-title"
+        id="printSummaryTitle"
+      ></div>
+
+      <div class="print-summary-stats">
+
+        <span>
+          全班
+          <b id="printCountAll">0</b>
+          人
+        </span>
+
+        <span>
+          已繳
+          <b id="printCountPaid">0</b>
+          人
+        </span>
+
+        <span>
+          未繳
+          <b id="printCountUnpaid">0</b>
+          人
+        </span>
+
+        <span>
+          補交
+          <b id="printCountLate">0</b>
+          人
+        </span>
 
-<span
-  class="sync-badge"
-  id="syncBadge"
->
-☁️ 等待登入
-</span>
+        <span>
+          免繳
+          <b id="printCountExempt">0</b>
+          人
+        </span>
 
-<span
-  class="account-email"
-  id="accountEmail"
-></span>
+      </div>
 
-</div>
+    </div>
 
 
-<div class="cloud-right">
+    <div
+      class="section-title"
+      id="rosterTitle"
+    >
+      🏴‍☠️ 船員收繳名冊
+    </div>
 
-<button
-  class="btn-light"
-  id="refreshCloudBtn"
->
-🔄 重新同步
-</button>
 
+    <div
+      class="controls"
+      style="margin-bottom:12px"
+    >
 
-<button
-  class="btn-dark"
-  id="logoutBtn"
->
-🚪 登出
-</button>
+      <div class="left-controls">
 
-</div>
+        <input
+          id="searchInput"
+          class="search"
+          type="text"
+          placeholder="🔎 搜尋座號或姓名"
+        />
 
-</div>
+        <button
+          class="btn-light filter-btn active"
+          data-filter="all"
+        >
+          全部
+        </button>
 
+        <button
+          class="btn-light filter-btn"
+          data-filter="unpaid"
+        >
+          未繳
+        </button>
 
-<div class="stats">
+        <button
+          class="btn-light filter-btn"
+          data-filter="paid"
+        >
+          已繳
+        </button>
 
-<div class="stat all">
+        <button
+          class="btn-light filter-btn"
+          data-filter="late"
+        >
+          補交
+        </button>
 
-<b id="countAll">
-28
-</b>
+        <button
+          class="btn-light filter-btn"
+          data-filter="exempt"
+        >
+          免繳
+        </button>
 
-<span>
-全班人數
-</span>
+        <button
+          class="btn-light filter-btn"
+          data-filter="overdue"
+        >
+          逾期
+        </button>
 
-</div>
+      </div>
 
 
-<div class="stat paid">
+      <div class="right-controls">
 
-<b id="countPaid">
-0
-</b>
+        <button
+          class="btn-blue"
+          id="allPaidBtn"
+        >
+          ✅ 全部設已繳
+        </button>
 
-<span>
-已繳交
-</span>
+        <button
+          class="btn-light"
+          id="allUnpaidBtn"
+        >
+          ↩ 全部設未繳
+        </button>
 
-</div>
+      </div>
 
+    </div>
 
-<div class="stat unpaid">
 
-<b id="countUnpaid">
-28
-</b>
+    <div class="table-wrap">
 
-<span>
-未繳交
-</span>
+      <table>
 
-</div>
+        <thead>
 
+          <tr>
+            <th>座號</th>
+            <th>姓名</th>
+            <th>繳交狀態</th>
+            <th>期限提醒</th>
+            <th>備註</th>
+          </tr>
 
-<div class="stat late">
+        </thead>
 
-<b id="countLate">
-0
-</b>
+        <tbody id="studentBody"></tbody>
 
-<span>
-補交
-</span>
+      </table>
 
-</div>
+      <div
+        class="empty"
+        id="emptyState"
+        hidden
+      >
+        沒有符合條件的學生。
+      </div>
 
+    </div>
 
-<div class="stat exempt">
+  </section>
 
-<b id="countExempt">
-0
-</b>
 
-<span>
-免繳
-</span>
-
-</div>
-
-</div>
-
-
-<div class="progress-wrap">
-
-<div
-  class="progress"
-  id="progress"
-></div>
-
-</div>
-
-
-<div
-  class="progress-text"
-  id="progressText"
->
-完成率 0%
-</div>
-
-</div>
-
-</section>
-
-
-<section class="panel">
-
-<div class="section-title">
-🏴‍☠️ 船員收繳名冊
-</div>
-
-
-<div
-  class="controls"
-  style="margin-bottom:12px"
->
-
-<div class="left-controls">
-
-<input
-  id="searchInput"
-  class="search"
-  type="text"
-  placeholder="🔎 搜尋座號或姓名"
-/>
-
-
-<button
-  class="btn-light filter-btn active"
-  data-filter="all"
->
-全部
-</button>
-
-
-<button
-  class="btn-light filter-btn"
-  data-filter="unpaid"
->
-未繳
-</button>
-
-
-<button
-  class="btn-light filter-btn"
-  data-filter="paid"
->
-已繳
-</button>
-
-
-<button
-  class="btn-light filter-btn"
-  data-filter="late"
->
-補交
-</button>
-
-
-<button
-  class="btn-light filter-btn"
-  data-filter="exempt"
->
-免繳
-</button>
-
-
-<button
-  class="btn-light filter-btn"
-  data-filter="overdue"
->
-逾期
-</button>
-
-</div>
-
-
-<div class="right-controls">
-
-<button
-  class="btn-blue"
-  id="allPaidBtn"
->
-✅ 全部設已繳
-</button>
-
-
-<button
-  class="btn-light"
-  id="allUnpaidBtn"
->
-↩ 全部設未繳
-</button>
-
-</div>
-
-</div>
-
-
-<div class="table-wrap">
-
-<table>
-
-<thead>
-
-<tr>
-
-<th>
-座號
-</th>
-
-<th>
-姓名
-</th>
-
-<th>
-繳交狀態
-</th>
-
-<th>
-期限提醒
-</th>
-
-<th>
-備註
-</th>
-
-</tr>
-
-</thead>
-
-
-<tbody id="studentBody"></tbody>
-
-</table>
-
-
-<div
-  class="empty"
-  id="emptyState"
-  hidden
->
-沒有符合條件的學生。
-</div>
-
-</div>
-
-</section>
-
-
-<div class="footer-note">
-☁️ 收繳資料使用 Firebase Firestore 雲端儲存；登入同一帳號即可跨裝置讀取。
-</div>
+  <div class="footer-note">
+    ☁️ 收繳資料使用 Firebase Firestore 雲端儲存；登入同一帳號即可跨裝置讀取。
+  </div>
 
 </div>
 
@@ -1612,54 +1266,32 @@ tbody tr.overdue td:first-child{
 
 import {
   initializeApp
-}
-from
+} from
 "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
 
 
 import {
-
   getAuth,
-
   onAuthStateChanged,
-
   signInWithEmailAndPassword,
-
   signOut
-
-}
-from
+} from
 "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 
 
 import {
-
   getFirestore,
-
   collection,
-
   doc,
-
   setDoc,
-
   getDocs,
-
   deleteDoc,
-
   query,
-
   orderBy,
-
   serverTimestamp
-
-}
-from
+} from
 "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
-
-/* ================================
-   Firebase
-================================ */
 
 const firebaseConfig = {
 
@@ -1702,66 +1334,45 @@ getFirestore(
 );
 
 
-/* ================================
+/* ==============================
    學生名單
-================================ */
+============================== */
 
 const STUDENTS = [
 
   {seat:1,name:"王禹涵"},
-
   {seat:2,name:"江育緹"},
-
   {seat:3,name:"呂思儀"},
-
   {seat:4,name:"李詠騏"},
 
   {seat:5,name:"林子歆"},
-
   {seat:6,name:"林禹萱"},
-
   {seat:7,name:"張馨勻"},
-
   {seat:8,name:"陳昕樂"},
 
   {seat:9,name:"陳梓安"},
-
   {seat:10,name:"陳筠蓁"},
-
   {seat:11,name:"陳苙絜"},
-
   {seat:12,name:"楊錚諭"},
 
   {seat:13,name:"趙安褕"},
-
   {seat:14,name:"魏語潔"},
-
   {seat:15,name:"江靚恩"},
-
   {seat:16,name:"王洋振"},
 
   {seat:17,name:"吳昊丞"},
-
   {seat:18,name:"李祐誠"},
-
   {seat:19,name:"林宸陞"},
-
   {seat:20,name:"林維辰"},
 
   {seat:21,name:"林鈺棟"},
-
   {seat:22,name:"洪楷祥"},
-
   {seat:23,name:"陳兆楷"},
-
   {seat:24,name:"陳沂璟"},
 
   {seat:25,name:"黑肚‧尤明"},
-
   {seat:26,name:"賴震宇"},
-
   {seat:27,name:"戴震龍"},
-
   {seat:28,name:"謝宇哲"}
 
 ];
@@ -1780,18 +1391,28 @@ const STATUS_LABEL = {
 };
 
 
-let currentUser = null;
+let currentUser =
+null;
 
-let currentId = null;
 
-let filter = "all";
+let currentId =
+null;
+
+
+let filter =
+"all";
+
 
 let studentState =
 createBlankState();
 
-let historyRecords = [];
 
-let autosaveTimer = null;
+let historyRecords =
+[];
+
+
+let autosaveTimer =
+null;
 
 
 const $ =
@@ -1801,22 +1422,27 @@ document.getElementById(
 );
 
 
-/* ================================
-   建立空白學生狀態
-================================ */
+/* ==============================
+   建立空白狀態
+============================== */
 
 function createBlankState(){
 
   return Object.fromEntries(
 
     STUDENTS.map(
+
       s => [
+
         s.seat,
+
         {
           status:"unpaid",
           note:""
         }
+
       ]
+
     )
 
   );
@@ -1824,17 +1450,19 @@ function createBlankState(){
 }
 
 
-/* ================================
+/* ==============================
    日期
-================================ */
+============================== */
 
 function todayISO(){
 
   const d =
   new Date();
 
+
   const y =
   d.getFullYear();
+
 
   const m =
   String(
@@ -1844,6 +1472,7 @@ function todayISO(){
     "0"
   );
 
+
   const day =
   String(
     d.getDate()
@@ -1852,19 +1481,25 @@ function todayISO(){
     "0"
   );
 
+
   return `${y}-${m}-${day}`;
 
 }
 
 
-function isOverdue(status){
+function isOverdue(
+  status
+){
 
   const due =
   $("dueDate").value;
 
+
   return (
-    !!due &&
-    todayISO() > due &&
+    !!due
+    &&
+    todayISO() > due
+    &&
     status === "unpaid"
   );
 
@@ -1877,19 +1512,23 @@ function formatDate(s){
     return "未設定";
   }
 
+
   const [y,m,d] =
   s.split("-");
+
 
   return `${y}/${m}/${d}`;
 
 }
 
 
-/* ================================
+/* ==============================
    HTML 安全
-================================ */
+============================== */
 
-function escapeHTML(str=""){
+function escapeHTML(
+  str=""
+){
 
   return String(str).replace(
 
@@ -1914,41 +1553,50 @@ function escapeHTML(str=""){
 }
 
 
-/* ================================
+/* ==============================
    Toast
-================================ */
+============================== */
 
-function showToast(msg){
+function showToast(
+  msg
+){
 
   const t =
   $("toast");
 
+
   t.textContent =
   msg;
+
 
   t.classList.add(
     "show"
   );
 
+
   clearTimeout(
     showToast.timer
   );
 
+
   showToast.timer =
   setTimeout(
+
     () =>
       t.classList.remove(
         "show"
       ),
+
     2000
+
   );
 
 }
 
 
-/* ================================
-   Firebase 同步狀態
-================================ */
+/* ==============================
+   Firebase 狀態
+============================== */
 
 function setSync(
   state,
@@ -1957,6 +1605,7 @@ function setSync(
 
   const b =
   $("syncBadge");
+
 
   b.className =
   "sync-badge" +
@@ -1968,15 +1617,16 @@ function setSync(
     ""
   );
 
+
   b.textContent =
   text;
 
 }
 
 
-/* ================================
+/* ==============================
    收繳項目資料
-================================ */
+============================== */
 
 function currentMeta(){
 
@@ -2000,9 +1650,9 @@ function currentMeta(){
 }
 
 
-/* ================================
-   Firestore 路徑
-================================ */
+/* ==============================
+   Firestore
+============================== */
 
 function recordsCollection(){
 
@@ -2013,6 +1663,7 @@ function recordsCollection(){
     );
 
   }
+
 
   return collection(
 
@@ -2029,7 +1680,9 @@ function recordsCollection(){
 }
 
 
-function recordRef(id){
+function recordRef(
+  id
+){
 
   if(!currentUser){
 
@@ -2038,6 +1691,7 @@ function recordRef(id){
     );
 
   }
+
 
   return doc(
 
@@ -2056,9 +1710,9 @@ function recordRef(id){
 }
 
 
-/* ================================
-   顯示學生
-================================ */
+/* ==============================
+   學生名冊
+============================== */
 
 function render(){
 
@@ -2082,6 +1736,7 @@ function render(){
 
 
   STUDENTS.forEach(
+
     s => {
 
       const st =
@@ -2166,7 +1821,6 @@ function render(){
           ${escapeHTML(s.name)}
         </td>
 
-
         <td class="status-cell">
 
           <div class="status-actions">
@@ -2197,36 +1851,31 @@ function render(){
 
           </div>
 
-
-          <!--
-          列印時才會顯示
-          -->
-
-          <span class="print-status">
-            ${STATUS_LABEL[st.status]}
-          </span>
-
         </td>
-
 
         <td>
 
           <span
-            class="status-badge ${overdue ? 'overdue' : 'normal'}"
+            class="status-badge ${
+              overdue
+              ?
+              "overdue"
+              :
+              "normal"
+            }"
           >
 
             ${
               overdue
               ?
-              '⚠ 逾期未繳'
+              "⚠ 逾期未繳"
               :
-              '正常'
+              "正常"
             }
 
           </span>
 
         </td>
-
 
         <td>
 
@@ -2247,6 +1896,7 @@ function render(){
       );
 
     }
+
   );
 
 
@@ -2262,9 +1912,9 @@ function render(){
 }
 
 
-/* ================================
+/* ==============================
    狀態按鈕
-================================ */
+============================== */
 
 function statusButton(
   seat,
@@ -2290,7 +1940,13 @@ function statusButton(
     <button
       class="status-btn
       ${status}
-      ${current === status ? 'selected' : ''}"
+      ${
+        current === status
+        ?
+        "selected"
+        :
+        ""
+      }"
       data-seat="${seat}"
       data-status="${status}"
     >
@@ -2305,9 +1961,9 @@ function statusButton(
 }
 
 
-/* ================================
-   每列操作
-================================ */
+/* ==============================
+   每列事件
+============================== */
 
 function bindRowEvents(){
 
@@ -2316,10 +1972,13 @@ function bindRowEvents(){
       ".status-btn"
     )
     .forEach(
+
       btn => {
 
         btn.addEventListener(
+
           "click",
+
           async () => {
 
             const seat =
@@ -2328,7 +1987,8 @@ function bindRowEvents(){
             );
 
 
-            studentState[seat].status =
+            studentState[seat]
+            .status =
             btn.dataset.status;
 
 
@@ -2352,9 +2012,11 @@ function bindRowEvents(){
             }
 
           }
+
         );
 
       }
+
     );
 
 
@@ -2363,10 +2025,13 @@ function bindRowEvents(){
       ".note-input"
     )
     .forEach(
+
       input => {
 
         input.addEventListener(
+
           "input",
+
           () => {
 
             studentState[
@@ -2380,17 +2045,19 @@ function bindRowEvents(){
             scheduleAutosave();
 
           }
+
         );
 
       }
+
     );
 
 }
 
 
-/* ================================
+/* ==============================
    統計
-================================ */
+============================== */
 
 function updateStats(){
 
@@ -2403,28 +2070,32 @@ function updateStats(){
   const paid =
   values.filter(
     x =>
-      x.status === "paid"
+      x.status ===
+      "paid"
   ).length;
 
 
   const unpaid =
   values.filter(
     x =>
-      x.status === "unpaid"
+      x.status ===
+      "unpaid"
   ).length;
 
 
   const late =
   values.filter(
     x =>
-      x.status === "late"
+      x.status ===
+      "late"
   ).length;
 
 
   const exempt =
   values.filter(
     x =>
-      x.status === "exempt"
+      x.status ===
+      "exempt"
   ).length;
 
 
@@ -2446,46 +2117,114 @@ function updateStats(){
   );
 
 
-  $("countAll").textContent =
+  $("countAll")
+  .textContent =
   STUDENTS.length;
 
 
-  $("countPaid").textContent =
+  $("countPaid")
+  .textContent =
   paid;
 
 
-  $("countUnpaid").textContent =
+  $("countUnpaid")
+  .textContent =
   unpaid;
 
 
-  $("countLate").textContent =
+  $("countLate")
+  .textContent =
   late;
 
 
-  $("countExempt").textContent =
+  $("countExempt")
+  .textContent =
   exempt;
 
 
-  $("progress").style.width =
+  $("progress")
+  .style
+  .width =
   pct + "%";
 
 
-  $("progressText").textContent =
+  $("progressText")
+  .textContent =
   `完成率 ${pct}%（${completed}/${STUDENTS.length}）`;
 
 }
 
 
-/* ================================
+/* ==============================
+   列印摘要
+============================== */
+
+function updatePrintSummary(){
+
+  const item =
+  $("itemName")
+    .value
+    .trim()
+  ||
+  "未命名項目";
+
+
+  $("printSummaryTitle")
+  .textContent =
+  `804班｜收繳項目：${item}`;
+
+
+  $("printCountAll")
+  .textContent =
+  $("countAll")
+  .textContent;
+
+
+  $("printCountPaid")
+  .textContent =
+  $("countPaid")
+  .textContent;
+
+
+  $("printCountUnpaid")
+  .textContent =
+  $("countUnpaid")
+  .textContent;
+
+
+  $("printCountLate")
+  .textContent =
+  $("countLate")
+  .textContent;
+
+
+  $("printCountExempt")
+  .textContent =
+  $("countExempt")
+  .textContent;
+
+}
+
+
+/*
+瀏覽器用快捷鍵 Ctrl+P 時，
+也會先更新列印摘要
+*/
+
+window.addEventListener(
+  "beforeprint",
+  updatePrintSummary
+);
+
+
+/* ==============================
    自動儲存
-================================ */
+============================== */
 
 function scheduleAutosave(){
 
   if(!currentId){
-
     return;
-
   }
 
 
@@ -2515,9 +2254,9 @@ function scheduleAutosave(){
 }
 
 
-/* ================================
+/* ==============================
    儲存目前紀錄
-================================ */
+============================== */
 
 async function saveCurrentCloud(
   showSuccess=true
@@ -2550,7 +2289,8 @@ async function saveCurrentCloud(
     &&
     meta.dueDate
     &&
-    meta.receiveDate > meta.dueDate
+    meta.receiveDate >
+    meta.dueDate
   ){
 
     showToast(
@@ -2633,7 +2373,13 @@ async function saveCurrentCloud(
 
 
     showToast(
-      `Firebase 儲存失敗：${err.code || err.message || "未知錯誤"}`
+      `Firebase 儲存失敗：${
+        err.code
+        ||
+        err.message
+        ||
+        "未知錯誤"
+      }`
     );
 
 
@@ -2644,9 +2390,9 @@ async function saveCurrentCloud(
 }
 
 
-/* ================================
-   建立／儲存項目
-================================ */
+/* ==============================
+   建立／儲存
+============================== */
 
 async function saveRecord(){
 
@@ -2671,7 +2417,10 @@ async function saveRecord(){
       "請先填寫收繳項目名稱"
     );
 
-    $("itemName").focus();
+
+    $("itemName")
+    .focus();
+
 
     return;
 
@@ -2683,7 +2432,8 @@ async function saveRecord(){
     &&
     meta.dueDate
     &&
-    meta.receiveDate > meta.dueDate
+    meta.receiveDate >
+    meta.dueDate
   ){
 
     showToast(
@@ -2764,7 +2514,8 @@ async function saveRecord(){
     );
 
 
-    $("historySelect").value =
+    $("historySelect")
+    .value =
     currentId;
 
 
@@ -2788,7 +2539,13 @@ async function saveRecord(){
 
 
     showToast(
-      `無法儲存：${err.code || err.message || "未知錯誤"}`
+      `無法儲存：${
+        err.code
+        ||
+        err.message
+        ||
+        "未知錯誤"
+      }`
     );
 
   }
@@ -2796,9 +2553,9 @@ async function saveRecord(){
 }
 
 
-/* ================================
+/* ==============================
    新增收繳項目
-================================ */
+============================== */
 
 function newRecord(){
 
@@ -2810,19 +2567,23 @@ function newRecord(){
   createBlankState();
 
 
-  $("itemName").value =
+  $("itemName")
+  .value =
   "";
 
 
-  $("receiveDate").value =
+  $("receiveDate")
+  .value =
   todayISO();
 
 
-  $("dueDate").value =
+  $("dueDate")
+  .value =
   "";
 
 
-  $("historySelect").value =
+  $("historySelect")
+  .value =
   "";
 
 
@@ -2833,7 +2594,8 @@ function newRecord(){
   setActiveFilter();
 
 
-  $("searchInput").value =
+  $("searchInput")
+  .value =
   "";
 
 
@@ -2853,18 +2615,16 @@ function newRecord(){
 }
 
 
-/* ================================
-   重新讀取 Firestore
-================================ */
+/* ==============================
+   歷史紀錄
+============================== */
 
 async function refreshHistory(
   showMessage=false
 ){
 
   if(!currentUser){
-
     return;
-
   }
 
 
@@ -2897,6 +2657,7 @@ async function refreshHistory(
 
     historyRecords =
     snap.docs.map(
+
       d => ({
 
         id:
@@ -2905,6 +2666,7 @@ async function refreshHistory(
         ...d.data()
 
       })
+
     );
 
 
@@ -2921,6 +2683,7 @@ async function refreshHistory(
 
 
     historyRecords.forEach(
+
       r => {
 
         const op =
@@ -2935,7 +2698,9 @@ async function refreshHistory(
 
         op.textContent =
         `${
-          r.itemName || '未命名'
+          r.itemName
+          ||
+          "未命名"
         }｜截止 ${
           formatDate(
             r.dueDate
@@ -2948,6 +2713,7 @@ async function refreshHistory(
         );
 
       }
+
     );
 
 
@@ -2995,7 +2761,13 @@ async function refreshHistory(
 
 
     showToast(
-      `讀取 Firestore 失敗：${err.code || err.message || "未知錯誤"}`
+      `讀取 Firestore 失敗：${
+        err.code
+        ||
+        err.message
+        ||
+        "未知錯誤"
+      }`
     );
 
   }
@@ -3003,14 +2775,15 @@ async function refreshHistory(
 }
 
 
-/* ================================
-   載入歷史紀錄
-================================ */
+/* ==============================
+   載入紀錄
+============================== */
 
 function loadRecord(){
 
   const id =
-  $("historySelect").value;
+  $("historySelect")
+  .value;
 
 
   if(!id){
@@ -3046,16 +2819,25 @@ function loadRecord(){
   rec.id;
 
 
-  $("itemName").value =
-  rec.itemName || "";
+  $("itemName")
+  .value =
+  rec.itemName
+  ||
+  "";
 
 
-  $("receiveDate").value =
-  rec.receiveDate || "";
+  $("receiveDate")
+  .value =
+  rec.receiveDate
+  ||
+  "";
 
 
-  $("dueDate").value =
-  rec.dueDate || "";
+  $("dueDate")
+  .value =
+  rec.dueDate
+  ||
+  "";
 
 
   studentState =
@@ -3063,6 +2845,7 @@ function loadRecord(){
 
 
   STUDENTS.forEach(
+
     s => {
 
       const saved =
@@ -3077,9 +2860,13 @@ function loadRecord(){
 
       if(saved){
 
-        studentState[s.seat] = {
+        studentState[
+          s.seat
+        ] = {
 
-          ...studentState[s.seat],
+          ...studentState[
+            s.seat
+          ],
 
           ...saved
 
@@ -3088,6 +2875,7 @@ function loadRecord(){
       }
 
     }
+
   );
 
 
@@ -3098,7 +2886,8 @@ function loadRecord(){
   setActiveFilter();
 
 
-  $("searchInput").value =
+  $("searchInput")
+  .value =
   "";
 
 
@@ -3112,9 +2901,9 @@ function loadRecord(){
 }
 
 
-/* ================================
-   刪除紀錄
-================================ */
+/* ==============================
+   刪除
+============================== */
 
 async function deleteRecord(){
 
@@ -3189,7 +2978,13 @@ async function deleteRecord(){
 
 
     showToast(
-      `刪除失敗：${err.code || err.message || "未知錯誤"}`
+      `刪除失敗：${
+        err.code
+        ||
+        err.message
+        ||
+        "未知錯誤"
+      }`
     );
 
   }
@@ -3197,14 +2992,18 @@ async function deleteRecord(){
 }
 
 
-/* ================================
-   全部設定狀態
-================================ */
+/* ==============================
+   全班狀態
+============================== */
 
-async function setAll(status){
+async function setAll(
+  status
+){
 
   const label =
-  STATUS_LABEL[status];
+  STATUS_LABEL[
+    status
+  ];
 
 
   if(
@@ -3219,9 +3018,11 @@ async function setAll(status){
 
 
   STUDENTS.forEach(
-    s =>
 
-      studentState[s.seat].status =
+    s =>
+      studentState[
+        s.seat
+      ].status =
       status
 
   );
@@ -3246,43 +3047,45 @@ async function setAll(status){
 }
 
 
-/* ================================
+/* ==============================
    篩選
-================================ */
+============================== */
 
 function setActiveFilter(){
 
   document
-  .querySelectorAll(
-    ".filter-btn"
-  )
-  .forEach(
-    b =>
+    .querySelectorAll(
+      ".filter-btn"
+    )
+    .forEach(
 
-      b.classList.toggle(
+      b =>
+        b.classList.toggle(
 
-        "active",
+          "active",
 
-        b.dataset.filter === filter
+          b.dataset.filter ===
+          filter
 
-      )
+        )
 
-  );
+    );
 
 }
 
 
-/* ================================
+/* ==============================
    未繳名單
-================================ */
+============================== */
 
 function unpaidList(){
 
   return STUDENTS.filter(
 
     s =>
-      studentState[s.seat]
-      .status ===
+      studentState[
+        s.seat
+      ].status ===
       "unpaid"
 
   );
@@ -3290,9 +3093,9 @@ function unpaidList(){
 }
 
 
-/* ================================
-   複製未繳名單
-================================ */
+/* ==============================
+   複製未繳
+============================== */
 
 async function copyUnpaid(){
 
@@ -3311,7 +3114,11 @@ async function copyUnpaid(){
   const due =
   $("dueDate").value
   ?
-  `（截止：${formatDate($("dueDate").value)}）`
+  `（截止：${
+    formatDate(
+      $("dueDate").value
+    )
+  }）`
   :
   "";
 
@@ -3321,10 +3128,14 @@ async function copyUnpaid(){
   ?
   `${item}${due}
 未繳交：
-${list.map(
-  s =>
-    `${s.seat}號 ${s.name}`
-).join("\n")}`
+${
+  list
+    .map(
+      s =>
+        `${s.seat}號 ${s.name}`
+    )
+    .join("\n")
+}`
   :
   `${item}${due}
 全班皆已完成繳交。`;
@@ -3357,16 +3168,17 @@ ${list.map(
 }
 
 
-/* ================================
+/* ==============================
    CSV
-================================ */
+============================== */
 
 function csvEscape(v){
 
   return '"' +
   String(
     v ?? ""
-  ).replaceAll(
+  )
+  .replaceAll(
     '"',
     '""'
   )
@@ -3417,10 +3229,13 @@ function exportCSV(){
 
 
   STUDENTS.forEach(
+
     s => {
 
       const st =
-      studentState[s.seat];
+      studentState[
+        s.seat
+      ];
 
 
       rows.push([
@@ -3446,6 +3261,7 @@ function exportCSV(){
       ]);
 
     }
+
   );
 
 
@@ -3453,11 +3269,15 @@ function exportCSV(){
   "\uFEFF"
   +
   rows.map(
+
     r =>
       r.map(
         csvEscape
-      ).join(",")
-  ).join("\r\n");
+      )
+      .join(",")
+
+  )
+  .join("\r\n");
 
 
   const blob =
@@ -3504,11 +3324,13 @@ function exportCSV(){
 }
 
 
-/* ================================
+/* ==============================
    登入錯誤
-================================ */
+============================== */
 
-function friendlyAuthError(code){
+function friendlyAuthError(
+  code
+){
 
   const map = {
 
@@ -3534,9 +3356,9 @@ function friendlyAuthError(code){
 }
 
 
-/* ================================
+/* ==============================
    登入
-================================ */
+============================== */
 
 async function login(){
 
@@ -3551,7 +3373,8 @@ async function login(){
     .value;
 
 
-  $("loginError").textContent =
+  $("loginError")
+  .textContent =
   "";
 
 
@@ -3561,19 +3384,23 @@ async function login(){
     !password
   ){
 
-    $("loginError").textContent =
+    $("loginError")
+    .textContent =
     "請輸入 Email 與密碼。";
+
 
     return;
 
   }
 
 
-  $("loginBtn").disabled =
+  $("loginBtn")
+  .disabled =
   true;
 
 
-  $("loginBtn").textContent =
+  $("loginBtn")
+  .textContent =
   "登入中…";
 
 
@@ -3598,7 +3425,8 @@ async function login(){
     );
 
 
-    $("loginError").textContent =
+    $("loginError")
+    .textContent =
     friendlyAuthError(
       err.code
     );
@@ -3607,11 +3435,13 @@ async function login(){
 
   finally{
 
-    $("loginBtn").disabled =
+    $("loginBtn")
+    .disabled =
     false;
 
 
-    $("loginBtn").textContent =
+    $("loginBtn")
+    .textContent =
     "🏴‍☠️ 登入收繳系統";
 
   }
@@ -3619,9 +3449,9 @@ async function login(){
 }
 
 
-/* ================================
+/* ==============================
    按鈕事件
-================================ */
+============================== */
 
 $("loginBtn")
 .addEventListener(
@@ -3649,7 +3479,9 @@ $("logoutBtn")
 .addEventListener(
   "click",
   () =>
-    signOut(auth)
+    signOut(
+      auth
+    )
 );
 
 
@@ -3657,7 +3489,9 @@ $("refreshCloudBtn")
 .addEventListener(
   "click",
   () =>
-    refreshHistory(true)
+    refreshHistory(
+      true
+    )
 );
 
 
@@ -3703,11 +3537,24 @@ $("exportBtn")
 );
 
 
+/*
+按下網頁上的列印按鈕前，
+先把班級、項目及統計資料寫入列印摘要。
+*/
+
 $("printBtn")
 .addEventListener(
+
   "click",
-  () =>
-    window.print()
+
+  () => {
+
+    updatePrintSummary();
+
+    window.print();
+
+  }
+
 );
 
 
@@ -3715,7 +3562,9 @@ $("allPaidBtn")
 .addEventListener(
   "click",
   () =>
-    setAll("paid")
+    setAll(
+      "paid"
+    )
 );
 
 
@@ -3723,7 +3572,9 @@ $("allUnpaidBtn")
 .addEventListener(
   "click",
   () =>
-    setAll("unpaid")
+    setAll(
+      "unpaid"
+    )
 );
 
 
@@ -3736,7 +3587,9 @@ $("searchInput")
 
 $("dueDate")
 .addEventListener(
+
   "change",
+
   () => {
 
     render();
@@ -3744,6 +3597,7 @@ $("dueDate")
     scheduleAutosave();
 
   }
+
 );
 
 
@@ -3763,11 +3617,14 @@ $("receiveDate")
 
 $("historySelect")
 .addEventListener(
+
   "change",
+
   () => {
 
     if(
-      $("historySelect").value
+      $("historySelect")
+      .value
     ){
 
       loadRecord();
@@ -3775,6 +3632,7 @@ $("historySelect")
     }
 
   }
+
 );
 
 
@@ -3783,10 +3641,12 @@ document
   ".filter-btn"
 )
 .forEach(
-  btn =>
 
+  btn =>
     btn.addEventListener(
+
       "click",
+
       () => {
 
         filter =
@@ -3799,14 +3659,15 @@ document
         render();
 
       }
+
     )
 
 );
 
 
-/* ================================
+/* ==============================
    Firebase 登入狀態
-================================ */
+============================== */
 
 onAuthStateChanged(
 
@@ -3826,9 +3687,12 @@ onAuthStateChanged(
       );
 
 
-      $("accountEmail").textContent =
+      $("accountEmail")
+      .textContent =
       `👤 ${
-        user.email || '已登入'
+        user.email
+        ||
+        "已登入"
       }`;
 
 
@@ -3838,8 +3702,10 @@ onAuthStateChanged(
       );
 
 
-      $("receiveDate").value =
-      $("receiveDate").value
+      $("receiveDate")
+      .value =
+      $("receiveDate")
+      .value
       ||
       todayISO();
 
@@ -3867,7 +3733,8 @@ onAuthStateChanged(
       createBlankState();
 
 
-      $("accountEmail").textContent =
+      $("accountEmail")
+      .textContent =
       "";
 
 
@@ -3892,11 +3759,12 @@ onAuthStateChanged(
 );
 
 
-/* ================================
-   初始畫面
-================================ */
+/* ==============================
+   初始
+============================== */
 
-$("receiveDate").value =
+$("receiveDate")
+.value =
 todayISO();
 
 
