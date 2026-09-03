@@ -101,22 +101,127 @@ tbody tr:hover td{background:#fff4cd} tbody tr.overdue td{background:#fff0e6} tb
   .stats .stat:first-child{grid-column:1/-1}.controls{align-items:stretch}.left-controls,.right-controls{width:100%}.search{min-width:100%}
   .left-controls button,.right-controls button{flex:1}
 }
+/* ===== 列印專用：僅改變列印版面，不影響原網頁設定 ===== */
+.print-summary{display:none}
+
+@page{size:A4 portrait;margin:7mm}
+
 @media print{
-  body{background:white}.app{width:100%;margin:0}.hero,.panel{box-shadow:none}
-  .toolbar,.controls,.history-row,.footer-note,.toast,.cloud-bar,.class-switch-panel{display:none!important}
-  .hero{border:2px solid #333}.panel{border:1px solid #555}.status-actions{display:block}
+  html,body{background:#fff!important;margin:0!important;padding:0!important}
+  body::before{display:none!important}
+  .app{width:100%!important;margin:0!important;padding:0!important}
+
+  /* 上方操作介面列印時全部隱藏；原網頁畫面不變 */
+  .hero,.toolbar,.controls,.history-row,.footer-note,.toast,.cloud-bar,.class-switch-panel{display:none!important}
+
+  /* 只留下列印專用的班級、項目與精簡統計 */
+  .print-summary{
+    display:block!important;
+    margin:0 0 4mm 0;
+    padding:0 0 2.5mm 0;
+    border-bottom:1.2px solid #333;
+    color:#111;
+  }
+  .print-summary-title{
+    font-size:15pt;
+    line-height:1.25;
+    font-weight:900;
+    text-align:center;
+    margin:0 0 2mm 0;
+  }
+  .print-summary-stats{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:0;
+    flex-wrap:wrap;
+    font-size:10.5pt;
+    line-height:1.4;
+    font-weight:800;
+  }
+  .print-summary-stats span{white-space:nowrap}
+  .print-summary-stats span:not(:last-child)::after{content:"　｜　";font-weight:400}
+
+  /* 名冊盡量壓在 1 張 A4，必要時自然延伸到第 2 張 */
+  .panel{
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    border-radius:0!important;
+    box-shadow:none!important;
+    background:#fff!important;
+  }
+  #rosterTitle{display:none!important}
+  .table-wrap{overflow:visible!important;border:1px solid #555!important;border-radius:0!important;background:#fff!important}
+  table{
+    min-width:0!important;
+    width:100%!important;
+    border-collapse:collapse!important;
+    table-layout:fixed!important;
+    font-size:9.5pt!important;
+    line-height:1.15!important;
+  }
+  thead{display:table-header-group}
+  thead th{
+    position:static!important;
+    background:#eee!important;
+    color:#111!important;
+    padding:1.7mm 1.2mm!important;
+    border:1px solid #777!important;
+    font-size:9.5pt!important;
+  }
+  tbody tr{break-inside:avoid;page-break-inside:avoid}
+  tbody td{
+    padding:1.45mm 1.2mm!important;
+    border:1px solid #aaa!important;
+    background:#fff!important;
+    vertical-align:middle!important;
+  }
+  tbody tr:hover td,tbody tr.overdue td{background:#fff!important}
+  tbody tr.overdue td:first-child{box-shadow:none!important}
+
+  th:nth-child(1),td:nth-child(1){width:9%;text-align:center}
+  th:nth-child(2),td:nth-child(2){width:18%}
+  th:nth-child(3),td:nth-child(3){width:23%}
+  th:nth-child(4),td:nth-child(4){width:16%;text-align:center}
+  th:nth-child(5),td:nth-child(5){width:34%}
+
+  .seat{font-size:9.5pt!important}
+  .name{font-size:9.5pt!important}
+  .status-cell{min-width:0!important}
+  .status-actions{display:block!important}
   .status-actions .status-btn{display:none!important}
   .status-actions .status-btn.selected{
-    display:inline-block!important;
+    display:inline!important;
     background:transparent!important;
     color:#111!important;
     border:0!important;
     box-shadow:none!important;
     padding:0!important;
-    font-size:11px!important;
+    margin:0!important;
+    font-size:9.5pt!important;
+    font-weight:800!important;
   }
-  .note-input{border:0;background:transparent}
-  table{min-width:0;font-size:11px}thead th{position:static;background:#ddd;color:#111}
+  .status-badge{
+    padding:0!important;
+    background:transparent!important;
+    color:#111!important;
+    font-size:9pt!important;
+    font-weight:700!important;
+  }
+  .note-input{
+    width:100%!important;
+    min-width:0!important;
+    border:0!important;
+    background:transparent!important;
+    padding:0!important;
+    margin:0!important;
+    color:#111!important;
+    font-size:9pt!important;
+    box-shadow:none!important;
+  }
+  .note-input::placeholder{color:transparent!important}
+  .empty{display:none!important}
 }
 </style>
 </head>
@@ -208,6 +313,16 @@ tbody tr:hover td{background:#fff4cd} tbody tr.overdue td{background:#fff0e6} tb
   </section>
 
   <section class="panel">
+    <div class="print-summary" id="printSummary">
+      <div class="print-summary-title" id="printSummaryTitle"></div>
+      <div class="print-summary-stats">
+        <span>全班 <b id="printCountAll">0</b> 人</span>
+        <span>已繳 <b id="printCountPaid">0</b> 人</span>
+        <span>未繳 <b id="printCountUnpaid">0</b> 人</span>
+        <span>補交 <b id="printCountLate">0</b> 人</span>
+        <span>免繳 <b id="printCountExempt">0</b> 人</span>
+      </div>
+    </div>
     <div class="section-title" id="rosterTitle">🏴‍☠️ 船員收繳名冊</div>
     <div class="controls" style="margin-bottom:12px">
       <div class="left-controls">
@@ -457,6 +572,18 @@ function updateStats(){
   $("progressText").textContent=`完成率 ${pct}%（${completed}/${list.length}）`;
 }
 
+function updatePrintSummary(){
+  const item=$(`itemName`).value.trim()||"未命名項目";
+  $(`printSummaryTitle`).textContent=`${currentClass().name}班｜收繳項目：${item}`;
+  $(`printCountAll`).textContent=$(`countAll`).textContent;
+  $(`printCountPaid`).textContent=$(`countPaid`).textContent;
+  $(`printCountUnpaid`).textContent=$(`countUnpaid`).textContent;
+  $(`printCountLate`).textContent=$(`countLate`).textContent;
+  $(`printCountExempt`).textContent=$(`countExempt`).textContent;
+}
+
+window.addEventListener("beforeprint",updatePrintSummary);
+
 function scheduleAutosave(){
   if(!currentId)return;
   clearTimeout(autosaveTimer);setSync("saving","☁️ 等待儲存…");
@@ -618,7 +745,7 @@ $("loadBtn").addEventListener("click",loadRecord);
 $("deleteBtn").addEventListener("click",deleteRecord);
 $("copyUnpaidBtn").addEventListener("click",copyUnpaid);
 $("exportBtn").addEventListener("click",exportCSV);
-$("printBtn").addEventListener("click",()=>window.print());
+$("printBtn").addEventListener("click",()=>{updatePrintSummary();window.print();});
 $("allPaidBtn").addEventListener("click",()=>setAll("paid"));
 $("allUnpaidBtn").addEventListener("click",()=>setAll("unpaid"));
 $("searchInput").addEventListener("input",render);
