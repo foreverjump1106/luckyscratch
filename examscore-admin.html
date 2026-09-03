@@ -547,7 +547,7 @@ tbody tr:hover td:nth-child(1),tbody tr:hover td:nth-child(2) {
   font-size:18px;
   font-weight:900
 }
-.teacher-box,.action-box,.week-box {
+.teacher-box,.scope-box,.action-box,.checkpoint-box,.week-box {
   margin-top:12px;
   padding:14px 16px;
   border-radius:14px;
@@ -557,9 +557,17 @@ tbody tr:hover td:nth-child(1),tbody tr:hover td:nth-child(2) {
   background:#eef5fb;
   border-left:5px solid #72a9ce
 }
+.scope-box {
+  background:#f7f1ff;
+  border-left:5px solid #9a7ac3
+}
 .action-box {
   background:#fff5dc;
   border-left:5px solid #e0a64b
+}
+.checkpoint-box {
+  background:#fff0ef;
+  border-left:5px solid #cf7770
 }
 .week-box {
   background:#edf6e7;
@@ -1129,6 +1137,126 @@ const SUBJECTS=[{
 },{
   key:"social",avgKey:"socialAvg",name:"社會",icon:"🌏"
 }];
+
+const GRADE8_CURRICULUM={
+  chinese:{
+    publisher:"翰林版",
+    1:{scope:"第1課〈田園之秋選〉、第2課〈古詩選〉、第3課〈下雨天，真好〉＋語文常識一：語法（上）詞類",focus:["課文主旨、關鍵字詞與注釋","古詩文意、語譯與情感判讀","敘事與描寫線索","詞類辨識與在句中的作用"]},
+    2:{scope:"第4課〈愛蓮說〉、第5課〈生命中的碎珠〉、第6課〈鳥〉＋語文常識二：語法（下）句子",focus:["文言文語譯與作者觀點","課文內容、修辭與情意判讀","段落結構與閱讀理解","句子結構與語法判讀"]},
+    3:{scope:"第7課〈張釋之執法〉、第8課〈找尋失落的水源〉、第9課〈一棵開花的樹〉、第10課〈畫的哀傷〉",focus:["文言文人物與事件判讀","說明／記敘文本閱讀","詩歌意象與情感","跨文本閱讀與題意推論"]}
+  },
+  english:{
+    publisher:"翰林版",
+    1:{scope:"Unit 1–2",focus:["Unit 1：天氣、季節；How／What 問天氣與天氣描述","Unit 1：授與動詞","Unit 2：社團活動、學科；after／before／when 等從屬連接詞","Unit 2：所有格代名詞"]},
+    2:{scope:"Unit 3–4",focus:["Unit 3：家事與睡眠／夢境；過去進行式","Unit 3：過去進行式與過去式的搭配、時間副詞","Unit 4：職業探索；不定詞與動名詞作受詞","Unit 4：動名詞作主詞、虛主詞 it"]},
+    3:{scope:"Unit 5–6",focus:["Unit 5：旅行、交通工具與指示方向；交通方式表達","Unit 5：指示方向用語","Unit 6：購物；未來式","Unit 6：cost／spend／pay 與 take／spend 的花費句型"]}
+  },
+  math:{
+    publisher:"翰林版",
+    1:{scope:"第1章〈乘法公式與多項式〉＋2-1〈平方根的意義〉",focus:["1-1 乘法公式","1-2 多項式的加減","1-3 多項式的乘除","2-1 平方根的意義"],prereq:["正負數與分數四則運算","乘法分配律與去括號","同類項合併與代數式運算","平方與指數概念"]},
+    2:{scope:"2-2〈根式的運算〉～3-2〈利用十字交乘法因式分解〉",focus:["2-2 根式的運算","2-3 畢氏定理","3-1 提公因式與乘法公式作因式分解","3-2 十字交乘法因式分解"],prereq:["平方根與平方的互逆概念","乘法公式熟練度","多項式乘法","質因數分解與因數概念"]},
+    3:{scope:"第4章〈一元二次方程式〉＋第5章〈統計資料處理〉",focus:["因式分解法解一元二次方程式","配方法與公式解","一元二次方程式應用問題","統計資料整理、解讀與比較"],prereq:["因式分解","移項與等量概念","代數運算與代入","平均數與資料閱讀"]}
+  },
+  science:{
+    publisher:"翰林版",
+    1:{scope:"第1章〈基本測量〉＋第2章〈物質的世界〉",focus:["長度、質量、時間的測量與估計","體積與密度及質量—體積關係","物質性質與實驗觀察","溶液、濃度、混合物分離與實驗判讀"]},
+    2:{scope:"第3章〈波動與聲音〉＋第4章〈光、影像與顏色〉",focus:["波的傳播與特徵","聲音形成、多變的聲音與應用","光的反射與平面鏡成像","光的折射、透鏡與色散／顏色"]},
+    3:{scope:"第5章〈溫度與熱〉＋第6章〈物質的基本結構〉",focus:["溫度與溫度計","熱量、比熱與熱效應","熱的傳播方式","元素、週期表、分子與化學式等物質基本結構"]}
+  },
+  social:{
+    publisher:"康軒版",
+    1:{scope:"地理1–2＋歷史1–2＋公民1–2",focus:["地理：中國的自然環境、人口成長與文化遷移","歷史：商周至隋唐的國家與社會、民族與文化","公民：國家與民主政治、民主國家的公共意見"]},
+    2:{scope:"地理3–4＋歷史3–4＋公民3–4",focus:["地理：中國的產業發展與地區差異、經濟發展與全球關連","歷史：宋元時期的民族互動、明清帝國與天朝體制","公民：政府與權力分立、我國的中央政府"]},
+    3:{scope:"地理5–6＋歷史5–6＋公民5–6",focus:["地理：東北亞的自然環境、經濟發展","歷史：西方衝擊下的晚清變革、晚清社會文化變遷","公民：我國的地方政府、民主社會的政治參與及投票"]}
+  }
+};
+
+function getCurriculumContext(subjectKey,nextExam){
+  if(!nextExam||Number(nextExam.grade)!==8||Number(nextExam.semester)!==1)return null;
+  const subject=GRADE8_CURRICULUM[subjectKey];
+  if(!subject)return null;
+  const exam=subject[Number(nextExam.examNo)];
+  if(!exam)return null;
+  return {publisher:subject.publisher,...exam};
+}
+
+function curriculumBridgeText(a,nextExam){
+  const c=getCurriculumContext(a.key,nextExam);
+  if(!c)return "目前尚未建立這一階段的教材範圍對照，先依歷次成績趨勢與班平均進行判讀。";
+  const focus=c.focus.join("、");
+  if(a.key==='math'&&c.prereq){
+    const pre=c.prereq.join("、");
+    if(a.profile.id==='foundation'||a.profile.id==='priority_support'||a.profile.id==='declining'){
+      return `本次範圍是「${c.scope}」。以數學老師角度，先不要直接大量刷本次難題；應先檢查 ${pre}。這些能力會直接影響 ${focus}。`;
+    }
+    return `本次範圍是「${c.scope}」。七年級基礎若已穩定，可把練習重心直接放在 ${focus}，並用限時混合題檢查公式辨識、運算速度與步驟完整度。`;
+  }
+  if(a.key==='english'){
+    return `本次為翰林版「${c.scope}」，文法與主題重點包含：${focus}。建議把歷次英文表現轉成「單字／句型／文法／閱讀」四類檢核，考前練習要直接涵蓋這些 Unit 的文法焦點。`;
+  }
+  if(a.key==='chinese'){
+    return `本次為翰林版「${c.scope}」，重點包含：${focus}。國文複習要把「課內字詞與課文理解、語文常識、閱讀推論」分開檢查，不宜只用總分判斷。`;
+  }
+  if(a.key==='science'){
+    return `本次為翰林版「${c.scope}」，重點包含：${focus}。自然科要分成概念、實驗／操作、圖表與計算四類檢核，才能知道真正失分來源。`;
+  }
+  if(a.key==='social'){
+    return `本次為康軒版「${c.scope}」，內容橫跨：${focus}。社會科應把地理、歷史、公民分開準備，再用混合題確認情境判讀能力。`;
+  }
+  return `本次範圍是「${c.scope}」，重點為 ${focus}。`;
+}
+
+function scopeSpecificActions(a,nextExam){
+  const c=getCurriculumContext(a.key,nextExam);
+  if(!c)return [];
+  const weak=a.profile.id==='foundation'||a.profile.id==='priority_support'||a.profile.id==='declining';
+  if(a.key==='math'){
+    if(Number(nextExam.examNo)===1){
+      return weak?["先用 12～15 題先備診斷檢查：分配律、去括號、同類項、正負號與平方；任一類正確率未達 80%，先補該類再進入乘法公式。","乘法公式不可只背公式：每一種公式各做『辨識公式→展開→反向檢查』題，確認看得出題型。","多項式加減乘除每次計算都要求同類項對齊；錯題特別標記負號、漏項、指數錯誤。","2-1 平方根先確認『平方根、正平方根、根號』概念差異，避免只會按計算機。"]:["乘法公式直接進入混合辨識題，避免只做單一公式的重複題。","多項式乘除加入限時練習，檢查正負號、漏項與計算速度。","2-1 平方根加入概念判斷與數線估值題，確認不是只有機械計算。"];
+    }
+    if(Number(nextExam.examNo)===2){
+      return weak?["先回測 2-1 平方根概念與第1章乘法公式，因為根式運算與因式分解會直接使用。","2-2 根式運算分成化簡、乘除、加減三類，各類至少連續兩次達 80% 正確率。","畢氏定理固定先畫圖、標直角、辨識斜邊，再代公式，避免公式背對但邊判斷錯。","因式分解要同時練『提公因式／公式／十字交乘』的辨識，看到題目先說出選哪一法。"]:["根式運算加入多步驟與混合題。","畢氏定理加入情境與逆向求邊題。","因式分解用混合題訓練方法辨識，不按章節提示解題。"];
+    }
+    return weak?["先回測因式分解與一元一次方程式的移項、等量與代數運算。","一元二次方程式先做到能辨識因式分解法、配方法、公式解的使用時機。","應用題固定寫未知數、列式、解方程式、檢驗答案四步驟。","統計資料處理要練表格／圖表讀取與數據比較，不只算平均。"]:["一元二次方程式以混合解法與應用題為主。","每題解完要檢查根是否符合題意，避免算對方程式卻答錯情境。","統計加入圖表與資料判讀題，訓練比較與說明。"];
+  }
+  if(a.key==='english'){
+    const n=Number(nextExam.examNo);
+    if(n===1)return ["Unit 1：How／What 問天氣與天氣描述要做問答互換；能看到中文情境自己寫出完整英文問句與答句。","授與動詞至少整理 give／send／show／teach 等常見句型，做『人＋物』與『物＋介系詞＋人』改寫。","Unit 2：after／before／when 要練兩子句前後關係與逗號位置；所有格代名詞要與所有格形容詞做成對照表。","每週至少一篇 Unit 1–2 主題閱讀，錯題標記是單字、文法還是句意判讀。"];
+    if(n===2)return ["過去進行式要和過去式一起比較，特別練『某動作進行時另一件事發生』的情境。","時間副詞與 at／when 等線索要先圈出，再決定時態。","不定詞與動名詞作受詞要整理常見動詞搭配；每組至少自己造句。","虛主詞 it 與動名詞作主詞做句型改寫練習。"];
+    return ["Unit 5 交通方式與方向指示要做地圖情境題，不只背片語。","Unit 6 未來式要能依時間線索判斷 will／be going to 等表達。","cost／spend／pay 與 take／spend 要做主詞、介系詞與時間／金錢的句型對照。","每週至少一篇購物或旅行情境閱讀並限時完成。"];
+  }
+  if(a.key==='chinese'){
+    const n=Number(nextExam.examNo);
+    if(n===1)return ["第1～3課每課做一張『主旨／人物或景物／重要字詞／寫作特色』摘要。","古詩至少做到逐句語譯、意象、情感與關鍵字判讀，不只背原文。","語法（上）詞類要從句子中實際辨識名詞、動詞、形容詞等，不能只背定義。","每週兩篇閱讀理解，訂正時標示答案依據句。"];
+    if(n===2)return ["〈愛蓮說〉逐段語譯並整理託物言志與作者價值觀。","第5、6課整理敘事線索、情感轉折與關鍵句。","語法（下）句子以實際句子判讀與改寫為主。","文言與白話閱讀交錯練習，檢查語譯與推論能力。"];
+    return ["〈張釋之執法〉整理人物立場、事件因果與文言語譯。","第8～10課分別整理說明線索、詩歌意象與敘事情感。","第三次段考沒有額外語法單元時，將更多時間放在跨文本閱讀與課文細節。","每週至少一篇長文閱讀，練主旨、推論與詞義判讀。"];
+  }
+  if(a.key==='science'){
+    const n=Number(nextExam.examNo);
+    if(n===1)return ["基本測量先練單位、估讀、有效數字與測量誤差的觀念題。","密度題固定寫質量、體積、密度三量關係，並做圖表判讀。","物質世界把物質性質、溶液濃度、混合物分離分成三張概念表。","實驗題每題都標示目的、變因、觀察、結論。"];
+    if(n===2)return ["波與聲音先分清波的特徵、聲音產生與傳播條件。","聲音題練頻率、音調、響度等概念比較。","光學固定畫入射線、法線、反射／折射方向，不只看圖猜答案。","透鏡與成像題用作圖＋規則雙重檢查。"];
+    return ["溫度與熱先分清『溫度』與『熱量』，再進入比熱與熱效應。","熱傳播以傳導、對流、輻射做生活情境辨識。","元素與週期表先建立符號、分類與位置概念。","分子／化學式題要同時練符號意義與粒子數判讀。"];
+  }
+  if(a.key==='social'){
+    const n=Number(nextExam.examNo);
+    if(n===1)return ["地理1–2用中國地形、氣候、人口與文化遷移做圖表／地圖整合，不只背課文句子。","歷史1–2建立商周到隋唐時間軸，整理制度、民族互動與文化發展的前後關係。","公民1–2整理國家、民主政治、公共意見等核心概念，情境題要圈出關鍵詞。","每週做一次地理＋歷史＋公民混合題，檢查是否能切換思考方式。"];
+    if(n===2)return ["地理3–4用產業、區域差異與全球關連做圖表比較。","歷史3–4整理宋元民族互動與明清政權制度的差異。","公民3–4畫出權力分立與中央政府機關關係圖。","混合題訂正時要標記是記憶錯、概念混淆還是資料判讀錯。"];
+    return ["地理5–6以東北亞環境、產業與經濟發展做國家比較表。","歷史5–6建立晚清衝擊、改革與社會文化變遷的因果時間線。","公民5–6整理地方政府、政治參與與投票制度。","段考前用跨冊情境題檢查是否能從資料找到正確概念。"];
+  }
+  return [];
+}
+
+function curriculumCheckpoints(a,nextExam){
+  const c=getCurriculumContext(a.key,nextExam);
+  if(!c)return ["能重做最近錯題並說明錯因。","同類基本題連續兩次達約 80% 正確率。"];
+  if(a.key==='math')return ["本次範圍基本題連續兩次練習達 80% 以上。","錯題能標出是概念、計算、題意或步驟錯誤。","不看提示能自己判斷該使用哪一種公式／方法。"];
+  if(a.key==='english')return ["本次 Unit 單字隔天回測達 90% 左右。","核心文法 5 題至少答對 4 題，且能自己造句。","短篇閱讀能在限定時間內完成並指出錯題依據。"];
+  if(a.key==='chinese')return ["本次課文重要字詞、主旨與語文常識小測達 80% 左右。","閱讀題每題能指出文章中的答案依據。","文言內容能完成基本語譯與人物／主旨判讀。"];
+  if(a.key==='science')return ["概念題、實驗題、圖表／計算題各自達 80% 左右。","實驗題能說出主要變因與結論。","計算題能完整寫出公式、代入與單位。"];
+  if(a.key==='social')return ["地理、歷史、公民三部分各自小測達 80% 左右。","歷史能不看課本說出主要時間與因果線。","地理／公民情境題能圈出關鍵資料再作答。"];
+  return ["完成本次段考範圍的分項檢核。"];
+}
+
 function showMessage(el,text,type="info"){
   el.textContent=text;
   el.className="message "+type
@@ -1676,13 +1804,14 @@ function buildAnalyses(records,nextExam){
     }
   })
 }
-function teacherDiagnosis(a){
+function teacherDiagnosis(a,nextExam){
   const p=[`目前判定為「${a.profile.name}」。`,a.profile.description,`最近一次 ${formatScore(a.latest)} 分，歷次平均 ${formatScore(a.average)} 分。`];
   if(a.recentTrend>=5)p.push(`近三次增加約 ${formatScore(a.recentTrend)} 分。`);
   else if(a.recentTrend<=-5)p.push(`近三次下降約 ${formatScore(Math.abs(a.recentTrend))} 分。`);
   else p.push('近三次變化不大，重點放在穩定度與固定失分。');
   if(a.classDiff>=5)p.push(`歷次平均約高於班平均 ${formatScore(a.classDiff)} 分。`);
   else if(a.classDiff<=-5)p.push(`歷次平均約低於班平均 ${formatScore(Math.abs(a.classDiff))} 分。`);
+  p.push(curriculumBridgeText(a,nextExam));
   return p.join('')
 }
 function practiceRatio(a){
@@ -1713,16 +1842,18 @@ function practiceRatio(a){
     }
   }
 }
-function subjectPrescription(a){
+function subjectPrescription(a,nextExam){
   const p=a.profile.id;
+  const scope=scopeSpecificActions(a,nextExam);
+  let general=[];
   switch(a.key){
-    case'chinese':return (p==='foundation'||p==='priority_support')?["先用舊考卷分類字詞、課文、語文常識、閱讀理解，找出錯最多的一類。","課內內容採少量多次複習，每次只處理一課。","每週至少兩篇短篇閱讀，每題都回文中找答案依據。"]:["每課整理主旨、重要字詞、注釋、寫作特色。","閱讀題作答後一定回文章標記答案依據。","錯題依字詞／課文／語文常識／閱讀分類。"];
-    case'english':return (p==='foundation'||p==='priority_support')?["把英文拆成單字、片語、文法、閱讀四部分。","每天 10～15 分鐘單字，隔天先回測昨天內容。","每個文法句型至少自己造 3 句。","每週至少兩篇短篇閱讀。"]:["每天維持少量單字回測。","每週選兩個文法重點自己造句。","每週完成兩篇閱讀。","錯題標記是單字、文法或閱讀造成。"];
-    case'math':return (p==='foundation'||p==='priority_support')?["先檢核七年級正負數與分數、代數式、方程式、比例、文字題。","某類基本題若連錯 3 題以上，先回課本例題與基本題。","錯題標記觀念、計算、題意、步驟。","每週至少三次，每次 25～30 分鐘。"]:(p==='declining'?["先把最近兩次錯題按單元分類，找出下降集中在哪個概念。","不要直接增加刷題量，先確認是運算、概念還是題意問題。","每週一次只做最近錯題，直到能不看解答完成。"]:["每週三次：新觀念／變化題／錯題各一次。","逐步增加文字題與變化題。","段考前一週完成一份限時混合題。"]);
-    case'science':return (p==='foundation'||p==='priority_support')?["每個概念都回答：是什麼、為什麼、條件改變會怎樣。","實驗題整理目的、變因、結果與結論。","計算題固定寫已知量→公式→代入→單位。","圖表題先讀軸、單位、趨勢再作答。"]:["每週整理核心概念。","每週至少重新看一次實驗。","計算題維持完整步驟。","圖表題先看軸與單位再作答。"];
-    case'social':return (p==='foundation'||p==='priority_support')?["先確認失分主要在歷史、地理還是公民。","歷史用時間軸整理事件、原因、結果與影響。","地理每章整理地圖、位置、氣候或統計圖。","公民把易混概念做兩欄比較表。"]:["歷史做時間軸。","地理做圖表與地圖判讀。","公民做概念比較。","每週完成一次混合題。"]
+    case'chinese':general=(p==='foundation'||p==='priority_support')?["用舊考卷分類字詞、課文、語文常識、閱讀理解，找出錯最多的一類。","課內內容採少量多次複習，每次只處理一課。","每週至少兩篇閱讀，每題回文中找答案依據。"]:["每課整理主旨、重要字詞、注釋、寫作特色。","閱讀題作答後回文章標記答案依據。","錯題依字詞／課文／語文常識／閱讀分類。"] ;break;
+    case'english':general=(p==='foundation'||p==='priority_support')?["把英文拆成單字、片語、文法、閱讀四部分。","每天 10～15 分鐘單字，隔天先回測昨天內容。","每個文法句型至少自己造 3 句。"]:["每天維持少量單字回測。","文法錯題整理成句型表並自己造句。","每週完成兩篇閱讀。"] ;break;
+    case'math':general=(p==='foundation'||p==='priority_support')?["錯題標記觀念、計算、題意、步驟。","每週至少三次，每次 25～30 分鐘。"]:(p==='declining'?["先把最近兩次錯題按單元分類，找出下降集中在哪個概念。","不要直接增加刷題量，先確認是運算、概念還是題意問題。"]:["每週三次：新觀念／變化題／錯題各一次。","段考前完成一份限時混合題。"]);break;
+    case'science':general=(p==='foundation'||p==='priority_support')?["概念要能回答：是什麼、為什麼、條件改變會怎樣。","實驗題整理目的、變因、結果與結論。","計算題固定寫已知量→公式→代入→單位。"]:["每週整理核心概念與一個實驗。","圖表題先看軸、單位、趨勢再作答。"] ;break;
+    case'social':general=(p==='foundation'||p==='priority_support')?["先確認失分主要在歷史、地理還是公民。","歷史用時間軸、地理用圖表／地圖、公民用概念比較。"]:["歷史做時間軸、地理做資料判讀、公民做概念比較。","每週完成一次三科混合題。"] ;break;
   }
-  return[]
+  return [...scope,...general]
 }
 function fourWeekPlan(a,nextExam){
   const r=practiceRatio(a);
@@ -1743,13 +1874,7 @@ function fourWeekPlan(a,nextExam){
      號`;$('studentExamCount').textContent=`已有 ${
       records.length
     }
-     次段考資料`;const nextExam=determineNextExam(allExams);$('nextStageTitle').textContent=nextExam?nextExam.title:'尚無法判斷下一階段';$('nextStageText').textContent=nextExam?`目前已完成到「${
-      records.at(-1).exam.examName
-    }
-    」。以下分析以準備「${
-      nextExam.shortTitle
-    }
-    」為目標。`:'';const avgs=records.map(x=>+x.result.average).filter(Number.isFinite),ranks=records.map(x=>+x.result.rank).filter(Number.isFinite);$('studentSummary').innerHTML=`<div class="summary-card"><div class="summary-label">歷次最高平均</div><div class="summary-value">${
+     次段考資料`;const nextExam=determineNextExam(allExams);$('nextStageTitle').textContent=nextExam?nextExam.title:'尚無法判斷下一階段';$('nextStageText').textContent=nextExam?`目前已完成到「${records.at(-1).exam.examName}」。以下分析以準備「${nextExam.shortTitle}」為目標，並已套用目前確認的八年級實際教材版本與段考範圍。`:'';const avgs=records.map(x=>+x.result.average).filter(Number.isFinite),ranks=records.map(x=>+x.result.rank).filter(Number.isFinite);$('studentSummary').innerHTML=`<div class="summary-card"><div class="summary-label">歷次最高平均</div><div class="summary-value">${
       avgs.length?formatScore(Math.max(...avgs)):'—'
     }
     </div></div><div class="summary-card"><div class="summary-label">歷次最低平均</div><div class="summary-value">${
@@ -1776,53 +1901,20 @@ function fourWeekPlan(a,nextExam){
       formatScore(mean(vals))
     }
     </td></tr>`}).join('')}
-    function renderSubjectAnalyses(analyses,nextExam){$('subjectAnalysisList').innerHTML=analyses.map(a=>{const rx=subjectPrescription(a),plan=fourWeekPlan(a,nextExam),ratio=practiceRatio(a);return `<div class="subject-analysis-card"><div class="subject-analysis-head"><div class="subject-analysis-name">${
-      a.icon
-    }
-     ${
-      a.name
-    }
-    </div><div class="subject-status">${
-      escapeHtml(a.profile.name)
-    }
-    </div></div><div class="subject-analysis-body"><div class="subject-data-grid"><div class="subject-data-item"><div class="subject-data-label">最近一次</div><div class="subject-data-value">${
-      formatScore(a.latest)
-    }
-    </div></div><div class="subject-data-item"><div class="subject-data-label">歷次平均</div><div class="subject-data-value">${
-      formatScore(a.average)
-    }
-    </div></div><div class="subject-data-item"><div class="subject-data-label">近三次變化</div><div class="subject-data-value ${a.recentTrend>0?'positive':a.recentTrend<0?'negative':''}">${
-      signed(a.recentTrend)
-    }
-    </div></div><div class="subject-data-item"><div class="subject-data-label">相較班平均</div><div class="subject-data-value ${a.classDiff>0?'positive':a.classDiff<0?'negative':''}">${
-      signed(a.classDiff)
-    }
-    </div></div></div><div class="teacher-box"><div class="box-title">🧑‍🏫 ${
-      a.name
-    }
-    老師的判讀</div>${
-      escapeHtml(teacherDiagnosis(a))
-    }
-    </div><div class="action-box"><div class="box-title">🎯 個人化學習處方</div><div style="font-weight:800;margin-bottom:8px">建議練習比例：基礎 ${
-      ratio.foundation
-    }
-    % ／ 錯題修正 ${
-      ratio.correction
-    }
-    % ／ 變化進階 ${
-      ratio.challenge
-    }
-    %</div><ol class="action-list">${
-      rx.map(x=>`<li>${escapeHtml(x)}</li>`).join('')
-    }
-    </ol></div><div class="week-box"><div class="box-title">📅 ${
-      nextExam?nextExam.shortTitle:'下一次段考'
-    }
-    前四週計畫</div><ol class="action-list">${
-      plan.map((x,i)=>`<li><strong>第 ${i+1} 週：</strong>${escapeHtml(x.replace(/^第\d週：/,''))}</li>`).join('')
-    }
-    </ol></div></div></div>`}).join('')}
-    function renderPriorities(analyses){const ranked=[...analyses].map(a=>({...a,finalPriority:priorityScore(a)})).sort((a,b)=>b.finalPriority-a.finalPriority),first=ranked[0],second=ranked[1],strongest=[...analyses].sort((a,b)=>b.average-a.average)[0],items=[];if(first)items.push({title:`第一優先：${
+    function renderSubjectAnalyses(analyses,nextExam){
+  $('subjectAnalysisList').innerHTML=analyses.map(a=>{
+    const rx=subjectPrescription(a,nextExam),plan=fourWeekPlan(a,nextExam),ratio=practiceRatio(a),ctx=getCurriculumContext(a.key,nextExam),checks=curriculumCheckpoints(a,nextExam);
+    return `<div class="subject-analysis-card"><div class="subject-analysis-head"><div class="subject-analysis-name">${a.icon} ${a.name}</div><div class="subject-status">${escapeHtml(a.profile.name)}</div></div><div class="subject-analysis-body">
+      <div class="subject-data-grid"><div class="subject-data-item"><div class="subject-data-label">最近一次</div><div class="subject-data-value">${formatScore(a.latest)}</div></div><div class="subject-data-item"><div class="subject-data-label">歷次平均</div><div class="subject-data-value">${formatScore(a.average)}</div></div><div class="subject-data-item"><div class="subject-data-label">近三次變化</div><div class="subject-data-value ${a.recentTrend>0?'positive':a.recentTrend<0?'negative':''}">${signed(a.recentTrend)}</div></div><div class="subject-data-item"><div class="subject-data-label">相較班平均</div><div class="subject-data-value ${a.classDiff>0?'positive':a.classDiff<0?'negative':''}">${signed(a.classDiff)}</div></div></div>
+      ${ctx?`<div class="scope-box"><div class="box-title">📚 ${ctx.publisher}｜本次實際段考範圍</div><strong>${escapeHtml(ctx.scope)}</strong><br><span style="color:#6b6475">重點：${ctx.focus.map(escapeHtml).join('、')}</span></div>`:''}
+      <div class="teacher-box"><div class="box-title">🧑‍🏫 ${a.name}老師的判讀</div>${escapeHtml(teacherDiagnosis(a,nextExam))}</div>
+      <div class="action-box"><div class="box-title">🎯 依本次範圍的個人化學習處方</div><div style="font-weight:800;margin-bottom:8px">建議練習比例：基礎 ${ratio.foundation}% ／ 錯題修正 ${ratio.correction}% ／ 變化進階 ${ratio.challenge}%</div><ol class="action-list">${rx.map(x=>`<li>${escapeHtml(x)}</li>`).join('')}</ol></div>
+      <div class="checkpoint-box"><div class="box-title">✅ 達標檢核</div><ol class="action-list">${checks.map(x=>`<li>${escapeHtml(x)}</li>`).join('')}</ol></div>
+      <div class="week-box"><div class="box-title">📅 ${nextExam?nextExam.shortTitle:'下一次段考'}前四週計畫</div><ol class="action-list">${plan.map((x,i)=>`<li><strong>第 ${i+1} 週：</strong>${escapeHtml(x.replace(/^第\d週：/,''))}</li>`).join('')}</ol></div>
+    </div></div>`
+  }).join('')
+}
+function renderPriorities(analyses){const ranked=[...analyses].map(a=>({...a,finalPriority:priorityScore(a)})).sort((a,b)=>b.finalPriority-a.finalPriority),first=ranked[0],second=ranked[1],strongest=[...analyses].sort((a,b)=>b.average-a.average)[0],items=[];if(first)items.push({title:`第一優先：${
       first.name
     }
     `,text:`${
