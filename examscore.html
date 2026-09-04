@@ -403,6 +403,89 @@
 
     .action-list li { margin: 6px 0; }
 
+
+    .scope-box {
+      margin-top: 11px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      background: #f4efff;
+      border-left: 5px solid #9a7bd4;
+      line-height: 1.85;
+    }
+
+    .trait-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin: 0 0 12px;
+    }
+
+    .trait-chip {
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid #e5d8c6;
+      background: #f6f1e9;
+      color: #6d6257;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .operation-box {
+      margin-top: 11px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      background: #fff0e9;
+      border-left: 5px solid #df865f;
+      line-height: 1.8;
+    }
+
+    .operation-task {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      margin: 9px 0;
+      padding: 9px 10px;
+      border-radius: 11px;
+      background: rgba(255,255,255,.75);
+    }
+
+    .operation-task input[type="checkbox"] {
+      width: 19px;
+      height: 19px;
+      min-height: auto;
+      margin-top: 3px;
+      flex: 0 0 auto;
+      accent-color: #d9903d;
+    }
+
+    .operation-task label {
+      margin: 0;
+      line-height: 1.7;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .operation-standard {
+      margin-top: 11px;
+      padding: 10px 12px;
+      border-radius: 11px;
+      background: #fff;
+      color: #79543b;
+      font-size: 14px;
+      font-weight: 900;
+      line-height: 1.75;
+    }
+
+    .checkpoint-box {
+      margin-top: 11px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      background: #eef8f5;
+      border-left: 5px solid #65a88f;
+      line-height: 1.85;
+    }
+
     .priority-grid {
       display: grid;
       grid-template-columns: repeat(3,minmax(0,1fr));
@@ -494,17 +577,40 @@
 
       <div style="height:14px"></div>
 
-      <div class="field">
-        <label for="birthMMDD">出生月日 4 碼</label>
-        <input id="birthMMDD" inputmode="numeric" maxlength="4" autocomplete="off" placeholder="例如 0201">
-      </div>
+      <form id="queryForm" autocomplete="off" onsubmit="return false;">
+        <!-- 欺騙部分瀏覽器／密碼管理員，不要把教師帳密自動塞到查詢欄位 -->
+        <input type="text" name="fake_username" autocomplete="username" tabindex="-1"
+               aria-hidden="true" style="position:absolute;left:-9999px;opacity:0;width:1px;height:1px;">
+        <input type="password" name="fake_password" autocomplete="current-password" tabindex="-1"
+               aria-hidden="true" style="position:absolute;left:-9999px;opacity:0;width:1px;height:1px;">
 
-      <div class="field">
-        <label for="idLast5">身分證字號後 5 碼</label>
-        <input id="idLast5" type="password" inputmode="numeric" maxlength="5" autocomplete="off" placeholder="請輸入 5 碼">
-      </div>
+        <div class="field">
+          <label for="birthMMDD">出生月日 4 碼</label>
+          <input id="birthMMDD"
+                 name="student_birth_mmdd"
+                 inputmode="numeric"
+                 maxlength="4"
+                 autocomplete="one-time-code"
+                 autocapitalize="off"
+                 spellcheck="false"
+                 placeholder="例如 0201">
+        </div>
 
-      <button id="queryBtn" class="btn">查詢我的成績</button>
+        <div class="field">
+          <label for="idLast5">身分證字號後 5 碼</label>
+          <input id="idLast5"
+                 name="student_id_verify_code"
+                 type="password"
+                 inputmode="numeric"
+                 maxlength="5"
+                 autocomplete="new-password"
+                 autocapitalize="off"
+                 spellcheck="false"
+                 placeholder="請輸入 5 碼">
+        </div>
+
+        <button id="queryBtn" type="button" class="btn">查詢我的成績</button>
+      </form>
 
       <div id="loginMessage" class="message"></div>
 
@@ -569,9 +675,9 @@
         <div class="section-title">🧭 下一階段五科學習建議</div>
 
         <div class="help">
-          目前學生端使用與教師後台相同的核心判定邏輯，但文字改成學生與家長較容易執行的說法。
-          現階段會依歷次成績、近期趨勢、與班平均的差距及成績穩定度提供建議。
-          等之後加入各科教材版本與實際段考範圍後，這裡會再升級成更細的章節與題型建議。
+          學生／家長端使用與教師後台相同的核心判定邏輯，但改成較容易理解與執行的說法。
+          系統會同時參考歷次成績、近期趨勢、與班平均的差距、成績穩定度、個人學習特徵，
+          並套用目前已確認的八年級教材版本與實際段考範圍，提供本週可直接操作的任務與達標標準。
         </div>
 
         <div style="height:14px"></div>
@@ -627,6 +733,204 @@
       { key:"science", avgKey:"scienceAvg", name:"自然", icon:"🔬" },
       { key:"social", avgKey:"socialAvg", name:"社會", icon:"🌏" }
     ];
+
+    /* =========================================================
+       八年級上學期教材版本與實際段考範圍
+       國英數自然：翰林；社會：康軒
+    ========================================================= */
+
+    const GRADE8_CURRICULUM = {
+      chinese: {
+        publisher:"翰林版",
+        1:{
+          scope:"第1課〈田園之秋選〉、第2課〈古詩選〉、第3課〈下雨天，真好〉＋語文常識一：語法（上）詞類",
+          focus:[
+            "課文主旨、關鍵字詞與注釋",
+            "古詩文意、語譯與情感判讀",
+            "敘事與描寫線索",
+            "詞類辨識與在句中的作用"
+          ]
+        },
+        2:{
+          scope:"第4課〈愛蓮說〉、第5課〈生命中的碎珠〉、第6課〈鳥〉＋語文常識二：語法（下）句子",
+          focus:[
+            "文言文語譯與作者觀點",
+            "課文內容、修辭與情意判讀",
+            "段落結構與閱讀理解",
+            "句子結構與語法判讀"
+          ]
+        },
+        3:{
+          scope:"第7課〈張釋之執法〉、第8課〈找尋失落的水源〉、第9課〈一棵開花的樹〉、第10課〈畫的哀傷〉",
+          focus:[
+            "文言文人物與事件判讀",
+            "說明／記敘文本閱讀",
+            "詩歌意象與情感",
+            "跨文本閱讀與題意推論"
+          ]
+        }
+      },
+
+      english: {
+        publisher:"翰林版",
+        1:{
+          scope:"Unit 1–2",
+          focus:[
+            "Unit 1：天氣、季節；How／What 問天氣與天氣描述",
+            "Unit 1：授與動詞",
+            "Unit 2：社團活動、學科；after／before／when 等從屬連接詞",
+            "Unit 2：所有格代名詞"
+          ]
+        },
+        2:{
+          scope:"Unit 3–4",
+          focus:[
+            "Unit 3：家事與睡眠／夢境；過去進行式",
+            "Unit 3：過去進行式與過去式的搭配、時間副詞",
+            "Unit 4：職業探索；不定詞與動名詞作受詞",
+            "Unit 4：動名詞作主詞、虛主詞 it"
+          ]
+        },
+        3:{
+          scope:"Unit 5–6",
+          focus:[
+            "Unit 5：旅行、交通工具與指示方向；交通方式表達",
+            "Unit 5：指示方向用語",
+            "Unit 6：購物；未來式",
+            "Unit 6：cost／spend／pay 與 take／spend 的花費句型"
+          ]
+        }
+      },
+
+      math: {
+        publisher:"翰林版",
+        1:{
+          scope:"第1章〈乘法公式與多項式〉＋2-1〈平方根的意義〉",
+          focus:[
+            "1-1 乘法公式",
+            "1-2 多項式的加減",
+            "1-3 多項式的乘除",
+            "2-1 平方根的意義"
+          ],
+          prereq:[
+            "正負數與分數四則運算",
+            "乘法分配律與去括號",
+            "同類項合併與代數式運算",
+            "平方與指數概念"
+          ]
+        },
+        2:{
+          scope:"2-2〈根式的運算〉～3-2〈利用十字交乘法因式分解〉",
+          focus:[
+            "2-2 根式的運算",
+            "2-3 畢氏定理",
+            "3-1 提公因式與乘法公式作因式分解",
+            "3-2 十字交乘法因式分解"
+          ],
+          prereq:[
+            "平方根與平方的互逆概念",
+            "乘法公式熟練度",
+            "多項式乘法",
+            "質因數分解與因數概念"
+          ]
+        },
+        3:{
+          scope:"第4章〈一元二次方程式〉＋第5章〈統計資料處理〉",
+          focus:[
+            "因式分解法解一元二次方程式",
+            "配方法與公式解",
+            "一元二次方程式應用問題",
+            "統計資料整理、解讀與比較"
+          ],
+          prereq:[
+            "因式分解",
+            "移項與等量概念",
+            "代數運算與代入",
+            "平均數與資料閱讀"
+          ]
+        }
+      },
+
+      science: {
+        publisher:"翰林版",
+        1:{
+          scope:"第1章〈基本測量〉＋第2章〈物質的世界〉",
+          focus:[
+            "長度、質量、時間的測量與估計",
+            "體積與密度及質量—體積關係",
+            "物質性質與實驗觀察",
+            "溶液、濃度、混合物分離與實驗判讀"
+          ]
+        },
+        2:{
+          scope:"第3章〈波動與聲音〉＋第4章〈光、影像與顏色〉",
+          focus:[
+            "波的傳播與特徵",
+            "聲音形成、多變的聲音與應用",
+            "光的反射與平面鏡成像",
+            "光的折射、透鏡與色散／顏色"
+          ]
+        },
+        3:{
+          scope:"第5章〈溫度與熱〉＋第6章〈物質的基本結構〉",
+          focus:[
+            "溫度與溫度計",
+            "熱量、比熱與熱效應",
+            "熱的傳播方式",
+            "元素、週期表、分子與化學式等物質基本結構"
+          ]
+        }
+      },
+
+      social: {
+        publisher:"康軒版",
+        1:{
+          scope:"地理1–2＋歷史1–2＋公民1–2",
+          focus:[
+            "地理：中國的自然環境、人口成長與文化遷移",
+            "歷史：商周至隋唐的國家與社會、民族與文化",
+            "公民：國家與民主政治、民主國家的公共意見"
+          ]
+        },
+        2:{
+          scope:"地理3–4＋歷史3–4＋公民3–4",
+          focus:[
+            "地理：中國的產業發展與地區差異、經濟發展與全球關連",
+            "歷史：宋元時期的民族互動、明清帝國與天朝體制",
+            "公民：政府與權力分立、我國的中央政府"
+          ]
+        },
+        3:{
+          scope:"地理5–6＋歷史5–6＋公民5–6",
+          focus:[
+            "地理：東北亞的自然環境、經濟發展",
+            "歷史：西方衝擊下的晚清變革、晚清社會文化變遷",
+            "公民：我國的地方政府、民主社會的政治參與及投票"
+          ]
+        }
+      }
+    };
+
+    function getCurriculumContext(subjectKey,nextExam) {
+      if (
+        !nextExam ||
+        Number(nextExam.grade) !== 8 ||
+        Number(nextExam.semester) !== 1
+      ) {
+        return null;
+      }
+
+      const subject = GRADE8_CURRICULUM[subjectKey];
+      if (!subject) return null;
+
+      const exam = subject[Number(nextExam.examNo)];
+      if (!exam) return null;
+
+      return {
+        publisher:subject.publisher,
+        ...exam
+      };
+    }
 
     function showMessage(element,text,type="info") {
       element.textContent = text;
@@ -799,29 +1103,240 @@
       return exams;
     }
 
-    function getSequentialTrend(values) {
-      const recent = values
-        .map(Number)
-        .filter(Number.isFinite)
-        .slice(-3);
 
-      if (recent.length < 3) return "insufficient";
+    function getSequentialTrend(values) {
+      const valid =
+        values
+          .map(Number)
+          .filter(Number.isFinite)
+          .slice(-3);
+
+      if (valid.length < 3) return "insufficient";
 
       if (
-        recent[0] < recent[1] &&
-        recent[1] < recent[2]
+        valid[0] < valid[1] &&
+        valid[1] < valid[2]
       ) {
         return "up";
       }
 
       if (
-        recent[0] > recent[1] &&
-        recent[1] > recent[2]
+        valid[0] > valid[1] &&
+        valid[1] > valid[2]
       ) {
         return "down";
       }
 
       return "mixed";
+    }
+
+    function isWeakProfile(profileId) {
+      return [
+        "priority_support",
+        "foundation",
+        "foundation_declining",
+        "foundation_recovering",
+        "declining"
+      ].includes(profileId);
+    }
+
+    function getTrendStats(values) {
+      const valid =
+        values
+          .map(Number)
+          .filter(Number.isFinite);
+
+      const last3 = valid.slice(-3);
+      const latest = valid.at(-1);
+      const previous =
+        valid.length >= 2 ? valid.at(-2) : latest;
+      const beforePrevious =
+        valid.length >= 3 ? valid.at(-3) : previous;
+
+      const latestChange =
+        Number.isFinite(latest) &&
+        Number.isFinite(previous)
+          ? latest - previous
+          : 0;
+
+      const previousChange =
+        Number.isFinite(previous) &&
+        Number.isFinite(beforePrevious)
+          ? previous - beforePrevious
+          : 0;
+
+      const recentTrend =
+        last3.length >= 2
+          ? last3.at(-1) - last3[0]
+          : 0;
+
+      const recentSlope =
+        last3.length >= 2
+          ? recentTrend / (last3.length - 1)
+          : 0;
+
+      const early =
+        valid.length >= 4
+          ? valid.slice(0,Math.ceil(valid.length / 2))
+          : valid.slice(0,-1);
+
+      const late =
+        valid.length >= 4
+          ? valid.slice(Math.floor(valid.length / 2))
+          : valid.slice(-2);
+
+      const earlyMean = mean(early);
+      const lateMean = mean(late);
+
+      const halfChange =
+        Number.isFinite(earlyMean) &&
+        Number.isFinite(lateMean)
+          ? lateMean - earlyMean
+          : 0;
+
+      return {
+        latest,
+        previous,
+        beforePrevious,
+        latestChange,
+        previousChange,
+        recentTrend,
+        recentSlope,
+        earlyMean,
+        lateMean,
+        halfChange
+      };
+    }
+
+    function buildLearningTraits(data) {
+      const traits = [];
+
+      const add =
+        (id,label,weight=0) =>
+          traits.push({id,label,weight});
+
+      const {
+        historicalAverage,
+        recentTrend,
+        latestChange,
+        previousChange,
+        classDiff,
+        latestClassDiff,
+        volatility,
+        latestVsSelf,
+        sequentialTrend,
+        halfChange
+      } = data;
+
+      if (sequentialTrend === "up") {
+        add("continuous_up","近三次連續上升",12);
+      }
+
+      if (sequentialTrend === "down") {
+        add("continuous_down","近三次連續下降",20);
+      }
+
+      if (recentTrend >= 8) {
+        add("strong_up","近期明顯進步",12);
+      } else if (recentTrend >= 3) {
+        add("mild_up","近期緩步進步",6);
+      }
+
+      if (recentTrend <= -8) {
+        add("strong_down","近期明顯下降",20);
+      } else if (recentTrend <= -3) {
+        add("mild_down","近期緩步下降",10);
+      }
+
+      if (
+        latestChange >= 5 &&
+        previousChange < 0
+      ) {
+        add("rebound","最近一次回升",8);
+      }
+
+      if (
+        latestChange <= -5 &&
+        previousChange > 0
+      ) {
+        add("turn_down","最近一次轉為下降",12);
+      }
+
+      if (latestVsSelf <= -8) {
+        add("below_self","最近一次明顯低於個人常態",12);
+      }
+
+      if (latestVsSelf >= 8) {
+        add("above_self","最近一次明顯高於個人常態",6);
+      }
+
+      if (volatility >= 10) {
+        add("volatile","歷次波動偏大",12);
+      } else if (volatility <= 5) {
+        add("stable_scores","歷次表現穩定",-4);
+      }
+
+      if (classDiff >= 8) {
+        add("above_class","長期高於班平均",-6);
+      } else if (classDiff <= -8) {
+        add("below_class","長期低於班平均",12);
+      }
+
+      if (latestClassDiff >= 8) {
+        add("latest_above_class","本次高於班平均",-3);
+      } else if (latestClassDiff <= -8) {
+        add("latest_below_class","本次低於班平均",8);
+      }
+
+      if (
+        historicalAverage < 70 &&
+        recentTrend >= 5
+      ) {
+        add(
+          "weak_but_improving",
+          "基礎仍需補強但方向向上",
+          4
+        );
+      }
+
+      if (
+        historicalAverage >= 80 &&
+        recentTrend <= -5
+      ) {
+        add(
+          "strong_but_declining",
+          "原有基礎不差但近期下滑",
+          14
+        );
+      }
+
+      if (
+        historicalAverage >= 85 &&
+        volatility <= 6
+      ) {
+        add("stable_high","高分且穩定",-10);
+      }
+
+      if (
+        historicalAverage >= 70 &&
+        historicalAverage < 85 &&
+        Math.abs(recentTrend) < 5 &&
+        volatility < 8
+      ) {
+        add("stable_middle","中段穩定",0);
+      }
+
+      if (halfChange >= 8) {
+        add("long_term_up","前後期比較明顯進步",8);
+      }
+
+      if (halfChange <= -8) {
+        add("long_term_down","前後期比較明顯下降",14);
+      }
+
+      return traits.sort(
+        (a,b) => b.weight - a.weight
+      );
     }
 
     function classifyLearningProfile(data) {
@@ -830,7 +1345,6 @@
         recentTrend,
         classDiff,
         volatility,
-        range,
         latestVsSelf,
         sequentialTrend
       } = data;
@@ -842,10 +1356,42 @@
       ) {
         return {
           id:"priority_support",
-          name:"需要優先補強",
+          name:"需要優先補強型",
+          priority:100,
           description:
-            "目前不只是一次考試較低，歷次表現也顯示這一科需要先把基礎重新整理。",
-          priority:100
+            "歷次表現與班級相對位置都偏弱，近期也還沒有形成明顯改善，這一科需要先把核心基礎重新建立。"
+        };
+      }
+
+      if (
+        historicalAverage < 70 &&
+        (
+          sequentialTrend === "down" ||
+          recentTrend <= -5
+        )
+      ) {
+        return {
+          id:"foundation_declining",
+          name:"基礎補強＋近期下降型",
+          priority:96,
+          description:
+            "原本基礎還沒有完全穩固，最近又出現下降，需要先找出下滑原因，再補真正會影響下一次段考的基礎。"
+        };
+      }
+
+      if (
+        historicalAverage < 70 &&
+        (
+          sequentialTrend === "up" ||
+          recentTrend >= 5
+        )
+      ) {
+        return {
+          id:"foundation_recovering",
+          name:"基礎補強＋正在回升型",
+          priority:76,
+          description:
+            "整體基礎還需要補強，但最近已經往上，代表目前有些方法是有效的；只補真正卡住的地方，不需要全部重學。"
         };
       }
 
@@ -853,9 +1399,25 @@
         return {
           id:"foundation",
           name:"基礎補強型",
+          priority:85,
           description:
-            "現階段先把基本知識與常見錯誤補穩，比直接做很多難題更重要。",
-          priority:85
+            "先把下一次段考會直接用到的基礎、基本題與固定錯誤補穩，再逐步增加變化題。"
+        };
+      }
+
+      if (
+        historicalAverage >= 80 &&
+        (
+          sequentialTrend === "down" ||
+          recentTrend <= -6
+        )
+      ) {
+        return {
+          id:"strong_declining",
+          name:"原有優勢但近期下滑型",
+          priority:78,
+          description:
+            "原本能力並不差，但最近明顯下滑，應先確認是不是新單元、準備節奏或考試失誤造成。"
         };
       }
 
@@ -866,22 +1428,19 @@
         return {
           id:"declining",
           name:"近期下降型",
+          priority:90,
           description:
-            "最近幾次有明顯下降，要先找出是哪些內容或讀書方式造成，而不是只增加題量。",
-          priority:90
+            "最近已形成下降趨勢，要先診斷原因，再決定是補基礎、修正錯題或調整複習方式。"
         };
       }
 
-      if (
-        volatility >= 10 ||
-        range >= 25
-      ) {
+      if (volatility >= 10) {
         return {
           id:"volatile",
           name:"波動調整型",
+          priority:72,
           description:
-            "能力不一定不足，但每次表現差距較大，重點是讓平常準備與考試表現更穩定。",
-          priority:72
+            "能力不一定不足，但每次表現起伏較大，要建立固定節奏，減少粗心、遺忘與考試狀態造成的落差。"
         };
       }
 
@@ -892,9 +1451,9 @@
         return {
           id:"improving",
           name:"穩定進步型",
+          priority:48,
           description:
-            "最近幾次持續往上，目前的學習方式正在產生效果，可以維持並逐步提高題目難度。",
-          priority:48
+            "最近持續往上，目前的學習方式正在產生效果；下一階段保留節奏，再增加適量整合與變化題。"
         };
       }
 
@@ -905,9 +1464,9 @@
         return {
           id:"advanced",
           name:"高分精進型",
+          priority:25,
           description:
-            "基本能力已有一定程度，下一階段應把時間放在整合題、速度與容易失分的細節。",
-          priority:25
+            "基本能力相對完整，下一階段把重點放在整合、速度、推論與較高層次的應用。"
         };
       }
 
@@ -915,9 +1474,9 @@
         return {
           id:"class_strength",
           name:"相對優勢型",
+          priority:30,
           description:
-            "這一科長期高於班級平均，維持正常複習即可，把更多時間留給其他需要改善的科目。",
-          priority:30
+            "這一科長期相對班平均有優勢，維持正常複習即可，把更多額外時間留給真正需要改善的科目。"
         };
       }
 
@@ -925,156 +1484,214 @@
         return {
           id:"recent_drop",
           name:"單次失常觀察型",
+          priority:68,
           description:
-            "平常能力並不差，但最近一次明顯低於自己的正常表現，需要找出這次失分原因。",
-          priority:68
+            "最近一次明顯低於自己的正常表現，先確認是不是本次單元、粗心、時間分配或準備不足造成。"
         };
       }
 
       return {
         id:"stable",
         name:"穩定發展型",
+        priority:45,
         description:
-          "整體沒有明顯下降或大幅波動，持續維持固定複習並改善固定失分即可。",
-        priority:45
+          "整體沒有明顯下降或大幅波動，維持現在的節奏，針對固定失分逐步提高正確率即可。"
       };
     }
 
     function buildAnalyses(records,nextExam) {
-      return SUBJECTS.map(subject => {
-        const scores = [];
-        const classDiffs = [];
+      return SUBJECTS.map(
+        subject => {
+          const scores = [];
+          const classDiffs = [];
 
-        records.forEach(record => {
-          const score = Number(record.result[subject.key]);
-          const classAverage = Number(record.exam[subject.avgKey]);
+          records.forEach(
+            record => {
+              const score =
+                Number(
+                  record.result[subject.key]
+                );
 
-          if (Number.isFinite(score)) {
-            scores.push(score);
-          }
+              const classAverage =
+                Number(
+                  record.exam[subject.avgKey]
+                );
 
-          if (
-            Number.isFinite(score) &&
-            Number.isFinite(classAverage)
-          ) {
-            classDiffs.push(score - classAverage);
-          }
-        });
+              if (Number.isFinite(score)) {
+                scores.push(score);
+              }
 
-        const latest =
-          scores.length ? scores[scores.length - 1] : null;
+              if (
+                Number.isFinite(score) &&
+                Number.isFinite(classAverage)
+              ) {
+                classDiffs.push(
+                  score - classAverage
+                );
+              }
+            }
+          );
 
-        const previous =
-          scores.length >= 2 ? scores[scores.length - 2] : latest;
+          const trend =
+            getTrendStats(scores);
 
-        const historicalAverage =
-          mean(scores) ?? 0;
+          const latest =
+            trend.latest;
 
-        const recent =
-          scores.slice(-3);
+          const previous =
+            trend.previous;
 
-        const recentTrend =
-          recent.length >= 2
-            ? recent[recent.length - 1] - recent[0]
-            : 0;
+          const average =
+            mean(scores) ?? 0;
 
-        const latestChange =
-          Number.isFinite(latest) &&
-          Number.isFinite(previous)
-            ? latest - previous
-            : 0;
+          const recentTrend =
+            trend.recentTrend;
 
-        const classDiff =
-          mean(classDiffs) ?? 0;
+          const latestChange =
+            trend.latestChange;
 
-        const volatility =
-          standardDeviation(scores);
+          const classDiff =
+            mean(classDiffs) ?? 0;
 
-        const range =
-          scores.length
-            ? Math.max(...scores) - Math.min(...scores)
-            : 0;
+          const latestClassDiff =
+            classDiffs.length
+              ? classDiffs.at(-1)
+              : 0;
 
-        const latestVsSelf =
-          Number.isFinite(latest)
-            ? latest - historicalAverage
-            : 0;
+          const volatility =
+            standardDeviation(scores);
 
-        const sequentialTrend =
-          getSequentialTrend(scores);
+          const range =
+            scores.length
+              ? Math.max(...scores) - Math.min(...scores)
+              : 0;
 
-        const profile =
-          classifyLearningProfile({
+          const latestVsSelf =
+            Number.isFinite(latest)
+              ? latest - average
+              : 0;
+
+          const sequentialTrend =
+            getSequentialTrend(scores);
+
+          const data = {
             latest,
-            historicalAverage,
+            historicalAverage:average,
             recentTrend,
             latestChange,
+            previousChange:trend.previousChange,
             classDiff,
+            latestClassDiff,
             volatility,
             range,
             latestVsSelf,
-            sequentialTrend
-          });
+            sequentialTrend,
+            halfChange:trend.halfChange
+          };
 
-        return {
-          ...subject,
-          scores,
-          latest,
-          previous,
-          average:historicalAverage,
-          recentTrend,
-          latestChange,
-          classDiff,
-          volatility,
-          range,
-          latestVsSelf,
-          sequentialTrend,
-          profile,
+          const profile =
+            classifyLearningProfile(data);
+
+          const traits =
+            buildLearningTraits(data);
+
+          return {
+            ...subject,
+            scores,
+            latest,
+            previous,
+            average,
+            recentTrend,
+            latestChange,
+            previousChange:trend.previousChange,
+            classDiff,
+            latestClassDiff,
+            volatility,
+            range,
+            latestVsSelf,
+            sequentialTrend,
+            halfChange:trend.halfChange,
+            recentSlope:trend.recentSlope,
+            profile,
+            traits,
+            nextExam
+          };
+        }
+      );
+    }
+
+    function curriculumBridgeText(analysis,nextExam) {
+      const context =
+        getCurriculumContext(
+          analysis.key,
           nextExam
-        };
-      });
-    }
+        );
 
-    function practiceRatio(analysis) {
-      switch (analysis.profile.id) {
-        case "priority_support":
-          return {foundation:55,correction:30,challenge:15};
-
-        case "foundation":
-          return {foundation:50,correction:30,challenge:20};
-
-        case "declining":
-          return {foundation:30,correction:45,challenge:25};
-
-        case "volatile":
-          return {foundation:30,correction:40,challenge:30};
-
-        case "improving":
-          return {foundation:30,correction:25,challenge:45};
-
-        case "advanced":
-          return {foundation:15,correction:20,challenge:65};
-
-        case "class_strength":
-          return {foundation:20,correction:20,challenge:60};
-
-        case "recent_drop":
-          return {foundation:25,correction:50,challenge:25};
-
-        default:
-          return {foundation:30,correction:30,challenge:40};
+      if (!context) {
+        return "目前尚未建立這個階段的教材範圍對照，所以先依歷次成績、近期趨勢與班平均來判讀。";
       }
+
+      const focus =
+        context.focus.join("、");
+
+      if (
+        analysis.key === "math" &&
+        context.prereq
+      ) {
+        const prereq =
+          context.prereq.join("、");
+
+        if (
+          isWeakProfile(
+            analysis.profile.id
+          )
+        ) {
+          return `下一次數學範圍是「${context.scope}」。先不要急著大量做難題，先檢查 ${prereq}，因為這些能力會直接影響 ${focus}。`;
+        }
+
+        return `下一次數學範圍是「${context.scope}」。七年級基礎如果已穩定，可以把練習重心直接放在 ${focus}，並用限時混合題檢查公式辨識、運算速度與步驟完整度。`;
+      }
+
+      if (analysis.key === "english") {
+        return `下一次英文是翰林版「${context.scope}」，重點包含：${focus}。準備時會分成單字、句型、文法與閱讀四類，不只看英文總分。`;
+      }
+
+      if (analysis.key === "chinese") {
+        return `下一次國文是翰林版「${context.scope}」，重點包含：${focus}。複習時要把課內字詞與課文理解、語文常識、閱讀推論分開檢查。`;
+      }
+
+      if (analysis.key === "science") {
+        return `下一次自然是翰林版「${context.scope}」，重點包含：${focus}。準備時會把概念、實驗／操作、圖表與計算分開檢查。`;
+      }
+
+      if (analysis.key === "social") {
+        return `下一次社會是康軒版「${context.scope}」，內容包含：${focus}。歷史、地理、公民要分開準備，再用混合題確認情境判讀能力。`;
+      }
+
+      return `下一次範圍是「${context.scope}」，重點為 ${focus}。`;
     }
 
-    function familyDiagnosis(analysis) {
+    function familyDiagnosis(analysis,nextExam) {
       const parts = [];
 
       parts.push(
-        `目前屬於「${analysis.profile.name}」。`
+        `目前屬於「${analysis.profile.name}」。${analysis.profile.description}`
       );
 
+      const traitText =
+        analysis.traits
+          .slice(0,4)
+          .map(item => item.label)
+          .join("、");
+
+      if (traitText) {
+        parts.push(
+          `目前還有「${traitText}」等個人特徵。`
+        );
+      }
+
       parts.push(
-        analysis.profile.description
+        `最近一次 ${formatScore(analysis.latest)} 分，歷次平均 ${formatScore(analysis.average)} 分。`
       );
 
       if (analysis.recentTrend >= 5) {
@@ -1083,11 +1700,29 @@
         );
       } else if (analysis.recentTrend <= -5) {
         parts.push(
-          `最近三次整體下降約 ${formatScore(Math.abs(analysis.recentTrend))} 分，建議不要只當成一次失常。`
+          `最近三次整體下降約 ${formatScore(Math.abs(analysis.recentTrend))} 分，不建議只把它當成一次失常。`
         );
       } else {
         parts.push(
-          "最近幾次變化不大，可以把重點放在固定錯誤與學習穩定度。"
+          "最近三次變化不大，目前更值得處理的是固定錯誤與穩定度。"
+        );
+      }
+
+      if (
+        analysis.latestChange >= 5 &&
+        analysis.previousChange < 0
+      ) {
+        parts.push(
+          `最近一次較前次回升 ${formatScore(analysis.latestChange)} 分，表示已有修正跡象，不需要把原本有效的方法全部推翻。`
+        );
+      }
+
+      if (
+        analysis.latestChange <= -5 &&
+        analysis.previousChange > 0
+      ) {
+        parts.push(
+          `最近一次在前次回升後又下降 ${formatScore(Math.abs(analysis.latestChange))} 分，要特別留意讀書節奏是否不穩。`
         );
       }
 
@@ -1097,307 +1732,1024 @@
         );
       } else if (analysis.classDiff <= -5) {
         parts.push(
-          `歷次平均約低於班平均 ${formatScore(Math.abs(analysis.classDiff))} 分，需要先把基本能力缺口補起來。`
-        );
-      } else {
-        parts.push(
-          "整體大致落在班級平均附近。"
+          `歷次平均約低於班平均 ${formatScore(Math.abs(analysis.classDiff))} 分。`
         );
       }
+
+      if (analysis.volatility >= 10) {
+        parts.push(
+          "歷次成績波動偏大，建議加入固定短測，讓每次表現逐漸穩定。"
+        );
+      }
+
+      parts.push(
+        curriculumBridgeText(
+          analysis,
+          nextExam
+        )
+      );
 
       return parts.join("");
     }
 
-    function getChinesePrescription(a) {
-      if (["priority_support","foundation"].includes(a.profile.id)) {
-        return [
-          "先拿以前的國文考卷，把錯題分成「字音字形／詞語成語、課文與注釋、語文常識、閱讀理解」四類，找出最常失分的類型。",
-          "課內內容不要一次全部重背；每天用 10～15 分鐘複習一課的重點字詞、注釋與主旨。",
-          "每週至少做 2 篇短篇閱讀，每一題訂正時都要在文章裡找出答案依據。",
-          "如果閱讀題常錯，不要只抄答案；要說明是「沒讀懂題目、找錯段落、還是推論錯誤」。"
-        ];
-      }
-
-      if (a.profile.id === "declining") {
-        return [
-          "先比較最近兩次國文考卷，確認下降主要來自課內題還是閱讀題。",
-          "若課內題失分增加，就先補字詞、注釋、課文主旨；若閱讀題下降，就把時間移到短篇閱讀與答案依據練習。",
-          "最近兩次錯過的題型先重做一次，不急著大量增加新題。",
-          "每週至少安排一次 20 分鐘的國文綜合複習。"
-        ];
-      }
-
-      if (["advanced","class_strength"].includes(a.profile.id)) {
-        return [
-          "課內基本題維持即可，不需要花大量時間重複抄寫。",
-          "把更多時間放在長篇閱讀、文意推論、修辭判讀與跨文本比較。",
-          "閱讀練習加入時間限制，除了做對，也要提高判斷速度。",
-          "考前整理最容易混淆的字詞與語文常識，避免高分學生因小地方失分。"
-        ];
-      }
-
-      return [
-        "每週固定整理本週課文的字詞、注釋與主旨。",
-        "每週至少 2 篇閱讀理解，訂正時找出答案依據。",
-        "將錯題分成課內與閱讀兩類，看看哪一類最常重複出錯。",
-        "考前不要只重新看答案，要把曾經錯過的題目再做一次。"
-      ];
-    }
-
-    function getEnglishPrescription(a) {
-      if (["priority_support","foundation"].includes(a.profile.id)) {
-        return [
-          "把英文分成「單字、片語、文法句型、閱讀」四部分，不要只把全部時間拿來背單字。",
-          "每天 10～15 分鐘背少量單字，隔天先測昨天的字，再加入新的。",
-          "每個文法重點至少自己造 3 句，能自己寫出句子才算真的會用。",
-          "每週至少 2 篇短篇閱讀；先看題目，再回文章找關鍵句。",
-          "把考卷文法錯題整理成自己的文法錯題表，同類錯誤不要重複發生。"
-        ];
-      }
-
-      if (a.profile.id === "declining") {
-        return [
-          "先確認近期下降主要是單字忘記、文法混淆，還是閱讀速度不夠。",
-          "最近兩次考卷的文法錯題，要把正確句型重新寫一次。",
-          "維持每天少量英文接觸，不改成考前一週才大量背誦。",
-          "每週安排一次 15～20 分鐘限時閱讀，檢查時間是否足夠。"
-        ];
-      }
-
-      if (["advanced","class_strength"].includes(a.profile.id)) {
-        return [
-          "單字與基本文法維持即可，把時間增加在閱讀速度、長句判讀與文意推論。",
-          "文法練習改用句型轉換與混合題，不需要大量重做單一基本題。",
-          "每週至少一次限時閱讀，錯題再判斷是單字、句構或推論造成。",
-          "考前特別整理容易混淆的文法與例外用法。"
-        ];
-      }
-
-      return [
-        "每天維持 10～15 分鐘單字回測。",
-        "每週挑 2 個文法重點，各自造 3～5 句。",
-        "每週至少完成 2 篇閱讀。",
-        "英文錯題要標明是單字、文法還是閱讀造成。"
-      ];
-    }
-
-    function getMathPrescription(a) {
-      if (["priority_support","foundation"].includes(a.profile.id)) {
-        return [
-          "先檢查七年級先備能力：正負數與分數運算、代數式、一元一次方程式、比例與文字題。",
-          "某一類基本題若連續錯 3 題以上，先回課本例題與基本題，不急著做難題。",
-          "每一道數學錯題都標記原因：①觀念不懂 ②計算錯誤 ③看錯題意 ④步驟不完整。",
-          "每週至少安排 3 次，每次約 25～30 分鐘。",
-          "同類基本題連續兩次正確率達約 80% 以上後，再增加變化題。"
-        ];
-      }
-
-      if (a.profile.id === "declining") {
-        return [
-          "先把最近兩次數學考卷依單元分類，找出下降集中在哪一類題目。",
-          "不要直接把題量加倍；先確認是運算、觀念、題意轉譯還是粗心造成。",
-          "每週安排一次「只重做錯題」，直到可以不看解答完成。",
-          "補舊內容的同時要維持八年級新課進度，避免形成新的落差。"
-        ];
-      }
-
-      if (a.profile.id === "improving") {
-        return [
-          "目前的數學方法有效，先維持原本節奏。",
-          "基本題比例可以降低，逐步增加變化題、文字題與需要多步驟思考的題目。",
-          "每週挑 2 題較完整的題目，練習自己說明每一步為什麼可以這樣做。",
-          "保留固定錯題回顧，避免以前的錯誤重新出現。"
-        ];
-      }
-
-      if (["advanced","class_strength"].includes(a.profile.id)) {
-        return [
-          "減少大量重複基本題，把時間放在變化題、素養題與多步驟問題。",
-          "每次失分要分清楚是粗心計算還是解題策略問題。",
-          "每週一次限時混合題，訓練速度與穩定度。",
-          "除了做對，也要能說明解題理由與使用的概念。"
-        ];
-      }
-
-      return [
-        "每週安排 3 次數學：一次新觀念與基本題、一次變化題、一次錯題。",
-        "每一道錯題標記失分原因，不只抄正確答案。",
-        "每週至少挑 1～2 題重新說明完整解法。",
-        "段考前一週完成一次限時混合練習。"
-      ];
-    }
-
-    function getSciencePrescription(a) {
-      if (["priority_support","foundation"].includes(a.profile.id)) {
-        return [
-          "每個自然概念都要能回答三件事：「是什麼？為什麼？條件改變後會怎樣？」。",
-          "實驗題固定整理：目的、操作變因、控制變因、應變變因、結果與結論。",
-          "公式計算題固定寫「已知量 → 公式 → 代入 → 單位」。",
-          "圖表題先看橫軸、縱軸、單位和變化方向，再看選項。",
-          "如果基本概念題仍常錯，先回課本圖解與實驗，不要直接大量刷進階題。"
-        ];
-      }
-
-      if (a.profile.id === "declining") {
-        return [
-          "先確認下降是否從某個新單元開始，再決定要補哪一章。",
-          "把最近錯題分成「概念、實驗、圖表、計算」四類。",
-          "每週至少重新整理一個最近學過的實驗。",
-          "新單元先理解原因與結果，再記名詞，不要只背結論。"
-        ];
-      }
-
-      if (["advanced","class_strength"].includes(a.profile.id)) {
-        return [
-          "基本名詞與課文維持即可，把更多時間放在實驗設計、圖表判讀與跨概念整合。",
-          "練習從題目條件推論結果，不只記課本結論。",
-          "計算題要保持完整單位與步驟，避免小地方失分。",
-          "每週完成一次自然混合題，維持整體判讀能力。"
-        ];
-      }
-
-      return [
-        "每週整理本週 2～3 個核心概念。",
-        "每週至少重新看一次實驗或圖表。",
-        "計算題維持完整公式與單位。",
-        "錯題要分清楚是概念、實驗、讀圖或計算造成。"
-      ];
-    }
-
-    function getSocialPrescription(a) {
-      if (["priority_support","foundation"].includes(a.profile.id)) {
-        return [
-          "先把社會分成歷史、地理、公民，確認主要失分在哪一部分，不要三科都只用背誦。",
-          "歷史：用時間軸整理「原因 → 事件 → 結果 → 影響」。",
-          "地理：每章至少整理一次地圖、位置、氣候或統計圖。",
-          "公民：把容易混淆的概念做成兩欄比較表。",
-          "每次情境題做錯，都圈出題幹中真正決定答案的關鍵詞。"
-        ];
-      }
-
-      if (a.profile.id === "declining") {
-        return [
-          "比較最近兩次段考，確認下降主要在歷史、地理還是公民。",
-          "先補下降最明顯的領域，不要全部重新背一次。",
-          "情境題訂正時找題幹關鍵詞，不只抄選項答案。",
-          "每週做一次歷史、地理、公民混合題，確認不是只熟悉單一章節。"
-        ];
-      }
-
-      if (["advanced","class_strength"].includes(a.profile.id)) {
-        return [
-          "基本記憶維持即可，把更多時間放在跨章節比較、圖表資料判讀與長篇情境題。",
-          "歷史除了事件本身，要能比較前因後果。",
-          "地理與公民加強「從資料推論」，不只背課本文字。",
-          "考前整理最容易混淆的概念與相似制度。"
-        ];
-      }
-
-      return [
-        "歷史用時間軸整理前因後果。",
-        "地理固定練地圖與圖表判讀。",
-        "公民把容易混淆的概念做比較表。",
-        "每週完成一次歷史、地理、公民混合題。"
-      ];
-    }
-
-    function getSubjectPrescription(analysis) {
-      switch (analysis.key) {
-        case "chinese":
-          return getChinesePrescription(analysis);
-
-        case "english":
-          return getEnglishPrescription(analysis);
-
-        case "math":
-          return getMathPrescription(analysis);
-
-        case "science":
-          return getSciencePrescription(analysis);
-
-        case "social":
-          return getSocialPrescription(analysis);
-
-        default:
-          return [];
-      }
-    }
-
-    function getFourWeekPlan(analysis,nextExam) {
-      const ratio = practiceRatio(analysis);
-      const target = nextExam ? nextExam.shortTitle : "下一次段考";
+    function practiceRatio(analysis) {
+      let foundation = 30;
+      let correction = 30;
+      let challenge = 40;
 
       switch (analysis.profile.id) {
         case "priority_support":
+          foundation = 55;
+          correction = 35;
+          challenge = 10;
+          break;
+
+        case "foundation_declining":
+          foundation = 50;
+          correction = 40;
+          challenge = 10;
+          break;
+
+        case "foundation_recovering":
+          foundation = 45;
+          correction = 30;
+          challenge = 25;
+          break;
+
         case "foundation":
-          return [
-            "第1週：用以前考卷找出最常錯的 2～3 類能力。",
-            `第2週：練習比例以基礎 ${ratio.foundation}%、錯題修正 ${ratio.correction}%、變化題 ${ratio.challenge}% 為主。`,
-            "第3週：基本內容穩定後，再加入本階段新課與變化題。",
-            "第4週：完成一次限時練習，只整理仍會重複出現的錯誤。"
-          ];
+          foundation = 50;
+          correction = 30;
+          challenge = 20;
+          break;
+
+        case "strong_declining":
+          foundation = 20;
+          correction = 50;
+          challenge = 30;
+          break;
 
         case "declining":
-          return [
-            "第1週：比較最近兩次考卷，找出下降開始的內容與題型。",
-            `第2週：把大約 ${ratio.foundation + ratio.correction}% 的時間放在薄弱內容與錯題。`,
-            "第3週：加入新課，確認補舊內容時沒有落下目前進度。",
-            "第4週：用混合題檢查下降問題是否改善。"
-          ];
-
-        case "improving":
-          return [
-            "第1週：保留目前有效的讀書方式。",
-            `第2週：將變化與進階題比例提高到約 ${ratio.challenge}%。`,
-            "第3週：加入限時練習，確認速度與正確率。",
-            "第4週：只精修仍會錯的題目，不大量重做已熟練內容。"
-          ];
-
-        case "advanced":
-        case "class_strength":
-          return [
-            "第1週：確認基本題沒有因為太熟而出現粗心失分。",
-            `第2週：變化與進階內容約占 ${ratio.challenge}% 的練習時間。`,
-            "第3週：加入限時與跨單元整合練習。",
-            "第4週：只複習高頻錯誤與進階題，不重新刷大量基本題。"
-          ];
+          foundation = 30;
+          correction = 45;
+          challenge = 25;
+          break;
 
         case "volatile":
-          return [
-            "第1週：回看歷次高低分，找出波動和單元、粗心或準備方式的關係。",
-            "第2週：建立固定複習節奏，不要有時完全不讀、有時突然大量練習。",
-            "第3週：用兩次短測驗檢查同樣內容是否能維持相近表現。",
-            "第4週：考前維持平常節奏，不做過量臨時衝刺。"
-          ];
+          foundation = 25;
+          correction = 45;
+          challenge = 30;
+          break;
 
-        default:
-          return [
-            "第1週：整理目前弱點與最近錯題。",
-            "第2週：維持新課同步並改善最常出現的失分。",
-            "第3週：增加變化題與整合題。",
-            `第4週：完成一次 ${target} 前的限時檢核。`
-          ];
+        case "improving":
+          foundation = 25;
+          correction = 25;
+          challenge = 50;
+          break;
+
+        case "advanced":
+          foundation = 10;
+          correction = 20;
+          challenge = 70;
+          break;
+
+        case "class_strength":
+          foundation = 15;
+          correction = 20;
+          challenge = 65;
+          break;
+
+        case "recent_drop":
+          foundation = 20;
+          correction = 55;
+          challenge = 25;
+          break;
       }
+
+      if (
+        analysis.traits.some(
+          item => item.id === "below_class"
+        )
+      ) {
+        foundation += 5;
+      }
+
+      if (
+        analysis.traits.some(
+          item => item.id === "volatile"
+        )
+      ) {
+        correction += 5;
+      }
+
+      if (
+        analysis.traits.some(
+          item =>
+            item.id === "strong_down" ||
+            item.id === "continuous_down"
+        )
+      ) {
+        correction += 5;
+      }
+
+      if (
+        analysis.traits.some(
+          item =>
+            item.id === "strong_up" ||
+            item.id === "continuous_up"
+        )
+      ) {
+        challenge += 5;
+      }
+
+      if (
+        analysis.traits.some(
+          item => item.id === "stable_high"
+        )
+      ) {
+        challenge += 5;
+      }
+
+      const total =
+        foundation +
+        correction +
+        challenge;
+
+      foundation =
+        Math.round(
+          (foundation / total) * 20
+        ) * 5;
+
+      correction =
+        Math.round(
+          (correction / total) * 20
+        ) * 5;
+
+      challenge =
+        100 -
+        foundation -
+        correction;
+
+      if (challenge < 10) {
+        challenge = 10;
+
+        correction =
+          Math.max(
+            20,
+            100 - foundation - challenge
+          );
+      }
+
+      return {
+        foundation,
+        correction,
+        challenge
+      };
+    }
+
+    function scopeSpecificActions(analysis,nextExam) {
+      const context =
+        getCurriculumContext(
+          analysis.key,
+          nextExam
+        );
+
+      if (!context) return [];
+
+      const weak =
+        isWeakProfile(
+          analysis.profile.id
+        );
+
+      const examNo =
+        Number(nextExam.examNo);
+
+      if (analysis.key === "math") {
+        if (examNo === 1) {
+          return weak
+            ? [
+                "先用 12～15 題先備診斷檢查：分配律、去括號、同類項、正負號與平方；任一類正確率未達 80%，先補該類再進入乘法公式。",
+                "乘法公式不可只背公式：每一種公式都要做「辨識公式→展開→反向檢查」，確認真的看得出題型。",
+                "多項式加減乘除每次計算都要讓同類項對齊，錯題特別檢查負號、漏項與指數。",
+                "2-1 平方根先分清楚「平方根、正平方根、根號」的差異，避免只會機械計算。"
+              ]
+            : [
+                "乘法公式直接進入混合辨識題，避免只做單一公式的重複題。",
+                "多項式乘除加入限時練習，檢查正負號、漏項與計算速度。",
+                "2-1 平方根加入概念判斷與數線估值題，確認不是只有機械計算。"
+              ];
+        }
+
+        if (examNo === 2) {
+          return weak
+            ? [
+                "先回測 2-1 平方根概念與第1章乘法公式，因為根式運算與因式分解會直接用到。",
+                "2-2 根式運算分成化簡、乘除、加減三類，各類至少連續兩次達 80% 正確率。",
+                "畢氏定理固定先畫圖、標直角、辨識斜邊，再代公式，避免公式會背但邊判斷錯。",
+                "因式分解要一起練「提公因式／公式／十字交乘」的辨識，看到題目先說出要選哪一法。"
+              ]
+            : [
+                "根式運算加入多步驟與混合題。",
+                "畢氏定理加入情境與逆向求邊題。",
+                "因式分解用混合題訓練方法辨識，不按章節提示解題。"
+              ];
+        }
+
+        return weak
+          ? [
+              "先回測因式分解與一元一次方程式的移項、等量與代數運算。",
+              "一元二次方程式先做到能辨識因式分解法、配方法、公式解的使用時機。",
+              "應用題固定寫未知數、列式、解方程式、檢驗答案四步驟。",
+              "統計資料處理要練表格／圖表讀取與數據比較，不只計算平均。"
+            ]
+          : [
+              "一元二次方程式以混合解法與應用題為主。",
+              "每題解完要檢查根是否符合題意，避免方程式算對但情境答錯。",
+              "統計加入圖表與資料判讀題，訓練比較與說明。"
+            ];
+      }
+
+      if (analysis.key === "english") {
+        if (examNo === 1) {
+          return [
+            "Unit 1：How／What 問天氣與天氣描述要做問答互換；能看到中文情境自己寫出完整英文問句與答句。",
+            "授與動詞至少整理 give／send／show／teach 等常見句型，練「人＋物」與「物＋介系詞＋人」改寫。",
+            "Unit 2：after／before／when 要練兩子句前後關係與逗號位置；所有格代名詞要和所有格形容詞做成對照表。",
+            "每週至少一篇 Unit 1–2 主題閱讀，錯題標記是單字、文法還是句意判讀。"
+          ];
+        }
+
+        if (examNo === 2) {
+          return [
+            "過去進行式要和過去式一起比較，特別練「某動作進行時另一件事發生」的情境。",
+            "時間副詞與 at／when 等線索要先圈出，再決定時態。",
+            "不定詞與動名詞作受詞要整理常見動詞搭配；每組至少自己造句。",
+            "虛主詞 it 與動名詞作主詞做句型改寫練習。"
+          ];
+        }
+
+        return [
+          "Unit 5 交通方式與方向指示要做地圖情境題，不只背片語。",
+          "Unit 6 未來式要能依時間線索判斷 will／be going to 等表達。",
+          "cost／spend／pay 與 take／spend 要做主詞、介系詞與時間／金錢的句型對照。",
+          "每週至少一篇購物或旅行情境閱讀並限時完成。"
+        ];
+      }
+
+      if (analysis.key === "chinese") {
+        if (examNo === 1) {
+          return [
+            "第1～3課每課做一張「主旨／人物或景物／重要字詞／寫作特色」摘要。",
+            "古詩至少做到逐句語譯、意象、情感與關鍵字判讀，不只背原文。",
+            "語法（上）詞類要從句子中實際辨識名詞、動詞、形容詞等，不能只背定義。",
+            "每週兩篇閱讀理解，訂正時標示答案依據句。"
+          ];
+        }
+
+        if (examNo === 2) {
+          return [
+            "〈愛蓮說〉逐段語譯並整理託物言志與作者價值觀。",
+            "第5、6課整理敘事線索、情感轉折與關鍵句。",
+            "語法（下）句子以實際句子判讀與改寫為主。",
+            "文言與白話閱讀交錯練習，檢查語譯與推論能力。"
+          ];
+        }
+
+        return [
+          "〈張釋之執法〉整理人物立場、事件因果與文言語譯。",
+          "第8～10課分別整理說明線索、詩歌意象與敘事情感。",
+          "第三次段考沒有額外語法單元時，把更多時間放在跨文本閱讀與課文細節。",
+          "每週至少一篇長文閱讀，練主旨、推論與詞義判讀。"
+        ];
+      }
+
+      if (analysis.key === "science") {
+        if (examNo === 1) {
+          return [
+            "基本測量先練單位、估讀、有效數字與測量誤差的觀念題。",
+            "密度題固定寫質量、體積、密度三量關係，並做圖表判讀。",
+            "物質世界把物質性質、溶液濃度、混合物分離分成三張概念表。",
+            "實驗題每題都標示目的、變因、觀察、結論。"
+          ];
+        }
+
+        if (examNo === 2) {
+          return [
+            "波與聲音先分清波的特徵、聲音產生與傳播條件。",
+            "聲音題練頻率、音調、響度等概念比較。",
+            "光學固定畫入射線、法線、反射／折射方向，不只看圖猜答案。",
+            "透鏡與成像題用作圖＋規則雙重檢查。"
+          ];
+        }
+
+        return [
+          "溫度與熱先分清「溫度」與「熱量」，再進入比熱與熱效應。",
+          "熱傳播以傳導、對流、輻射做生活情境辨識。",
+          "元素與週期表先建立符號、分類與位置概念。",
+          "分子／化學式題要同時練符號意義與粒子數判讀。"
+        ];
+      }
+
+      if (analysis.key === "social") {
+        if (examNo === 1) {
+          return [
+            "地理1–2用中國地形、氣候、人口與文化遷移做圖表／地圖整合，不只背課文句子。",
+            "歷史1–2建立商周到隋唐時間軸，整理制度、民族互動與文化發展的前後關係。",
+            "公民1–2整理國家、民主政治、公共意見等核心概念，情境題要圈出關鍵詞。",
+            "每週做一次地理＋歷史＋公民混合題，檢查能不能切換思考方式。"
+          ];
+        }
+
+        if (examNo === 2) {
+          return [
+            "地理3–4用產業、區域差異與全球關連做圖表比較。",
+            "歷史3–4整理宋元民族互動與明清政權制度的差異。",
+            "公民3–4畫出權力分立與中央政府機關關係圖。",
+            "混合題訂正時標記是記憶錯、概念混淆還是資料判讀錯。"
+          ];
+        }
+
+        return [
+          "地理5–6以東北亞環境、產業與經濟發展做國家比較表。",
+          "歷史5–6建立晚清衝擊、改革與社會文化變遷的因果時間線。",
+          "公民5–6整理地方政府、政治參與與投票制度。",
+          "段考前用跨冊情境題檢查能不能從資料找到正確概念。"
+        ];
+      }
+
+      return [];
+    }
+
+    function subjectPrescription(analysis,nextExam) {
+      const profile =
+        analysis.profile.id;
+
+      const scope =
+        scopeSpecificActions(
+          analysis,
+          nextExam
+        );
+
+      let general = [];
+
+      switch (analysis.key) {
+        case "chinese":
+          general =
+            isWeakProfile(profile)
+              ? [
+                  "用舊考卷把錯題分成字詞／課文／語文常識／閱讀理解，先找固定失分來源。",
+                  "課內內容採少量多次，每次只處理一課；閱讀題一定回文章找答案依據。"
+                ]
+              : [
+                  "每課整理主旨、重要字詞、注釋、寫作特色，避免只靠考前重讀。",
+                  "閱讀題作答後標記答案依據，並記錄推論錯誤或題意誤判。"
+                ];
+          break;
+
+        case "english":
+          general =
+            isWeakProfile(profile)
+              ? [
+                  "英文固定拆成單字、片語、文法、閱讀四類檢核，不只看總分。",
+                  "每天10～15分鐘回測舊單字；核心文法每個句型至少自己造3句。"
+                ]
+              : [
+                  "每天維持少量單字回測，文法錯題整理成句型表。",
+                  "每週至少兩篇閱讀，錯題區分單字、句構與推論。"
+                ];
+          break;
+
+        case "math":
+          general =
+            isWeakProfile(profile)
+              ? [
+                  "數學錯題固定標記觀念、計算、題意、步驟四類；同一錯因連續出現時先停下來補基礎。",
+                  "每週至少三次，每次25～30分鐘；基本題達標後才增加變化題。"
+                ]
+              : (
+                  profile === "strong_declining" ||
+                  profile === "declining" ||
+                  profile === "recent_drop"
+                )
+                  ? [
+                      "先把最近兩次錯題按單元與錯因分類，不直接用增加題量處理下降。",
+                      "至少安排一次只重做錯題，確認不看解答仍能完成。"
+                    ]
+                  : [
+                      "每週三次：新觀念／變化題／錯題各一次。",
+                      "段考前完成一份限時混合題，檢查速度與粗心。"
+                    ];
+          break;
+
+        case "science":
+          general =
+            isWeakProfile(profile)
+              ? [
+                  "每個概念都要能回答「是什麼、為什麼、條件改變會怎樣」，再進入題目。",
+                  "實驗題整理目的、變因、結果與結論；計算題固定寫已知量→公式→代入→單位。"
+                ]
+              : [
+                  "每週整理核心概念與一個實驗，並加入圖表／計算混合題。",
+                  "圖表題先讀軸、單位與趨勢，再看選項。"
+                ];
+          break;
+
+        case "social":
+          general =
+            isWeakProfile(profile)
+              ? [
+                  "社會先分歷史、地理、公民三條線檢查，不要全部只用背誦。",
+                  "歷史用時間軸、地理用圖表／地圖、公民用概念比較，再用混合題驗證。"
+                ]
+              : [
+                  "歷史做因果時間軸、地理做資料判讀、公民做概念比較。",
+                  "每週完成一次三科混合題，檢查情境切換能力。"
+                ];
+          break;
+      }
+
+      const modifiers = [];
+
+      if (
+        analysis.traits.some(
+          item =>
+            item.id === "weak_but_improving"
+        )
+      ) {
+        modifiers.push(
+          "雖然歷次平均仍偏弱，但近期已經進步；不要把整冊重頭再學一次，只補下一次段考真正會用到、而且診斷還沒達標的基礎。"
+        );
+      }
+
+      if (
+        analysis.traits.some(
+          item =>
+            item.id === "strong_but_declining"
+        )
+      ) {
+        modifiers.push(
+          "原有基礎不差但近期下滑，本週先把錯題診斷放在新單元與考試策略，不要先假設所有基礎都不會。"
+        );
+      }
+
+      if (
+        analysis.traits.some(
+          item =>
+            item.id === "volatile"
+        )
+      ) {
+        modifiers.push(
+          "增加每週一次固定時間、固定題數的短測；目標不是一次高分，而是讓兩次短測差距逐步縮小。"
+        );
+      }
+
+      if (
+        analysis.traits.some(
+          item =>
+            item.id === "below_self"
+        )
+      ) {
+        modifiers.push(
+          "最近一次低於個人常態，先對照前一次與本次考卷；如果錯誤集中在少數題型，就只針對該題型修正，不全面增加負擔。"
+        );
+      }
+
+      if (
+        analysis.traits.some(
+          item =>
+            item.id === "rebound"
+        )
+      ) {
+        modifiers.push(
+          "最近一次已回升，保留目前有效的複習節奏；新的補強方法一次只增加一項。"
+        );
+      }
+
+      if (
+        analysis.traits.some(
+          item =>
+            item.id === "above_class"
+        ) &&
+        analysis.average >= 80
+      ) {
+        modifiers.push(
+          "長期高於班平均，基本題以維持手感為主，把額外時間移到本次範圍的整合、推論與高層次題。"
+        );
+      }
+
+      return [
+        ...scope,
+        ...modifiers,
+        ...general
+      ];
+    }
+
+    function fourWeekPlan(analysis,nextExam) {
+      const ratio =
+        practiceRatio(analysis);
+
+      const context =
+        getCurriculumContext(
+          analysis.key,
+          nextExam
+        );
+
+      const target =
+        nextExam
+          ? nextExam.shortTitle
+          : "下一次段考";
+
+      const focus1 =
+        context?.focus?.[0] ||
+        "本次段考核心內容";
+
+      const focus2 =
+        context?.focus?.[1] ||
+        "第二個核心內容";
+
+      let week1 =
+        `診斷週：用舊考卷與本次範圍小測，優先檢核「${focus1}」與「${focus2}」，只記錄真正未達標的能力。`;
+
+      let week2 =
+        `修正週：依個人比例安排基礎 ${ratio.foundation}%、錯題修正 ${ratio.correction}%、變化進階 ${ratio.challenge}%，集中處理第1週未達標內容。`;
+
+      let week3 =
+        "整合週：把已補強內容放回本次段考混合題，確認不是只會單一題型。";
+
+      let week4 =
+        `模擬週：完成一次接近 ${target} 的限時練習，最後只複習仍會重複出錯的內容。`;
+
+      if (
+        analysis.profile.id ===
+        "foundation_recovering"
+      ) {
+        week1 =
+          `保留有效方法：先確認「${focus1}」與「${focus2}」的先備能力，只有未達80%的部分才補，不全面重學。`;
+
+        week3 =
+          "進階銜接：在維持基本題正確率的前提下增加變化題，讓近期進步延伸到八年級新內容。";
+      }
+
+      if (
+        [
+          "foundation_declining",
+          "declining",
+          "strong_declining"
+        ].includes(
+          analysis.profile.id
+        )
+      ) {
+        week1 =
+          "找下降原因：比較最近兩次考卷的錯題類型，再用本次範圍小測確認下降是舊基礎、新單元還是考試策略造成。";
+
+        week2 =
+          `集中修正：本週約 ${ratio.foundation + ratio.correction}% 的時間只處理已確認的薄弱內容，不漫無目的增加題量。`;
+      }
+
+      if (
+        analysis.profile.id ===
+        "volatile"
+      ) {
+        week1 =
+          `穩定度診斷：針對「${focus1}」做兩次固定題數短測，記錄兩次分數差與錯因。`;
+
+        week3 =
+          "穩定度驗證：再做兩次同規格短測，目標是正確率接近且錯誤類型不重複。";
+      }
+
+      if (
+        [
+          "improving",
+          "advanced",
+          "class_strength"
+        ].includes(
+          analysis.profile.id
+        )
+      ) {
+        week1 =
+          `維持＋確認：快速檢核「${focus1}」與「${focus2}」基本題，達標後不重複刷熟悉題。`;
+
+        week2 =
+          `提升週：將約 ${ratio.challenge}% 的時間放在本次範圍的變化、整合或限時題。`;
+
+        week3 =
+          "應用週：使用跨題型混合題，要求自己說明判斷依據或解題理由。";
+      }
+
+      if (
+        analysis.traits.some(
+          item =>
+            item.id === "rebound"
+        )
+      ) {
+        week1 +=
+          " 最近一次已有回升，本週不要同時更換多種讀書方法。";
+      }
+
+      return [
+        week1,
+        week2,
+        week3,
+        week4
+      ];
     }
 
     function priorityScore(analysis) {
-      let score = analysis.profile.priority;
+      let score =
+        analysis.profile.priority;
+
+      score +=
+        analysis.traits
+          .filter(
+            item => item.weight > 0
+          )
+          .slice(0,4)
+          .reduce(
+            (sum,item) =>
+              sum + item.weight,
+            0
+          );
 
       if (analysis.recentTrend <= -8) {
-        score += 20;
-      } else if (analysis.recentTrend <= -4) {
         score += 10;
       }
 
       if (analysis.classDiff <= -8) {
-        score += 15;
+        score += 8;
       }
 
       if (analysis.latestVsSelf <= -8) {
-        score += 10;
+        score += 6;
       }
 
       return score;
+    }
+
+    function weeklyOperationalTasks(
+      analysis,
+      nextExam
+    ) {
+      const context =
+        getCurriculumContext(
+          analysis.key,
+          nextExam
+        );
+
+      const examNo =
+        Number(
+          nextExam?.examNo || 1
+        );
+
+      const declining =
+        [
+          "declining",
+          "foundation_declining",
+          "strong_declining",
+          "recent_drop"
+        ].includes(
+          analysis.profile.id
+        );
+
+      const improving =
+        [
+          "foundation_recovering",
+          "improving"
+        ].includes(
+          analysis.profile.id
+        );
+
+      const tasks = [];
+
+      let standard =
+        "完成任務後，能說明自己的主要錯誤來源，並在同類小測中達到約 80% 正確率。";
+
+      if (analysis.key === "math") {
+        if (examNo === 1) {
+          tasks.push(
+            "先做 12 題先備診斷：分配律、去括號、同類項、正負號各 3 題；把錯題分成「觀念／計算／題意／步驟」。"
+          );
+
+          tasks.push(
+            "乘法公式三類各做 5 題：完全平方和、完全平方差、平方差；每題先寫出使用哪個公式再計算。"
+          );
+
+          tasks.push(
+            "多項式加減乘除做 10 題，要求同類項對齊並特別檢查負號、漏項與指數。"
+          );
+
+          tasks.push(
+            "2-1 平方根做 8 題概念題：平方根、正平方根、根號表示與簡單估值。"
+          );
+
+          standard =
+            "先備診斷各類至少 80%；乘法公式混合題 15 題至少答對 12 題；平方根概念 8 題至少答對 7 題。";
+        } else if (examNo === 2) {
+          tasks.push(
+            "2-2 根式運算：化簡、乘除、加減各做 5 題，錯題要重做到能獨立完成。"
+          );
+
+          tasks.push(
+            "畢氏定理做 8 題：每題先畫圖、標直角與斜邊，再列式。"
+          );
+
+          tasks.push(
+            "因式分解三種方法各做 5 題：提公因式、乘法公式、十字交乘；作答前先說明選哪一法。"
+          );
+
+          tasks.push(
+            "做一份 15 題混合小測，不標示章節，訓練自己判斷方法。"
+          );
+
+          standard =
+            "根式、畢氏、因式分解三區皆達 80%；混合小測 15 題至少答對 12 題。";
+        } else {
+          tasks.push(
+            "一元二次方程式三種解法各做 4 題：因式分解、配方法、公式解，並標記為何選此方法。"
+          );
+
+          tasks.push(
+            "做 5 題應用題，每題固定寫「設未知數→列式→解方程式→檢驗答案」。"
+          );
+
+          tasks.push(
+            "統計資料處理做 10 題圖表與數據判讀，不只計算平均。"
+          );
+
+          tasks.push(
+            "完成 15 題第4、5章混合小測並限時。"
+          );
+
+          standard =
+            "一元二次方程式基本題與統計判讀皆達 80%；應用題 5 題至少正確 4 題。";
+        }
+      }
+
+      if (analysis.key === "english") {
+        const unitText =
+          context?.scope ||
+          `Unit ${examNo * 2 - 1}–${examNo * 2}`;
+
+        tasks.push(
+          `${unitText} 單字分成兩天，每天 15～20 個；隔天先回測前一天，英文→中文與中文→英文都要測。`
+        );
+
+        tasks.push(
+          "本次核心文法挑 2 個重點，每個做 8 題，再各自造 3 句完整句子。"
+        );
+
+        tasks.push(
+          "完成 2 篇本次 Unit 主題短閱讀，每篇限時 8～10 分鐘；錯題標記「單字／文法／找錯資訊／推論」。"
+        );
+
+        tasks.push(
+          "把本週錯過的 5 個單字或文法題做成一張「個人易錯清單」，週末再測一次。"
+        );
+
+        standard =
+          "單字隔天回測至少 90%；核心文法 8 題至少答對 7 題；兩篇閱讀平均至少 80%。";
+      }
+
+      if (analysis.key === "chinese") {
+        tasks.push(
+          "本次每一課各整理一張小卡：主旨、重要字詞／注釋、人物或景物、寫作特色，每張控制在一頁內。"
+        );
+
+        tasks.push(
+          examNo === 1
+            ? "語法上（詞類）做 15 題句中辨識題，錯題要寫出為什麼判成該詞類。"
+            : examNo === 2
+              ? "語法下（句子）做 15 題句型判讀／改寫題。"
+              : "挑本次課文兩課做跨文本比較：主旨、情感、寫法各寫 1 個差異。"
+        );
+
+        tasks.push(
+          "完成 2 篇閱讀理解，每篇訂正時在文章中畫出答案依據句。"
+        );
+
+        tasks.push(
+          "從舊考卷挑 10 題國文錯題重做，並分成「課內／語文常識／閱讀」三類。"
+        );
+
+        standard =
+          "課內小測與語法／閱讀至少達 80%；閱讀題每題都能指出答案依據。";
+      }
+
+      if (analysis.key === "science") {
+        tasks.push(
+          "把本次兩章各整理 1 張概念圖，每張只放核心名詞、因果與公式／重要關係。"
+        );
+
+        tasks.push(
+          examNo === 1
+            ? "基本測量與密度／濃度相關題共做 10 題，計算題固定寫「已知→公式→代入→單位」。"
+            : examNo === 2
+              ? "波、聲音、光學共做 10 題，光學題一定畫線或示意圖。"
+              : "溫度熱學與物質基本結構共做 10 題，概念與計算各半。"
+        );
+
+        tasks.push(
+          "完成 5 題實驗或圖表題，每題先寫「看什麼變因／哪個軸／哪個單位」再作答。"
+        );
+
+        tasks.push(
+          "把本週自然錯題分成「概念／實驗／圖表／計算」四類，最多的一類再補 5 題。"
+        );
+
+        standard =
+          "概念、實驗／圖表、計算三類都達約 80%；計算題單位與步驟完整。";
+      }
+
+      if (analysis.key === "social") {
+        tasks.push(
+          `歷史：把本次第 ${examNo * 2 - 1}～${examNo * 2} 單元整理成一條時間／因果線，每個事件至少寫「原因→事件→結果」。`
+        );
+
+        tasks.push(
+          `地理：本次第 ${examNo * 2 - 1}～${examNo * 2} 單元至少判讀 5 張地圖、統計圖或表格，每題圈出關鍵資料。`
+        );
+
+        tasks.push(
+          `公民：本次第 ${examNo * 2 - 1}～${examNo * 2} 單元做 2 張概念比較表，再做 10 題情境題。`
+        );
+
+        tasks.push(
+          "完成 15 題歷史＋地理＋公民混合小測，錯題標記「記憶／概念混淆／資料判讀」。"
+        );
+
+        standard =
+          "歷史、地理、公民三部分各自至少 80%；混合小測 15 題至少答對 12 題。";
+      }
+
+      if (declining) {
+        tasks.unshift(
+          "先花 15 分鐘比較最近兩次考卷：圈出重複錯誤，找出「最近下降最明顯的題型」後再開始本週任務。"
+        );
+      } else if (improving) {
+        tasks.push(
+          "保留目前有效方法：本週不要一次增加太多題量，只把「變化／整合題」比上週多 3～5 題。"
+        );
+      } else if (
+        analysis.profile.id ===
+        "volatile"
+      ) {
+        tasks.push(
+          "本週安排兩次相同題數、相近難度的短測，記錄兩次差距與重複錯題，目標是把波動縮小。"
+        );
+      }
+
+      return {
+        tasks:[
+          ...new Set(tasks)
+        ].slice(0,6),
+        standard
+      };
+    }
+
+    function curriculumCheckpoints(
+      analysis,
+      nextExam
+    ) {
+      const context =
+        getCurriculumContext(
+          analysis.key,
+          nextExam
+        );
+
+      if (!context) {
+        return [
+          "能重做最近錯題並說明錯因。",
+          "同類基本題連續兩次達約 80% 正確率。"
+        ];
+      }
+
+      if (analysis.key === "math") {
+        return [
+          "本次範圍基本題連續兩次練習達 80% 以上。",
+          "錯題能標出是觀念、計算、題意或步驟錯誤。",
+          "不看提示能自己判斷該使用哪一種公式／方法。"
+        ];
+      }
+
+      if (analysis.key === "english") {
+        return [
+          "本次 Unit 單字隔天回測達 90% 左右。",
+          "核心文法 5 題至少答對 4 題，而且能自己造句。",
+          "短篇閱讀能在限定時間內完成並指出錯題依據。"
+        ];
+      }
+
+      if (analysis.key === "chinese") {
+        return [
+          "本次課文重要字詞、主旨與語文常識小測達 80% 左右。",
+          "閱讀題每題能指出文章中的答案依據。",
+          "文言內容能完成基本語譯與人物／主旨判讀。"
+        ];
+      }
+
+      if (analysis.key === "science") {
+        return [
+          "概念題、實驗題、圖表／計算題各自達 80% 左右。",
+          "實驗題能說出主要變因與結論。",
+          "計算題能完整寫出公式、代入與單位。"
+        ];
+      }
+
+      if (analysis.key === "social") {
+        return [
+          "地理、歷史、公民三部分各自小測達 80% 左右。",
+          "歷史能不看課本說出主要時間與因果線。",
+          "地理／公民情境題能圈出關鍵資料再作答。"
+        ];
+      }
+
+      return [
+        "完成本次段考範圍的分項檢核。"
+      ];
+    }
+
+    function personalizedCheckpoints(
+      analysis,
+      nextExam
+    ) {
+      const checks = [
+        ...curriculumCheckpoints(
+          analysis,
+          nextExam
+        )
+      ];
+
+      if (
+        isWeakProfile(
+          analysis.profile.id
+        )
+      ) {
+        checks.unshift(
+          "本次範圍先備診斷中，未達80%的項目要能明確列出，不把整冊都當成弱點。"
+        );
+      }
+
+      if (
+        [
+          "foundation_recovering",
+          "improving"
+        ].includes(
+          analysis.profile.id
+        )
+      ) {
+        checks.push(
+          "連續兩次練習都維持進步，不因增加變化題而讓基本題正確率明顯下降。"
+        );
+      }
+
+      if (
+        [
+          "declining",
+          "foundation_declining",
+          "strong_declining"
+        ].includes(
+          analysis.profile.id
+        )
+      ) {
+        checks.push(
+          "最近兩次重複出現的主要錯因，在下一次同類練習中至少減少一半。"
+        );
+      }
+
+      if (
+        analysis.profile.id ===
+        "volatile"
+      ) {
+        checks.push(
+          "兩次固定題數短測的分數差逐步縮小到約10分以內，而且重複錯誤減少。"
+        );
+      }
+
+      if (
+        [
+          "advanced",
+          "class_strength"
+        ].includes(
+          analysis.profile.id
+        )
+      ) {
+        checks.push(
+          "混合／進階題正確率維持約80%以上，基本題粗心失分控制在少數題。"
+        );
+      }
+
+      if (
+        analysis.traits.some(
+          item =>
+            item.id === "below_self"
+        )
+      ) {
+        checks.push(
+          "能說明最近一次低於個人常態的主要原因，並在下一次短測驗證是否改善。"
+        );
+      }
+
+      return [
+        ...new Set(checks)
+      ];
     }
 
     function renderCharts(records) {
@@ -1533,21 +2885,51 @@
         ).join("");
     }
 
-    function renderAnalyses(analyses,nextExam) {
+
+    function renderAnalyses(
+      analyses,
+      nextExam
+    ) {
       $("subjectList").innerHTML =
         analyses.map(
           analysis => {
-            const ratio =
-              practiceRatio(analysis);
-
             const prescription =
-              getSubjectPrescription(analysis);
-
-            const plan =
-              getFourWeekPlan(
+              subjectPrescription(
                 analysis,
                 nextExam
               );
+
+            const plan =
+              fourWeekPlan(
+                analysis,
+                nextExam
+              );
+
+            const ratio =
+              practiceRatio(
+                analysis
+              );
+
+            const context =
+              getCurriculumContext(
+                analysis.key,
+                nextExam
+              );
+
+            const checks =
+              personalizedCheckpoints(
+                analysis,
+                nextExam
+              );
+
+            const operation =
+              weeklyOperationalTasks(
+                analysis,
+                nextExam
+              );
+
+            const traits =
+              analysis.traits.slice(0,5);
 
             return `
               <article class="subject-card">
@@ -1613,34 +2995,147 @@
 
                   </div>
 
+                  ${
+                    traits.length
+                      ? `
+                        <div class="trait-row">
+                          ${
+                            traits.map(
+                              trait =>
+                                `<span class="trait-chip">${escapeHtml(trait.label)}</span>`
+                            ).join("")
+                          }
+                        </div>
+                      `
+                      : ""
+                  }
+
+                  ${
+                    context
+                      ? `
+                        <div class="scope-box">
+
+                          <div class="box-title">
+                            📚 ${escapeHtml(context.publisher)}｜下一次實際段考範圍
+                          </div>
+
+                          <strong>
+                            ${escapeHtml(context.scope)}
+                          </strong>
+
+                          <br>
+
+                          <span style="color:#6b6475">
+                            重點：
+                            ${
+                              context.focus
+                                .map(escapeHtml)
+                                .join("、")
+                            }
+                          </span>
+
+                        </div>
+                      `
+                      : ""
+                  }
+
                   <div class="analysis-box">
+
                     <div class="box-title">
-                      🔎 目前狀況
+                      🔎 目前學習狀況
                     </div>
 
-                    ${escapeHtml(familyDiagnosis(analysis))}
+                    ${escapeHtml(
+                      familyDiagnosis(
+                        analysis,
+                        nextExam
+                      )
+                    )}
+
                   </div>
 
                   <div class="action-box">
+
                     <div class="box-title">
-                      🎯 接下來怎麼做
+                      🎯 依下一次段考範圍的個人化建議
                     </div>
 
                     <div style="font-weight:800;margin-bottom:8px">
+
                       建議練習比例：
+
                       基礎 ${ratio.foundation}%
+
                       ／ 錯題修正 ${ratio.correction}%
+
                       ／ 變化進階 ${ratio.challenge}%
+
                     </div>
 
                     <ol class="action-list">
+
                       ${
                         prescription.map(
                           item =>
                             `<li>${escapeHtml(item)}</li>`
                         ).join("")
                       }
+
                     </ol>
+
+                  </div>
+
+                  <div class="operation-box">
+
+                    <div class="box-title">
+                      📝 本週直接操作清單
+                    </div>
+
+                    ${
+                      operation.tasks.map(
+                        (item,index) => `
+                          <div class="operation-task">
+
+                            <input
+                              type="checkbox"
+                              id="task-${analysis.key}-${index}"
+                            >
+
+                            <label
+                              for="task-${analysis.key}-${index}"
+                            >
+                              ${escapeHtml(item)}
+                            </label>
+
+                          </div>
+                        `
+                      ).join("")
+                    }
+
+                    <div class="operation-standard">
+                      🏁 本週完成標準：
+                      ${escapeHtml(operation.standard)}
+                    </div>
+
+                  </div>
+
+                  <div class="checkpoint-box">
+
+                    <div class="box-title">
+                      ✅ 我怎麼知道自己真的進步了？
+                    </div>
+
+                    <ol class="action-list">
+
+                      ${
+                        checks.map(
+                          item =>
+                            `<li>${escapeHtml(item)}</li>`
+                        ).join("")
+                      }
+
+                    </ol>
+
                   </div>
 
                   <div class="week-box">
@@ -1654,12 +3149,20 @@
                     </div>
 
                     <ol class="action-list">
+
                       ${
                         plan.map(
-                          item =>
-                            `<li>${escapeHtml(item)}</li>`
+                          (item,index) => `
+                            <li>
+                              <strong>
+                                第 ${index + 1} 週：
+                              </strong>
+                              ${escapeHtml(item)}
+                            </li>
+                          `
                         ).join("")
                       }
+
                     </ol>
 
                   </div>
@@ -1672,56 +3175,74 @@
         ).join("");
     }
 
+
     function renderPriorities(analyses) {
       const ranked =
-        analyses
+        [...analyses]
           .map(
             analysis => ({
               ...analysis,
-              finalPriority:priorityScore(analysis)
+              finalPriority:
+                priorityScore(analysis)
             })
           )
           .sort(
             (a,b) =>
-              b.finalPriority - a.finalPriority
+              b.finalPriority -
+              a.finalPriority
           );
 
-      const first = ranked[0];
-      const second = ranked[1];
+      const first =
+        ranked[0];
+
+      const second =
+        ranked[1];
 
       const strongest =
         [...analyses]
           .sort(
             (a,b) =>
-              b.average - a.average
+              b.average -
+              a.average
           )[0];
 
       const items = [];
 
       if (first) {
+        const trait =
+          first.traits[0]?.label ||
+          first.profile.name;
+
         items.push({
-          title:`第一優先：${first.name}`,
+          title:
+            `第一優先：${first.name}`,
 
           text:
-            `${first.name}目前屬於「${first.profile.name}」。先完成這一科建議中的前兩項，不要同時改太多學習方式。`
+            `${first.name}目前屬於「${first.profile.name}」，主要特徵是「${trait}」。先完成本週操作清單與第一週診斷，找出真正還沒達標的內容，再增加題量。`
         });
       }
 
       if (second) {
+        const trait =
+          second.traits[0]?.label ||
+          second.profile.name;
+
         items.push({
-          title:`第二優先：${second.name}`,
+          title:
+            `第二優先：${second.name}`,
 
           text:
-            `${second.name}是目前第二需要投入時間的科目，建議固定每週複習時段。`
+            `${second.name}目前主要特徵是「${trait}」。固定安排每週時段處理，不要和第一優先科同時大幅增加負擔。`
         });
       }
 
       if (strongest) {
         items.push({
-          title:`${strongest.name}維持即可`,
+          title:
+            `${strongest.name}維持即可`,
 
           text:
-            `${strongest.name}目前歷次表現相對較穩定，維持正常複習，把額外時間留給前兩項。`
+            `${strongest.name}目前歷次表現相對較好。如果本次基本檢核已達標，就維持手感，把額外時間留給前兩個優先科。`
         });
       }
 
@@ -1746,8 +3267,7 @@
 
               </div>
             `
-          )
-          .join("");
+          ).join("");
     }
 
     function renderResult(student,records,exams) {
@@ -1770,7 +3290,7 @@
           nextExam.title;
 
         $("nextStageText").textContent =
-          `目前資料已完成到「${records[records.length - 1].exam.examName}」。以下會把已有的歷次表現，轉成「${nextExam.shortTitle}」前可以直接執行的複習方向。`;
+          `目前資料已完成到「${records[records.length - 1].exam.examName}」。以下會把已有的歷次表現，轉成「${nextExam.shortTitle}」前可以直接執行的複習方向，並套用目前已確認的八年級教材版本與實際段考範圍。`;
       } else {
         $("nextStageTitle").textContent =
           "下一階段";
@@ -2113,10 +3633,50 @@
       );
     }
 
+
+    function clearCredentialFields() {
+      $("birthMMDD").value = "";
+      $("idLast5").value = "";
+    }
+
+    window.addEventListener(
+      "pageshow",
+      () => {
+        setTimeout(
+          clearCredentialFields,
+          60
+        );
+      }
+    );
+
+    window.addEventListener(
+      "load",
+      () => {
+        setTimeout(
+          clearCredentialFields,
+          120
+        );
+
+        setTimeout(
+          clearCredentialFields,
+          500
+        );
+      }
+    );
+
     $("queryBtn")
       .addEventListener(
         "click",
         queryStudent
+      );
+
+    $("queryForm")
+      .addEventListener(
+        "submit",
+        event => {
+          event.preventDefault();
+          queryStudent();
+        }
       );
 
     $("logoutBtn")
