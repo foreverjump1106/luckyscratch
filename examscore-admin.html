@@ -38,7 +38,7 @@ body:before {
   background-position:0 0,18px 18px;
   z-index:-1
 }
-button,input,select {
+button,input,select,textarea {
   font-family:inherit
 }
 .page {
@@ -119,7 +119,19 @@ input,select {
   font-size:16px;
   outline:none
 }
-input:focus,select:focus {
+textarea {
+  width:100%;
+  min-height:110px;
+  padding:12px 14px;
+  border:1px solid #d4d9df;
+  border-radius:14px;
+  background:#fff;
+  font-size:15px;
+  line-height:1.7;
+  outline:none;
+  resize:vertical
+}
+input:focus,select:focus,textarea:focus {
   border-color:#e5a94b;
   box-shadow:0 0 0 4px rgba(229,169,75,.14)
 }
@@ -547,7 +559,7 @@ tbody tr:hover td:nth-child(1),tbody tr:hover td:nth-child(2) {
   font-size:18px;
   font-weight:900
 }
-.teacher-box,.scope-box,.action-box,.checkpoint-box,.week-box {
+.teacher-box,.scope-box,.action-box,.operation-box,.checkpoint-box,.week-box {
   margin-top:12px;
   padding:14px 16px;
   border-radius:14px;
@@ -564,6 +576,42 @@ tbody tr:hover td:nth-child(1),tbody tr:hover td:nth-child(2) {
 .action-box {
   background:#fff5dc;
   border-left:5px solid #e0a64b
+}
+.operation-box {
+  background:#f0f8ff;
+  border-left:5px solid #5f9ed1
+}
+.operation-task {
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  margin:9px 0;
+  padding:10px 12px;
+  border-radius:12px;
+  background:rgba(255,255,255,.82);
+  border:1px solid #dce9f4
+}
+.operation-task input {
+  width:18px;
+  height:18px;
+  min-height:0;
+  margin-top:4px;
+  accent-color:#5f9ed1
+}
+.operation-task label {
+  margin:0;
+  font-weight:700;
+  line-height:1.7;
+  cursor:pointer
+}
+.operation-standard {
+  margin-top:10px;
+  padding:10px 12px;
+  border-radius:12px;
+  background:#ffffff;
+  border:1px dashed #9dbbd5;
+  color:#526779;
+  font-weight:800
 }
 .checkpoint-box {
   background:#fff0ef;
@@ -762,6 +810,16 @@ tbody tr:hover td:nth-child(1),tbody tr:hover td:nth-child(2) {
     grid-template-columns:1fr 1fr
   }
 }
+
+.scope-settings-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.scope-subject-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.scope-editor-card{padding:18px;border:1px solid #e3ded5;border-radius:18px;background:#fffdf9}
+.scope-editor-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;font-weight:900;font-size:18px;color:#475569}
+.scope-source-badge{display:inline-flex;align-items:center;padding:5px 9px;border-radius:999px;font-size:12px;font-weight:900;background:#e8f3fb;color:#376f95}
+.scope-preview{margin-top:16px;padding:15px 17px;border-radius:15px;background:#f7f3ec;border-left:5px solid #d89038;line-height:1.8}
+@media(max-width:900px){.scope-settings-grid{grid-template-columns:1fr 1fr}.scope-subject-grid{grid-template-columns:1fr}}
+@media(max-width:560px){.scope-settings-grid{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -798,6 +856,7 @@ tbody tr:hover td:nth-child(1),tbody tr:hover td:nth-child(2) {
 </div>
 <div class="tabs">
 <button class="tab active" data-page="syncPage">Excel 同步</button>
+<button class="tab" data-page="scopePage">段考範圍設定</button>
 <button class="tab" data-page="examPage">段考總表</button>
 <button class="tab" data-page="historyPage">歷次總表</button>
 <button class="tab" data-page="studentPage">學生歷程</button>
@@ -835,6 +894,76 @@ tbody tr:hover td:nth-child(1),tbody tr:hover td:nth-child(2) {
 <div id="excelMessage" class="message">
 </div>
 <div id="sheetList" class="sheet-list">
+</div>
+</div>
+</section>
+
+<section id="scopePage" class="tab-page">
+<div class="card">
+<div class="section-title">🧭 段考範圍設定</div>
+<div class="help">
+段考範圍公布後，只要在這裡輸入一次並儲存到 Firebase。之後「學生歷程」與「處方總覽」會優先使用教師後端設定的範圍，再依每位學生的歷次成績、近期趨勢、班平均差距、波動與個人特徵，自動產生不同的建議、操作任務與達標目標。若該次段考尚未建立 Firebase 設定，才會退回目前內建的八上預設範圍。
+</div>
+<div class="scope-settings-grid" style="margin-top:18px">
+<div class="field"><label>學年度</label><input id="scopeSchoolYear" type="number" value="115"></div>
+<div class="field"><label>學期</label><select id="scopeSemester"><option value="1">上學期</option><option value="2">下學期</option></select></div>
+<div class="field"><label>第幾次段考</label><select id="scopeExamNo"><option value="1">第一次段考</option><option value="2">第二次段考</option><option value="3">第三次段考</option></select></div>
+<div class="field"><label>年級</label><select id="scopeGrade"><option value="7">七年級</option><option value="8" selected>八年級</option><option value="9">九年級</option></select></div>
+</div>
+<div class="actions">
+<button id="scopeLoadBtn" class="btn btn-blue">載入 Firebase 設定</button>
+<button id="scopeDefaultBtn" class="btn btn-secondary">帶入目前內建範圍</button>
+<button id="scopeSaveBtn" class="btn">儲存全部科目</button>
+</div>
+<div id="scopeMessage" class="message"></div>
+<div class="scope-preview"><strong>填寫方式：</strong>「重點項目」與「先備能力」請一行一項。之後程式會依這些資料自動安排本週任務與檢核標準，不需要再改 HTML。</div>
+</div>
+
+<div class="scope-subject-grid">
+
+<div class="scope-editor-card">
+<div class="scope-editor-title"><span>📖 國文</span><span class="scope-source-badge" id="scopeBadge-chinese">尚未載入</span></div>
+<div class="field"><label>教材版本</label><input id="scopePublisher-chinese" placeholder="例如：翰林版"></div>
+<div class="field"><label>段考範圍</label><textarea id="scopeRange-chinese" placeholder="請輸入本次實際段考範圍"></textarea></div>
+<div class="field"><label>重點項目（一行一項）</label><textarea id="scopeFocus-chinese" placeholder="請一行輸入一個重點"></textarea></div>
+<div class="field"><label>先備能力／需要先檢核（一行一項，可空白）</label><textarea id="scopePrereq-chinese"></textarea></div>
+<div class="field"><label>教師補充提醒（可空白）</label><textarea id="scopeNote-chinese"></textarea></div>
+</div>
+
+<div class="scope-editor-card">
+<div class="scope-editor-title"><span>🔤 英文</span><span class="scope-source-badge" id="scopeBadge-english">尚未載入</span></div>
+<div class="field"><label>教材版本</label><input id="scopePublisher-english" placeholder="例如：翰林版"></div>
+<div class="field"><label>段考範圍</label><textarea id="scopeRange-english" placeholder="請輸入本次實際段考範圍"></textarea></div>
+<div class="field"><label>重點項目（一行一項）</label><textarea id="scopeFocus-english" placeholder="請一行輸入一個重點"></textarea></div>
+<div class="field"><label>先備能力／需要先檢核（一行一項，可空白）</label><textarea id="scopePrereq-english"></textarea></div>
+<div class="field"><label>教師補充提醒（可空白）</label><textarea id="scopeNote-english"></textarea></div>
+</div>
+
+<div class="scope-editor-card">
+<div class="scope-editor-title"><span>➗ 數學</span><span class="scope-source-badge" id="scopeBadge-math">尚未載入</span></div>
+<div class="field"><label>教材版本</label><input id="scopePublisher-math" placeholder="例如：翰林版"></div>
+<div class="field"><label>段考範圍</label><textarea id="scopeRange-math" placeholder="請輸入本次實際段考範圍"></textarea></div>
+<div class="field"><label>重點項目（一行一項）</label><textarea id="scopeFocus-math" placeholder="請一行輸入一個重點"></textarea></div>
+<div class="field"><label>先備能力／需要先檢核（一行一項，可空白）</label><textarea id="scopePrereq-math"></textarea></div>
+<div class="field"><label>教師補充提醒（可空白）</label><textarea id="scopeNote-math"></textarea></div>
+</div>
+
+<div class="scope-editor-card">
+<div class="scope-editor-title"><span>🔬 自然</span><span class="scope-source-badge" id="scopeBadge-science">尚未載入</span></div>
+<div class="field"><label>教材版本</label><input id="scopePublisher-science" placeholder="例如：翰林版"></div>
+<div class="field"><label>段考範圍</label><textarea id="scopeRange-science" placeholder="請輸入本次實際段考範圍"></textarea></div>
+<div class="field"><label>重點項目（一行一項）</label><textarea id="scopeFocus-science" placeholder="請一行輸入一個重點"></textarea></div>
+<div class="field"><label>先備能力／需要先檢核（一行一項，可空白）</label><textarea id="scopePrereq-science"></textarea></div>
+<div class="field"><label>教師補充提醒（可空白）</label><textarea id="scopeNote-science"></textarea></div>
+</div>
+
+<div class="scope-editor-card">
+<div class="scope-editor-title"><span>🌏 社會</span><span class="scope-source-badge" id="scopeBadge-social">尚未載入</span></div>
+<div class="field"><label>教材版本</label><input id="scopePublisher-social" placeholder="例如：翰林版"></div>
+<div class="field"><label>段考範圍</label><textarea id="scopeRange-social" placeholder="請輸入本次實際段考範圍"></textarea></div>
+<div class="field"><label>重點項目（一行一項）</label><textarea id="scopeFocus-social" placeholder="請一行輸入一個重點"></textarea></div>
+<div class="field"><label>先備能力／需要先檢核（一行一項，可空白）</label><textarea id="scopePrereq-social"></textarea></div>
+<div class="field"><label>教師補充提醒（可空白）</label><textarea id="scopeNote-social"></textarea></div>
 </div>
 </div>
 </section>
@@ -1113,7 +1242,7 @@ import {
 }
  from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 import {
-  getFirestore,collection,doc,getDoc,getDocs,writeBatch,serverTimestamp
+  getFirestore,collection,doc,getDoc,getDocs,writeBatch,serverTimestamp,setDoc
 }
  from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 const firebaseConfig={
@@ -1125,7 +1254,7 @@ let parsedExams=[],currentExamRows=[],currentExamSort={
   key:"seat",asc:true
 },historyRows=[],historyExams=[],historySort={
   key:"seat",asc:true
-},studentDirectory=new Map(),studentAverageChart=null,studentRankChart=null,classSubjectChart=null,classAverageChart=null;
+},studentDirectory=new Map(),studentAverageChart=null,studentRankChart=null,classSubjectChart=null,classAverageChart=null,examScopeCache=new Map(),examScopeCacheLoaded=false;
 const SUBJECTS=[{
   key:"chinese",avgKey:"chineseAvg",name:"國文",icon:"📖"
 },{
@@ -1171,19 +1300,92 @@ const GRADE8_CURRICULUM={
   }
 };
 
+function scopeDocId(meta){
+  if(!meta)return "";
+  return `${Number(meta.schoolYear)}-${Number(meta.semester)}-exam${Number(meta.examNo)}`;
+}
+function linesToArray(v){
+  return String(v||"").split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
+}
+function normalizeScopeSubject(raw={}){
+  return {
+    publisher:String(raw.publisher||"").trim(),
+    scope:String(raw.scope||"").trim(),
+    focus:Array.isArray(raw.focus)?raw.focus.map(x=>String(x).trim()).filter(Boolean):linesToArray(raw.focus),
+    prereq:Array.isArray(raw.prereq)?raw.prereq.map(x=>String(x).trim()).filter(Boolean):linesToArray(raw.prereq),
+    teacherNote:String(raw.teacherNote||"").trim()
+  };
+}
+async function loadExamScopeCache(force=false){
+  if(examScopeCacheLoaded&&!force)return examScopeCache;
+  examScopeCache.clear();
+  try{
+    const snap=await getDocs(collection(db,"examScopes"));
+    snap.docs.forEach(item=>examScopeCache.set(item.id,item.data()));
+    examScopeCacheLoaded=true;
+  }catch(e){
+    console.warn("examScopes 載入失敗，暫用內建範圍",e);
+    examScopeCacheLoaded=false;
+  }
+  return examScopeCache;
+}
 function getCurriculumContext(subjectKey,nextExam){
-  if(!nextExam||Number(nextExam.grade)!==8||Number(nextExam.semester)!==1)return null;
+  if(!nextExam)return null;
+  const id=scopeDocId(nextExam);
+  const stored=examScopeCache.get(id);
+  if(stored?.subjects?.[subjectKey]){
+    const s=normalizeScopeSubject(stored.subjects[subjectKey]);
+    if(s.scope||s.focus.length||s.publisher){
+      return {...s,source:"firebase"};
+    }
+  }
+  if(Number(nextExam.grade)!==8||Number(nextExam.semester)!==1)return null;
   const subject=GRADE8_CURRICULUM[subjectKey];
   if(!subject)return null;
   const exam=subject[Number(nextExam.examNo)];
   if(!exam)return null;
-  return {publisher:subject.publisher,...exam};
+  return {publisher:subject.publisher,...exam,prereq:exam.prereq||[],teacherNote:"",source:"builtin"};
+}
+function genericScopeActions(a,nextExam){
+  const c=getCurriculumContext(a.key,nextExam);
+  if(!c||c.source!=="firebase")return null;
+  const weak=isWeakProfile(a.profile.id);
+  const focus=(c.focus||[]).slice(0,5);
+  const prereq=(c.prereq||[]).slice(0,5);
+  const actions=[];
+  if(prereq.length){
+    actions.push(weak
+      ? `先用短測檢核先備能力：${prereq.join("、")}。未達 80% 的項目先補強，再進入本次範圍。`
+      : `快速確認先備能力：${prereq.join("、")}；若已達標，不重複刷基本題。`);
+  }
+  if(focus.length){
+    actions.push(`把本次範圍拆成 ${focus.length} 個重點：${focus.join("、")}。每個重點都先做一次基本檢核。`);
+    actions.push(weak
+      ? `先從「${focus[0]}」開始，依「基本題→錯題重做→隔天同類再測」進行；達 80% 再進下一項。`
+      : `基本題達標後，將「${focus.slice(0,3).join("、")}」放入混合題或限時題，確認能自行判斷。`);
+  }
+  if(a.key==="chinese")actions.push("課內整理之外，每週至少加入兩篇閱讀或語文判讀，訂正時標示答案依據。");
+  if(a.key==="english")actions.push("把單字、句型／文法、閱讀分開檢核；單字隔天回測，核心文法要能自己造句。");
+  if(a.key==="math")actions.push("錯題固定分成觀念、計算、題意、步驟四類；同一錯因重複時先補基礎。");
+  if(a.key==="science")actions.push("把概念、實驗／圖表、計算分開檢核；實驗題要能說出目的、變因與結論。");
+  if(a.key==="social")actions.push("歷史用時間／因果、地理用地圖／圖表、公民用概念比較，再用混合題檢核。");
+  if(c.teacherNote)actions.push(`教師補充提醒：${c.teacherNote}`);
+  return actions;
 }
 
 function curriculumBridgeText(a,nextExam){
   const c=getCurriculumContext(a.key,nextExam);
   if(!c)return "目前尚未建立這一階段的教材範圍對照，先依歷次成績趨勢與班平均進行判讀。";
-  const focus=c.focus.join("、");
+  const focus=(c.focus||[]).join("、");
+  const noteSuffix=c.teacherNote?` 教師補充：${c.teacherNote}`:"";
+  if(c.source==="firebase"){
+    const pre=(c.prereq||[]).join("、");
+    const base=`本次範圍是「${c.scope||"已由教師設定"}」；重點包含：${focus||"請依教師設定內容準備"}。`;
+    if(isWeakProfile(a.profile.id)&&pre){
+      return `${base} 依這位學生的歷次表現，先檢核 ${pre}，未達標部分先補，再進入本次重點。${noteSuffix}`;
+    }
+    return `${base} 程式會依這位學生的趨勢與個人特徵，自動調整基礎、錯題與變化題比例。${noteSuffix}`;
+  }
   if(a.key==='math'&&c.prereq){
     const pre=c.prereq.join("、");
     if(isWeakProfile(a.profile.id)){
@@ -1209,6 +1411,8 @@ function curriculumBridgeText(a,nextExam){
 function scopeSpecificActions(a,nextExam){
   const c=getCurriculumContext(a.key,nextExam);
   if(!c)return [];
+  const dynamicActions=genericScopeActions(a,nextExam);
+  if(dynamicActions)return dynamicActions;
   const weak=isWeakProfile(a.profile.id);
   if(a.key==='math'){
     if(Number(nextExam.examNo)===1){
@@ -1429,13 +1633,138 @@ onAuthStateChanged(auth,async user=>{
     $('adminArea').classList.remove('show')
   }
 });
+
+function getScopeEditorMeta(){
+  return {
+    schoolYear:Number($("scopeSchoolYear").value),
+    semester:Number($("scopeSemester").value),
+    examNo:Number($("scopeExamNo").value),
+    grade:Number($("scopeGrade").value)
+  };
+}
+function fillScopeEditor(meta,stored){
+  SUBJECTS.forEach(s=>{
+    let data=null,source="尚未設定";
+    if(stored?.subjects?.[s.key]){
+      data=normalizeScopeSubject(stored.subjects[s.key]);
+      source="Firebase";
+    }else if(Number(meta.grade)===8&&Number(meta.semester)===1){
+      const bs=GRADE8_CURRICULUM[s.key],be=bs?.[Number(meta.examNo)];
+      if(bs&&be){
+        data={publisher:bs.publisher,scope:be.scope||"",focus:be.focus||[],prereq:be.prereq||[],teacherNote:""};
+        source="內建預設";
+      }
+    }
+    data=data||{publisher:"",scope:"",focus:[],prereq:[],teacherNote:""};
+    $(`scopePublisher-${s.key}`).value=data.publisher||"";
+    $(`scopeRange-${s.key}`).value=data.scope||"";
+    $(`scopeFocus-${s.key}`).value=(data.focus||[]).join("\n");
+    $(`scopePrereq-${s.key}`).value=(data.prereq||[]).join("\n");
+    $(`scopeNote-${s.key}`).value=data.teacherNote||"";
+    $(`scopeBadge-${s.key}`).textContent=source;
+  });
+}
+async function loadScopeEditor(){
+  clearMessage($("scopeMessage"));
+  const meta=getScopeEditorMeta(),id=scopeDocId(meta);
+  $("scopeLoadBtn").disabled=true;$("scopeLoadBtn").textContent="載入中...";
+  try{
+    const snap=await getDoc(doc(db,"examScopes",id));
+    if(snap.exists()){
+      examScopeCache.set(id,snap.data());examScopeCacheLoaded=true;
+      fillScopeEditor(meta,snap.data());
+      showMessage($("scopeMessage"),"已載入 Firebase 段考範圍設定。","success");
+    }else{
+      fillScopeEditor(meta,null);
+      showMessage($("scopeMessage"),"Firebase 尚未設定這次段考；目前顯示可用的內建預設。確認或修改後直接儲存即可。","info");
+    }
+  }catch(e){
+    console.error(e);
+    showMessage($("scopeMessage"),`載入失敗：${e.code||""} ${e.message||""}`,"error");
+  }finally{
+    $("scopeLoadBtn").disabled=false;$("scopeLoadBtn").textContent="載入 Firebase 設定";
+  }
+}
+function loadBuiltinScopeIntoEditor(){
+  clearMessage($("scopeMessage"));
+  const meta=getScopeEditorMeta();
+  if(Number(meta.grade)!==8||Number(meta.semester)!==1){
+    SUBJECTS.forEach(s=>{
+      $(`scopePublisher-${s.key}`).value="";
+      $(`scopeRange-${s.key}`).value="";
+      $(`scopeFocus-${s.key}`).value="";
+      $(`scopePrereq-${s.key}`).value="";
+      $(`scopeNote-${s.key}`).value="";
+      $(`scopeBadge-${s.key}`).textContent="請自行輸入";
+    });
+    showMessage($("scopeMessage"),"目前只有八年級上學期有內建預設；其他年級或學期請直接輸入並儲存。","info");
+    return;
+  }
+  const fake={subjects:{}};
+  SUBJECTS.forEach(s=>{
+    const bs=GRADE8_CURRICULUM[s.key],be=bs?.[Number(meta.examNo)];
+    if(bs&&be)fake.subjects[s.key]={publisher:bs.publisher,scope:be.scope||"",focus:be.focus||[],prereq:be.prereq||[],teacherNote:""};
+  });
+  fillScopeEditor(meta,fake);
+  SUBJECTS.forEach(s=>$(`scopeBadge-${s.key}`).textContent="內建預設");
+  showMessage($("scopeMessage"),"已帶入內建範圍，確認或修改後按「儲存全部科目」。","info");
+}
+function collectScopeSubjects(){
+  const subjects={};
+  SUBJECTS.forEach(s=>{
+    subjects[s.key]={
+      publisher:$(`scopePublisher-${s.key}`).value.trim(),
+      scope:$(`scopeRange-${s.key}`).value.trim(),
+      focus:linesToArray($(`scopeFocus-${s.key}`).value),
+      prereq:linesToArray($(`scopePrereq-${s.key}`).value),
+      teacherNote:$(`scopeNote-${s.key}`).value.trim()
+    };
+  });
+  return subjects;
+}
+async function saveScopeEditor(){
+  clearMessage($("scopeMessage"));
+  if(!auth.currentUser||auth.currentUser.uid!==ADMIN_UID){
+    showMessage($("scopeMessage"),"請先用授權教師帳號登入。","error");return;
+  }
+  const meta=getScopeEditorMeta(),subjects=collectScopeSubjects();
+  const missing=SUBJECTS.filter(s=>!subjects[s.key].scope&&!subjects[s.key].focus.length);
+  if(missing.length){
+    showMessage($("scopeMessage"),`尚未填入：${missing.map(s=>s.name).join("、")}。每科至少要有段考範圍或重點項目。`,"error");return;
+  }
+  const id=scopeDocId(meta);
+  const payload={...meta,scopeId:id,subjects,updatedAt:serverTimestamp(),updatedBy:auth.currentUser.email||""};
+  $("scopeSaveBtn").disabled=true;$("scopeSaveBtn").textContent="儲存中...";
+  try{
+    await setDoc(doc(db,"examScopes",id),payload,{merge:true});
+    examScopeCache.set(id,{...payload,updatedAt:new Date()});examScopeCacheLoaded=true;
+    SUBJECTS.forEach(s=>$(`scopeBadge-${s.key}`).textContent="Firebase");
+    showMessage($("scopeMessage"),"儲存完成。之後學生歷程與處方總覽會優先使用這份範圍，不需要再修改程式碼。","success");
+  }catch(e){
+    console.error(e);
+    const msg=e.code==="permission-denied"
+      ?"儲存失敗：Firestore Rules 尚未允許教師寫入 examScopes，請先更新規則。"
+      :`儲存失敗：${e.code||""} ${e.message||""}`;
+    showMessage($("scopeMessage"),msg,"error");
+  }finally{
+    $("scopeSaveBtn").disabled=false;$("scopeSaveBtn").textContent="儲存全部科目";
+  }
+}
+$("scopeLoadBtn").onclick=loadScopeEditor;
+$("scopeDefaultBtn").onclick=loadBuiltinScopeIntoEditor;
+$("scopeSaveBtn").onclick=saveScopeEditor;
+
 document.querySelectorAll('.tab').forEach(btn=>btn.onclick=async()=>{
   document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
   document.querySelectorAll('.tab-page').forEach(x=>x.classList.remove('active'));
   btn.classList.add('active');
   $(btn.dataset.page).classList.add('active');
   if(btn.dataset.page==='examPage')await loadExamList();
-  if(btn.dataset.page==='studentPage'||btn.dataset.page==='overviewPage')await loadStudentList()
+  if(btn.dataset.page==='scopePage')await loadScopeEditor();
+  if(btn.dataset.page==='studentPage'||btn.dataset.page==='overviewPage'){
+    await loadExamScopeCache();
+    await loadStudentList();
+  }
 });
 $('parseBtn').onclick=async()=>{
   clearMessage($('excelMessage'));
@@ -2023,6 +2352,81 @@ function priorityScore(a){
   return score;
 }
 
+function weeklyOperationalTasks(a,nextExam){
+  const c=getCurriculumContext(a.key,nextExam);
+  const examNo=Number(nextExam?.examNo||1);
+  const weak=isWeakProfile(a.profile.id);
+  const declining=['declining','foundation_declining','strong_declining','recent_drop'].includes(a.profile.id);
+  const improving=['foundation_recovering','improving'].includes(a.profile.id);
+  const tasks=[];
+  let standard='完成任務後，能說明自己的主要錯誤來源，並在同類小測中達到約 80% 正確率。';
+
+  if(a.key==='math'){
+    if(examNo===1){
+      tasks.push('先做 12 題先備診斷：分配律、去括號、同類項、正負號各 3 題；把錯題分成「觀念／計算／題意／步驟」。');
+      tasks.push('乘法公式三類各做 5 題：完全平方和、完全平方差、平方差；每題先寫出使用哪個公式再計算。');
+      tasks.push('多項式加減乘除做 10 題，要求同類項對齊並特別檢查負號、漏項與指數。');
+      tasks.push('2-1 平方根做 8 題概念題：平方根、正平方根、根號表示與簡單估值。');
+      standard='先備診斷各類至少 80%；乘法公式混合題 15 題至少答對 12 題；平方根概念 8 題至少答對 7 題。';
+    }else if(examNo===2){
+      tasks.push('2-2 根式運算：化簡、乘除、加減各做 5 題，錯題需重做直到能獨立完成。');
+      tasks.push('畢氏定理做 8 題：每題先畫圖、標直角與斜邊，再列式。');
+      tasks.push('因式分解三種方法各做 5 題：提公因式、乘法公式、十字交乘；作答前先說明選哪一法。');
+      tasks.push('做一份 15 題混合小測，不標示章節，訓練自己判斷方法。');
+      standard='根式、畢氏、因式分解三區皆達 80%；混合小測 15 題至少答對 12 題。';
+    }else{
+      tasks.push('一元二次方程式三種解法各做 4 題：因式分解、配方法、公式解，並標記為何選此方法。');
+      tasks.push('做 5 題應用題，每題固定寫「設未知數→列式→解方程式→檢驗答案」。');
+      tasks.push('統計資料處理做 10 題圖表與數據判讀，不只計算平均。');
+      tasks.push('完成 15 題第4、5章混合小測並限時。');
+      standard='一元二次方程式基本題與統計判讀皆達 80%；應用題 5 題至少正確 4 題。';
+    }
+  }
+
+  if(a.key==='english'){
+    const unitText=c?.scope||`Unit ${examNo*2-1}–${examNo*2}`;
+    tasks.push(`${unitText} 單字分成兩天，每天 15～20 個；隔天先回測前一天，英文→中文與中文→英文都要測。`);
+    tasks.push('本次核心文法挑 2 個重點，每個做 8 題，再各自造 3 句完整句子。');
+    tasks.push('完成 2 篇本次 Unit 主題短閱讀，每篇限時 8～10 分鐘；錯題標記「單字／文法／找錯資訊／推論」。');
+    tasks.push('把本週錯過的 5 個單字或文法題做成一張「個人易錯清單」，週末再測一次。');
+    standard='單字隔天回測至少 90%；核心文法 8 題至少答對 7 題；兩篇閱讀平均至少 80%。';
+  }
+
+  if(a.key==='chinese'){
+    tasks.push('本次每一課各整理一張小卡：主旨、重要字詞／注釋、人物或景物、寫作特色，每張控制在一頁內。');
+    tasks.push(examNo===1?'語法上（詞類）做 15 題句中辨識題，錯題要寫出為什麼判成該詞類。':examNo===2?'語法下（句子）做 15 題句型判讀／改寫題。':'挑本次課文兩課做跨文本比較：主旨、情感、寫法各寫 1 個差異。');
+    tasks.push('完成 2 篇閱讀理解，每篇訂正時在文章中畫出答案依據句。');
+    tasks.push('從舊考卷挑 10 題國文錯題重做，並分成「課內／語文常識／閱讀」三類。');
+    standard='課內小測與語法／閱讀至少達 80%；閱讀題每題都能指出答案依據。';
+  }
+
+  if(a.key==='science'){
+    tasks.push('把本次兩章各整理 1 張概念圖，每張只放核心名詞、因果與公式／重要關係。');
+    tasks.push(examNo===1?'基本測量與密度／濃度相關題共做 10 題，計算題固定寫「已知→公式→代入→單位」。':examNo===2?'波、聲音、光學共做 10 題，光學題一定畫線或示意圖。':'溫度熱學與物質基本結構共做 10 題，概念與計算各半。');
+    tasks.push('完成 5 題實驗或圖表題，每題先寫「看什麼變因／哪個軸／哪個單位」再作答。');
+    tasks.push('把本週自然錯題分成「概念／實驗／圖表／計算」四類，最多的一類再補 5 題。');
+    standard='概念、實驗／圖表、計算三類都達約 80%；計算題單位與步驟完整。';
+  }
+
+  if(a.key==='social'){
+    tasks.push(`歷史：把本次第 ${examNo*2-1}～${examNo*2} 單元整理成一條時間／因果線，每個事件至少寫「原因→事件→結果」。`);
+    tasks.push(`地理：本次第 ${examNo*2-1}～${examNo*2} 單元至少判讀 5 張地圖、統計圖或表格，每題圈出關鍵資料。`);
+    tasks.push(`公民：本次第 ${examNo*2-1}～${examNo*2} 單元做 2 張概念比較表，再做 10 題情境題。`);
+    tasks.push('完成 15 題歷史＋地理＋公民混合小測，錯題標記「記憶／概念混淆／資料判讀」。');
+    standard='歷史、地理、公民三部分各自至少 80%；混合小測 15 題至少答對 12 題。';
+  }
+
+  if(declining){
+    tasks.unshift('先花 15 分鐘比較最近兩次考卷：圈出重複錯誤，找出「最近下降最明顯的題型」後再開始本週任務。');
+  }else if(improving){
+    tasks.push('保留目前有效方法：本週不要一次增加太多題量，只把「變化／整合題」比上週多 3～5 題。');
+  }else if(a.profile.id==='volatile'){
+    tasks.push('本週安排兩次相同題數、相近難度的短測，記錄兩次差距與重複錯題，目標是把波動縮小。');
+  }
+
+  return {tasks:[...new Set(tasks)].slice(0,6),standard};
+}
+
 function personalizedCheckpoints(a,nextExam){
   const checks=[...curriculumCheckpoints(a,nextExam)];
   if(isWeakProfile(a.profile.id))checks.unshift('本次範圍先備診斷中，未達80%的項目要能明確列出，不把整冊都當成弱點。');
@@ -2033,7 +2437,7 @@ function personalizedCheckpoints(a,nextExam){
   if(a.traits.some(t=>t.id==='below_self'))checks.push('能說明最近一次低於個人常態的主要原因，並在下一次短測驗證是否改善。');
   return [...new Set(checks)];
 }
-    $('loadStudentBtn').onclick=async()=>{clearMessage($('studentMessage'));const key=$('studentSelect').value;if(!key)return;try{const student=studentDirectory.get(key),exams=await getExamList(),records=[];for(const exam of exams){const d=await getDoc(doc(db,'examResults',exam.examCode||exam.id,'students',key));if(d.exists())records.push({exam,result:d.data()})}if(!records.length){showMessage($('studentMessage'),'此學生目前沒有段考資料。','error');return}renderStudentHistory(student,records,exams)}catch(e){console.error(e);showMessage($('studentMessage'),'學生歷程載入失敗。','error')}};
+    $('loadStudentBtn').onclick=async()=>{clearMessage($('studentMessage'));const key=$('studentSelect').value;if(!key)return;try{await loadExamScopeCache();const student=studentDirectory.get(key),exams=await getExamList(),records=[];for(const exam of exams){const d=await getDoc(doc(db,'examResults',exam.examCode||exam.id,'students',key));if(d.exists())records.push({exam,result:d.data()})}if(!records.length){showMessage($('studentMessage'),'此學生目前沒有段考資料。','error');return}renderStudentHistory(student,records,exams)}catch(e){console.error(e);showMessage($('studentMessage'),'學生歷程載入失敗。','error')}};
     function renderStudentHistory(student,records,allExams){$('studentResultArea').style.display='block';const latest=records.at(-1).result;$('studentName').textContent=student.name;$('studentMeta').textContent=`${
       latest.classCode||''
     }
@@ -2077,14 +2481,16 @@ function personalizedCheckpoints(a,nextExam){
         const ratio=practiceRatio(a);
         const ctx=getCurriculumContext(a.key,nextExam);
         const checks=personalizedCheckpoints(a,nextExam);
+        const operation=weeklyOperationalTasks(a,nextExam);
         const traits=a.traits.slice(0,5);
     
         return `<div class="subject-analysis-card"><div class="subject-analysis-head"><div class="subject-analysis-name">${a.icon} ${a.name}</div><div class="subject-status">${escapeHtml(a.profile.name)}</div></div><div class="subject-analysis-body">
           <div class="subject-data-grid"><div class="subject-data-item"><div class="subject-data-label">最近一次</div><div class="subject-data-value">${formatScore(a.latest)}</div></div><div class="subject-data-item"><div class="subject-data-label">歷次平均</div><div class="subject-data-value">${formatScore(a.average)}</div></div><div class="subject-data-item"><div class="subject-data-label">近三次變化</div><div class="subject-data-value ${a.recentTrend>0?'positive':a.recentTrend<0?'negative':''}">${signed(a.recentTrend)}</div></div><div class="subject-data-item"><div class="subject-data-label">相較班平均</div><div class="subject-data-value ${a.classDiff>0?'positive':a.classDiff<0?'negative':''}">${signed(a.classDiff)}</div></div></div>
           <div style="display:flex;flex-wrap:wrap;gap:7px;margin:0 0 12px;">${traits.map(t=>`<span style="padding:6px 10px;border-radius:999px;background:#f6f1e9;border:1px solid #e5d8c6;font-size:12px;font-weight:800;color:#6d6257;">${escapeHtml(t.label)}</span>`).join('')}</div>
-          ${ctx?`<div class="scope-box"><div class="box-title">📚 ${ctx.publisher}｜本次實際段考範圍</div><strong>${escapeHtml(ctx.scope)}</strong><br><span style="color:#6b6475">重點：${ctx.focus.map(escapeHtml).join('、')}</span></div>`:''}
+          ${ctx?`<div class="scope-box"><div class="box-title">📚 ${escapeHtml(ctx.publisher||'教材')}｜本次實際段考範圍 <span style="font-size:12px;color:#7b8491">（${ctx.source==='firebase'?'教師後端設定':'內建預設'}）</span></div><strong>${escapeHtml(ctx.scope||'')}</strong><br><span style="color:#6b6475">重點：${(ctx.focus||[]).map(escapeHtml).join('、')}</span>${ctx.teacherNote?`<br><span style="color:#8a6344">教師提醒：${escapeHtml(ctx.teacherNote)}</span>`:''}</div>`:''}
           <div class="teacher-box"><div class="box-title">🧑‍🏫 ${a.name}老師的判讀</div>${escapeHtml(teacherDiagnosis(a,nextExam))}</div>
           <div class="action-box"><div class="box-title">🎯 依本次範圍的個人化學習處方</div><div style="font-weight:800;margin-bottom:8px">建議練習比例：基礎 ${ratio.foundation}% ／ 錯題修正 ${ratio.correction}% ／ 變化進階 ${ratio.challenge}%</div><ol class="action-list">${rx.map(x=>`<li>${escapeHtml(x)}</li>`).join('')}</ol></div>
+          <div class="operation-box"><div class="box-title">📝 本週直接操作清單</div>${operation.tasks.map((x,i)=>`<div class="operation-task"><input type="checkbox" id="task-${a.key}-${i}"><label for="task-${a.key}-${i}">${escapeHtml(x)}</label></div>`).join('')}<div class="operation-standard">🏁 本週完成標準：${escapeHtml(operation.standard)}</div></div>
           <div class="checkpoint-box"><div class="box-title">✅ 個人達標檢核</div><ol class="action-list">${checks.map(x=>`<li>${escapeHtml(x)}</li>`).join('')}</ol></div>
           <div class="week-box"><div class="box-title">📅 ${nextExam?nextExam.shortTitle:'下一次段考'}前四週個人計畫</div><ol class="action-list">${plan.map((x,i)=>`<li><strong>第 ${i+1} 週：</strong>${escapeHtml(x)}</li>`).join('')}</ol></div>
         </div></div>`;
@@ -2099,7 +2505,7 @@ function renderPriorities(analyses){
   $('priorityGrid').innerHTML=items.slice(0,3).map((x,i)=>`<div class="priority-card"><div class="priority-number">${i+1}</div><div class="priority-title">${escapeHtml(x.title)}</div><div class="priority-text">${escapeHtml(x.text)}</div></div>`).join('');
 }
     $('loadOverviewBtn').onclick=loadOverview;$('overviewSort').onchange=()=>{if($('overviewTableBody').dataset.loaded==='1')loadOverview()};
-    async function loadOverview(){clearMessage($('overviewMessage'));$('loadOverviewBtn').disabled=true;$('loadOverviewBtn').textContent='分析中...';try{const exams=await getExamList();if(!exams.length){showMessage($('overviewMessage'),'目前沒有段考資料。','error');return}const snaps=await Promise.all(exams.map(exam=>getDocs(collection(db,'examResults',exam.examCode||exam.id,'students')))),studentMap=new Map();exams.forEach((exam,i)=>snaps[i].docs.forEach(item=>{const r=item.data(),key=r.studentKey||item.id;if(!studentMap.has(key))studentMap.set(key,{studentKey:key,name:r.name||'',seat:normalizeSeat(r.seat),records:[]});const s=studentMap.get(key);s.name=r.name||s.name;s.seat=normalizeSeat(r.seat)||s.seat;s.records.push({exam,result:r})}));const rows=[];for(const s of studentMap.values()){const nextExam=determineNextExam(exams),analyses=buildAnalyses(s.records,nextExam),ranked=[...analyses].map(a=>({...a,finalPriority:priorityScore(a)})).sort((a,b)=>b.finalPriority-a.finalPriority);rows.push({...s,analyses,first:ranked[0],overallPriority:ranked[0]?.finalPriority||0})}const sort=$('overviewSort').value;rows.sort((a,b)=>sort==='priority'?b.overallPriority-a.overallPriority:sort==='name'?a.name.localeCompare(b.name,'zh-Hant'):Number(a.seat)-Number(b.seat));const counts={priority_support:0,foundation:0,foundation_declining:0,foundation_recovering:0,strong_declining:0,declining:0,volatile:0};rows.forEach(r=>r.analyses.forEach(a=>{if(counts[a.profile.id]!==undefined)counts[a.profile.id]++}));$('overviewSummary').innerHTML=`<div class="summary-card"><div class="summary-label">學生人數</div><div class="summary-value">${
+    async function loadOverview(){clearMessage($('overviewMessage'));$('loadOverviewBtn').disabled=true;$('loadOverviewBtn').textContent='分析中...';try{await loadExamScopeCache();const exams=await getExamList();if(!exams.length){showMessage($('overviewMessage'),'目前沒有段考資料。','error');return}const snaps=await Promise.all(exams.map(exam=>getDocs(collection(db,'examResults',exam.examCode||exam.id,'students')))),studentMap=new Map();exams.forEach((exam,i)=>snaps[i].docs.forEach(item=>{const r=item.data(),key=r.studentKey||item.id;if(!studentMap.has(key))studentMap.set(key,{studentKey:key,name:r.name||'',seat:normalizeSeat(r.seat),records:[]});const s=studentMap.get(key);s.name=r.name||s.name;s.seat=normalizeSeat(r.seat)||s.seat;s.records.push({exam,result:r})}));const rows=[];for(const s of studentMap.values()){const nextExam=determineNextExam(exams),analyses=buildAnalyses(s.records,nextExam),ranked=[...analyses].map(a=>({...a,finalPriority:priorityScore(a)})).sort((a,b)=>b.finalPriority-a.finalPriority);rows.push({...s,analyses,first:ranked[0],overallPriority:ranked[0]?.finalPriority||0})}const sort=$('overviewSort').value;rows.sort((a,b)=>sort==='priority'?b.overallPriority-a.overallPriority:sort==='name'?a.name.localeCompare(b.name,'zh-Hant'):Number(a.seat)-Number(b.seat));const counts={priority_support:0,foundation:0,foundation_declining:0,foundation_recovering:0,strong_declining:0,declining:0,volatile:0};rows.forEach(r=>r.analyses.forEach(a=>{if(counts[a.profile.id]!==undefined)counts[a.profile.id]++}));$('overviewSummary').innerHTML=`<div class="summary-card"><div class="summary-label">學生人數</div><div class="summary-value">${
       rows.length
     }
     </div></div><div class="summary-card"><div class="summary-label">需優先介入科次</div><div class="summary-value negative">${
