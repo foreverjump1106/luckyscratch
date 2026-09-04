@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>班級工作回報系統</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📋</text></svg>">
+  <style>
+    :root{--bg:#f5f7fb;--card:#fff;--ink:#172033;--muted:#667085;--line:#e4e7ec;--brand:#2563eb;--brand2:#1d4ed8;--good:#067647;--warn:#b54708;--bad:#b42318;--soft:#eff6ff}
+    *{box-sizing:border-box} body{margin:0;font-family:"Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+    button,input,select,textarea{font:inherit}.hidden{display:none!important}.wrap{max-width:1120px;margin:auto;padding:18px}.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}.brand{font-size:24px;font-weight:800}.sub{color:var(--muted);font-size:14px}.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 8px 24px rgba(16,24,40,.05)}
+    .login{max-width:420px;margin:8vh auto}.field{display:grid;gap:6px;margin:12px 0}.field label{font-weight:700}.field input,.field select,.field textarea{width:100%;border:1px solid #cfd4dc;border-radius:10px;padding:11px 12px;background:#fff}.btn{border:0;border-radius:10px;padding:10px 14px;cursor:pointer;font-weight:700}.btn.primary{background:var(--brand);color:white}.btn.primary:hover{background:var(--brand2)}.btn.gray{background:#eef2f6}.btn.danger{background:#fee4e2;color:var(--bad)}.btn.good{background:#dcfae6;color:var(--good)}.btn.small{padding:7px 10px;font-size:13px}.grid{display:grid;gap:14px}.roles{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}.role-card{cursor:pointer;border:2px solid transparent}.role-card:hover{border-color:#bfdbfe}.role-card.active{border-color:var(--brand);background:var(--soft)}.pill{display:inline-flex;align-items:center;border-radius:999px;padding:5px 9px;font-size:12px;font-weight:700;background:#f2f4f7;color:#344054}.pill.good{background:#dcfae6;color:var(--good)}.pill.warn{background:#fff4e5;color:var(--warn)}.pill.bad{background:#fee4e2;color:var(--bad)}.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:14px 0}.tabs{display:flex;gap:8px;flex-wrap:wrap}.tab{background:#eef2f6}.tab.active{background:#dbeafe;color:#1d4ed8}.section-title{font-size:20px;font-weight:800;margin:2px 0 12px}.item{border:1px solid var(--line);border-radius:14px;padding:14px;margin:10px 0}.item-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.meta{font-size:13px;color:var(--muted);margin-top:4px}.roster{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px;margin-top:12px}.student{border:1px solid var(--line);border-radius:12px;padding:10px;background:#fff}.student .name{font-weight:700}.status{width:100%;margin-top:7px;border-radius:9px;border:1px solid #d0d5dd;padding:7px}.score-row{display:grid;grid-template-columns:72px 1fr 90px 110px;gap:8px;align-items:center;padding:7px 0;border-bottom:1px solid #f0f2f5}.score-row input,.score-row select{width:100%;padding:8px;border:1px solid #d0d5dd;border-radius:8px}.stats{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.stat{background:#f8fafc;border:1px solid var(--line);border-radius:10px;padding:8px 10px;font-size:13px}.notice{padding:11px 12px;border-radius:10px;background:#fffaeb;color:#93370d;margin:10px 0}.error{background:#fef3f2;color:#b42318}.success{background:#ecfdf3;color:#067647}.empty{text-align:center;color:var(--muted);padding:30px 10px}.footer-note{font-size:12px;color:var(--muted);margin-top:16px}
+    @media(max-width:700px){.wrap{padding:12px}.brand{font-size:20px}.score-row{grid-template-columns:48px 1fr 80px}.score-row .score-status{grid-column:2/4}.card{padding:14px}.topbar{align-items:flex-start}.topbar .right{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <section id="loginView" class="card login">
+    <div class="brand">📋 班級工作回報系統</div>
+    <div class="sub">小老師、班級幹部與任課老師登入</div>
+    <div id="loginMsg"></div>
+    <div class="field"><label>帳號</label><input id="loginUser" autocomplete="username" placeholder="例如 80427 或老師帳號"></div>
+    <div class="field"><label>密碼</label><input id="loginPass" type="password" autocomplete="current-password" placeholder="輸入密碼"></div>
+    <button id="loginBtn" class="btn primary" style="width:100%">登入</button>
+    <div class="footer-note">帳號由管理員建立並指定職務。若帳號已停用，即使密碼正確也無法使用。</div>
+  </section>
+
+  <main id="appView" class="hidden">
+    <div class="topbar">
+      <div><div class="brand">📋 班級工作回報系統</div><div id="who" class="sub"></div></div>
+      <div class="right"><button id="changePwdBtn" class="btn gray small">修改自己的密碼</button><button id="logoutBtn" class="btn gray small">登出</button></div>
+    </div>
+    <div id="appMsg"></div>
+    <section class="card">
+      <div class="section-title">我的職務</div>
+      <div id="roleGrid" class="grid roles"></div>
+    </section>
+
+    <section id="workspace" class="card hidden" style="margin-top:14px">
+      <div class="item-head"><div><div id="workspaceTitle" class="section-title"></div><div id="workspacePerm" class="sub"></div></div></div>
+      <div class="tabs" style="margin-top:12px"><button class="btn tab active" data-tab="collection">📥 收繳</button><button class="btn tab" data-tab="scores">📊 小考成績</button></div>
+      <div id="collectionPanel"></div>
+      <div id="scoresPanel" class="hidden"></div>
+    </section>
+  </main>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, updatePassword } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+import { getFirestore, doc, getDoc, collection, addDoc, updateDoc, deleteDoc, query, where, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB56F4wJ-IMUiBsqJ5P33HoDK642h7671U",
+  authDomain: "class-datawork.firebaseapp.com",
+  projectId: "class-datawork",
+  storageBucket: "class-datawork.firebasestorage.app",
+  messagingSenderId: "24186422479",
+  appId: "1:24186422479:web:8dee260f34b2e506fd63ba"
+};
+const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getFirestore(app);
+const $=s=>document.querySelector(s); const $$=s=>[...document.querySelectorAll(s)];
+const SYNTH_DOMAIN="class-datawork.local";
+let profile=null,currentAssignment=null,roster=[],unsubItems=null,unsubAssess=null;
+const statusOptions=[['submitted','已繳'],['missing','未繳'],['late','補交'],['exempt','免繳']];
+const scoreStatusOptions=[['normal','正常'],['absent','缺考'],['makeup','補考'],['exempt','免試'],['not_entered','未登記']];
+function emailFor(v){v=v.trim();return v.includes('@')?v:`${v}@${SYNTH_DOMAIN}`}
+function msg(el,text,type='notice'){el.innerHTML=text?`<div class="notice ${type}">${text}</div>`:''}
+function esc(v=''){return String(v).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]))}
+function scopeKey(a){return `${a.classId}|${a.scopeType}|${a.scopeName}`}
+function assignmentLabel(a){return a.scopeType==='subject'?`${a.classId}班｜${a.scopeName}${a.kind==='teacher'?'任課老師':'小老師'}`:`${a.classId}班｜${a.scopeName}`}
+function canCollection(a){return !!a.canCollection} function canScores(a){return !!a.canScores}
+function today(){return new Date().toLocaleDateString('sv-SE')}
+async function loadRoster(classId){const s=await getDoc(doc(db,'classes',classId)); roster=s.exists()?(s.data().students||[]):[]; return roster}
+async function audit(action,targetType,targetId,detail){try{await addDoc(collection(db,'auditLogs'),{actorUid:auth.currentUser.uid,actorName:profile.displayName||profile.username,action,targetType,targetId,detail,createdAt:serverTimestamp()})}catch(e){console.warn(e)}}
+
+$('#loginBtn').onclick=async()=>{msg($('#loginMsg'),'');try{await signInWithEmailAndPassword(auth,emailFor($('#loginUser').value),$('#loginPass').value)}catch(e){msg($('#loginMsg'),'登入失敗：請確認帳號與密碼。','error')}};
+$('#logoutBtn').onclick=()=>signOut(auth);
+$('#changePwdBtn').onclick=async()=>{const p=prompt('請輸入新的密碼（至少 6 碼）：');if(!p)return;if(p.length<6)return alert('密碼至少 6 碼');try{await updatePassword(auth.currentUser,p);alert('密碼已更新。')}catch(e){alert('修改失敗。若登入已久，請先登出再登入後重試。')}};
+
+onAuthStateChanged(auth,async user=>{
+  if(!user){profile=null;$('#loginView').classList.remove('hidden');$('#appView').classList.add('hidden');return}
+  const snap=await getDoc(doc(db,'users',user.uid));
+  if(!snap.exists()||snap.data().active!==true){await signOut(auth);msg($('#loginMsg'),'此帳號尚未啟用或已被停用，請洽管理員。','error');return}
+  profile={uid:user.uid,...snap.data()};
+  if(profile.type==='admin'){location.href='class-workadmin.html';return}
+  $('#loginView').classList.add('hidden');$('#appView').classList.remove('hidden');$('#who').textContent=`${profile.displayName||profile.username}｜${profile.username}`;renderRoles();
+});
+
+function renderRoles(){const list=profile.assignments||[];const box=$('#roleGrid');box.innerHTML='';if(!list.length){box.innerHTML='<div class="empty">目前沒有被指派任何職務。帳號仍可保留，等管理員重新指派權限後即可使用。</div>';$('#workspace').classList.add('hidden');return}
+ list.forEach((a,i)=>{const d=document.createElement('div');d.className='card role-card';d.innerHTML=`<div style="font-weight:800">${esc(assignmentLabel(a))}</div><div class="meta">${canCollection(a)?'📥 可登記收繳':'📥 收繳唯讀'}　${canScores(a)?'📊 可登記成績':'📊 成績唯讀'}</div>`;d.onclick=()=>selectAssignment(i,d);box.appendChild(d)})}
+async function selectAssignment(i,el){$$('.role-card').forEach(x=>x.classList.remove('active'));el.classList.add('active');currentAssignment=profile.assignments[i];$('#workspace').classList.remove('hidden');$('#workspaceTitle').textContent=assignmentLabel(currentAssignment);$('#workspacePerm').textContent=`權限：${canCollection(currentAssignment)?'可登記收繳':'收繳唯讀'}；${canScores(currentAssignment)?'可登記小考成績':'成績唯讀'}`;await loadRoster(currentAssignment.classId);startCollection();startScores()}
+$$('.tab').forEach(b=>b.onclick=()=>{$$('.tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');const t=b.dataset.tab;$('#collectionPanel').classList.toggle('hidden',t!=='collection');$('#scoresPanel').classList.toggle('hidden',t!=='scores')});
+
+function startCollection(){if(unsubItems)unsubItems();const key=scopeKey(currentAssignment);const q=query(collection(db,'collectionItems'),where('scopeKey','==',key));unsubItems=onSnapshot(q,snap=>{const items=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(b.date||'').localeCompare(a.date||''));renderCollection(items)})}
+function renderCollection(items){const p=$('#collectionPanel');let html='';if(canCollection(currentAssignment))html+=`<div class="toolbar"><button id="newCollectionBtn" class="btn primary">＋新增收繳項目</button></div>`;html+=items.length?'':'<div class="empty">目前沒有收繳紀錄。</div>';items.forEach(it=>{const counts={submitted:0,missing:0,late:0,exempt:0};Object.values(it.records||{}).forEach(v=>counts[v]=(counts[v]||0)+1);html+=`<div class="item"><div class="item-head"><div><b>${esc(it.itemName)}</b><div class="meta">${esc(it.date||'')} ${it.dueDate?`｜截止 ${esc(it.dueDate)}`:''}｜建立：${esc(it.createdByName||'')}</div></div><div><span class="pill ${it.reviewStatus==='confirmed'?'good':'warn'}">${it.reviewStatus==='confirmed'?'已確認':'尚未確認'}</span> ${it.locked?'<span class="pill bad">已鎖定</span>':''}</div></div><div class="stats"><span class="stat">已繳 ${counts.submitted}</span><span class="stat">未繳 ${counts.missing}</span><span class="stat">補交 ${counts.late}</span><span class="stat">免繳 ${counts.exempt}</span></div><div class="toolbar"><button class="btn gray small open-col" data-id="${it.id}">${it.locked||!canCollection(currentAssignment)?'查看':'登記/修改'}</button>${!it.locked&&canCollection(currentAssignment)?`<button class="btn danger small del-col" data-id="${it.id}">刪除</button>`:''}</div><div id="col-${it.id}" class="hidden"></div></div>`});p.innerHTML=html;
+ $('#newCollectionBtn')?.addEventListener('click',createCollectionPrompt);$$('.open-col').forEach(b=>b.onclick=()=>toggleCollectionEditor(items.find(x=>x.id===b.dataset.id)));$$('.del-col').forEach(b=>b.onclick=()=>removeCollection(items.find(x=>x.id===b.dataset.id)))}
+async function createCollectionPrompt(){const name=prompt('收繳項目名稱：');if(!name)return;const due=prompt('截止日期（可留空，格式 YYYY-MM-DD）：','')||'';const note=prompt('備註（可留空）：','')||'';const a=currentAssignment,key=scopeKey(a),records={};roster.forEach(s=>records[s.id||String(s.seat)]='submitted');const ref=await addDoc(collection(db,'collectionItems'),{scopeKey:key,classId:a.classId,scopeType:a.scopeType,scopeName:a.scopeName,itemName:name.trim(),date:today(),dueDate:due.trim(),note:note.trim(),records,createdBy:auth.currentUser.uid,createdByName:profile.displayName||profile.username,createdAt:serverTimestamp(),updatedAt:serverTimestamp(),reviewStatus:'pending',locked:false});await audit('create','collection',ref.id,`新增收繳：${name}`)}
+function toggleCollectionEditor(it){const box=$(`#col-${it.id}`);if(!box.classList.contains('hidden')){box.classList.add('hidden');box.innerHTML='';return}box.classList.remove('hidden');const editable=!it.locked&&canCollection(currentAssignment);box.innerHTML=`${it.note?`<div class="notice">備註：${esc(it.note)}</div>`:''}<div class="toolbar">${editable?'<button class="btn gray small all-submitted">全部已繳</button>':''}<span class="sub">點選狀態即可修改</span></div><div class="roster">${roster.map(s=>{const id=s.id||String(s.seat),v=(it.records||{})[id]||'submitted';return `<div class="student"><div class="name">${s.seat}. ${esc(s.name)}</div><select class="status col-status" data-student="${esc(id)}" ${editable?'':'disabled'}>${statusOptions.map(([x,l])=>`<option value="${x}" ${x===v?'selected':''}>${l}</option>`).join('')}</select></div>`}).join('')}</div>${editable?'<div class="toolbar"><button class="btn primary save-col">儲存收繳狀態</button></div>':''}`;
+ box.querySelector('.all-submitted')?.addEventListener('click',()=>box.querySelectorAll('.col-status').forEach(s=>s.value='submitted'));box.querySelector('.save-col')?.addEventListener('click',async()=>{const records={};box.querySelectorAll('.col-status').forEach(s=>records[s.dataset.student]=s.value);await updateDoc(doc(db,'collectionItems',it.id),{records,updatedAt:serverTimestamp()});await audit('update','collection',it.id,`更新收繳：${it.itemName}`);alert('已儲存')})}
+async function removeCollection(it){if(!confirm(`確定刪除「${it.itemName}」？`))return;await deleteDoc(doc(db,'collectionItems',it.id));await audit('delete','collection',it.id,`刪除收繳：${it.itemName}`)}
+
+function startScores(){if(unsubAssess)unsubAssess();const key=scopeKey(currentAssignment);const q=query(collection(db,'assessments'),where('scopeKey','==',key));unsubAssess=onSnapshot(q,snap=>{const items=snap.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(b.date||'').localeCompare(a.date||''));renderScores(items)})}
+function calcStats(it){const vals=[];let absent=0,below=0;Object.values(it.scores||{}).forEach(r=>{if(r.status==='absent')absent++;if((r.status==='normal'||r.status==='makeup')&&Number.isFinite(Number(r.score))){const n=Number(r.score);vals.push(n);if(n<Number(it.passScore||0))below++}});return{avg:vals.length?(vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(1):'-',high:vals.length?Math.max(...vals):'-',low:vals.length?Math.min(...vals):'-',below,absent,count:vals.length}}
+function renderScores(items){const p=$('#scoresPanel');let html='';if(canScores(currentAssignment))html+=`<div class="toolbar"><button id="newAssessBtn" class="btn primary">＋新增小考</button></div>`;html+=items.length?'':'<div class="empty">目前沒有小考紀錄。</div>';items.forEach(it=>{const st=calcStats(it);html+=`<div class="item"><div class="item-head"><div><b>${esc(it.name)}</b><div class="meta">${esc(it.date||'')}｜滿分 ${it.maxScore}｜及格 ${it.passScore}｜建立：${esc(it.createdByName||'')}</div></div><div><span class="pill ${it.reviewStatus==='confirmed'?'good':'warn'}">${it.reviewStatus==='confirmed'?'已確認':'尚未確認'}</span> ${it.locked?'<span class="pill bad">已鎖定</span>':''}</div></div><div class="stats"><span class="stat">平均 ${st.avg}</span><span class="stat">最高 ${st.high}</span><span class="stat">最低 ${st.low}</span><span class="stat">未達及格 ${st.below}</span><span class="stat">缺考 ${st.absent}</span></div><div class="toolbar"><button class="btn gray small open-score" data-id="${it.id}">${it.locked||!canScores(currentAssignment)?'查看':'登記/修改'}</button>${!it.locked&&canScores(currentAssignment)?`<button class="btn danger small del-score" data-id="${it.id}">刪除</button>`:''}</div><div id="score-${it.id}" class="hidden"></div></div>`});p.innerHTML=html;$('#newAssessBtn')?.addEventListener('click',createAssessmentPrompt);$$('.open-score').forEach(b=>b.onclick=()=>toggleScoreEditor(items.find(x=>x.id===b.dataset.id)));$$('.del-score').forEach(b=>b.onclick=()=>removeAssessment(items.find(x=>x.id===b.dataset.id)))}
+async function createAssessmentPrompt(){const name=prompt('小考名稱：');if(!name)return;const max=Number(prompt('滿分：','100'));if(!Number.isFinite(max)||max<=0)return alert('滿分格式不正確');const pass=Number(prompt('及格分數：',String(Math.round(max*.6))));if(!Number.isFinite(pass))return alert('及格分數格式不正確');const a=currentAssignment,scores={};roster.forEach(s=>scores[s.id||String(s.seat)]={status:'not_entered',score:null});const ref=await addDoc(collection(db,'assessments'),{scopeKey:scopeKey(a),classId:a.classId,scopeType:a.scopeType,scopeName:a.scopeName,name:name.trim(),date:today(),maxScore:max,passScore:pass,note:'',scores,createdBy:auth.currentUser.uid,createdByName:profile.displayName||profile.username,createdAt:serverTimestamp(),updatedAt:serverTimestamp(),reviewStatus:'pending',locked:false});await audit('create','assessment',ref.id,`新增小考：${name}`)}
+function toggleScoreEditor(it){const box=$(`#score-${it.id}`);if(!box.classList.contains('hidden')){box.classList.add('hidden');box.innerHTML='';return}box.classList.remove('hidden');const editable=!it.locked&&canScores(currentAssignment);box.innerHTML=`<div>${roster.map(s=>{const id=s.id||String(s.seat),r=(it.scores||{})[id]||{status:'not_entered',score:null};return `<div class="score-row"><b>${s.seat}</b><span>${esc(s.name)}</span><input class="score-input" data-student="${esc(id)}" type="number" inputmode="decimal" min="0" max="${it.maxScore}" value="${r.score??''}" ${editable?'':'disabled'}><select class="score-status" data-student="${esc(id)}" ${editable?'':'disabled'}>${scoreStatusOptions.map(([x,l])=>`<option value="${x}" ${x===r.status?'selected':''}>${l}</option>`).join('')}</select></div>`}).join('')}</div>${editable?'<div class="toolbar"><button class="btn primary save-score">儲存成績</button></div>':''}`;
+ if(editable){const inputs=[...box.querySelectorAll('.score-input')];inputs.forEach((inp,i)=>inp.addEventListener('keydown',e=>{if(e.key==='Enter'&&inputs[i+1]){e.preventDefault();inputs[i+1].focus();inputs[i+1].select()}}));box.querySelector('.save-score').onclick=async()=>{const scores={};roster.forEach(s=>{const id=s.id||String(s.seat),inp=box.querySelector(`.score-input[data-student="${CSS.escape(id)}"]`),sel=box.querySelector(`.score-status[data-student="${CSS.escape(id)}"]`);let score=inp.value===''?null:Number(inp.value);if(score!==null&&(score<0||score>Number(it.maxScore)))throw new Error(`${s.name} 分數超出範圍`);let status=sel.value;if(score!==null&&status==='not_entered')status='normal';scores[id]={score,status}});try{await updateDoc(doc(db,'assessments',it.id),{scores,updatedAt:serverTimestamp()});await audit('update','assessment',it.id,`更新小考：${it.name}`);alert('已儲存')}catch(e){alert(e.message)}}}}
+async function removeAssessment(it){if(!confirm(`確定刪除「${it.name}」？`))return;await deleteDoc(doc(db,'assessments',it.id));await audit('delete','assessment',it.id,`刪除小考：${it.name}`)}
+</script>
+</body>
+</html>
