@@ -1288,4 +1288,2332 @@ onAuthStateChanged(
     }catch(e){
 
       console.error(
-        "登入後讀取帳號
+        "登入後讀取帳號資料失敗",
+        e
+      );
+
+
+      const code =
+        e?.code
+        ||
+        "unknown";
+
+
+      await signOut(auth);
+
+
+      msg(
+        $("#loginMsg"),
+        `帳號資料讀取失敗：${code}，請聯絡導師。`,
+        "error"
+      );
+
+    }
+
+  }
+);
+
+
+function currentAssignments(){
+
+  return (
+    profile.assignments
+    ||
+    []
+  )
+  .filter(
+    a =>
+      (
+        a.semester
+        ||
+        ""
+      )
+      === currentSemester
+  );
+
+}
+
+
+function renderRoles(){
+
+  const list =
+    currentAssignments();
+
+
+  const box =
+    $("#roleGrid");
+
+
+  box.innerHTML =
+    "";
+
+
+  $("#workspace")
+    .classList
+    .add(
+      "hidden"
+    );
+
+
+  currentAssignment =
+    null;
+
+
+  if(
+    !list.length
+  ){
+
+    box.innerHTML = `
+
+      <div class="empty">
+
+        <b>
+          ${esc(
+            profile.displayName
+            ||
+            profile.username
+          )}
+        </b>
+
+        <br><br>
+
+        目前尚未被指派
+        ${esc(currentSemester)}
+        的任何幹部或小老師權限。
+
+        <br><br>
+
+        如你本學期有擔任幹部或小老師，
+        但未看到功能，
+        請聯絡導師確認。
+
+      </div>
+    `;
+
+
+    return;
+
+  }
+
+
+  list.forEach(
+    (
+      a,
+      i
+    )=>{
+
+      const d =
+        document.createElement(
+          "div"
+        );
+
+
+      d.className =
+        "card role-card";
+
+
+      d.innerHTML = `
+
+        <div
+          style="font-weight:800"
+        >
+
+          ${esc(
+            assignmentLabel(a)
+          )}
+
+        </div>
+
+        <div class="meta">
+
+          ${
+            canCollection(a)
+              ? "📥 可登記收繳"
+              : "📥 收繳唯讀"
+          }
+
+          ${
+            a.scopeType
+            === "subject"
+              ? (
+                  canScores(a)
+                    ? "　📊 可登記成績"
+                    : "　📊 成績唯讀"
+                )
+              : ""
+          }
+
+        </div>
+      `;
+
+
+      d.onclick =
+        ()=> selectAssignment(
+          i,
+          d
+        );
+
+
+      box.appendChild(
+        d
+      );
+
+    }
+  );
+
+}
+
+
+async function selectAssignment(
+  i,
+  el
+){
+
+  const list =
+    currentAssignments();
+
+
+  $$(".role-card")
+    .forEach(
+      x =>
+        x.classList
+          .remove(
+            "active"
+          )
+    );
+
+
+  el.classList
+    .add(
+      "active"
+    );
+
+
+  currentAssignment =
+    list[i];
+
+
+  $("#workspace")
+    .classList
+    .remove(
+      "hidden"
+    );
+
+
+  $("#workspaceTitle")
+    .textContent =
+      assignmentLabel(
+        currentAssignment
+      );
+
+
+  $("#workspacePerm")
+    .textContent =
+      `${currentSemester}｜權限：${
+        canCollection(
+          currentAssignment
+        )
+          ? "可登記收繳"
+          : "收繳唯讀"
+      }${
+        currentAssignment.scopeType
+        === "subject"
+          ? `；${
+              canScores(
+                currentAssignment
+              )
+                ? "可登記小考成績"
+                : "成績唯讀"
+            }`
+          : ""
+      }`;
+
+
+  $("#scoresTab")
+    .classList
+    .toggle(
+      "hidden",
+      currentAssignment.scopeType
+      !== "subject"
+    );
+
+
+  if(
+    currentAssignment.scopeType
+    !== "subject"
+  ){
+
+    $$(".tab")
+      .forEach(
+        x =>
+          x.classList
+            .remove(
+              "active"
+            )
+      );
+
+
+    document.querySelector(
+      '[data-tab="collection"]'
+    )
+    .classList
+    .add(
+      "active"
+    );
+
+
+    $("#collectionPanel")
+      .classList
+      .remove(
+        "hidden"
+      );
+
+
+    $("#scoresPanel")
+      .classList
+      .add(
+        "hidden"
+      );
+
+  }
+
+
+  await loadRoster(
+    currentAssignment.classId
+  );
+
+
+  startCollection();
+
+
+  if(
+    currentAssignment.scopeType
+    === "subject"
+  ){
+
+    startScores();
+
+  }
+
+}
+
+
+$$(".tab")
+  .forEach(
+    b =>
+      b.onclick =
+      ()=>{
+
+        if(
+          b.classList
+            .contains(
+              "hidden"
+            )
+        ){
+
+          return;
+
+        }
+
+
+        $$(".tab")
+          .forEach(
+            x =>
+              x.classList
+                .remove(
+                  "active"
+                )
+          );
+
+
+        b.classList
+          .add(
+            "active"
+          );
+
+
+        const t =
+          b.dataset.tab;
+
+
+        $("#collectionPanel")
+          .classList
+          .toggle(
+            "hidden",
+            t !== "collection"
+          );
+
+
+        $("#scoresPanel")
+          .classList
+          .toggle(
+            "hidden",
+            t !== "scores"
+          );
+
+      }
+  );
+
+
+// ============================================================
+// 收繳資料
+// 修正：查詢同時限制「目前學期」與「權限範圍」
+// ============================================================
+
+function startCollection(){
+
+  if(
+    unsubItems
+  ){
+
+    unsubItems();
+
+  }
+
+
+  const key =
+    scopeKey(
+      currentAssignment
+    );
+
+
+  const q =
+    query(
+
+      collection(
+        db,
+        "collectionItems"
+      ),
+
+      where(
+        "semester",
+        "==",
+        currentSemester
+      ),
+
+      where(
+        "scopeKey",
+        "==",
+        key
+      )
+
+    );
+
+
+  unsubItems =
+    onSnapshot(
+      q,
+      snap=>{
+
+        msg(
+          $("#appMsg"),
+          ""
+        );
+
+
+        const items =
+          snap.docs
+            .map(
+              d=>({
+                id:d.id,
+                ...d.data()
+              })
+            )
+            .sort(
+              (
+                a,
+                b
+              ) =>
+                (
+                  b.date
+                  ||
+                  ""
+                )
+                .localeCompare(
+                  a.date
+                  ||
+                  ""
+                )
+            );
+
+
+        renderCollection(
+          items
+        );
+
+      },
+      e =>{
+
+        console.error(
+          "讀取收繳資料失敗",
+          e
+        );
+
+
+        msg(
+          $("#appMsg"),
+          `讀取收繳資料失敗：${esc(e.message)}`,
+          "error"
+        );
+
+      }
+    );
+
+}
+
+
+function renderCollection(
+  items
+){
+
+  const p =
+    $("#collectionPanel");
+
+
+  let html =
+    canCollection(
+      currentAssignment
+    )
+      ? `
+        <div class="toolbar">
+
+          <button
+            id="newCollectionBtn"
+            class="btn primary"
+          >
+            ＋新增收繳項目
+          </button>
+
+        </div>
+      `
+      : "";
+
+
+  html +=
+    items.length
+      ? ""
+      : `
+        <div class="empty">
+          本學期目前沒有收繳紀錄。
+        </div>
+      `;
+
+
+  items.forEach(
+    it=>{
+
+      const counts = {
+
+        submitted:0,
+
+        missing:0,
+
+        late:0,
+
+        exempt:0
+
+      };
+
+
+      Object.values(
+        it.records
+        ||
+        {}
+      )
+      .forEach(
+        v =>
+          counts[v] =
+            (
+              counts[v]
+              ||
+              0
+            )
+            +
+            1
+      );
+
+
+      html += `
+
+        <div class="item">
+
+          <div class="item-head">
+
+            <div>
+
+              <b>
+                ${esc(
+                  it.itemName
+                )}
+              </b>
+
+              <div class="meta">
+
+                ${esc(
+                  it.semester
+                  ||
+                  currentSemester
+                )}
+
+                ｜
+
+                ${esc(
+                  it.date
+                  ||
+                  ""
+                )}
+
+                ${
+                  it.dueDate
+                    ? `｜截止 ${esc(it.dueDate)}`
+                    : ""
+                }
+
+                ｜建立：
+
+                ${esc(
+                  it.createdByName
+                  ||
+                  ""
+                )}
+
+              </div>
+
+            </div>
+
+
+            <div>
+
+              <span
+                class="pill ${
+                  it.reviewStatus
+                  === "confirmed"
+                    ? "good"
+                    : "warn"
+                }"
+              >
+
+                ${
+                  it.reviewStatus
+                  === "confirmed"
+                    ? "已確認"
+                    : "尚未確認"
+                }
+
+              </span>
+
+              ${
+                it.locked
+                  ? `
+                    <span class="pill bad">
+                      已鎖定
+                    </span>
+                  `
+                  : ""
+              }
+
+            </div>
+
+          </div>
+
+
+          <div class="stats">
+
+            <span class="stat">
+              已繳
+              ${counts.submitted}
+            </span>
+
+            <span class="stat">
+              未繳
+              ${counts.missing}
+            </span>
+
+            <span class="stat">
+              補交
+              ${counts.late}
+            </span>
+
+            <span class="stat">
+              免繳
+              ${counts.exempt}
+            </span>
+
+          </div>
+
+
+          <div class="toolbar">
+
+            <button
+              class="btn gray small open-col"
+              data-id="${it.id}"
+            >
+
+              ${
+                it.locked
+                ||
+                !canCollection(
+                  currentAssignment
+                )
+                  ? "查看"
+                  : "登記/修改"
+              }
+
+            </button>
+
+
+            ${
+              !it.locked
+              &&
+              canCollection(
+                currentAssignment
+              )
+                ? `
+                  <button
+                    class="btn danger small del-col"
+                    data-id="${it.id}"
+                  >
+                    刪除
+                  </button>
+                `
+                : ""
+            }
+
+          </div>
+
+
+          <div
+            id="col-${it.id}"
+            class="hidden"
+          ></div>
+
+        </div>
+      `;
+
+    }
+  );
+
+
+  p.innerHTML =
+    html;
+
+
+  $("#newCollectionBtn")
+    ?.addEventListener(
+      "click",
+      createCollectionPrompt
+    );
+
+
+  $$(".open-col")
+    .forEach(
+      b =>
+        b.onclick =
+          ()=> toggleCollectionEditor(
+            items.find(
+              x =>
+                x.id
+                === b.dataset.id
+            )
+          )
+    );
+
+
+  $$(".del-col")
+    .forEach(
+      b =>
+        b.onclick =
+          ()=> removeCollection(
+            items.find(
+              x =>
+                x.id
+                === b.dataset.id
+            )
+          )
+    );
+
+}
+
+
+async function createCollectionPrompt(){
+
+  const name =
+    prompt(
+      "收繳項目名稱："
+    );
+
+
+  if(
+    !name
+  ){
+
+    return;
+
+  }
+
+
+  const due =
+    prompt(
+      "截止日期（可留空，格式 YYYY-MM-DD）：",
+      ""
+    )
+    ||
+    "";
+
+
+  const note =
+    prompt(
+      "備註（可留空）：",
+      ""
+    )
+    ||
+    "";
+
+
+  const a =
+    currentAssignment;
+
+
+  const key =
+    scopeKey(a);
+
+
+  const records =
+    {};
+
+
+  roster.forEach(
+    s =>
+      records[
+        s.id
+        ||
+        String(
+          s.seat
+        )
+      ]
+      =
+      "submitted"
+  );
+
+
+  try{
+
+    const ref =
+      await addDoc(
+        collection(
+          db,
+          "collectionItems"
+        ),
+        {
+
+          semester:
+            currentSemester,
+
+          scopeKey:
+            key,
+
+          classId:
+            a.classId,
+
+          scopeType:
+            a.scopeType,
+
+          scopeName:
+            a.scopeName,
+
+          itemName:
+            name.trim(),
+
+          date:
+            today(),
+
+          dueDate:
+            due.trim(),
+
+          note:
+            note.trim(),
+
+          records,
+
+          createdBy:
+            auth.currentUser.uid,
+
+          createdByName:
+            profile.displayName
+            ||
+            profile.username,
+
+          createdAt:
+            serverTimestamp(),
+
+          updatedAt:
+            serverTimestamp(),
+
+          reviewStatus:
+            "pending",
+
+          locked:
+            false
+
+        }
+      );
+
+
+    await audit(
+      "create",
+      "collection",
+      ref.id,
+      `新增收繳：${name}`
+    );
+
+  }catch(e){
+
+    console.error(
+      e
+    );
+
+
+    alert(
+      "新增收繳項目失敗："
+      +
+      e.message
+    );
+
+  }
+
+}
+
+
+function toggleCollectionEditor(
+  it
+){
+
+  const box =
+    $(
+      `#col-${it.id}`
+    );
+
+
+  if(
+    !box.classList
+      .contains(
+        "hidden"
+      )
+  ){
+
+    box.classList
+      .add(
+        "hidden"
+      );
+
+
+    box.innerHTML =
+      "";
+
+
+    return;
+
+  }
+
+
+  box.classList
+    .remove(
+      "hidden"
+    );
+
+
+  const editable =
+    !it.locked
+    &&
+    canCollection(
+      currentAssignment
+    );
+
+
+  box.innerHTML = `
+
+    ${
+      it.note
+        ? `
+          <div class="notice">
+            備註：
+            ${esc(it.note)}
+          </div>
+        `
+        : ""
+    }
+
+
+    <div class="toolbar">
+
+      ${
+        editable
+          ? `
+            <button
+              class="btn gray small all-submitted"
+            >
+              全部已繳
+            </button>
+          `
+          : ""
+      }
+
+      <span class="sub">
+        點選狀態即可修改
+      </span>
+
+    </div>
+
+
+    <div class="roster">
+
+      ${
+        roster.map(
+          s=>{
+
+            const id =
+              s.id
+              ||
+              String(
+                s.seat
+              );
+
+
+            const v =
+              (
+                it.records
+                ||
+                {}
+              )[id]
+              ||
+              "submitted";
+
+
+            return `
+
+              <div class="student">
+
+                <div class="name">
+
+                  ${s.seat}.
+                  ${esc(
+                    s.name
+                  )}
+
+                </div>
+
+
+                <select
+                  class="status col-status"
+                  data-student="${esc(id)}"
+                  ${
+                    editable
+                      ? ""
+                      : "disabled"
+                  }
+                >
+
+                  ${
+                    statusOptions
+                      .map(
+                        (
+                          [
+                            x,
+                            l
+                          ]
+                        )=>`
+
+                          <option
+                            value="${x}"
+                            ${
+                              x === v
+                                ? "selected"
+                                : ""
+                            }
+                          >
+                            ${l}
+                          </option>
+
+                        `
+                      )
+                      .join("")
+                  }
+
+                </select>
+
+              </div>
+            `;
+
+          }
+        )
+        .join("")
+      }
+
+    </div>
+
+
+    ${
+      editable
+        ? `
+          <div class="toolbar">
+
+            <button
+              class="btn primary save-col"
+            >
+              儲存收繳狀態
+            </button>
+
+          </div>
+        `
+        : ""
+    }
+
+  `;
+
+
+  box.querySelector(
+    ".all-submitted"
+  )
+  ?.addEventListener(
+    "click",
+    ()=>
+      box.querySelectorAll(
+        ".col-status"
+      )
+      .forEach(
+        s =>
+          s.value =
+            "submitted"
+      )
+  );
+
+
+  box.querySelector(
+    ".save-col"
+  )
+  ?.addEventListener(
+    "click",
+    async()=>{
+
+      const records =
+        {};
+
+
+      box.querySelectorAll(
+        ".col-status"
+      )
+      .forEach(
+        s =>
+          records[
+            s.dataset.student
+          ]
+          =
+          s.value
+      );
+
+
+      try{
+
+        await updateDoc(
+          doc(
+            db,
+            "collectionItems",
+            it.id
+          ),
+          {
+
+            records,
+
+            updatedAt:
+              serverTimestamp()
+
+          }
+        );
+
+
+        await audit(
+          "update",
+          "collection",
+          it.id,
+          `更新收繳：${it.itemName}`
+        );
+
+
+        alert(
+          "已儲存"
+        );
+
+      }catch(e){
+
+        alert(
+          "儲存失敗："
+          +
+          e.message
+        );
+
+      }
+
+    }
+  );
+
+}
+
+
+async function removeCollection(
+  it
+){
+
+  if(
+    !confirm(
+      `確定刪除「${it.itemName}」？`
+    )
+  ){
+
+    return;
+
+  }
+
+
+  try{
+
+    await deleteDoc(
+      doc(
+        db,
+        "collectionItems",
+        it.id
+      )
+    );
+
+
+    await audit(
+      "delete",
+      "collection",
+      it.id,
+      `刪除收繳：${it.itemName}`
+    );
+
+  }catch(e){
+
+    alert(
+      "刪除失敗："
+      +
+      e.message
+    );
+
+  }
+
+}
+
+
+// ============================================================
+// 小考成績
+// 修正：查詢同時限制「目前學期」與「權限範圍」
+// ============================================================
+
+function startScores(){
+
+  if(
+    unsubAssess
+  ){
+
+    unsubAssess();
+
+  }
+
+
+  const key =
+    scopeKey(
+      currentAssignment
+    );
+
+
+  const q =
+    query(
+
+      collection(
+        db,
+        "assessments"
+      ),
+
+      where(
+        "semester",
+        "==",
+        currentSemester
+      ),
+
+      where(
+        "scopeKey",
+        "==",
+        key
+      )
+
+    );
+
+
+  unsubAssess =
+    onSnapshot(
+      q,
+      snap=>{
+
+        msg(
+          $("#appMsg"),
+          ""
+        );
+
+
+        const items =
+          snap.docs
+            .map(
+              d=>({
+                id:d.id,
+                ...d.data()
+              })
+            )
+            .sort(
+              (
+                a,
+                b
+              ) =>
+                (
+                  b.date
+                  ||
+                  ""
+                )
+                .localeCompare(
+                  a.date
+                  ||
+                  ""
+                )
+            );
+
+
+        renderScores(
+          items
+        );
+
+      },
+      e =>{
+
+        console.error(
+          "讀取成績資料失敗",
+          e
+        );
+
+
+        msg(
+          $("#appMsg"),
+          `讀取成績資料失敗：${esc(e.message)}`,
+          "error"
+        );
+
+      }
+    );
+
+}
+
+
+function calcStats(
+  it
+){
+
+  const vals =
+    [];
+
+
+  let absent =
+    0;
+
+
+  let below =
+    0;
+
+
+  Object.values(
+    it.scores
+    ||
+    {}
+  )
+  .forEach(
+    r=>{
+
+      if(
+        r.status
+        === "absent"
+      ){
+
+        absent++;
+
+      }
+
+
+      if(
+        (
+          r.status
+          === "normal"
+          ||
+          r.status
+          === "makeup"
+        )
+        &&
+        r.score !== null
+        &&
+        r.score !== ""
+        &&
+        Number.isFinite(
+          Number(
+            r.score
+          )
+        )
+      ){
+
+        const n =
+          Number(
+            r.score
+          );
+
+
+        vals.push(
+          n
+        );
+
+
+        if(
+          n
+          <
+          Number(
+            it.passScore
+            ||
+            0
+          )
+        ){
+
+          below++;
+
+        }
+
+      }
+
+    }
+  );
+
+
+  return {
+
+    avg:
+      vals.length
+        ? (
+            vals.reduce(
+              (
+                a,
+                b
+              ) =>
+                a + b,
+              0
+            )
+            /
+            vals.length
+          )
+          .toFixed(1)
+        : "-",
+
+
+    high:
+      vals.length
+        ? Math.max(
+            ...vals
+          )
+        : "-",
+
+
+    low:
+      vals.length
+        ? Math.min(
+            ...vals
+          )
+        : "-",
+
+
+    below,
+
+    absent,
+
+    count:
+      vals.length
+
+  };
+
+}
+
+
+function renderScores(
+  items
+){
+
+  const p =
+    $("#scoresPanel");
+
+
+  let html =
+    canScores(
+      currentAssignment
+    )
+      ? `
+        <div class="toolbar">
+
+          <button
+            id="newAssessBtn"
+            class="btn primary"
+          >
+            ＋新增小考
+          </button>
+
+        </div>
+      `
+      : "";
+
+
+  html +=
+    items.length
+      ? ""
+      : `
+        <div class="empty">
+          本學期目前沒有小考紀錄。
+        </div>
+      `;
+
+
+  items.forEach(
+    it=>{
+
+      const st =
+        calcStats(
+          it
+        );
+
+
+      html += `
+
+        <div class="item">
+
+          <div class="item-head">
+
+            <div>
+
+              <b>
+                ${esc(
+                  it.name
+                )}
+              </b>
+
+              <div class="meta">
+
+                ${esc(
+                  it.semester
+                  ||
+                  currentSemester
+                )}
+
+                ｜
+
+                ${esc(
+                  it.date
+                  ||
+                  ""
+                )}
+
+                ｜滿分
+                ${it.maxScore}
+
+                ｜及格
+                ${it.passScore}
+
+                ｜建立：
+
+                ${esc(
+                  it.createdByName
+                  ||
+                  ""
+                )}
+
+              </div>
+
+            </div>
+
+
+            <div>
+
+              <span
+                class="pill ${
+                  it.reviewStatus
+                  === "confirmed"
+                    ? "good"
+                    : "warn"
+                }"
+              >
+
+                ${
+                  it.reviewStatus
+                  === "confirmed"
+                    ? "已確認"
+                    : "尚未確認"
+                }
+
+              </span>
+
+
+              ${
+                it.locked
+                  ? `
+                    <span class="pill bad">
+                      已鎖定
+                    </span>
+                  `
+                  : ""
+              }
+
+            </div>
+
+          </div>
+
+
+          <div class="stats">
+
+            <span class="stat">
+              平均
+              ${st.avg}
+            </span>
+
+            <span class="stat">
+              最高
+              ${st.high}
+            </span>
+
+            <span class="stat">
+              最低
+              ${st.low}
+            </span>
+
+            <span class="stat">
+              未達及格
+              ${st.below}
+            </span>
+
+            <span class="stat">
+              缺考
+              ${st.absent}
+            </span>
+
+          </div>
+
+
+          <div class="toolbar">
+
+            <button
+              class="btn gray small open-score"
+              data-id="${it.id}"
+            >
+
+              ${
+                it.locked
+                ||
+                !canScores(
+                  currentAssignment
+                )
+                  ? "查看"
+                  : "登記/修改"
+              }
+
+            </button>
+
+
+            ${
+              !it.locked
+              &&
+              canScores(
+                currentAssignment
+              )
+                ? `
+                  <button
+                    class="btn danger small del-score"
+                    data-id="${it.id}"
+                  >
+                    刪除
+                  </button>
+                `
+                : ""
+            }
+
+          </div>
+
+
+          <div
+            id="score-${it.id}"
+            class="hidden"
+          ></div>
+
+        </div>
+      `;
+
+    }
+  );
+
+
+  p.innerHTML =
+    html;
+
+
+  $("#newAssessBtn")
+    ?.addEventListener(
+      "click",
+      createAssessmentPrompt
+    );
+
+
+  $$(".open-score")
+    .forEach(
+      b =>
+        b.onclick =
+          ()=> toggleScoreEditor(
+            items.find(
+              x =>
+                x.id
+                === b.dataset.id
+            )
+          )
+    );
+
+
+  $$(".del-score")
+    .forEach(
+      b =>
+        b.onclick =
+          ()=> removeAssessment(
+            items.find(
+              x =>
+                x.id
+                === b.dataset.id
+            )
+          )
+    );
+
+}
+
+
+async function createAssessmentPrompt(){
+
+  const name =
+    prompt(
+      "小考名稱："
+    );
+
+
+  if(
+    !name
+  ){
+
+    return;
+
+  }
+
+
+  const max =
+    Number(
+      prompt(
+        "滿分：",
+        "100"
+      )
+    );
+
+
+  if(
+    !Number.isFinite(
+      max
+    )
+    ||
+    max <= 0
+  ){
+
+    return alert(
+      "滿分格式不正確"
+    );
+
+  }
+
+
+  const pass =
+    Number(
+      prompt(
+        "及格分數：",
+        String(
+          Math.round(
+            max * .6
+          )
+        )
+      )
+    );
+
+
+  if(
+    !Number.isFinite(
+      pass
+    )
+  ){
+
+    return alert(
+      "及格分數格式不正確"
+    );
+
+  }
+
+
+  const a =
+    currentAssignment;
+
+
+  const scores =
+    {};
+
+
+  roster.forEach(
+    s =>
+      scores[
+        s.id
+        ||
+        String(
+          s.seat
+        )
+      ]
+      = {
+
+        status:
+          "not_entered",
+
+        score:
+          null
+
+      }
+  );
+
+
+  try{
+
+    const ref =
+      await addDoc(
+        collection(
+          db,
+          "assessments"
+        ),
+        {
+
+          semester:
+            currentSemester,
+
+          scopeKey:
+            scopeKey(a),
+
+          classId:
+            a.classId,
+
+          scopeType:
+            a.scopeType,
+
+          scopeName:
+            a.scopeName,
+
+          name:
+            name.trim(),
+
+          date:
+            today(),
+
+          maxScore:
+            max,
+
+          passScore:
+            pass,
+
+          note:
+            "",
+
+          scores,
+
+          createdBy:
+            auth.currentUser.uid,
+
+          createdByName:
+            profile.displayName
+            ||
+            profile.username,
+
+          createdAt:
+            serverTimestamp(),
+
+          updatedAt:
+            serverTimestamp(),
+
+          reviewStatus:
+            "pending",
+
+          locked:
+            false
+
+        }
+      );
+
+
+    await audit(
+      "create",
+      "assessment",
+      ref.id,
+      `新增小考：${name}`
+    );
+
+  }catch(e){
+
+    console.error(
+      e
+    );
+
+
+    alert(
+      "新增小考失敗："
+      +
+      e.message
+    );
+
+  }
+
+}
+
+
+function toggleScoreEditor(
+  it
+){
+
+  const box =
+    $(
+      `#score-${it.id}`
+    );
+
+
+  if(
+    !box.classList
+      .contains(
+        "hidden"
+      )
+  ){
+
+    box.classList
+      .add(
+        "hidden"
+      );
+
+
+    box.innerHTML =
+      "";
+
+
+    return;
+
+  }
+
+
+  box.classList
+    .remove(
+      "hidden"
+    );
+
+
+  const editable =
+    !it.locked
+    &&
+    canScores(
+      currentAssignment
+    );
+
+
+  box.innerHTML = `
+
+    <div>
+
+      ${
+        roster.map(
+          s=>{
+
+            const id =
+              s.id
+              ||
+              String(
+                s.seat
+              );
+
+
+            const r =
+              (
+                it.scores
+                ||
+                {}
+              )[id]
+              ||
+              {
+
+                status:
+                  "not_entered",
+
+                score:
+                  null
+
+              };
+
+
+            return `
+
+              <div class="score-row">
+
+                <b>
+                  ${s.seat}
+                </b>
+
+
+                <span>
+                  ${esc(
+                    s.name
+                  )}
+                </span>
+
+
+                <input
+                  class="score-input"
+                  data-student="${esc(id)}"
+                  type="number"
+                  inputmode="decimal"
+                  min="0"
+                  max="${it.maxScore}"
+                  value="${
+                    r.score
+                    ??
+                    ""
+                  }"
+                  ${
+                    editable
+                      ? ""
+                      : "disabled"
+                  }
+                >
+
+
+                <select
+                  class="score-status"
+                  data-student="${esc(id)}"
+                  ${
+                    editable
+                      ? ""
+                      : "disabled"
+                  }
+                >
+
+                  ${
+                    scoreStatusOptions
+                      .map(
+                        (
+                          [
+                            x,
+                            l
+                          ]
+                        )=>`
+
+                          <option
+                            value="${x}"
+                            ${
+                              x === r.status
+                                ? "selected"
+                                : ""
+                            }
+                          >
+                            ${l}
+                          </option>
+
+                        `
+                      )
+                      .join("")
+                  }
+
+                </select>
+
+              </div>
+            `;
+
+          }
+        )
+        .join("")
+      }
+
+    </div>
+
+
+    ${
+      editable
+        ? `
+          <div class="toolbar">
+
+            <button
+              class="btn primary save-score"
+            >
+              儲存成績
+            </button>
+
+          </div>
+        `
+        : ""
+    }
+
+  `;
+
+
+  if(
+    editable
+  ){
+
+    const inputs =
+      [
+        ...box.querySelectorAll(
+          ".score-input"
+        )
+      ];
+
+
+    inputs.forEach(
+      (
+        inp,
+        i
+      ) =>
+        inp.addEventListener(
+          "keydown",
+          e=>{
+
+            if(
+              e.key
+              === "Enter"
+              &&
+              inputs[
+                i + 1
+              ]
+            ){
+
+              e.preventDefault();
+
+
+              inputs[
+                i + 1
+              ]
+              .focus();
+
+
+              inputs[
+                i + 1
+              ]
+              .select();
+
+            }
+
+          }
+        )
+    );
+
+
+    box.querySelector(
+      ".save-score"
+    )
+    .onclick =
+    async()=>{
+
+      const scores =
+        {};
+
+
+      try{
+
+        roster.forEach(
+          s=>{
+
+            const id =
+              s.id
+              ||
+              String(
+                s.seat
+              );
+
+
+            const inp =
+              box.querySelector(
+                `.score-input[data-student="${CSS.escape(id)}"]`
+              );
+
+
+            const sel =
+              box.querySelector(
+                `.score-status[data-student="${CSS.escape(id)}"]`
+              );
+
+
+            let score =
+              inp.value
+              === ""
+                ? null
+                : Number(
+                    inp.value
+                  );
+
+
+            if(
+              score
+              !== null
+              &&
+              (
+                score < 0
+                ||
+                score
+                >
+                Number(
+                  it.maxScore
+                )
+              )
+            ){
+
+              throw new Error(
+                `${s.name} 分數超出範圍`
+              );
+
+            }
+
+
+            let status =
+              sel.value;
+
+
+            if(
+              score
+              !== null
+              &&
+              status
+              === "not_entered"
+            ){
+
+              status =
+                "normal";
+
+            }
+
+
+            scores[id] = {
+
+              score,
+
+              status
+
+            };
+
+          }
+        );
+
+
+        await updateDoc(
+          doc(
+            db,
+            "assessments",
+            it.id
+          ),
+          {
+
+            scores,
+
+            updatedAt:
+              serverTimestamp()
+
+          }
+        );
+
+
+        await audit(
+          "update",
+          "assessment",
+          it.id,
+          `更新小考：${it.name}`
+        );
+
+
+        alert(
+          "已儲存"
+        );
+
+      }catch(e){
+
+        console.error(
+          e
+        );
+
+
+        alert(
+          "儲存失敗："
+          +
+          e.message
+        );
+
+      }
+
+    };
+
+  }
+
+}
+
+
+async function removeAssessment(
+  it
+){
+
+  if(
+    !confirm(
+      `確定刪除「${it.name}」？`
+    )
+  ){
+
+    return;
+
+  }
+
+
+  try{
+
+    await deleteDoc(
+      doc(
+        db,
+        "assessments",
+        it.id
+      )
+    );
+
+
+    await audit(
+      "delete",
+      "assessment",
+      it.id,
+      `刪除小考：${it.name}`
+    );
+
+  }catch(e){
+
+    alert(
+      "刪除失敗："
+      +
+      e.message
+    );
+
+  }
+
+}
+
+</script>
+
+</body>
+</html>
