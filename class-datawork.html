@@ -1,55 +1,3733 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>班級工作回報－管理後台</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>班級工作回報－管理後台</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛠️</text></svg>">
 <style>
-:root{--bg:#f5f7fb;--card:#fff;--ink:#172033;--muted:#667085;--line:#e4e7ec;--brand:#2563eb;--good:#067647;--warn:#b54708;--bad:#b42318}*{box-sizing:border-box}body{margin:0;font-family:"Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;background:var(--bg);color:var(--ink)}button,input,select,textarea{font:inherit}.hidden{display:none!important}.wrap{max-width:1280px;margin:auto;padding:16px}.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:0 8px 24px rgba(16,24,40,.05)}.login{max-width:430px;margin:8vh auto}.brand{font-size:24px;font-weight:800}.sub,.meta{color:var(--muted);font-size:13px}.topbar{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:14px}.btn{border:0;border-radius:10px;padding:9px 13px;cursor:pointer;font-weight:700}.primary{background:var(--brand);color:#fff}.gray{background:#eef2f6}.danger{background:#fee4e2;color:var(--bad)}.good{background:#dcfae6;color:var(--good)}.warn{background:#fff4e5;color:var(--warn)}.small{font-size:13px;padding:7px 9px}.field{display:grid;gap:5px;margin:10px 0}.field input,.field select,.field textarea{width:100%;border:1px solid #cfd4dc;border-radius:9px;padding:10px}.nav{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px}.nav .active{background:#dbeafe;color:#1d4ed8}.grid{display:grid;gap:12px}.g4{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}.stat{padding:14px}.stat b{font-size:28px}.section-title{font-size:20px;font-weight:800;margin-bottom:10px}.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:10px 0}.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:12px}table{border-collapse:collapse;width:100%;min-width:760px}th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left;font-size:14px}th{background:#f8fafc;position:sticky;top:0}.pill{display:inline-block;padding:4px 8px;border-radius:999px;background:#f2f4f7;font-size:12px;font-weight:700}.pill.good{background:#dcfae6;color:var(--good)}.pill.warn{background:#fff4e5;color:var(--warn)}.pill.bad{background:#fee4e2;color:var(--bad)}.notice{padding:10px 12px;border-radius:10px;background:#fffaeb;color:#93370d;margin:10px 0}.error{background:#fef3f2;color:#b42318}.success{background:#ecfdf3;color:#067647}.item{border:1px solid var(--line);border-radius:13px;padding:13px;margin:9px 0}.item-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}.assign{background:#f8fafc;border:1px solid var(--line);padding:8px 10px;border-radius:9px;margin:6px 0}.roster-preview{max-height:340px;overflow:auto;border:1px solid var(--line);border-radius:10px;padding:8px}.modal{position:fixed;inset:0;background:rgba(16,24,40,.45);display:flex;align-items:center;justify-content:center;padding:14px;z-index:10}.modal-card{background:#fff;border-radius:16px;padding:16px;width:min(900px,100%);max-height:90vh;overflow:auto}.student-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:7px}.student{border:1px solid var(--line);border-radius:10px;padding:8px}.student select,.student input{width:100%;padding:7px;border:1px solid #d0d5dd;border-radius:8px;margin-top:5px}@media(max-width:760px){.wrap{padding:10px}.two{grid-template-columns:1fr}.brand{font-size:20px}.topbar{align-items:flex-start}}
+:root{
+  --bg:#f5f7fb;
+  --card:#fff;
+  --ink:#172033;
+  --muted:#667085;
+  --line:#e4e7ec;
+  --brand:#2563eb;
+  --good:#067647;
+  --warn:#b54708;
+  --bad:#b42318
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:"Noto Sans TC","Microsoft JhengHei",system-ui,sans-serif;
+  background:var(--bg);
+  color:var(--ink)
+}
+button,input,select,textarea{font:inherit}
+.hidden{display:none!important}
+.wrap{max-width:1280px;margin:auto;padding:16px}
+.card{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:16px;
+  box-shadow:0 8px 24px rgba(16,24,40,.05)
+}
+.login{max-width:430px;margin:8vh auto}
+.brand{font-size:24px;font-weight:800}
+.sub,.meta{color:var(--muted);font-size:13px}
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  align-items:center;
+  margin-bottom:14px
+}
+.btn{
+  border:0;
+  border-radius:10px;
+  padding:9px 13px;
+  cursor:pointer;
+  font-weight:700
+}
+.primary{background:var(--brand);color:#fff}
+.gray{background:#eef2f6}
+.danger{background:#fee4e2;color:var(--bad)}
+.good{background:#dcfae6;color:var(--good)}
+.warn{background:#fff4e5;color:var(--warn)}
+.small{font-size:13px;padding:7px 9px}
+.field{display:grid;gap:5px;margin:10px 0}
+.field input,.field select,.field textarea{
+  width:100%;
+  border:1px solid #cfd4dc;
+  border-radius:9px;
+  padding:10px
+}
+.nav{
+  display:flex;
+  flex-wrap:wrap;
+  gap:7px;
+  margin-bottom:14px
+}
+.nav .active{background:#dbeafe;color:#1d4ed8}
+.grid{display:grid;gap:12px}
+.g4{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.stat{padding:14px}
+.stat b{font-size:28px}
+.section-title{
+  font-size:20px;
+  font-weight:800;
+  margin-bottom:10px
+}
+.toolbar{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  align-items:center;
+  margin:10px 0
+}
+.table-wrap{
+  overflow:auto;
+  border:1px solid var(--line);
+  border-radius:12px
+}
+table{
+  border-collapse:collapse;
+  width:100%;
+  min-width:760px
+}
+th,td{
+  padding:9px 10px;
+  border-bottom:1px solid var(--line);
+  text-align:left;
+  font-size:14px
+}
+th{
+  background:#f8fafc;
+  position:sticky;
+  top:0
+}
+.pill{
+  display:inline-block;
+  padding:4px 8px;
+  border-radius:999px;
+  background:#f2f4f7;
+  font-size:12px;
+  font-weight:700
+}
+.pill.good{background:#dcfae6;color:var(--good)}
+.pill.warn{background:#fff4e5;color:var(--warn)}
+.pill.bad{background:#fee4e2;color:var(--bad)}
+.notice{
+  padding:10px 12px;
+  border-radius:10px;
+  background:#fffaeb;
+  color:#93370d;
+  margin:10px 0
+}
+.error{background:#fef3f2;color:#b42318}
+.success{background:#ecfdf3;color:#067647}
+.item{
+  border:1px solid var(--line);
+  border-radius:13px;
+  padding:13px;
+  margin:9px 0
+}
+.item-head{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  align-items:flex-start
+}
+.two{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px
+}
+.assign{
+  background:#f8fafc;
+  border:1px solid var(--line);
+  padding:8px 10px;
+  border-radius:9px;
+  margin:6px 0
+}
+.roster-preview{
+  max-height:340px;
+  overflow:auto;
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:8px
+}
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(16,24,40,.45);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:14px;
+  z-index:10
+}
+.modal-card{
+  background:#fff;
+  border-radius:16px;
+  padding:16px;
+  width:min(900px,100%);
+  max-height:90vh;
+  overflow:auto
+}
+.student-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+  gap:7px
+}
+.student{
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:8px
+}
+.student select,.student input{
+  width:100%;
+  padding:7px;
+  border:1px solid #d0d5dd;
+  border-radius:8px;
+  margin-top:5px
+}
+@media(max-width:760px){
+  .wrap{padding:10px}
+  .two{grid-template-columns:1fr}
+  .brand{font-size:20px}
+  .topbar{align-items:flex-start}
+}
 </style>
 </head>
-<body><div class="wrap">
-<section id="loginView" class="card login"><div class="brand">🛠️ 班級工作回報－管理後台</div><div class="sub">僅管理員帳號可進入</div><div id="loginMsg"></div><div class="field"><label>管理員帳號／Email</label><input id="loginUser"></div><div class="field"><label>密碼</label><input id="loginPass" type="password"></div><button id="loginBtn" class="btn primary" style="width:100%">登入</button></section>
-<main id="appView" class="hidden"><div class="topbar"><div><div class="brand">🛠️ 班級工作回報－管理後台</div><div id="who" class="sub"></div></div><div><a href="class-work.html"><button class="btn gray small">前往回報頁</button></a> <button id="logoutBtn" class="btn gray small">登出</button></div></div><div id="appMsg"></div>
-<div class="nav"><button class="btn gray active" data-page="dashboard">總覽</button><button class="btn gray" data-page="records">收繳／成績</button><button class="btn gray" data-page="accounts">帳號與權限</button><button class="btn gray" data-page="classes">班級名單</button><button class="btn gray" data-page="audit">操作紀錄</button></div>
-<section id="page-dashboard"></section><section id="page-records" class="hidden"></section><section id="page-accounts" class="hidden"></section><section id="page-classes" class="hidden"></section><section id="page-audit" class="hidden"></section>
-</main></div><div id="modal" class="modal hidden"><div class="modal-card"><div id="modalBody"></div></div></div>
+
+<body>
+
+<div class="wrap">
+
+<section id="loginView" class="card login">
+  <div class="brand">🛠️ 班級工作回報－管理後台</div>
+  <div class="sub">僅管理員帳號可進入</div>
+
+  <div id="loginMsg"></div>
+
+  <div class="field">
+    <label>管理員帳號／Email</label>
+    <input id="loginUser">
+  </div>
+
+  <div class="field">
+    <label>密碼</label>
+    <input id="loginPass" type="password">
+  </div>
+
+  <button id="loginBtn" class="btn primary" style="width:100%">
+    登入
+  </button>
+</section>
+
+<main id="appView" class="hidden">
+
+  <div class="topbar">
+
+    <div>
+      <div class="brand">🛠️ 班級工作回報－管理後台</div>
+      <div id="who" class="sub"></div>
+    </div>
+
+    <div>
+      <a href="class-work.html">
+        <button class="btn gray small">
+          前往回報頁
+        </button>
+      </a>
+
+      <button id="logoutBtn" class="btn gray small">
+        登出
+      </button>
+    </div>
+
+  </div>
+
+  <div id="appMsg"></div>
+
+  <div class="nav">
+    <button class="btn gray active" data-page="dashboard">
+      總覽
+    </button>
+
+    <button class="btn gray" data-page="records">
+      收繳／成績
+    </button>
+
+    <button class="btn gray" data-page="accounts">
+      帳號與權限
+    </button>
+
+    <button class="btn gray" data-page="classes">
+      班級名單
+    </button>
+
+    <button class="btn gray" data-page="audit">
+      操作紀錄
+    </button>
+  </div>
+
+  <section id="page-dashboard"></section>
+
+  <section id="page-records" class="hidden"></section>
+
+  <section id="page-accounts" class="hidden"></section>
+
+  <section id="page-classes" class="hidden"></section>
+
+  <section id="page-audit" class="hidden"></section>
+
+</main>
+
+</div>
+
+<div id="modal" class="modal hidden">
+  <div class="modal-card">
+    <div id="modalBody"></div>
+  </div>
+</div>
+
 <script type="module">
-import{initializeApp,deleteApp}from"https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";import{getAuth,signInWithEmailAndPassword,signOut,onAuthStateChanged,createUserWithEmailAndPassword}from"https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";import{getFirestore,doc,getDoc,setDoc,updateDoc,deleteDoc,collection,addDoc,getDocs,query,orderBy,serverTimestamp}from"https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
-const firebaseConfig={apiKey:"AIzaSyB56F4wJ-IMUiBsqJ5P33HoDK642h7671U",authDomain:"class-datawork.firebaseapp.com",projectId:"class-datawork",storageBucket:"class-datawork.firebasestorage.app",messagingSenderId:"24186422479",appId:"1:24186422479:web:8dee260f34b2e506fd63ba"};
-const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app),$=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)],DOMAIN='class-datawork.local';let me=null,users=[],classes=[],collections=[],assessments=[];
-const defaultRosters={
-'804':[[1,'王禹涵'],[2,'江育緹'],[3,'呂思儀'],[4,'李詠騏'],[5,'林子歆'],[6,'林禹萱'],[7,'張馨勻'],[8,'陳昕樂'],[9,'陳梓安'],[10,'陳筠蓁'],[11,'陳苙絜'],[12,'楊錚諭'],[13,'趙安褕'],[14,'魏語潔'],[15,'江靚恩'],[16,'王洋振'],[17,'吳昊丞'],[18,'李祐誠'],[19,'林宸陞'],[20,'林維辰'],[21,'林鈺棟'],[22,'洪楷祥'],[23,'陳兆楷'],[24,'陳沂璟'],[25,'黑肚·尤明'],[26,'賴震宇'],[27,'戴震龍'],[28,'謝宇哲']],
-'802':[[1,'李芯玥'],[2,'李星緹'],[3,'林子歆'],[4,'林品妍'],[5,'林品彤'],[6,'林靛清'],[7,'陳又暄'],[8,'陳佳淇'],[9,'陳昕亞'],[10,'陳禹棠'],[11,'陳梓心'],[12,'黃衣芯'],[13,'劉妤妡'],[14,'賴芊忻'],[16,'王君晏'],[17,'王星尹'],[18,'田宇恩'],[19,'吳育承'],[20,'張立揚'],[21,'許宇曜'],[22,'陳宥禾'],[23,'陳昭瑒'],[24,'游育瑋'],[25,'游翔'],[26,'黃宇辰'],[27,'簡翊展'],[28,'羅泓棣']],
-'904':[[1,'戴嘉妤'],[2,'陳資晴'],[3,'傅詩穎'],[4,'張瞳恩'],[5,'黃宇婕'],[6,'吳沛媛'],[7,'李妍芯'],[8,'鄭羽恩'],[9,'林子桐'],[10,'許詠晴'],[11,'吳宸彤'],[12,'林品妍'],[13,'蘇佳君'],[15,'趙右群'],[16,'林定毅'],[17,'潘子堯'],[18,'郭羿楷'],[19,'張明哲'],[20,'吳宇曜'],[21,'魏永聖'],[22,'游承恩'],[23,'胡琮浩'],[24,'李柏沅'],[25,'許育政'],[26,'宗旻恩'],[27,'吳博硯']],
-'906':[[1,'陳亮妤'],[3,'董宜洳'],[4,'林庭瑜'],[5,'許淯淳'],[6,'陳鈺軒'],[7,'林郁庭'],[8,'陳雅竹'],[9,'陳睿瑤'],[10,'楊淇暄'],[11,'陳雨萱'],[12,'江霈穎'],[15,'陳逸恩'],[16,'劉哲皓'],[17,'陳士愷'],[18,'李開哲'],[19,'林翊凱'],[20,'林晉宇'],[21,'林釉荏'],[22,'林均昊'],[23,'賴羿軒'],[24,'鄧仲喆'],[25,'吳羽翔'],[26,'林擎宇'],[27,'林旻勳'],[28,'鄭凱軒'],[29,'李秉叡'],[31,'曾群文'],[32,'吳立丞']]
+
+import{
+  initializeApp,
+  deleteApp
+}from"https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+
+import{
+  getAuth,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged,
+  createUserWithEmailAndPassword
+}from"https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+import{
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+  deleteDoc,
+  collection,
+  addDoc,
+  getDocs,
+  query,
+  orderBy,
+  serverTimestamp
+}from"https://www.gstatic.com/firebasejs/10.12.5/firebase-firestore.js";
+
+const firebaseConfig={
+  apiKey:"AIzaSyB56F4wJ-IMUiBsqJ5P33HoDK642h7671U",
+  authDomain:"class-datawork.firebaseapp.com",
+  projectId:"class-datawork",
+  storageBucket:"class-datawork.firebasestorage.app",
+  messagingSenderId:"24186422479",
+  appId:"1:24186422479:web:8dee260f34b2e506fd63ba"
 };
-const subjects=['國文','英文','數學','自然','歷史','地理','公民','表藝','視藝','聽藝','童軍','家政','輔導','生科','資訊','健教'];const officerRoles=['班長','副班長','風紀股長','學藝股長','衛生股長','副衛生股長','康樂股長','保健股長','食勤股長','事務股長','輔導股長','圖書志工'];
-function esc(v=''){return String(v).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]))}function emailFor(v){v=v.trim();return v.includes('@')?v:`${v}@${DOMAIN}`}function msg(el,t,c='notice'){el.innerHTML=t?`<div class="notice ${c}">${t}</div>`:''}function today(){return new Date().toLocaleDateString('sv-SE')}function randomPwd(){const c='ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789';return Array.from({length:8},()=>c[Math.floor(Math.random()*c.length)]).join('')}
-function computeAccess(assignments=[]){const viewKeys=[],collectionWriteKeys=[],scoreWriteKeys=[],classAccess=[];for(const a of assignments){const k=`${a.classId}|${a.scopeType}|${a.scopeName}`;if(!viewKeys.includes(k))viewKeys.push(k);if(a.canCollection&&!collectionWriteKeys.includes(k))collectionWriteKeys.push(k);if(a.canScores&&!scoreWriteKeys.includes(k))scoreWriteKeys.push(k);if(!classAccess.includes(a.classId))classAccess.push(a.classId)}return{viewKeys,collectionWriteKeys,scoreWriteKeys,classAccess}}
-async function audit(action,targetType,targetId,detail){await addDoc(collection(db,'auditLogs'),{actorUid:auth.currentUser.uid,actorName:me.displayName||me.username,action,targetType,targetId,detail,createdAt:serverTimestamp()})}
-$('#loginBtn').onclick=async()=>{try{await signInWithEmailAndPassword(auth,emailFor($('#loginUser').value),$('#loginPass').value)}catch(e){msg($('#loginMsg'),'登入失敗，請確認管理員帳號與密碼。','error')}};$('#logoutBtn').onclick=()=>signOut(auth);
-onAuthStateChanged(auth,async u=>{if(!u){$('#loginView').classList.remove('hidden');$('#appView').classList.add('hidden');return}const s=await getDoc(doc(db,'users',u.uid));if(!s.exists()||s.data().active!==true||s.data().type!=='admin'){await signOut(auth);msg($('#loginMsg'),'此帳號沒有管理員權限。','error');return}me={uid:u.uid,...s.data()};$('#loginView').classList.add('hidden');$('#appView').classList.remove('hidden');$('#who').textContent=`${me.displayName||me.username}｜管理員`;await refreshAll()});
-$$('.nav button').forEach(b=>b.onclick=()=>{$$('.nav button').forEach(x=>x.classList.remove('active'));b.classList.add('active');['dashboard','records','accounts','classes','audit'].forEach(p=>$(`#page-${p}`).classList.toggle('hidden',p!==b.dataset.page));renderPage(b.dataset.page)});
-async function refreshAll(){const [us,cs,co,as]=await Promise.all([getDocs(collection(db,'users')),getDocs(collection(db,'classes')),getDocs(collection(db,'collectionItems')),getDocs(collection(db,'assessments'))]);users=us.docs.map(d=>({uid:d.id,...d.data()}));classes=cs.docs.map(d=>({id:d.id,...d.data()}));collections=co.docs.map(d=>({id:d.id,...d.data()}));assessments=as.docs.map(d=>({id:d.id,...d.data()}));renderDashboard()}
-function renderPage(p){if(p==='dashboard')renderDashboard();if(p==='records')renderRecords();if(p==='accounts')renderAccounts();if(p==='classes')renderClasses();if(p==='audit')renderAudit()}
-function renderDashboard(){const pending=collections.filter(x=>x.reviewStatus!=='confirmed').length+assessments.filter(x=>x.reviewStatus!=='confirmed').length;const activeUsers=users.filter(x=>x.active&&x.type!=='admin').length;$('#page-dashboard').innerHTML=`<div class="grid g4"><div class="card stat"><div class="sub">使用中帳號</div><b>${activeUsers}</b></div><div class="card stat"><div class="sub">收繳項目</div><b>${collections.length}</b></div><div class="card stat"><div class="sub">小考紀錄</div><b>${assessments.length}</b></div><div class="card stat"><div class="sub">待確認</div><b>${pending}</b></div></div><div class="card" style="margin-top:12px"><div class="section-title">待確認資料</div>${[...collections.map(x=>({...x,_type:'collection'})),...assessments.map(x=>({...x,_type:'assessment'}))].filter(x=>x.reviewStatus!=='confirmed').slice(0,12).map(recordCard).join('')||'<div class="sub">目前沒有待確認資料。</div>'}</div>`;bindRecordButtons()}
-function recordCard(x){const title=x._type==='collection'?x.itemName:x.name;return `<div class="item"><div class="item-head"><div><b>${esc(title)}</b><div class="meta">${esc(x.classId)}｜${esc(x.scopeName)}｜${esc(x.date||'')}｜建立：${esc(x.createdByName||'')}</div></div><div><span class="pill ${x.reviewStatus==='confirmed'?'good':'warn'}">${x.reviewStatus==='confirmed'?'已確認':'尚未確認'}</span> ${x.locked?'<span class="pill bad">已鎖定</span>':''}</div></div><div class="toolbar"><button class="btn gray small edit-record" data-type="${x._type}" data-id="${x.id}">查看/修改</button><button class="btn good small confirm-record" data-type="${x._type}" data-id="${x.id}">${x.reviewStatus==='confirmed'?'取消確認':'確認並鎖定'}</button><button class="btn danger small delete-record" data-type="${x._type}" data-id="${x.id}">刪除</button></div></div>`}
-function renderRecords(){const all=[...collections.map(x=>({...x,_type:'collection'})),...assessments.map(x=>({...x,_type:'assessment'}))].sort((a,b)=>(b.date||'').localeCompare(a.date||''));$('#page-records').innerHTML=`<div class="card"><div class="section-title">所有收繳／成績資料</div><div class="toolbar"><input id="recordSearch" placeholder="搜尋班級、科目、項目" style="padding:9px;border:1px solid #d0d5dd;border-radius:9px"><button class="btn gray" id="refreshRecords">重新整理</button></div><div id="recordList">${all.map(recordCard).join('')||'<div class="sub">尚無資料</div>'}</div></div>`;bindRecordButtons();$('#refreshRecords').onclick=async()=>{await refreshAll();renderRecords()};$('#recordSearch').oninput=e=>{const q=e.target.value.trim().toLowerCase();$('#recordList').innerHTML=all.filter(x=>`${x.classId} ${x.scopeName} ${x.itemName||x.name}`.toLowerCase().includes(q)).map(recordCard).join('');bindRecordButtons()}}
-function bindRecordButtons(){$$('.confirm-record').forEach(b=>b.onclick=()=>confirmRecord(b.dataset.type,b.dataset.id));$$('.delete-record').forEach(b=>b.onclick=()=>deleteRecord(b.dataset.type,b.dataset.id));$$('.edit-record').forEach(b=>b.onclick=()=>editRecord(b.dataset.type,b.dataset.id))}
-async function confirmRecord(type,id){const col=type==='collection'?'collectionItems':'assessments',arr=type==='collection'?collections:assessments,x=arr.find(y=>y.id===id),confirming=x.reviewStatus!=='confirmed';await updateDoc(doc(db,col,id),{reviewStatus:confirming?'confirmed':'pending',locked:confirming,confirmedBy:confirming?auth.currentUser.uid:null,confirmedAt:confirming?serverTimestamp():null,updatedAt:serverTimestamp()});await audit(confirming?'confirm':'unconfirm',type,id,`${confirming?'確認並鎖定':'取消確認'}：${x.itemName||x.name}`);await refreshAll();renderPage($('.nav .active').dataset.page)}
-async function deleteRecord(type,id){const col=type==='collection'?'collectionItems':'assessments',arr=type==='collection'?collections:assessments,x=arr.find(y=>y.id===id);if(!confirm(`確定刪除「${x.itemName||x.name}」？`))return;await deleteDoc(doc(db,col,id));await audit('delete',type,id,`管理員刪除：${x.itemName||x.name}`);await refreshAll();renderPage($('.nav .active').dataset.page)}
-async function editRecord(type,id){const arr=type==='collection'?collections:assessments,x=arr.find(y=>y.id===id),cl=classes.find(c=>c.id===x.classId),students=cl?.students||[];let body=`<div class="item-head"><div><div class="section-title">${esc(x.itemName||x.name)}</div><div class="meta">${x.classId}｜${esc(x.scopeName)}｜${esc(x.date||'')}</div></div><button class="btn gray close-modal">關閉</button></div>`;if(type==='collection'){const opts=[['submitted','已繳'],['missing','未繳'],['late','補交'],['exempt','免繳']];body+=`<div class="student-grid">${students.map(s=>{const sid=s.id||String(s.seat),v=(x.records||{})[sid]||'submitted';return `<div class="student"><b>${s.seat}. ${esc(s.name)}</b><select class="m-col" data-id="${sid}">${opts.map(([a,l])=>`<option value="${a}" ${a===v?'selected':''}>${l}</option>`).join('')}</select></div>`}).join('')}</div><div class="toolbar"><button class="btn primary save-modal">儲存修改</button></div>`}else{const opts=[['normal','正常'],['absent','缺考'],['makeup','補考'],['exempt','免試'],['not_entered','未登記']];body+=`<div class="student-grid">${students.map(s=>{const sid=s.id||String(s.seat),r=(x.scores||{})[sid]||{};return `<div class="student"><b>${s.seat}. ${esc(s.name)}</b><input class="m-score" data-id="${sid}" type="number" value="${r.score??''}" min="0" max="${x.maxScore}"><select class="m-status" data-id="${sid}">${opts.map(([a,l])=>`<option value="${a}" ${a===(r.status||'not_entered')?'selected':''}>${l}</option>`).join('')}</select></div>`}).join('')}</div><div class="toolbar"><button class="btn primary save-modal">儲存修改</button></div>`}showModal(body);$('.save-modal').onclick=async()=>{if(type==='collection'){const records={};$$('.m-col').forEach(s=>records[s.dataset.id]=s.value);await updateDoc(doc(db,'collectionItems',id),{records,updatedAt:serverTimestamp()})}else{const scores={};$$('.m-score').forEach(inp=>{const id=inp.dataset.id,sel=document.querySelector(`.m-status[data-id="${CSS.escape(id)}"]`);scores[id]={score:inp.value===''?null:Number(inp.value),status:sel.value}});await updateDoc(doc(db,'assessments',id),{scores,updatedAt:serverTimestamp()})}await audit('admin_update',type,id,`管理員修改：${x.itemName||x.name}`);hideModal();await refreshAll();renderPage($('.nav .active').dataset.page)}}
-function showModal(h){$('#modalBody').innerHTML=h;$('#modal').classList.remove('hidden');$('.close-modal')?.addEventListener('click',hideModal)}function hideModal(){$('#modal').classList.add('hidden');$('#modalBody').innerHTML=''}
 
-function renderAccounts(){const rows=users.filter(u=>u.type!=='admin').sort((a,b)=>(a.username||'').localeCompare(b.username||'')).map(u=>`<tr><td>${esc(u.username)}</td><td>${esc(u.displayName||'')}</td><td>${u.type==='teacher'?'任課老師':'學生'}</td><td>${u.active?'<span class="pill good">啟用</span>':'<span class="pill bad">停用</span>'}</td><td>${(u.assignments||[]).map(a=>`<div class="assign">${esc(a.classId)}｜${esc(a.scopeName)}｜${a.canCollection?'收繳可寫':'收繳唯讀'}｜${a.canScores?'成績可寫':'成績唯讀'}</div>`).join('')||'尚未指派'}</td><td><button class="btn gray small edit-user" data-id="${u.uid}">權限</button> <button class="btn ${u.active?'danger':'good'} small toggle-user" data-id="${u.uid}">${u.active?'停用':'啟用'}</button></td></tr>`).join('');$('#page-accounts').innerHTML=`<div class="two"><div class="card"><div class="section-title">建立新帳號</div><div class="notice">帳號建立後可以一直保留；每學期只要重新指派職務即可。密碼只會在建立成功當下顯示一次。</div><div class="field"><label>帳號</label><input id="newUsername" placeholder="例如 80427 或 teacher-chinese"></div><div class="field"><label>顯示姓名</label><input id="newName" placeholder="學生姓名或老師稱呼"></div><div class="field"><label>帳號類型</label><select id="newType"><option value="student">學生／小老師</option><option value="teacher">任課老師</option></select></div><div class="field"><label>初始密碼</label><input id="newPwd"><button id="genPwd" class="btn gray small" style="margin-top:6px">產生隨機密碼</button></div><button id="createUserBtn" class="btn primary">建立帳號</button><div id="createdInfo"></div></div><div class="card"><div class="section-title">帳號設計原則</div><p>學生登入帳號可以使用班級＋座號，例如 <b>80427</b>。Firebase 底層會自動轉成隱藏的登入 Email。</p><p>停用帳號不會刪除歷史紀錄。未來重新啟用後，仍可再指派新職務。</p><p class="sub">純 GitHub Pages 版本無法安全替別人直接重設 Firebase 密碼；忘記密碼時請先到 Firebase Authentication 主控台重設／處理。</p></div></div><div class="card" style="margin-top:12px"><div class="section-title">帳號與權限</div><div class="table-wrap"><table><thead><tr><th>帳號</th><th>姓名</th><th>類型</th><th>狀態</th><th>目前權限</th><th>操作</th></tr></thead><tbody>${rows}</tbody></table></div></div>`;$('#genPwd').onclick=()=>$('#newPwd').value=randomPwd();$('#createUserBtn').onclick=createAccount;$$('.toggle-user').forEach(b=>b.onclick=()=>toggleUser(b.dataset.id));$$('.edit-user').forEach(b=>b.onclick=()=>editUserPermissions(b.dataset.id))}
-async function createAccount(){const username=$('#newUsername').value.trim(),displayName=$('#newName').value.trim(),type=$('#newType').value,pwd=$('#newPwd').value;if(!username||!displayName||pwd.length<6)return alert('請填完整資料，密碼至少 6 碼。');let secondary;try{secondary=initializeApp(firebaseConfig,`secondary-${Date.now()}`);const sa=getAuth(secondary),cred=await createUserWithEmailAndPassword(sa,emailFor(username),pwd);await setDoc(doc(db,'users',cred.user.uid),{username,displayName,type,active:true,assignments:[],viewKeys:[],collectionWriteKeys:[],scoreWriteKeys:[],classAccess:[],createdAt:serverTimestamp(),updatedAt:serverTimestamp()});await audit('create_user','user',cred.user.uid,`建立帳號：${username} ${displayName}`);$('#createdInfo').innerHTML=`<div class="notice success"><b>帳號建立成功</b><br>帳號：${esc(username)}<br>初始密碼：<b>${esc(pwd)}</b><br><small>請現在記錄或個別交給本人。</small></div>`;await refreshAll();renderAccounts()}catch(e){alert('建立失敗：'+e.message)}finally{if(secondary)try{await deleteApp(secondary)}catch{}}}
-async function toggleUser(uid){const u=users.find(x=>x.uid===uid),active=!u.active;if(!confirm(`確定${active?'啟用':'停用'} ${u.displayName} 的帳號？`))return;await updateDoc(doc(db,'users',uid),{active,updatedAt:serverTimestamp()});await audit(active?'enable_user':'disable_user','user',uid,`${active?'啟用':'停用'}帳號：${u.username}`);await refreshAll();renderAccounts()}
-function editUserPermissions(uid){const u=users.find(x=>x.uid===uid),assigns=u.assignments||[];const classOpts=classes.map(c=>`<option value="${c.id}">${c.id}</option>`).join('')||Object.keys(defaultRosters).map(c=>`<option>${c}</option>`).join('');const current=assigns.map((a,i)=>`<div class="assign">${esc(a.classId)}｜${esc(a.scopeName)}｜${a.kind==='teacher'?'任課老師':a.scopeType==='subject'?'小老師':'班級幹部'}｜${a.canCollection?'收繳可寫':'收繳唯讀'}｜${a.canScores?'成績可寫':'成績唯讀'} <button class="btn danger small remove-assignment" data-i="${i}">移除</button></div>`).join('')||'<div class="sub">目前尚未指派職務。</div>';showModal(`<div class="item-head"><div><div class="section-title">${esc(u.displayName)}｜${esc(u.username)}</div><div class="meta">帳號保留，這裡只調整職務與權限。</div></div><button class="btn gray close-modal">關閉</button></div><div id="currentAssignments">${current}</div><hr style="border:none;border-top:1px solid #e4e7ec;margin:15px 0"><b>新增一個權限</b><div class="two"><div class="field"><label>班級</label><select id="aClass">${classOpts}</select></div><div class="field"><label>身分類型</label><select id="aKind"><option value="assistant">學科小老師</option><option value="teacher">任課老師</option><option value="officer">班級幹部</option></select></div></div><div class="field"><label>科目／職務</label><select id="aName">${subjects.map(s=>`<option>${s}</option>`).join('')}</select></div><div class="toolbar"><label><input type="checkbox" id="aCollection" checked> 可登記收繳</label><label><input type="checkbox" id="aScores" checked> 可登記成績</label></div><button class="btn primary" id="addAssignment">加入權限</button>`);const draft=[...assigns];function rerender(){const box=$('#currentAssignments');box.innerHTML=draft.map((a,i)=>`<div class="assign">${esc(a.classId)}｜${esc(a.scopeName)}｜${a.kind==='teacher'?'任課老師':a.scopeType==='subject'?'小老師':'班級幹部'}｜${a.canCollection?'收繳可寫':'收繳唯讀'}｜${a.canScores?'成績可寫':'成績唯讀'} <button class="btn danger small remove-assignment" data-i="${i}">移除</button></div>`).join('')||'<div class="sub">目前尚未指派職務。</div>';$$('.remove-assignment').forEach(b=>b.onclick=async()=>{draft.splice(Number(b.dataset.i),1);await saveAssignments(u,draft);rerender()})}$('#aKind').onchange=()=>{const k=$('#aKind').value,$n=$('#aName');$n.innerHTML=(k==='officer'?officerRoles:subjects).map(s=>`<option>${s}</option>`).join('');$('#aScores').checked=k!=='officer';if(k==='teacher')$('#aScores').checked=false};$('#addAssignment').onclick=async()=>{const kind=$('#aKind').value,name=$('#aName').value,a={kind,classId:$('#aClass').value,scopeType:kind==='officer'?'officer':'subject',scopeName:name,canCollection:$('#aCollection').checked,canScores:kind==='officer'?false:$('#aScores').checked};draft.push(a);await saveAssignments(u,draft);rerender()};rerender()}
-async function saveAssignments(u,assignments){const access=computeAccess(assignments);await updateDoc(doc(db,'users',u.uid),{assignments,...access,updatedAt:serverTimestamp()});await audit('permissions','user',u.uid,`更新權限：${u.username}`);u.assignments=assignments;Object.assign(u,access)}
+const app=initializeApp(firebaseConfig);
 
-function renderClasses(){const cards=classes.sort((a,b)=>a.id.localeCompare(b.id)).map(c=>`<div class="item"><div class="item-head"><div><b>${c.id} 班</b><div class="meta">${(c.students||[]).length} 人</div></div><div><button class="btn gray small edit-class" data-id="${c.id}">編輯</button></div></div></div>`).join('');$('#page-classes').innerHTML=`<div class="two"><div class="card"><div class="section-title">班級名單</div>${cards||'<div class="sub">尚未建立任何班級。</div>'}</div><div class="card"><div class="section-title">快速建立</div><div class="notice">第一次使用可直接匯入目前預設的 804、802、904、906 名單；之後都能在後台修改。</div><button id="seedClasses" class="btn primary">建立／更新預設班級名單</button><hr style="border:none;border-top:1px solid #e4e7ec;margin:15px 0"><b>新增自訂班級</b><div class="field"><label>班級</label><input id="classId" placeholder="例如 805"></div><div class="field"><label>名單（每行：座號,姓名）</label><textarea id="classRoster" rows="10" placeholder="1,王小明\n2,李小華"></textarea></div><button id="saveClass" class="btn primary">儲存班級</button></div></div>`;$('#seedClasses').onclick=seedClasses;$('#saveClass').onclick=()=>saveClass($('#classId').value,$('#classRoster').value);$$('.edit-class').forEach(b=>b.onclick=()=>editClass(b.dataset.id))}
-async function seedClasses(){for(const [id,arr] of Object.entries(defaultRosters)){await setDoc(doc(db,'classes',id),{classId:id,students:arr.map(([seat,name])=>({id:String(seat),seat,name})),updatedAt:serverTimestamp()},{merge:true})}await audit('seed','classes','default','建立／更新預設班級名單');await refreshAll();renderClasses();alert('預設班級名單已建立。')}
-function parseRoster(text){return text.split(/\r?\n/).map(x=>x.trim()).filter(Boolean).map(line=>{const [seat,...rest]=line.split(/[,，\t]/);return{id:String(Number(seat)),seat:Number(seat),name:rest.join('').trim()}}).filter(x=>x.seat&&x.name).sort((a,b)=>a.seat-b.seat)}async function saveClass(id,text){id=id.trim();if(!id)return alert('請輸入班級');const students=parseRoster(text);if(!students.length)return alert('請輸入名單');await setDoc(doc(db,'classes',id),{classId:id,students,updatedAt:serverTimestamp()},{merge:true});await audit('save_class','class',id,`更新班級名單 ${id}`);await refreshAll();renderClasses();alert('已儲存')}
-function editClass(id){const c=classes.find(x=>x.id===id),text=(c.students||[]).map(s=>`${s.seat},${s.name}`).join('\n');showModal(`<div class="item-head"><div class="section-title">編輯 ${id} 班名單</div><button class="btn gray close-modal">關閉</button></div><div class="field"><textarea id="editRoster" rows="18">${esc(text)}</textarea></div><button class="btn primary" id="saveEditRoster">儲存</button>`);$('#saveEditRoster').onclick=async()=>{await saveClass(id,$('#editRoster').value);hideModal()}}
-async function renderAudit(){let logs=[];try{const s=await getDocs(query(collection(db,'auditLogs'),orderBy('createdAt','desc')));logs=s.docs.slice(0,200).map(d=>d.data())}catch(e){const s=await getDocs(collection(db,'auditLogs'));logs=s.docs.map(d=>d.data()).slice(-200).reverse()}$('#page-audit').innerHTML=`<div class="card"><div class="section-title">最近操作紀錄</div><div class="table-wrap"><table><thead><tr><th>時間</th><th>操作者</th><th>動作</th><th>內容</th></tr></thead><tbody>${logs.map(l=>`<tr><td>${l.createdAt?.toDate?l.createdAt.toDate().toLocaleString('zh-TW'):''}</td><td>${esc(l.actorName||'')}</td><td>${esc(l.action||'')}</td><td>${esc(l.detail||'')}</td></tr>`).join('')}</tbody></table></div></div>`}
-</script></body></html>
+const auth=getAuth(app);
+
+const db=getFirestore(app);
+
+const $=s=>document.querySelector(s);
+
+const $$=s=>[
+  ...document.querySelectorAll(s)
+];
+
+const DOMAIN='class-datawork.local';
+
+let me=null;
+
+let users=[];
+
+let classes=[];
+
+let collections=[];
+
+let assessments=[];
+
+const defaultRosters={
+
+'804':[
+  [1,'王禹涵'],
+  [2,'江育緹'],
+  [3,'呂思儀'],
+  [4,'李詠騏'],
+  [5,'林子歆'],
+  [6,'林禹萱'],
+  [7,'張馨勻'],
+  [8,'陳昕樂'],
+  [9,'陳梓安'],
+  [10,'陳筠蓁'],
+  [11,'陳苙絜'],
+  [12,'楊錚諭'],
+  [13,'趙安褕'],
+  [14,'魏語潔'],
+  [15,'江靚恩'],
+  [16,'王洋振'],
+  [17,'吳昊丞'],
+  [18,'李祐誠'],
+  [19,'林宸陞'],
+  [20,'林維辰'],
+  [21,'林鈺棟'],
+  [22,'洪楷祥'],
+  [23,'陳兆楷'],
+  [24,'陳沂璟'],
+  [25,'黑肚·尤明'],
+  [26,'賴震宇'],
+  [27,'戴震龍'],
+  [28,'謝宇哲']
+],
+
+'802':[
+  [1,'李芯玥'],
+  [2,'李星緹'],
+  [3,'林子歆'],
+  [4,'林品妍'],
+  [5,'林品彤'],
+  [6,'林靛清'],
+  [7,'陳又暄'],
+  [8,'陳佳淇'],
+  [9,'陳昕亞'],
+  [10,'陳禹棠'],
+  [11,'陳梓心'],
+  [12,'黃衣芯'],
+  [13,'劉妤妡'],
+  [14,'賴芊忻'],
+  [16,'王君晏'],
+  [17,'王星尹'],
+  [18,'田宇恩'],
+  [19,'吳育承'],
+  [20,'張立揚'],
+  [21,'許宇曜'],
+  [22,'陳宥禾'],
+  [23,'陳昭瑒'],
+  [24,'游育瑋'],
+  [25,'游翔'],
+  [26,'黃宇辰'],
+  [27,'簡翊展'],
+  [28,'羅泓棣']
+],
+
+'904':[
+  [1,'戴嘉妤'],
+  [2,'陳資晴'],
+  [3,'傅詩穎'],
+  [4,'張瞳恩'],
+  [5,'黃宇婕'],
+  [6,'吳沛媛'],
+  [7,'李妍芯'],
+  [8,'鄭羽恩'],
+  [9,'林子桐'],
+  [10,'許詠晴'],
+  [11,'吳宸彤'],
+  [12,'林品妍'],
+  [13,'蘇佳君'],
+  [15,'趙右群'],
+  [16,'林定毅'],
+  [17,'潘子堯'],
+  [18,'郭羿楷'],
+  [19,'張明哲'],
+  [20,'吳宇曜'],
+  [21,'魏永聖'],
+  [22,'游承恩'],
+  [23,'胡琮浩'],
+  [24,'李柏沅'],
+  [25,'許育政'],
+  [26,'宗旻恩'],
+  [27,'吳博硯']
+],
+
+'906':[
+  [1,'陳亮妤'],
+  [3,'董宜洳'],
+  [4,'林庭瑜'],
+  [5,'許淯淳'],
+  [6,'陳鈺軒'],
+  [7,'林郁庭'],
+  [8,'陳雅竹'],
+  [9,'陳睿瑤'],
+  [10,'楊淇暄'],
+  [11,'陳雨萱'],
+  [12,'江霈穎'],
+  [15,'陳逸恩'],
+  [16,'劉哲皓'],
+  [17,'陳士愷'],
+  [18,'李開哲'],
+  [19,'林翊凱'],
+  [20,'林晉宇'],
+  [21,'林釉荏'],
+  [22,'林均昊'],
+  [23,'賴羿軒'],
+  [24,'鄧仲喆'],
+  [25,'吳羽翔'],
+  [26,'林擎宇'],
+  [27,'林旻勳'],
+  [28,'鄭凱軒'],
+  [29,'李秉叡'],
+  [31,'曾群文'],
+  [32,'吳立丞']
+]
+
+};
+
+const subjects=[
+  '國文',
+  '英文',
+  '數學',
+  '自然',
+  '歷史',
+  '地理',
+  '公民',
+  '表藝',
+  '視藝',
+  '聽藝',
+  '童軍',
+  '家政',
+  '輔導',
+  '生科',
+  '資訊',
+  '健教'
+];
+
+const officerRoles=[
+  '班長',
+  '副班長',
+  '風紀股長',
+  '學藝股長',
+  '衛生股長',
+  '副衛生股長',
+  '康樂股長',
+  '保健股長',
+  '食勤股長',
+  '事務股長',
+  '輔導股長',
+  '圖書志工'
+];
+
+function esc(v=''){
+
+  return String(v).replace(
+    /[&<>"]/g,
+    m=>({
+      '&':'&amp;',
+      '<':'&lt;',
+      '>':'&gt;',
+      '"':'&quot;'
+    }[m])
+  );
+
+}
+
+function emailFor(v){
+
+  v=v.trim();
+
+  return v.includes('@')
+    ?v
+    :`${v}@${DOMAIN}`;
+
+}
+
+function msg(el,t,c='notice'){
+
+  el.innerHTML=
+    t
+      ?`<div class="notice ${c}">${t}</div>`
+      :'';
+
+}
+
+function today(){
+
+  return new Date().toLocaleDateString(
+    'sv-SE'
+  );
+
+}
+
+function randomPwd(){
+
+  const c=
+    'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789';
+
+  return Array
+    .from(
+      {length:8},
+      ()=>c[
+        Math.floor(
+          Math.random()*c.length
+        )
+      ]
+    )
+    .join('');
+
+}
+
+function computeAccess(assignments=[]){
+
+  const viewKeys=[];
+
+  const collectionWriteKeys=[];
+
+  const scoreWriteKeys=[];
+
+  const classAccess=[];
+
+  for(const a of assignments){
+
+    const k=
+      `${a.classId}|${a.scopeType}|${a.scopeName}`;
+
+    if(!viewKeys.includes(k)){
+      viewKeys.push(k);
+    }
+
+    if(
+      a.canCollection
+      &&
+      !collectionWriteKeys.includes(k)
+    ){
+      collectionWriteKeys.push(k);
+    }
+
+    if(
+      a.canScores
+      &&
+      !scoreWriteKeys.includes(k)
+    ){
+      scoreWriteKeys.push(k);
+    }
+
+    if(
+      !classAccess.includes(a.classId)
+    ){
+      classAccess.push(a.classId);
+    }
+
+  }
+
+  return{
+    viewKeys,
+    collectionWriteKeys,
+    scoreWriteKeys,
+    classAccess
+  };
+
+}
+
+async function audit(
+  action,
+  targetType,
+  targetId,
+  detail
+){
+
+  await addDoc(
+    collection(db,'auditLogs'),
+    {
+      actorUid:auth.currentUser.uid,
+      actorName:me.displayName||me.username,
+      action,
+      targetType,
+      targetId,
+      detail,
+      createdAt:serverTimestamp()
+    }
+  );
+
+}
+
+$('#loginBtn').onclick=async()=>{
+
+  try{
+
+    await signInWithEmailAndPassword(
+      auth,
+      emailFor(
+        $('#loginUser').value
+      ),
+      $('#loginPass').value
+    );
+
+  }catch(e){
+
+    msg(
+      $('#loginMsg'),
+      '登入失敗，請確認管理員帳號與密碼。',
+      'error'
+    );
+
+  }
+
+};
+
+$('#logoutBtn').onclick=()=>signOut(auth);
+
+onAuthStateChanged(
+  auth,
+  async u=>{
+
+    if(!u){
+
+      $('#loginView')
+        .classList
+        .remove('hidden');
+
+      $('#appView')
+        .classList
+        .add('hidden');
+
+      return;
+
+    }
+
+    const s=
+      await getDoc(
+        doc(db,'users',u.uid)
+      );
+
+    if(
+      !s.exists()
+      ||
+      s.data().active!==true
+      ||
+      s.data().type!=='admin'
+    ){
+
+      await signOut(auth);
+
+      msg(
+        $('#loginMsg'),
+        '此帳號沒有管理員權限。',
+        'error'
+      );
+
+      return;
+
+    }
+
+    me={
+      uid:u.uid,
+      ...s.data()
+    };
+
+    $('#loginView')
+      .classList
+      .add('hidden');
+
+    $('#appView')
+      .classList
+      .remove('hidden');
+
+    $('#who').textContent=
+      `${me.displayName||me.username}｜管理員`;
+
+    await refreshAll();
+
+  }
+);
+
+$$('.nav button').forEach(
+  b=>b.onclick=()=>{
+
+    $$('.nav button')
+      .forEach(
+        x=>x.classList.remove('active')
+      );
+
+    b.classList.add('active');
+
+    [
+      'dashboard',
+      'records',
+      'accounts',
+      'classes',
+      'audit'
+    ].forEach(
+      p=>$(`#page-${p}`)
+        .classList
+        .toggle(
+          'hidden',
+          p!==b.dataset.page
+        )
+    );
+
+    renderPage(
+      b.dataset.page
+    );
+
+  }
+);
+
+async function refreshAll(){
+
+  const [
+    us,
+    cs,
+    co,
+    as
+  ]=await Promise.all([
+
+    getDocs(
+      collection(db,'users')
+    ),
+
+    getDocs(
+      collection(db,'classes')
+    ),
+
+    getDocs(
+      collection(db,'collectionItems')
+    ),
+
+    getDocs(
+      collection(db,'assessments')
+    )
+
+  ]);
+
+  users=
+    us.docs.map(
+      d=>({
+        uid:d.id,
+        ...d.data()
+      })
+    );
+
+  classes=
+    cs.docs.map(
+      d=>({
+        id:d.id,
+        ...d.data()
+      })
+    );
+
+  collections=
+    co.docs.map(
+      d=>({
+        id:d.id,
+        ...d.data()
+      })
+    );
+
+  assessments=
+    as.docs.map(
+      d=>({
+        id:d.id,
+        ...d.data()
+      })
+    );
+
+  renderDashboard();
+
+}
+
+function renderPage(p){
+
+  if(p==='dashboard'){
+    renderDashboard();
+  }
+
+  if(p==='records'){
+    renderRecords();
+  }
+
+  if(p==='accounts'){
+    renderAccounts();
+  }
+
+  if(p==='classes'){
+    renderClasses();
+  }
+
+  if(p==='audit'){
+    renderAudit();
+  }
+
+}
+
+function renderDashboard(){
+
+  const pending=
+    collections.filter(
+      x=>x.reviewStatus!=='confirmed'
+    ).length
+    +
+    assessments.filter(
+      x=>x.reviewStatus!=='confirmed'
+    ).length;
+
+  const activeUsers=
+    users.filter(
+      x=>x.active&&x.type!=='admin'
+    ).length;
+
+  $('#page-dashboard').innerHTML=`
+
+    <div class="grid g4">
+
+      <div class="card stat">
+        <div class="sub">
+          使用中帳號
+        </div>
+        <b>${activeUsers}</b>
+      </div>
+
+      <div class="card stat">
+        <div class="sub">
+          收繳項目
+        </div>
+        <b>${collections.length}</b>
+      </div>
+
+      <div class="card stat">
+        <div class="sub">
+          小考紀錄
+        </div>
+        <b>${assessments.length}</b>
+      </div>
+
+      <div class="card stat">
+        <div class="sub">
+          待確認
+        </div>
+        <b>${pending}</b>
+      </div>
+
+    </div>
+
+    <div class="card" style="margin-top:12px">
+
+      <div class="section-title">
+        待確認資料
+      </div>
+
+      ${
+        [
+          ...collections.map(
+            x=>({
+              ...x,
+              _type:'collection'
+            })
+          ),
+          ...assessments.map(
+            x=>({
+              ...x,
+              _type:'assessment'
+            })
+          )
+        ]
+        .filter(
+          x=>x.reviewStatus!=='confirmed'
+        )
+        .slice(0,12)
+        .map(recordCard)
+        .join('')
+        ||
+        '<div class="sub">目前沒有待確認資料。</div>'
+      }
+
+    </div>
+  `;
+
+  bindRecordButtons();
+
+}
+
+function recordCard(x){
+
+  const title=
+    x._type==='collection'
+      ?x.itemName
+      :x.name;
+
+  return `
+    <div class="item">
+
+      <div class="item-head">
+
+        <div>
+
+          <b>
+            ${esc(title)}
+          </b>
+
+          <div class="meta">
+            ${esc(x.classId)}
+            ｜
+            ${esc(x.scopeName)}
+            ｜
+            ${esc(x.date||'')}
+            ｜
+            建立：${esc(x.createdByName||'')}
+          </div>
+
+        </div>
+
+        <div>
+
+          <span class="pill ${
+            x.reviewStatus==='confirmed'
+              ?'good'
+              :'warn'
+          }">
+
+            ${
+              x.reviewStatus==='confirmed'
+                ?'已確認'
+                :'尚未確認'
+            }
+
+          </span>
+
+          ${
+            x.locked
+              ?'<span class="pill bad">已鎖定</span>'
+              :''
+          }
+
+        </div>
+
+      </div>
+
+      <div class="toolbar">
+
+        <button
+          class="btn gray small edit-record"
+          data-type="${x._type}"
+          data-id="${x.id}"
+        >
+          查看/修改
+        </button>
+
+        <button
+          class="btn good small confirm-record"
+          data-type="${x._type}"
+          data-id="${x.id}"
+        >
+          ${
+            x.reviewStatus==='confirmed'
+              ?'取消確認'
+              :'確認並鎖定'
+          }
+        </button>
+
+        <button
+          class="btn danger small delete-record"
+          data-type="${x._type}"
+          data-id="${x.id}"
+        >
+          刪除
+        </button>
+
+      </div>
+
+    </div>
+  `;
+
+}
+
+function renderRecords(){
+
+  const all=[
+    ...collections.map(
+      x=>({
+        ...x,
+        _type:'collection'
+      })
+    ),
+    ...assessments.map(
+      x=>({
+        ...x,
+        _type:'assessment'
+      })
+    )
+  ].sort(
+    (a,b)=>
+      (b.date||'')
+        .localeCompare(
+          a.date||''
+        )
+  );
+
+  $('#page-records').innerHTML=`
+
+    <div class="card">
+
+      <div class="section-title">
+        所有收繳／成績資料
+      </div>
+
+      <div class="toolbar">
+
+        <input
+          id="recordSearch"
+          placeholder="搜尋班級、科目、項目"
+          style="padding:9px;border:1px solid #d0d5dd;border-radius:9px"
+        >
+
+        <button
+          class="btn gray"
+          id="refreshRecords"
+        >
+          重新整理
+        </button>
+
+      </div>
+
+      <div id="recordList">
+
+        ${
+          all.map(recordCard).join('')
+          ||
+          '<div class="sub">尚無資料</div>'
+        }
+
+      </div>
+
+    </div>
+  `;
+
+  bindRecordButtons();
+
+  $('#refreshRecords').onclick=
+    async()=>{
+
+      await refreshAll();
+
+      renderRecords();
+
+    };
+
+  $('#recordSearch').oninput=
+    e=>{
+
+      const q=
+        e.target.value
+          .trim()
+          .toLowerCase();
+
+      $('#recordList').innerHTML=
+
+        all.filter(
+          x=>
+            `${x.classId} ${x.scopeName} ${x.itemName||x.name}`
+              .toLowerCase()
+              .includes(q)
+        )
+        .map(recordCard)
+        .join('');
+
+      bindRecordButtons();
+
+    };
+
+}
+
+function bindRecordButtons(){
+
+  $$('.confirm-record')
+    .forEach(
+      b=>b.onclick=
+        ()=>confirmRecord(
+          b.dataset.type,
+          b.dataset.id
+        )
+    );
+
+  $$('.delete-record')
+    .forEach(
+      b=>b.onclick=
+        ()=>deleteRecord(
+          b.dataset.type,
+          b.dataset.id
+        )
+    );
+
+  $$('.edit-record')
+    .forEach(
+      b=>b.onclick=
+        ()=>editRecord(
+          b.dataset.type,
+          b.dataset.id
+        )
+    );
+
+}
+
+async function confirmRecord(
+  type,
+  id
+){
+
+  const col=
+    type==='collection'
+      ?'collectionItems'
+      :'assessments';
+
+  const arr=
+    type==='collection'
+      ?collections
+      :assessments;
+
+  const x=
+    arr.find(
+      y=>y.id===id
+    );
+
+  const confirming=
+    x.reviewStatus!=='confirmed';
+
+  await updateDoc(
+    doc(
+      db,
+      col,
+      id
+    ),
+    {
+      reviewStatus:
+        confirming
+          ?'confirmed'
+          :'pending',
+
+      locked:confirming,
+
+      confirmedBy:
+        confirming
+          ?auth.currentUser.uid
+          :null,
+
+      confirmedAt:
+        confirming
+          ?serverTimestamp()
+          :null,
+
+      updatedAt:
+        serverTimestamp()
+    }
+  );
+
+  await audit(
+    confirming
+      ?'confirm'
+      :'unconfirm',
+    type,
+    id,
+    `${confirming?'確認並鎖定':'取消確認'}：${x.itemName||x.name}`
+  );
+
+  await refreshAll();
+
+  renderPage(
+    $('.nav .active')
+      .dataset
+      .page
+  );
+
+}
+
+async function deleteRecord(
+  type,
+  id
+){
+
+  const col=
+    type==='collection'
+      ?'collectionItems'
+      :'assessments';
+
+  const arr=
+    type==='collection'
+      ?collections
+      :assessments;
+
+  const x=
+    arr.find(
+      y=>y.id===id
+    );
+
+  if(
+    !confirm(
+      `確定刪除「${x.itemName||x.name}」？`
+    )
+  ){
+    return;
+  }
+
+  await deleteDoc(
+    doc(
+      db,
+      col,
+      id
+    )
+  );
+
+  await audit(
+    'delete',
+    type,
+    id,
+    `管理員刪除：${x.itemName||x.name}`
+  );
+
+  await refreshAll();
+
+  renderPage(
+    $('.nav .active')
+      .dataset
+      .page
+  );
+
+}
+
+async function editRecord(
+  type,
+  id
+){
+
+  const arr=
+    type==='collection'
+      ?collections
+      :assessments;
+
+  const x=
+    arr.find(
+      y=>y.id===id
+    );
+
+  const cl=
+    classes.find(
+      c=>c.id===x.classId
+    );
+
+  const students=
+    cl?.students||[];
+
+  let body=`
+
+    <div class="item-head">
+
+      <div>
+
+        <div class="section-title">
+          ${esc(x.itemName||x.name)}
+        </div>
+
+        <div class="meta">
+          ${x.classId}
+          ｜
+          ${esc(x.scopeName)}
+          ｜
+          ${esc(x.date||'')}
+        </div>
+
+      </div>
+
+      <button class="btn gray close-modal">
+        關閉
+      </button>
+
+    </div>
+  `;
+
+  if(type==='collection'){
+
+    const opts=[
+      ['submitted','已繳'],
+      ['missing','未繳'],
+      ['late','補交'],
+      ['exempt','免繳']
+    ];
+
+    body+=`
+
+      <div class="student-grid">
+
+        ${
+          students.map(
+            s=>{
+
+              const sid=
+                s.id||String(s.seat);
+
+              const v=
+                (x.records||{})[sid]
+                ||
+                'submitted';
+
+              return `
+
+                <div class="student">
+
+                  <b>
+                    ${s.seat}. ${esc(s.name)}
+                  </b>
+
+                  <select
+                    class="m-col"
+                    data-id="${sid}"
+                  >
+
+                    ${
+                      opts.map(
+                        ([a,l])=>`
+
+                          <option
+                            value="${a}"
+                            ${
+                              a===v
+                                ?'selected'
+                                :''
+                            }
+                          >
+                            ${l}
+                          </option>
+
+                        `
+                      ).join('')
+                    }
+
+                  </select>
+
+                </div>
+              `;
+
+            }
+          ).join('')
+        }
+
+      </div>
+
+      <div class="toolbar">
+
+        <button class="btn primary save-modal">
+          儲存修改
+        </button>
+
+      </div>
+    `;
+
+  }else{
+
+    const opts=[
+      ['normal','正常'],
+      ['absent','缺考'],
+      ['makeup','補考'],
+      ['exempt','免試'],
+      ['not_entered','未登記']
+    ];
+
+    body+=`
+
+      <div class="student-grid">
+
+        ${
+          students.map(
+            s=>{
+
+              const sid=
+                s.id||String(s.seat);
+
+              const r=
+                (x.scores||{})[sid]
+                ||
+                {};
+
+              return `
+
+                <div class="student">
+
+                  <b>
+                    ${s.seat}. ${esc(s.name)}
+                  </b>
+
+                  <input
+                    class="m-score"
+                    data-id="${sid}"
+                    type="number"
+                    value="${r.score??''}"
+                    min="0"
+                    max="${x.maxScore}"
+                  >
+
+                  <select
+                    class="m-status"
+                    data-id="${sid}"
+                  >
+
+                    ${
+                      opts.map(
+                        ([a,l])=>`
+
+                          <option
+                            value="${a}"
+                            ${
+                              a===(r.status||'not_entered')
+                                ?'selected'
+                                :''
+                            }
+                          >
+                            ${l}
+                          </option>
+
+                        `
+                      ).join('')
+                    }
+
+                  </select>
+
+                </div>
+              `;
+
+            }
+          ).join('')
+        }
+
+      </div>
+
+      <div class="toolbar">
+
+        <button class="btn primary save-modal">
+          儲存修改
+        </button>
+
+      </div>
+    `;
+
+  }
+
+  showModal(body);
+
+  $('.save-modal').onclick=
+    async()=>{
+
+      if(type==='collection'){
+
+        const records={};
+
+        $$('.m-col')
+          .forEach(
+            s=>
+              records[
+                s.dataset.id
+              ]=s.value
+          );
+
+        await updateDoc(
+          doc(
+            db,
+            'collectionItems',
+            id
+          ),
+          {
+            records,
+            updatedAt:
+              serverTimestamp()
+          }
+        );
+
+      }else{
+
+        const scores={};
+
+        $$('.m-score')
+          .forEach(
+            inp=>{
+
+              const sid=
+                inp.dataset.id;
+
+              const sel=
+                document.querySelector(
+                  `.m-status[data-id="${CSS.escape(sid)}"]`
+                );
+
+              scores[sid]={
+                score:
+                  inp.value===''
+                    ?null
+                    :Number(inp.value),
+
+                status:
+                  sel.value
+              };
+
+            }
+          );
+
+        await updateDoc(
+          doc(
+            db,
+            'assessments',
+            id
+          ),
+          {
+            scores,
+            updatedAt:
+              serverTimestamp()
+          }
+        );
+
+      }
+
+      await audit(
+        'admin_update',
+        type,
+        id,
+        `管理員修改：${x.itemName||x.name}`
+      );
+
+      hideModal();
+
+      await refreshAll();
+
+      renderPage(
+        $('.nav .active')
+          .dataset
+          .page
+      );
+
+    };
+
+}
+
+function showModal(h){
+
+  $('#modalBody').innerHTML=h;
+
+  $('#modal')
+    .classList
+    .remove('hidden');
+
+  $('.close-modal')
+    ?.addEventListener(
+      'click',
+      hideModal
+    );
+
+}
+
+function hideModal(){
+
+  $('#modal')
+    .classList
+    .add('hidden');
+
+  $('#modalBody').innerHTML='';
+
+}
+
+function renderAccounts(){
+
+  const rows=
+    users
+      .filter(
+        u=>u.type!=='admin'
+      )
+      .sort(
+        (a,b)=>
+          (a.username||'')
+            .localeCompare(
+              b.username||''
+            )
+      )
+      .map(
+        u=>`
+
+          <tr>
+
+            <td>
+              ${esc(u.username)}
+            </td>
+
+            <td>
+              ${esc(u.displayName||'')}
+            </td>
+
+            <td>
+              ${
+                u.type==='teacher'
+                  ?'任課老師'
+                  :'學生'
+              }
+            </td>
+
+            <td>
+              ${
+                u.active
+                  ?'<span class="pill good">啟用</span>'
+                  :'<span class="pill bad">停用</span>'
+              }
+            </td>
+
+            <td>
+
+              ${
+                (u.assignments||[])
+                  .map(
+                    a=>`
+
+                      <div class="assign">
+
+                        ${esc(a.classId)}
+                        ｜
+                        ${esc(a.scopeName)}
+                        ｜
+                        ${
+                          a.canCollection
+                            ?'收繳可寫'
+                            :'收繳唯讀'
+                        }
+                        ｜
+                        ${
+                          a.canScores
+                            ?'成績可寫'
+                            :'成績唯讀'
+                        }
+
+                      </div>
+                    `
+                  )
+                  .join('')
+                ||
+                '尚未指派'
+              }
+
+            </td>
+
+            <td>
+
+              <button
+                class="btn gray small edit-user"
+                data-id="${u.uid}"
+              >
+                權限
+              </button>
+
+              <button
+                class="btn ${
+                  u.active
+                    ?'danger'
+                    :'good'
+                } small toggle-user"
+                data-id="${u.uid}"
+              >
+
+                ${
+                  u.active
+                    ?'停用'
+                    :'啟用'
+                }
+
+              </button>
+
+            </td>
+
+          </tr>
+        `
+      )
+      .join('');
+
+  const classOpts=
+    (
+      classes.length
+        ?classes.map(c=>c.id)
+        :Object.keys(defaultRosters)
+    )
+    .sort()
+    .map(
+      id=>`
+        <option value="${id}">
+          ${id}
+        </option>
+      `
+    )
+    .join('');
+
+  $('#page-accounts').innerHTML=`
+
+    <div class="card">
+
+      <div class="section-title">
+        批次建立學生帳號
+      </div>
+
+      <div class="notice">
+
+        選擇班級後勾選學生，系統會以
+        「班級＋兩位座號」建立帳號，
+        例如 80407、80427，
+        並為每人產生不同的 8 碼初始密碼。
+        建立完成後可立即列印全部帳密卡。
+
+      </div>
+
+      <div class="toolbar">
+
+        <label>
+          班級
+
+          <select id="batchClass">
+            ${classOpts}
+          </select>
+
+        </label>
+
+        <button
+          id="loadBatchStudents"
+          class="btn gray"
+        >
+          載入名單
+        </button>
+
+        <button
+          id="selectAllBatch"
+          class="btn gray"
+        >
+          全選
+        </button>
+
+        <button
+          id="clearBatch"
+          class="btn gray"
+        >
+          全不選
+        </button>
+
+      </div>
+
+      <div
+        id="batchStudentList"
+        class="student-grid"
+      ></div>
+
+      <div class="toolbar">
+
+        <button
+          id="batchCreateBtn"
+          class="btn primary"
+        >
+          批次建立勾選帳號
+        </button>
+
+        <span class="sub">
+          已有帳號的學生會自動略過，不重複建立。
+        </span>
+
+      </div>
+
+      <div id="batchResult"></div>
+
+    </div>
+
+    <div
+      class="two"
+      style="margin-top:12px"
+    >
+
+      <div class="card">
+
+        <div class="section-title">
+          單筆建立帳號
+        </div>
+
+        <div class="notice">
+          任課老師或臨時帳號可在這裡建立。
+          密碼只會在建立成功當下顯示一次。
+        </div>
+
+        <div class="field">
+
+          <label>
+            帳號
+          </label>
+
+          <input
+            id="newUsername"
+            placeholder="例如 80427 或 teacher-chinese"
+          >
+
+        </div>
+
+        <div class="field">
+
+          <label>
+            顯示姓名
+          </label>
+
+          <input
+            id="newName"
+            placeholder="學生姓名或老師稱呼"
+          >
+
+        </div>
+
+        <div class="field">
+
+          <label>
+            帳號類型
+          </label>
+
+          <select id="newType">
+
+            <option value="student">
+              學生／小老師
+            </option>
+
+            <option value="teacher">
+              任課老師
+            </option>
+
+          </select>
+
+        </div>
+
+        <div class="field">
+
+          <label>
+            初始密碼
+          </label>
+
+          <input id="newPwd">
+
+          <button
+            id="genPwd"
+            class="btn gray small"
+            style="margin-top:6px"
+          >
+            產生隨機密碼
+          </button>
+
+        </div>
+
+        <button
+          id="createUserBtn"
+          class="btn primary"
+        >
+          建立帳號
+        </button>
+
+        <div id="createdInfo"></div>
+
+      </div>
+
+      <div class="card">
+
+        <div class="section-title">
+          帳號設計原則
+        </div>
+
+        <p>
+          學生帳號跟著人保留；
+          每學期只要重新指派職務，
+          不必重新發帳密。
+        </p>
+
+        <p>
+          停用帳號不會刪除歷史紀錄。
+          未來重新啟用後，
+          仍可再指派新職務。
+        </p>
+
+        <p class="sub">
+          初始密碼只在建立當下提供。
+          學生之後若自行改密碼，
+          後台不會也不應知道新密碼。
+        </p>
+
+      </div>
+
+    </div>
+
+    <div
+      class="card"
+      style="margin-top:12px"
+    >
+
+      <div class="section-title">
+        帳號與權限
+      </div>
+
+      <div class="table-wrap">
+
+        <table>
+
+          <thead>
+
+            <tr>
+              <th>帳號</th>
+              <th>姓名</th>
+              <th>類型</th>
+              <th>狀態</th>
+              <th>目前權限</th>
+              <th>操作</th>
+            </tr>
+
+          </thead>
+
+          <tbody>
+            ${rows}
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+  `;
+
+  $('#genPwd').onclick=
+    ()=>
+      $('#newPwd').value=
+        randomPwd();
+
+  $('#createUserBtn').onclick=
+    createAccount;
+
+  $('#loadBatchStudents').onclick=
+    renderBatchStudents;
+
+  $('#batchClass').onchange=
+    renderBatchStudents;
+
+  $('#selectAllBatch').onclick=
+    ()=>
+      $$('.batch-check')
+        .forEach(
+          x=>
+            x.checked=
+              !x.disabled
+        );
+
+  $('#clearBatch').onclick=
+    ()=>
+      $$('.batch-check')
+        .forEach(
+          x=>x.checked=false
+        );
+
+  $('#batchCreateBtn').onclick=
+    batchCreateAccounts;
+
+  $$('.toggle-user')
+    .forEach(
+      b=>b.onclick=
+        ()=>toggleUser(
+          b.dataset.id
+        )
+    );
+
+  $$('.edit-user')
+    .forEach(
+      b=>b.onclick=
+        ()=>editUserPermissions(
+          b.dataset.id
+        )
+    );
+
+  renderBatchStudents();
+
+}
+
+function accountUsername(
+  classId,
+  seat
+){
+
+  return `${classId}${String(seat).padStart(2,'0')}`;
+
+}
+
+function getRosterForClass(classId){
+
+  const c=
+    classes.find(
+      x=>x.id===classId
+    );
+
+  if(
+    c
+    &&
+    Array.isArray(c.students)
+  ){
+    return c.students;
+  }
+
+  return (
+    defaultRosters[classId]
+    ||
+    []
+  ).map(
+    ([seat,name])=>({
+      seat,
+      name,
+      id:String(seat)
+    })
+  );
+
+}
+
+function renderBatchStudents(){
+
+  const el=
+    $('#batchStudentList');
+
+  if(!el){
+    return;
+  }
+
+  const classId=
+    $('#batchClass').value;
+
+  const roster=
+    getRosterForClass(
+      classId
+    );
+
+  const existing=
+    new Set(
+      users.map(
+        u=>
+          (u.username||'')
+            .toLowerCase()
+      )
+    );
+
+  el.innerHTML=
+    roster.map(
+      s=>{
+
+        const username=
+          accountUsername(
+            classId,
+            s.seat
+          );
+
+        const has=
+          existing.has(
+            username.toLowerCase()
+          );
+
+        return `
+
+          <label class="student">
+
+            <input
+              class="batch-check"
+              type="checkbox"
+              data-seat="${s.seat}"
+              data-name="${esc(s.name)}"
+              data-user="${username}"
+              ${
+                has
+                  ?'disabled'
+                  :''
+              }
+            >
+
+            <b>
+              ${String(s.seat).padStart(2,'0')}
+              ${esc(s.name)}
+            </b>
+
+            <div class="meta">
+
+              帳號：${username}
+
+              ${
+                has
+                  ?'｜已建立'
+                  :''
+              }
+
+            </div>
+
+          </label>
+        `;
+
+      }
+    ).join('')
+    ||
+    '<div class="sub">此班尚未有名單，請先到「班級名單」建立。</div>';
+
+}
+
+async function createAuthAndProfile(
+  username,
+  displayName,
+  type,
+  pwd
+){
+
+  let secondary;
+
+  try{
+
+    secondary=
+      initializeApp(
+        firebaseConfig,
+        `secondary-${Date.now()}-${Math.random().toString(36).slice(2)}`
+      );
+
+    const sa=
+      getAuth(secondary);
+
+    const cred=
+      await createUserWithEmailAndPassword(
+        sa,
+        emailFor(username),
+        pwd
+      );
+
+    await setDoc(
+      doc(
+        db,
+        'users',
+        cred.user.uid
+      ),
+      {
+        username,
+        displayName,
+        type,
+        active:true,
+        assignments:[],
+        viewKeys:[],
+        collectionWriteKeys:[],
+        scoreWriteKeys:[],
+        classAccess:[],
+        mustChangePassword:true,
+        createdAt:serverTimestamp(),
+        updatedAt:serverTimestamp()
+      }
+    );
+
+    return{
+      uid:cred.user.uid,
+      username,
+      displayName,
+      password:pwd
+    };
+
+  }finally{
+
+    if(secondary){
+
+      try{
+        await deleteApp(
+          secondary
+        );
+      }catch{}
+
+    }
+
+  }
+
+}
+
+async function createAccount(){
+
+  const username=
+    $('#newUsername')
+      .value
+      .trim();
+
+  const displayName=
+    $('#newName')
+      .value
+      .trim();
+
+  const type=
+    $('#newType').value;
+
+  const pwd=
+    $('#newPwd').value;
+
+  if(
+    !username
+    ||
+    !displayName
+    ||
+    pwd.length<6
+  ){
+
+    return alert(
+      '請填完整資料，密碼至少 6 碼。'
+    );
+
+  }
+
+  try{
+
+    const r=
+      await createAuthAndProfile(
+        username,
+        displayName,
+        type,
+        pwd
+      );
+
+    await audit(
+      'create_user',
+      'user',
+      r.uid,
+      `建立帳號：${username} ${displayName}`
+    );
+
+    $('#createdInfo').innerHTML=`
+
+      <div class="notice success">
+
+        <b>
+          帳號建立成功
+        </b>
+
+        <br>
+
+        帳號：
+        ${esc(username)}
+
+        <br>
+
+        初始密碼：
+        <b>${esc(pwd)}</b>
+
+        <br>
+
+        <small>
+          請現在記錄或個別交給本人。
+        </small>
+
+      </div>
+    `;
+
+    await refreshAll();
+
+    renderAccounts();
+
+  }catch(e){
+
+    alert(
+      '建立失敗：'
+      +
+      e.message
+    );
+
+  }
+
+}
+
+async function batchCreateAccounts(){
+
+  const selected=
+
+    $$('.batch-check:checked')
+      .map(
+        x=>({
+          username:x.dataset.user,
+          displayName:x.dataset.name,
+          seat:Number(
+            x.dataset.seat
+          )
+        })
+      );
+
+  if(!selected.length){
+
+    return alert(
+      '請先勾選要建立帳號的學生。'
+    );
+
+  }
+
+  if(
+    !confirm(
+      `確定一次建立 ${selected.length} 個學生帳號？`
+    )
+  ){
+    return;
+  }
+
+  const btn=
+    $('#batchCreateBtn');
+
+  btn.disabled=true;
+
+  btn.textContent=
+    '建立中…';
+
+  const created=[];
+
+  const failed=[];
+
+  for(const s of selected){
+
+    const pwd=
+      randomPwd();
+
+    try{
+
+      const r=
+        await createAuthAndProfile(
+          s.username,
+          s.displayName,
+          'student',
+          pwd
+        );
+
+      created.push({
+        ...s,
+        password:pwd,
+        uid:r.uid
+      });
+
+      await audit(
+        'create_user',
+        'user',
+        r.uid,
+        `批次建立帳號：${s.username} ${s.displayName}`
+      );
+
+    }catch(e){
+
+      failed.push({
+        ...s,
+        error:
+          e.code
+          ||
+          e.message
+      });
+
+    }
+
+  }
+
+  btn.disabled=false;
+
+  btn.textContent=
+    '批次建立勾選帳號';
+
+  await refreshAll();
+
+  renderAccounts();
+
+  showBatchResult(
+    created,
+    failed
+  );
+
+}
+
+function showBatchResult(
+  created,
+  failed
+){
+
+  const host=
+    $('#batchResult');
+
+  if(!host){
+    return;
+  }
+
+  window.__lastBatchCredentials=
+    created;
+
+  host.innerHTML=`
+
+    <div class="notice ${
+      created.length
+        ?'success'
+        :'error'
+    }">
+
+      <b>
+        批次建立完成
+      </b>
+
+      ｜成功 ${created.length} 人
+
+      ${
+        failed.length
+          ?`，失敗 ${failed.length} 人`
+          :''
+      }
+
+      <br>
+
+      <small>
+        初始密碼只在這次結果中顯示，
+        請先列印或下載後再離開。
+      </small>
+
+    </div>
+
+    ${
+      created.length
+        ?`
+
+          <div class="toolbar">
+
+            <button
+              id="printBatchCards"
+              class="btn primary"
+            >
+              🖨️ 列印全部帳密卡
+            </button>
+
+            <button
+              id="downloadBatchCsv"
+              class="btn gray"
+            >
+              下載帳密清單 CSV
+            </button>
+
+          </div>
+
+          <div class="table-wrap">
+
+            <table>
+
+              <thead>
+
+                <tr>
+                  <th>帳號</th>
+                  <th>姓名</th>
+                  <th>初始密碼</th>
+                </tr>
+
+              </thead>
+
+              <tbody>
+
+                ${
+                  created.map(
+                    x=>`
+
+                      <tr>
+
+                        <td>
+                          ${esc(x.username)}
+                        </td>
+
+                        <td>
+                          ${esc(x.displayName)}
+                        </td>
+
+                        <td>
+                          <b>
+                            ${esc(x.password)}
+                          </b>
+                        </td>
+
+                      </tr>
+                    `
+                  ).join('')
+                }
+
+              </tbody>
+
+            </table>
+
+          </div>
+        `
+        :''
+    }
+
+    ${
+      failed.length
+        ?`
+
+          <div class="notice error">
+
+            失敗：
+
+            ${
+              failed.map(
+                x=>
+                  `${esc(x.username)} ${esc(x.displayName)} (${esc(x.error)})`
+              ).join('、')
+            }
+
+          </div>
+        `
+        :''
+    }
+  `;
+
+  if(created.length){
+
+    $('#printBatchCards').onclick=
+      ()=>printCredentialCards(
+        created
+      );
+
+    $('#downloadBatchCsv').onclick=
+      ()=>downloadCredentialCsv(
+        created
+      );
+
+  }
+
+}
+
+function printCredentialCards(list){
+
+  const cards=
+    list.map(
+      x=>`
+
+        <div class="cred-card">
+
+          <div class="cred-title">
+            班級資料回報系統
+          </div>
+
+          <div class="cred-name">
+            ${esc(x.displayName)} 同學
+          </div>
+
+          <div>
+            帳號：
+            <b>
+              ${esc(x.username)}
+            </b>
+          </div>
+
+          <div>
+            初始密碼：
+            <b>
+              ${esc(x.password)}
+            </b>
+          </div>
+
+          <div class="cred-note">
+            請妥善保管帳號密碼，
+            勿提供給其他同學。
+          </div>
+
+          <div class="cred-url">
+            登入：class-work.html
+          </div>
+
+        </div>
+      `
+    )
+    .join('');
+
+  const w=
+    window.open(
+      '',
+      '_blank'
+    );
+
+  w.document.write(`
+
+<!doctype html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8">
+
+<title>
+學生帳密卡
+</title>
+
+<style>
+
+@page{
+  size:A4;
+  margin:10mm
+}
+
+body{
+  font-family:"Microsoft JhengHei",sans-serif;
+  margin:0
+}
+
+.sheet{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8mm
+}
+
+.cred-card{
+  border:1px dashed #555;
+  border-radius:8px;
+  padding:10mm;
+  min-height:56mm;
+  break-inside:avoid
+}
+
+.cred-title{
+  font-weight:800;
+  font-size:18px;
+  margin-bottom:8px
+}
+
+.cred-name{
+  font-size:17px;
+  font-weight:700;
+  margin-bottom:8px
+}
+
+.cred-note,
+.cred-url{
+  font-size:12px;
+  margin-top:8px;
+  color:#444
+}
+
+@media print{
+  button{
+    display:none
+  }
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="sheet">
+
+${cards}
+
+</div>
+
+<script>
+window.onload=()=>window.print()
+<\/script>
+
+</body>
+
+</html>
+
+  `);
+
+  w.document.close();
+
+}
+
+function downloadCredentialCsv(list){
+
+  const rows=[
+    [
+      '帳號',
+      '姓名',
+      '初始密碼'
+    ],
+    ...list.map(
+      x=>[
+        x.username,
+        x.displayName,
+        x.password
+      ]
+    )
+  ];
+
+  const csv=
+    '\ufeff'
+    +
+    rows.map(
+      r=>
+        r.map(
+          v=>
+            `"${String(v).replaceAll('"','""')}"`
+        ).join(',')
+    ).join('\r\n');
+
+  const blob=
+    new Blob(
+      [csv],
+      {
+        type:'text/csv;charset=utf-8'
+      }
+    );
+
+  const a=
+    document.createElement('a');
+
+  a.href=
+    URL.createObjectURL(
+      blob
+    );
+
+  a.download=
+    `class-work-帳密-${today()}.csv`;
+
+  a.click();
+
+  URL.revokeObjectURL(
+    a.href
+  );
+
+}
+
+async function toggleUser(uid){
+
+  const u=
+    users.find(
+      x=>x.uid===uid
+    );
+
+  const active=
+    !u.active;
+
+  if(
+    !confirm(
+      `確定${active?'啟用':'停用'} ${u.displayName} 的帳號？`
+    )
+  ){
+    return;
+  }
+
+  await updateDoc(
+    doc(
+      db,
+      'users',
+      uid
+    ),
+    {
+      active,
+      updatedAt:
+        serverTimestamp()
+    }
+  );
+
+  await audit(
+    active
+      ?'enable_user'
+      :'disable_user',
+    'user',
+    uid,
+    `${active?'啟用':'停用'}帳號：${u.username}`
+  );
+
+  await refreshAll();
+
+  renderAccounts();
+
+}
+
+function editUserPermissions(uid){
+
+  const u=
+    users.find(
+      x=>x.uid===uid
+    );
+
+  const assigns=
+    u.assignments||[];
+
+  const classOpts=
+    classes
+      .map(
+        c=>`
+          <option value="${c.id}">
+            ${c.id}
+          </option>
+        `
+      )
+      .join('')
+    ||
+    Object.keys(defaultRosters)
+      .map(
+        c=>`
+          <option>
+            ${c}
+          </option>
+        `
+      )
+      .join('');
+
+  const current=
+    assigns.map(
+      (a,i)=>`
+
+        <div class="assign">
+
+          ${esc(a.classId)}
+          ｜
+          ${esc(a.scopeName)}
+          ｜
+          ${
+            a.kind==='teacher'
+              ?'任課老師'
+              :a.scopeType==='subject'
+                ?'小老師'
+                :'班級幹部'
+          }
+          ｜
+          ${
+            a.canCollection
+              ?'收繳可寫'
+              :'收繳唯讀'
+          }
+          ｜
+          ${
+            a.canScores
+              ?'成績可寫'
+              :'成績唯讀'
+          }
+
+          <button
+            class="btn danger small remove-assignment"
+            data-i="${i}"
+          >
+            移除
+          </button>
+
+        </div>
+      `
+    )
+    .join('')
+    ||
+    '<div class="sub">目前尚未指派職務。</div>';
+
+  showModal(`
+
+    <div class="item-head">
+
+      <div>
+
+        <div class="section-title">
+          ${esc(u.displayName)}
+          ｜
+          ${esc(u.username)}
+        </div>
+
+        <div class="meta">
+          帳號保留，
+          這裡只調整職務與權限。
+        </div>
+
+      </div>
+
+      <button class="btn gray close-modal">
+        關閉
+      </button>
+
+    </div>
+
+    <div id="currentAssignments">
+      ${current}
+    </div>
+
+    <hr
+      style="border:none;border-top:1px solid #e4e7ec;margin:15px 0"
+    >
+
+    <b>
+      新增一個權限
+    </b>
+
+    <div class="two">
+
+      <div class="field">
+
+        <label>
+          班級
+        </label>
+
+        <select id="aClass">
+          ${classOpts}
+        </select>
+
+      </div>
+
+      <div class="field">
+
+        <label>
+          身分類型
+        </label>
+
+        <select id="aKind">
+
+          <option value="assistant">
+            學科小老師
+          </option>
+
+          <option value="teacher">
+            任課老師
+          </option>
+
+          <option value="officer">
+            班級幹部
+          </option>
+
+        </select>
+
+      </div>
+
+    </div>
+
+    <div class="field">
+
+      <label>
+        科目／職務
+      </label>
+
+      <select id="aName">
+
+        ${
+          subjects.map(
+            s=>`
+              <option>
+                ${s}
+              </option>
+            `
+          ).join('')
+        }
+
+      </select>
+
+    </div>
+
+    <div class="toolbar">
+
+      <label>
+
+        <input
+          type="checkbox"
+          id="aCollection"
+          checked
+        >
+
+        可登記收繳
+
+      </label>
+
+      <label>
+
+        <input
+          type="checkbox"
+          id="aScores"
+          checked
+        >
+
+        可登記成績
+
+      </label>
+
+    </div>
+
+    <button
+      class="btn primary"
+      id="addAssignment"
+    >
+      加入權限
+    </button>
+  `);
+
+  const draft=[
+    ...assigns
+  ];
+
+  function rerender(){
+
+    const box=
+      $('#currentAssignments');
+
+    box.innerHTML=
+
+      draft.map(
+        (a,i)=>`
+
+          <div class="assign">
+
+            ${esc(a.classId)}
+            ｜
+            ${esc(a.scopeName)}
+            ｜
+            ${
+              a.kind==='teacher'
+                ?'任課老師'
+                :a.scopeType==='subject'
+                  ?'小老師'
+                  :'班級幹部'
+            }
+            ｜
+            ${
+              a.canCollection
+                ?'收繳可寫'
+                :'收繳唯讀'
+            }
+            ｜
+            ${
+              a.canScores
+                ?'成績可寫'
+                :'成績唯讀'
+            }
+
+            <button
+              class="btn danger small remove-assignment"
+              data-i="${i}"
+            >
+              移除
+            </button>
+
+          </div>
+        `
+      ).join('')
+      ||
+      '<div class="sub">目前尚未指派職務。</div>';
+
+    $$('.remove-assignment')
+      .forEach(
+        b=>b.onclick=
+          async()=>{
+
+            draft.splice(
+              Number(
+                b.dataset.i
+              ),
+              1
+            );
+
+            await saveAssignments(
+              u,
+              draft
+            );
+
+            rerender();
+
+          }
+      );
+
+  }
+
+  $('#aKind').onchange=
+    ()=>{
+
+      const k=
+        $('#aKind').value;
+
+      const n=
+        $('#aName');
+
+      n.innerHTML=
+        (
+          k==='officer'
+            ?officerRoles
+            :subjects
+        )
+        .map(
+          s=>`
+            <option>
+              ${s}
+            </option>
+          `
+        )
+        .join('');
+
+      $('#aScores').checked=
+        k!=='officer';
+
+      if(k==='teacher'){
+        $('#aScores').checked=false;
+      }
+
+  };
+
+  $('#addAssignment').onclick=
+    async()=>{
+
+      const kind=
+        $('#aKind').value;
+
+      const name=
+        $('#aName').value;
+
+      const a={
+
+        kind,
+
+        classId:
+          $('#aClass').value,
+
+        scopeType:
+          kind==='officer'
+            ?'officer'
+            :'subject',
+
+        scopeName:name,
+
+        canCollection:
+          $('#aCollection').checked,
+
+        canScores:
+          kind==='officer'
+            ?false
+            :$('#aScores').checked
+
+      };
+
+      draft.push(a);
+
+      await saveAssignments(
+        u,
+        draft
+      );
+
+      rerender();
+
+    };
+
+  rerender();
+
+}
+
+async function saveAssignments(
+  u,
+  assignments
+){
+
+  const access=
+    computeAccess(
+      assignments
+    );
+
+  await updateDoc(
+    doc(
+      db,
+      'users',
+      u.uid
+    ),
+    {
+      assignments,
+      ...access,
+      updatedAt:
+        serverTimestamp()
+    }
+  );
+
+  await audit(
+    'permissions',
+    'user',
+    u.uid,
+    `更新權限：${u.username}`
+  );
+
+  u.assignments=
+    assignments;
+
+  Object.assign(
+    u,
+    access
+  );
+
+}
+
+function renderClasses(){
+
+  const cards=
+    classes
+      .sort(
+        (a,b)=>
+          a.id.localeCompare(
+            b.id
+          )
+      )
+      .map(
+        c=>`
+
+          <div class="item">
+
+            <div class="item-head">
+
+              <div>
+
+                <b>
+                  ${c.id} 班
+                </b>
+
+                <div class="meta">
+                  ${
+                    (c.students||[])
+                      .length
+                  } 人
+                </div>
+
+              </div>
+
+              <div>
+
+                <button
+                  class="btn gray small edit-class"
+                  data-id="${c.id}"
+                >
+                  編輯
+                </button>
+
+              </div>
+
+            </div>
+
+          </div>
+        `
+      )
+      .join('');
+
+  $('#page-classes').innerHTML=`
+
+    <div class="two">
+
+      <div class="card">
+
+        <div class="section-title">
+          班級名單
+        </div>
+
+        ${
+          cards
+          ||
+          '<div class="sub">尚未建立任何班級。</div>'
+        }
+
+      </div>
+
+      <div class="card">
+
+        <div class="section-title">
+          快速建立
+        </div>
+
+        <div class="notice">
+
+          第一次使用可直接匯入目前預設的
+          804、802、904、906 名單；
+          之後都能在後台修改。
+
+        </div>
+
+        <button
+          id="seedClasses"
+          class="btn primary"
+        >
+          建立／更新預設班級名單
+        </button>
+
+        <hr
+          style="border:none;border-top:1px solid #e4e7ec;margin:15px 0"
+        >
+
+        <b>
+          新增自訂班級
+        </b>
+
+        <div class="field">
+
+          <label>
+            班級
+          </label>
+
+          <input
+            id="classId"
+            placeholder="例如 805"
+          >
+
+        </div>
+
+        <div class="field">
+
+          <label>
+            名單（每行：座號,姓名）
+          </label>
+
+          <textarea
+            id="classRoster"
+            rows="10"
+            placeholder="1,王小明
+2,李小華"
+          ></textarea>
+
+        </div>
+
+        <button
+          id="saveClass"
+          class="btn primary"
+        >
+          儲存班級
+        </button>
+
+      </div>
+
+    </div>
+  `;
+
+  $('#seedClasses').onclick=
+    seedClasses;
+
+  $('#saveClass').onclick=
+    ()=>saveClass(
+      $('#classId').value,
+      $('#classRoster').value
+    );
+
+  $$('.edit-class')
+    .forEach(
+      b=>b.onclick=
+        ()=>editClass(
+          b.dataset.id
+        )
+    );
+
+}
+
+async function seedClasses(){
+
+  for(
+    const [id,arr]
+    of Object.entries(
+      defaultRosters
+    )
+  ){
+
+    await setDoc(
+      doc(
+        db,
+        'classes',
+        id
+      ),
+      {
+        classId:id,
+
+        students:
+          arr.map(
+            ([seat,name])=>({
+              id:String(seat),
+              seat,
+              name
+            })
+          ),
+
+        updatedAt:
+          serverTimestamp()
+      },
+      {
+        merge:true
+      }
+    );
+
+  }
+
+  await audit(
+    'seed',
+    'classes',
+    'default',
+    '建立／更新預設班級名單'
+  );
+
+  await refreshAll();
+
+  renderClasses();
+
+  alert(
+    '預設班級名單已建立。'
+  );
+
+}
+
+function parseRoster(text){
+
+  return text
+    .split(/\r?\n/)
+    .map(
+      x=>x.trim()
+    )
+    .filter(Boolean)
+    .map(
+      line=>{
+
+        const [
+          seat,
+          ...rest
+        ]=
+          line.split(
+            /[,，\t]/
+          );
+
+        return{
+
+          id:String(
+            Number(seat)
+          ),
+
+          seat:Number(seat),
+
+          name:
+            rest
+              .join('')
+              .trim()
+
+        };
+
+      }
+    )
+    .filter(
+      x=>x.seat&&x.name
+    )
+    .sort(
+      (a,b)=>a.seat-b.seat
+    );
+
+}
+
+async function saveClass(
+  id,
+  text
+){
+
+  id=id.trim();
+
+  if(!id){
+
+    return alert(
+      '請輸入班級'
+    );
+
+  }
+
+  const students=
+    parseRoster(
+      text
+    );
+
+  if(!students.length){
+
+    return alert(
+      '請輸入名單'
+    );
+
+  }
+
+  await setDoc(
+    doc(
+      db,
+      'classes',
+      id
+    ),
+    {
+      classId:id,
+      students,
+      updatedAt:
+        serverTimestamp()
+    },
+    {
+      merge:true
+    }
+  );
+
+  await audit(
+    'save_class',
+    'class',
+    id,
+    `更新班級名單 ${id}`
+  );
+
+  await refreshAll();
+
+  renderClasses();
+
+  alert(
+    '已儲存'
+  );
+
+}
+
+function editClass(id){
+
+  const c=
+    classes.find(
+      x=>x.id===id
+    );
+
+  const text=
+    (c.students||[])
+      .map(
+        s=>`${s.seat},${s.name}`
+      )
+      .join('\n');
+
+  showModal(`
+
+    <div class="item-head">
+
+      <div class="section-title">
+        編輯 ${id} 班名單
+      </div>
+
+      <button class="btn gray close-modal">
+        關閉
+      </button>
+
+    </div>
+
+    <div class="field">
+
+      <textarea
+        id="editRoster"
+        rows="18"
+      >${esc(text)}</textarea>
+
+    </div>
+
+    <button
+      class="btn primary"
+      id="saveEditRoster"
+    >
+      儲存
+    </button>
+  `);
+
+  $('#saveEditRoster').onclick=
+    async()=>{
+
+      await saveClass(
+        id,
+        $('#editRoster').value
+      );
+
+      hideModal();
+
+    };
+
+}
+
+async function renderAudit(){
+
+  let logs=[];
+
+  try{
+
+    const s=
+      await getDocs(
+        query(
+          collection(
+            db,
+            'auditLogs'
+          ),
+          orderBy(
+            'createdAt',
+            'desc'
+          )
+        )
+      );
+
+    logs=
+      s.docs
+        .slice(0,200)
+        .map(
+          d=>d.data()
+        );
+
+  }catch(e){
+
+    const s=
+      await getDocs(
+        collection(
+          db,
+          'auditLogs'
+        )
+      );
+
+    logs=
+      s.docs
+        .map(
+          d=>d.data()
+        )
+        .slice(-200)
+        .reverse();
+
+  }
+
+  $('#page-audit').innerHTML=`
+
+    <div class="card">
+
+      <div class="section-title">
+        最近操作紀錄
+      </div>
+
+      <div class="table-wrap">
+
+        <table>
+
+          <thead>
+
+            <tr>
+              <th>時間</th>
+              <th>操作者</th>
+              <th>動作</th>
+              <th>內容</th>
+            </tr>
+
+          </thead>
+
+          <tbody>
+
+            ${
+              logs.map(
+                l=>`
+
+                  <tr>
+
+                    <td>
+
+                      ${
+                        l.createdAt?.toDate
+                          ?l.createdAt
+                            .toDate()
+                            .toLocaleString('zh-TW')
+                          :''
+                      }
+
+                    </td>
+
+                    <td>
+                      ${esc(l.actorName||'')}
+                    </td>
+
+                    <td>
+                      ${esc(l.action||'')}
+                    </td>
+
+                    <td>
+                      ${esc(l.detail||'')}
+                    </td>
+
+                  </tr>
+                `
+              ).join('')
+            }
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+  `;
+
+}
+
+</script>
+
+</body>
+</html>
