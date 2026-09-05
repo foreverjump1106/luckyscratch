@@ -116,7 +116,7 @@ textarea{
 
 .btn.primary{
   background:var(--brand);
-  color:white;
+  color:#fff;
 }
 
 .btn.primary:hover{
@@ -569,6 +569,7 @@ import {
   initializeApp
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
 
+
 import {
   getAuth,
   signInWithEmailAndPassword,
@@ -576,6 +577,7 @@ import {
   onAuthStateChanged,
   updatePassword
 } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
 
 import {
   getFirestore,
@@ -654,55 +656,28 @@ let currentSemester =
 
 const statusOptions = [
 
-  [
-    "submitted",
-    "已繳"
-  ],
+  ["submitted","已繳"],
 
-  [
-    "missing",
-    "未繳"
-  ],
+  ["missing","未繳"],
 
-  [
-    "late",
-    "補交"
-  ],
+  ["late","補交"],
 
-  [
-    "exempt",
-    "免繳"
-  ]
+  ["exempt","免繳"]
 
 ];
 
 
 const scoreStatusOptions = [
 
-  [
-    "normal",
-    "正常"
-  ],
+  ["normal","正常"],
 
-  [
-    "absent",
-    "缺考"
-  ],
+  ["absent","缺考"],
 
-  [
-    "makeup",
-    "補考"
-  ],
+  ["makeup","補考"],
 
-  [
-    "exempt",
-    "免試"
-  ],
+  ["exempt","免試"],
 
-  [
-    "not_entered",
-    "未登記"
-  ]
+  ["not_entered","未登記"]
 
 ];
 
@@ -931,6 +906,12 @@ async()=>{
 
   }catch(e){
 
+    console.error(
+      "登入失敗",
+      e
+    );
+
+
     msg(
       $("#loginMsg"),
       "登入失敗：請確認帳號與密碼。",
@@ -976,8 +957,9 @@ async function changeOwnPassword(
   ){
 
     alert(
-      "密碼至少 6 碼"
+      "密碼至少 6 碼。"
     );
+
 
     return changeOwnPassword(
       force
@@ -1000,12 +982,17 @@ async function changeOwnPassword(
       "兩次密碼不同，請重新設定。"
     );
 
+
     return changeOwnPassword(
       force
     );
 
   }
 
+
+  // =========================================================
+  // 第一步：修改 Firebase Authentication 密碼
+  // =========================================================
 
   try{
 
@@ -1014,44 +1001,52 @@ async function changeOwnPassword(
       p
     );
 
+  }catch(e){
 
-    await updateDoc(
-      doc(
-        db,
-        "users",
-        auth.currentUser.uid
-      ),
-      {
-
-        mustChangePassword:
-          false,
-
-        updatedAt:
-          serverTimestamp()
-
-      }
+    console.error(
+      "Authentication 密碼修改失敗",
+      e
     );
 
 
-    if(profile){
+    const code =
+      e?.code
+      ||
+      "unknown";
 
-      profile.mustChangePassword =
-        false;
+
+    let tip =
+      "密碼修改失敗。";
+
+
+    if(
+      code
+      === "auth/requires-recent-login"
+    ){
+
+      tip +=
+        "\n\n請先登出，再重新登入後立即修改。";
+
+    }
+    else if(
+      code
+      === "auth/weak-password"
+    ){
+
+      tip +=
+        "\n\n新密碼強度不足，請使用至少 6 碼。";
+
+    }
+    else{
+
+      tip +=
+        `\n\n錯誤代碼：${code}`;
 
     }
 
 
     alert(
-      "密碼已更新。請記住新的密碼。"
-    );
-
-
-    return true;
-
-  }catch(e){
-
-    alert(
-      "修改失敗。若登入已久，請先登出再登入後重試。"
+      tip
     );
 
 
@@ -1065,6 +1060,98 @@ async function changeOwnPassword(
     return false;
 
   }
+
+
+  // =========================================================
+  // 第二步：
+  // 只有第一次登入時，
+  // 才更新 Firestore 的 mustChangePassword
+  // =========================================================
+
+  if(
+    force
+    ||
+    profile?.mustChangePassword
+    === true
+  ){
+
+    try{
+
+      await updateDoc(
+        doc(
+          db,
+          "users",
+          auth.currentUser.uid
+        ),
+        {
+
+          mustChangePassword:
+            false,
+
+          updatedAt:
+            serverTimestamp()
+
+        }
+      );
+
+
+      if(profile){
+
+        profile.mustChangePassword =
+          false;
+
+      }
+
+    }catch(e){
+
+      console.error(
+        "Firestore 首次改密碼狀態更新失敗",
+        e
+      );
+
+
+      const code =
+        e?.code
+        ||
+        "unknown";
+
+
+      alert(
+        "新密碼已經修改成功，但「第一次登入完成狀態」尚未寫入。"
+        +
+        "\n\n"
+        +
+        `錯誤代碼：${code}`
+        +
+        "\n\n"
+        +
+        "請先記住你剛設定的新密碼。重新整理後請用這組新密碼重新登入；如果仍然出現這個訊息，請將錯誤代碼提供給導師。"
+      );
+
+
+      return false;
+
+    }
+
+  }
+
+
+  if(force){
+
+    alert(
+      "第一次登入密碼設定完成。之後請使用新密碼登入。"
+    );
+
+  }else{
+
+    alert(
+      "密碼已更新。之後請使用新密碼登入。"
+    );
+
+  }
+
+
+  return true;
 
 }
 
@@ -1102,109 +1189,136 @@ onAuthStateChanged(
     }
 
 
-    const snap =
-      await getDoc(
-        doc(
-          db,
-          "users",
-          user.uid
-        )
+    try{
+
+      const snap =
+        await getDoc(
+          doc(
+            db,
+            "users",
+            user.uid
+          )
+        );
+
+
+      if(
+        !snap.exists()
+        ||
+        snap.data().active
+        !== true
+      ){
+
+        await signOut(auth);
+
+
+        msg(
+          $("#loginMsg"),
+          "此帳號尚未啟用或已被停用，請聯絡導師。",
+          "error"
+        );
+
+
+        return;
+
+      }
+
+
+      profile = {
+
+        uid:
+          user.uid,
+
+        ...snap.data()
+
+      };
+
+
+      if(
+        profile.type
+        === "admin"
+      ){
+
+        location.href =
+          "class-workadmin.html";
+
+
+        return;
+
+      }
+
+
+      await loadSystem();
+
+
+      if(
+        profile.mustChangePassword
+        === true
+      ){
+
+        const ok =
+          await changeOwnPassword(
+            true
+          );
+
+
+        if(!ok){
+
+          return;
+
+        }
+
+      }
+
+
+      $("#loginView")
+        .classList
+        .add(
+          "hidden"
+        );
+
+
+      $("#appView")
+        .classList
+        .remove(
+          "hidden"
+        );
+
+
+      $("#who")
+        .textContent =
+          `${
+            profile.displayName
+            ||
+            profile.username
+          }｜${profile.username}`;
+
+
+      renderRoles();
+
+    }catch(e){
+
+      console.error(
+        "登入後讀取帳號資料失敗",
+        e
       );
 
 
-    if(
-      !snap.exists()
-      ||
-      snap.data().active
-      !== true
-    ){
+      const code =
+        e?.code
+        ||
+        "unknown";
+
 
       await signOut(auth);
 
 
       msg(
         $("#loginMsg"),
-        "此帳號尚未啟用或已被停用，請聯絡導師。",
+        `帳號資料讀取失敗：${code}，請聯絡導師。`,
         "error"
       );
 
-
-      return;
-
     }
-
-
-    profile = {
-
-      uid:
-        user.uid,
-
-      ...snap.data()
-
-    };
-
-
-    if(
-      profile.type
-      === "admin"
-    ){
-
-      location.href =
-        "class-workadmin.html";
-
-
-      return;
-
-    }
-
-
-    await loadSystem();
-
-
-    if(
-      profile.mustChangePassword
-      === true
-    ){
-
-      const ok =
-        await changeOwnPassword(
-          true
-        );
-
-
-      if(!ok){
-
-        return;
-
-      }
-
-    }
-
-
-    $("#loginView")
-      .classList
-      .add(
-        "hidden"
-      );
-
-
-    $("#appView")
-      .classList
-      .remove(
-        "hidden"
-      );
-
-
-    $("#who")
-      .textContent =
-        `${
-          profile.displayName
-          ||
-          profile.username
-        }｜${profile.username}`;
-
-
-    renderRoles();
 
   }
 );
@@ -1945,7 +2059,8 @@ async function createCollectionPrompt(){
     scopeKey(a);
 
 
-  const records = {};
+  const records =
+    {};
 
 
   roster.forEach(
@@ -2244,7 +2359,8 @@ function toggleCollectionEditor(
     "click",
     async()=>{
 
-      const records = {};
+      const records =
+        {};
 
 
       box.querySelectorAll(
@@ -3321,6 +3437,11 @@ function toggleScoreEditor(
         );
 
       }catch(e){
+
+        console.error(
+          e
+        );
+
 
         alert(
           e.message
